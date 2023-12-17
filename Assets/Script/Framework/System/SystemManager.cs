@@ -47,6 +47,7 @@ namespace Framework.System
             GameObject systemManagerGo = new GameObject("SystemManager");
             SystemManager systemManager = systemManagerGo.AddComponent<SystemManager>();
             _instance = systemManager;
+            DontDestroyOnLoad(_instance);
             _instance.Init();
         }
 
