@@ -1,11 +1,11 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Framework.GameSystem
 {
     /// <summary>
-    /// ��¦�t��
+    /// 基礎系統
     /// </summary>
     public interface IBaseGameSystem
     {
@@ -14,7 +14,7 @@ namespace Framework.GameSystem
     }
 
     /// <summary>
-    /// ��¦�t�ι�@
+    /// 基礎系統實作
     /// </summary>
     public abstract class BaseGameSystem : MonoBehaviour, IBaseGameSystem
     {

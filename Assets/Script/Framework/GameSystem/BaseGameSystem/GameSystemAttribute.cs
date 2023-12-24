@@ -1,9 +1,9 @@
-using System;
+ï»¿using System;
 
 namespace Framework.GameSystem
 {
     /// <summary>
-    /// ¨t²ÎÄİ©Ê ©óªì©l¤Æ¤è«KÀò±o¦U¨t²Î
+    /// ç³»çµ±å±¬æ€§ æ–¼åˆå§‹åŒ–æ–¹ä¾¿ç²å¾—å„ç³»çµ±
     /// </summary>
     public class GameSystemAttribute : Attribute
     {

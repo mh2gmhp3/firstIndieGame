@@ -1,4 +1,4 @@
-using Framework.GameSystem;
+ï»¿using Framework.GameSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,38 +9,38 @@ using Framework.Logging;
 namespace Framework.GameSystem
 {
     /// <summary>
-    /// ¦U¨t²ÎºŞ²zªÌ
-    /// Äİ©ó¹CÀ¸©³¼h³æ¤@ºŞ²zªÌ ¥ı¤£©â¥XInterface
+    /// å„ç³»çµ±ç®¡ç†è€…
+    /// å±¬æ–¼éŠæˆ²åº•å±¤å–®ä¸€ç®¡ç†è€… å…ˆä¸æŠ½å‡ºInterface
     /// </summary>
     public class GameSystemManager : MonoBehaviour
     {
         /// <summary>
-        /// ¨t²Î¦Cªí
+        /// ç³»çµ±åˆ—è¡¨
         /// </summary>
         private List<IBaseGameSystem> _systemList = new List<IBaseGameSystem>();
 
         /// <summary>
-        /// ¬O§_³Qªì©l¤Æ¹L
+        /// æ˜¯å¦è¢«åˆå§‹åŒ–é
         /// </summary>
         private bool _initialized = false;
 
         /// <summary>
-        /// ¹êÅéªºTransform
+        /// å¯¦é«”çš„Transform
         /// </summary>
         private Transform _transform;
         /// <summary>
-        /// ¹êÅéªºGameObject
+        /// å¯¦é«”çš„GameObject
         /// </summary>
         private GameObject _gameObject;
 
         /// <summary>
-        /// GameSystemManager°ß¤@¹êÅé
+        /// GameSystemManagerå”¯ä¸€å¯¦é«”
         /// </summary>
         private static GameSystemManager _instance = null;
 
         /// <summary>
-        /// ªì©l¤Æ¹êÅé 
-        /// «Ø¥ß³æ¤@¹êÅéSystemManager ¨Ãªì©l¤Æ
+        /// åˆå§‹åŒ–å¯¦é«”
+        /// å»ºç«‹å–®ä¸€å¯¦é«”SystemManager ä¸¦åˆå§‹åŒ–
         /// </summary>
         public static void InitInstance()
         {
@@ -52,7 +52,7 @@ namespace Framework.GameSystem
         }
 
         /// <summary>
-        /// «Ø¥ß©Ò¦³¨ãSystemAttribute³æ¤@¹êÅé ¨Ãªì©l¤Æ
+        /// å»ºç«‹æ‰€æœ‰å…·SystemAttributeå–®ä¸€å¯¦é«” ä¸¦åˆå§‹åŒ–
         /// </summary>
         private void Init()
         {
@@ -65,7 +65,7 @@ namespace Framework.GameSystem
         {
             List<IBaseGameSystem> result = new List<IBaseGameSystem>();
 
-            //Àò±o©Ò¦³¨ã¦³SystemAttributeªºType
+            //ç²å¾—æ‰€æœ‰å…·æœ‰SystemAttributeçš„Type
             List<(Type Type, GameSystemAttribute Attribute)> systemInfoList = new List<(Type type, GameSystemAttribute attribute)>();
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var assembly in assemblies)
@@ -81,9 +81,9 @@ namespace Framework.GameSystem
                 }
             }
 
-            //·ÓÀu­­«×±Æ§Ç
+            //ç…§å„ªé™åº¦æ’åº
             systemInfoList.Sort(
-                (x, y) => 
+                (x, y) =>
                 {
                     return x.Attribute.Priority.CompareTo(y.Attribute.Priority);
                 });

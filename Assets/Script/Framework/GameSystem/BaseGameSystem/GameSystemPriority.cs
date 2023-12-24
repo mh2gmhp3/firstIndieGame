@@ -1,9 +1,12 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Framework.GameSystem
 {
+    /// <summary>
+    /// 各系統修先權 TODO 如果很長改要抽成Setting避免每次Compiler都要跑
+    /// </summary>
     public static partial class GameSystemPriority
     {
         public const int ASSETS_SYSTEM = 0;
