@@ -7,12 +7,10 @@ namespace Framework.GameSystem
     /// </summary>
     public class GameSystemAttribute : Attribute
     {
-        public string Name;
         public int Priority;
 
-        public GameSystemAttribute(string name, int priority)
+        public GameSystemAttribute(int priority)
         {
-            Name = name;
             Priority = priority;
         }
     }
