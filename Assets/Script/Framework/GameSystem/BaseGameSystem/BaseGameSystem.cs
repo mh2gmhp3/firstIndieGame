@@ -9,7 +9,8 @@ namespace Framework.GameSystem
     /// </summary>
     public interface IBaseGameSystem
     {
-        public void Init();
+        public void SetManager(GameSystemManager gameSystemManager);
+        public bool Init();
         public void Update();
     }
 
@@ -18,9 +19,16 @@ namespace Framework.GameSystem
     /// </summary>
     public abstract class BaseGameSystem : MonoBehaviour, IBaseGameSystem
     {
-        void IBaseGameSystem.Init()
+        protected GameSystemManager _gameSystemManager;
+
+        void IBaseGameSystem.SetManager(GameSystemManager gameSystemManager)
         {
-            DoInit();
+            _gameSystemManager = gameSystemManager;
+        }
+
+        bool IBaseGameSystem.Init()
+        {
+            return DoInit();
         }
 
         void IBaseGameSystem.Update()
@@ -28,7 +36,7 @@ namespace Framework.GameSystem
             DoUpdate();
         }
 
-        protected virtual void DoInit() { }
+        protected virtual bool DoInit() { return true; }
 
         protected virtual void DoUpdate() { }
     }
