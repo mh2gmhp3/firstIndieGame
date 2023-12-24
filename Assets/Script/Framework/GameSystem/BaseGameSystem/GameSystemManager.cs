@@ -1,4 +1,4 @@
-using Framework.System;
+using Framework.GameSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,18 +6,18 @@ using System.Reflection;
 using UnityEngine;
 using Framework.Logging;
 
-namespace Framework.System
+namespace Framework.GameSystem
 {
     /// <summary>
     /// 各系統管理者
     /// 屬於遊戲底層單一管理者 先不抽出Interface
     /// </summary>
-    public class SystemManager : MonoBehaviour
+    public class GameSystemManager : MonoBehaviour
     {
         /// <summary>
         /// 系統列表
         /// </summary>
-        private List<IBaseSystem> _systemList = new List<IBaseSystem>();
+        private List<IBaseGameSystem> _systemList = new List<IBaseGameSystem>();
 
         /// <summary>
         /// 是否被初始化過
@@ -34,9 +34,9 @@ namespace Framework.System
         private GameObject _gameObject;
 
         /// <summary>
-        /// SystemManager唯一實體
+        /// GameSystemManager唯一實體
         /// </summary>
-        private static SystemManager _instance = null;
+        private static GameSystemManager _instance = null;
 
         /// <summary>
         /// 初始化實體 
@@ -44,8 +44,8 @@ namespace Framework.System
         /// </summary>
         public static void InitInstance()
         {
-            GameObject systemManagerGo = new GameObject("SystemManager");
-            SystemManager systemManager = systemManagerGo.AddComponent<SystemManager>();
+            GameObject systemManagerGo = new GameObject("GameSystemManager");
+            GameSystemManager systemManager = systemManagerGo.AddComponent<GameSystemManager>();
             _instance = systemManager;
             DontDestroyOnLoad(_instance);
             _instance.Init();
@@ -61,9 +61,9 @@ namespace Framework.System
             _systemList = GenAllSystem();
         }
 
-        private List<IBaseSystem> GenAllSystem()
+        private List<IBaseGameSystem> GenAllSystem()
         {
-            List<IBaseSystem> result = new List<IBaseSystem>();
+            List<IBaseGameSystem> result = new List<IBaseGameSystem>();
 
             //獲得所有具有SystemAttribute的Type
             List<(Type Type, GameSystemAttribute Attribute)> systemInfoList = new List<(Type type, GameSystemAttribute attribute)>();
@@ -81,13 +81,20 @@ namespace Framework.System
                 }
             }
 
+            //照優限度排序
+            systemInfoList.Sort(
+                (x, y) => 
+                {
+                    return x.Attribute.Priority.CompareTo(y.Attribute.Priority);
+                });
+
             foreach (var systemInfo in systemInfoList)
             {
                 string systemName = systemInfo.Attribute.Name;
                 GameObject systemGo = new GameObject(systemName);
                 Component systemComponent = systemGo.AddComponent(systemInfo.Type);
                 systemGo.transform.SetParent(_transform);
-                if (systemComponent is IBaseSystem baseSystem)
+                if (systemComponent is IBaseGameSystem baseSystem)
                 {
                     result.Add(baseSystem);
                     Log.LogInfo("System Instance Success, System Name : " + systemName);

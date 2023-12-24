@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Framework.System
+namespace Framework.GameSystem
 {
     /// <summary>
     /// 基礎系統
     /// </summary>
-    public interface IBaseSystem
+    public interface IBaseGameSystem
     {
         public void Init();
         public void Update();
@@ -16,14 +16,14 @@ namespace Framework.System
     /// <summary>
     /// 基礎系統實作
     /// </summary>
-    public abstract class BaseSystem : MonoBehaviour, IBaseSystem
+    public abstract class BaseGameSystem : MonoBehaviour, IBaseGameSystem
     {
-        void IBaseSystem.Init()
+        void IBaseGameSystem.Init()
         {
             DoInit();
         }
 
-        void IBaseSystem.Update()
+        void IBaseGameSystem.Update()
         {
             DoUpdate();
         }

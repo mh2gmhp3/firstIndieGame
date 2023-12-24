@@ -1,4 +1,4 @@
-using Framework.System;
+using Framework.GameSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +10,7 @@ namespace Game.Entry
         // Start is called before the first frame update
         void Start()
         {
-            SystemManager.InitInstance();
+            GameSystemManager.InitInstance();
         }
 
         // Update is called once per frame
