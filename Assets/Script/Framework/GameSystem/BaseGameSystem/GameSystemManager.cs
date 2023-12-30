@@ -13,51 +13,8 @@ namespace Framework.GameSystem
     /// 各系統管理者
     /// 屬於遊戲底層單一管理者 先不抽出Interface
     /// </summary>
-    public class GameSystemManager : MonoBehaviour
+    public partial class GameSystemManager : MonoBehaviour
     {
-        private class GameSystemInitProcessor
-        {
-            private List<IBaseGameSystem> _initGameSystemList;
-            private List<IBaseGameSystem> _cacheInitedGameSystemList = new List<IBaseGameSystem>();
-
-            public GameSystemInitProcessor(List<IBaseGameSystem> initSystemList)
-            {
-                _initGameSystemList = initSystemList;
-            }
-            public bool ProcessInit()
-            {
-                //沒有需要初始化的列表當作完成
-                if (_initGameSystemList == null)
-                    return true;
-
-                for (int i = 0; i < _initGameSystemList.Count; i++)
-                {
-                    IBaseGameSystem baseGameSystem = _initGameSystemList[i];
-                    if (baseGameSystem.Init())
-                    {
-                        _cacheInitedGameSystemList.Add(baseGameSystem);
-                    }
-                    else
-                    {
-                        //有系統無法初始化完成取消此次初始化 等下一次初始化
-                        break;
-                    }
-                }
-
-                //清除掉已完成的
-                for (int i = 0; i < _cacheInitedGameSystemList.Count; i++)
-                {
-                    _initGameSystemList.Remove(_cacheInitedGameSystemList[i]);
-                }
-
-                //已完成所有初始化
-                if (_initGameSystemList.Count == 0)
-                    return true;
-
-                return false;
-            }
-        }
-
         /// <summary>
         /// 系統列表
         /// </summary>
@@ -78,9 +35,19 @@ namespace Framework.GameSystem
         private GameObject _gameObject;
 
         /// <summary>
-        /// 初始化各式系統處理者
+        /// 初始化各系統處理者
         /// </summary>
         private GameSystemInitProcessor _initProcessor;
+
+        /// <summary>
+        /// Update各系統處理者
+        /// </summary>
+        private GameSystemUpdateProcessor _updateProcessor;
+
+        /// <summary>
+        /// 進入遊戲流程處理者
+        /// </summary>
+        private GameSystemEnterGameFlowStepProcessor _enterGameFlowStepProcessor;
 
         /// <summary>
         /// GameSystemManager唯一實體
@@ -109,6 +76,7 @@ namespace Framework.GameSystem
             _gameObject = gameObject;
             _gameSystemList = GenAllGameSystem();
             InitAllGameSystem();
+            InitAllProcessor();
         }
 
         /// <summary>
@@ -152,10 +120,22 @@ namespace Framework.GameSystem
             return result;
         }
 
+        private void InitAllProcessor()
+        {
+            _initProcessor = new GameSystemInitProcessor(_gameSystemList);
+            _updateProcessor = new GameSystemUpdateProcessor(_gameSystemList);
+            _enterGameFlowStepProcessor = new GameSystemEnterGameFlowStepProcessor(_gameSystemList);
+        }
+
         private void InitAllGameSystem()
         {
             _initialized = false;
-            _initProcessor = new GameSystemInitProcessor(_gameSystemList);
+        }
+
+        private void OniIitialized()
+        {
+            _enterGameFlowStepProcessor.SetActive(true);
+            _updateProcessor.SetActice(true);
         }
 
         private void Update()
@@ -163,9 +143,23 @@ namespace Framework.GameSystem
             if (!_initialized)
             {
                 _initialized = _initProcessor.ProcessInit();
-                //全部初始化成更也等到下一偵才開始Update
+                if (_initialized)
+                    OniIitialized();
                 return;
             }
+
+            _enterGameFlowStepProcessor.ProcessEnterGameFlowStep();
+            _updateProcessor.ProcessUpdate();
+        }
+
+        private void FixedUpdate()
+        {
+            _updateProcessor.ProcessFixedUpdate();
+        }
+
+        private void LateUpdate()
+        {
+            _updateProcessor.ProcessLateUpdate();
         }
     }
 }
