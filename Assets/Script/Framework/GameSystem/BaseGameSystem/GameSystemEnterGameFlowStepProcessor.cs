@@ -90,6 +90,7 @@ namespace Framework.GameSystem
 
                 if (_processEnterGameFlowStepGameSystemList.Count == 0)
                 {
+                    //處理進入下個階段
                     _processEnterGameFlowStepGameSystemList.AddRange(_enterGameFlowStepGameSystemList);
                     _nowFlowStep = _flowStepQueue.Dequeue();
 
@@ -101,6 +102,7 @@ namespace Framework.GameSystem
                 }
                 else
                 {
+                    //等每個System都處裡完當前階段
                     bool allProcessed = true;
                     for (int i = 0; i < _processEnterGameFlowStepGameSystemList.Count; i++)
                     {
