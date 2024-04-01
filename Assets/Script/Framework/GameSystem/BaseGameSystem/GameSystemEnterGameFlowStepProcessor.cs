@@ -76,16 +76,16 @@ namespace Framework.GameSystem
             /// <summary>
             /// 處理進入遊戲階段
             /// </summary>
-            public void ProcessEnterGameFlowStep()
+            public bool ProcessEnterGameFlowStep()
             {
                 if (!_active)
-                    return;
+                    return false;
 
                 if (_flowStepQueue.Count == 0 &&
                     _processEnterGameFlowStepGameSystemList.Count == 0)
                 {
                     _active = false;
-                    return;
+                    return true;
                 }
 
                 if (_processEnterGameFlowStepGameSystemList.Count == 0)
@@ -113,6 +113,8 @@ namespace Framework.GameSystem
                     if (allProcessed)
                         _processEnterGameFlowStepGameSystemList.Clear();
                 }
+
+                return false;
             }
         }
     }

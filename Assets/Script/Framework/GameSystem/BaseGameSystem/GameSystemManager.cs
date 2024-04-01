@@ -15,15 +15,23 @@ namespace Framework.GameSystem
     /// </summary>
     public partial class GameSystemManager : MonoBehaviour
     {
+        public enum GameState
+        {
+            None                    = 0,
+            Initialize              = 1,
+            ProcessingEnterGameStep = 2,
+            GameUpdate              = 3,
+        }
+
         /// <summary>
         /// 系統列表
         /// </summary>
         private List<IBaseGameSystem> _gameSystemList = new List<IBaseGameSystem>();
 
         /// <summary>
-        /// 是否被初始化過
+        /// 當前狀態
         /// </summary>
-        private bool _initialized = false;
+        private GameState _state = GameState.None;
 
         /// <summary>
         /// 實體的Transform
@@ -129,37 +137,74 @@ namespace Framework.GameSystem
 
         private void InitAllGameSystem()
         {
-            _initialized = false;
+            SetState(GameState.Initialize);
+            Log.LogInfo("InitAllGameSystem");
         }
 
         private void OniIitialized()
         {
             _enterGameFlowStepProcessor.SetActive(true);
+            SetState(GameState.ProcessingEnterGameStep);
+            Log.LogInfo("OniIitialized");
+        }
+
+        private void OnEnterGameFlowStepFinish()
+        {
+            _enterGameFlowStepProcessor.SetActive(false);
             _updateProcessor.SetActice(true);
+            SetState(GameState.GameUpdate);
+            Log.LogInfo("OnEnterGameFlowStepFinish");
         }
 
         private void Update()
         {
-            if (!_initialized)
+            if (IsState(GameState.Initialize))
             {
-                _initialized = _initProcessor.ProcessInit();
-                if (_initialized)
+                bool finish = _initProcessor.ProcessInit();
+                if (finish)
                     OniIitialized();
                 return;
             }
 
-            _enterGameFlowStepProcessor.ProcessEnterGameFlowStep();
+            if (IsState(GameState.ProcessingEnterGameStep))
+            {
+                bool finish = _enterGameFlowStepProcessor.ProcessEnterGameFlowStep();
+                if (finish)
+                    OnEnterGameFlowStepFinish();
+                return;
+            }
+
             _updateProcessor.ProcessUpdate();
         }
 
         private void FixedUpdate()
         {
+            if (!IsState(GameState.GameUpdate))
+                return;
+
             _updateProcessor.ProcessFixedUpdate();
         }
 
         private void LateUpdate()
         {
+            if (!IsState(GameState.GameUpdate))
+                return;
+
             _updateProcessor.ProcessLateUpdate();
         }
+
+        #region State
+
+        private void SetState(GameState state)
+        {
+            _state = state;
+        }
+
+        public bool IsState(GameState state)
+        {
+            return _state == state;
+        }
+
+        #endregion
     }
 }
