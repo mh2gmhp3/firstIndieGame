@@ -34,6 +34,10 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
                 return;
             }
 
+            Undo.RecordObject(
+                _instance,
+                "GameSystemEnterGameFlowStepSetting");
+
             DrawStepGUI();
             EditorGUILayout.Space(10);
             DrawStepConfigGUI();
@@ -99,24 +103,28 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
         List<int> _removeStepList = new List<int>();
         private void DrawStepGUI()
         {
-            for (int i = 0; i < _instance.EnterGameFlowStep.Count; i++)
+            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
             {
-                var stepId= _instance.EnterGameFlowStep[i];
-                EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
+                for (int i = 0; i < _instance.EnterGameFlowStep.Count; i++)
                 {
-                    GUILayout.Label($"{stepId}", GUILayout.Width(50));
-                    if (_idToStepCongifDic.TryGetValue(stepId, out var stepConfig))
+                    var stepId = _instance.EnterGameFlowStep[i];
+                    EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
                     {
-                        GUILayout.Label(stepConfig.Name);
+                        GUILayout.Label($"{stepId}", GUILayout.Width(50));
+                        if (_idToStepCongifDic.TryGetValue(stepId, out var stepConfig))
+                        {
+                            GUILayout.Label(stepConfig.Name);
+                        }
+                        GUILayout.FlexibleSpace();
+                        if (GUILayout.Button("X"))
+                        {
+                            _removeStepList.Add(stepId);
+                        }
                     }
-                    GUILayout.FlexibleSpace();
-                    if (GUILayout.Button("X"))
-                    {
-                        _removeStepList.Add(stepId);
-                    }
+                    EditorGUILayout.EndHorizontal();
                 }
-                EditorGUILayout.EndHorizontal();
             }
+            EditorGUILayout.EndVertical();
 
             foreach (var removeStep in _removeStepList)
             {
@@ -166,6 +174,13 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
                     GUILayout.Label($"{stepConfig.Id}", GUILayout.Width(50));
                     GUILayout.Label(stepConfig.Name);
                     GUILayout.FlexibleSpace();
+                    if (!_instance.EnterGameFlowStep.Contains(stepConfig.Id))
+                    {
+                        if (GUILayout.Button("添加至流程"))
+                        {
+                            _instance.EnterGameFlowStep.Add(stepConfig.Id);
+                        }
+                    }
                     if (GUILayout.Button("X"))
                     {
                         _removeStepConfigList.Add(stepConfig);
