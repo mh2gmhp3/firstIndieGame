@@ -6,7 +6,7 @@ using UnityEngine;
 namespace GameSystem.Framework.Input
 {
     [GameSystem(GameSystemPriority.INPUT_SYSTEM)]
-    public partial class InputSystem : BaseGameSystem
+    public partial class InputSystem : BaseGameSystem<InputSystem>
     {
         protected override void DoUpdate()
         {

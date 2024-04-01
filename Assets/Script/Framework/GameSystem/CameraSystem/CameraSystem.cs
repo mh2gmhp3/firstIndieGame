@@ -5,7 +5,7 @@ using UnityEngine;
 namespace GameSystem.Framework.Camera
 {
     [GameSystem(GameSystemPriority.CAMERA_SYSTEM)]
-    public partial class CameraSystem : BaseGameSystem
+    public partial class CameraSystem : BaseGameSystem<CameraSystem>
     {
 
     }

@@ -11,7 +11,7 @@ namespace GameSystem.Framework
     /// </summary>
     public interface IBaseGameSystem
     {
-        public void SetManager(GameSystemManager gameSystemManager);
+        public void InitBaseGameSystem(GameSystemManager gameSystemManager);
 
         /// <summary>
         /// 初始化
@@ -38,13 +38,16 @@ namespace GameSystem.Framework
     /// <summary>
     /// 基礎系統實作
     /// </summary>
-    public abstract class BaseGameSystem : MonoBehaviour, IBaseGameSystem
+    public abstract class BaseGameSystem<T> : MonoBehaviour, IBaseGameSystem
+        where T : BaseGameSystem<T>
     {
         protected GameSystemManager _gameSystemManager;
+        protected static T _instance;
 
-        void IBaseGameSystem.SetManager(GameSystemManager gameSystemManager)
+        void IBaseGameSystem.InitBaseGameSystem(GameSystemManager gameSystemManager)
         {
             _gameSystemManager = gameSystemManager;
+            _instance = this as T;
         }
 
         bool IBaseGameSystem.Init()

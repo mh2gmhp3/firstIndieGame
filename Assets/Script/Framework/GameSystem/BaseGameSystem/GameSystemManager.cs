@@ -115,7 +115,7 @@ namespace GameSystem.Framework
                 systemGo.transform.SetParent(_transform);
                 if (systemComponent is IBaseGameSystem baseSystem)
                 {
-                    baseSystem.SetManager(this);
+                    baseSystem.InitBaseGameSystem(this);
                     result.Add(baseSystem);
                     Log.LogInfo("System Instance Success, System Name : " + systemName);
                 }
