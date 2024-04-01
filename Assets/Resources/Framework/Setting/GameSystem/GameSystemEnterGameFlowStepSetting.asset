@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53af381aaa5164a45b9545fb97c726a5, type: 3}
   m_Name: GameSystemEnterGameFlowStepSetting
   m_EditorClassIdentifier: 
-  EnterGameFlowStep: 
+  EnterGameFlowStep: 01000000
   EnterGameFlowStepConfigs:
   - Id: 1
-    Name: 123
-  - Id: 2
-    Name: 1233
+    Name: Init_GUIRoot
