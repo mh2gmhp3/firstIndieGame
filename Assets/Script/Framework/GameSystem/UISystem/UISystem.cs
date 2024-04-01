@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 
 namespace GameSystem.Framework.UI
 {
     [GameSystem(GameSystemPriority.UI_SYSTEM)]
     public partial class UISystem : BaseGameSystem<UISystem>
     {
-        private const string GUI_ROOT_RESOURCE_PATH = "Framewark/UI/GUIRoot";
+        private const string GUI_ROOT_RESOURCE_PATH = "Framework/UI/GUIRoot";
 
         private GameObject _guiRoot = null;
         private Transform _guiRootTrans = null;
@@ -19,7 +20,7 @@ namespace GameSystem.Framework.UI
             if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GUIRoot)
             {
                 var obj = AssetsSystem.LoadAssets<GameObject>(GUI_ROOT_RESOURCE_PATH);
-                _guiRoot = Instantiate(obj);
+                _guiRoot = ObjectUtility.InstantiateWithoutClone(obj);
                 _guiRootTrans = _guiRoot.transform;
                 _guiRootRectTrans = _guiRootTrans as RectTransform;
 
