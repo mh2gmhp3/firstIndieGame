@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Framework.GameSystem
+namespace GameSystem.Framework
 {
     /// <summary>
     /// 系統屬性 於初始化方便獲得各系統

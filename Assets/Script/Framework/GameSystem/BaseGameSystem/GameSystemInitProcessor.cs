@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Framework.GameSystem
+namespace GameSystem.Framework
 {
     public partial class GameSystemManager
     {

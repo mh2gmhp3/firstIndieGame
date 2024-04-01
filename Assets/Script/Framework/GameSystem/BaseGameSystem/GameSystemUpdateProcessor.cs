@@ -1,9 +1,9 @@
-﻿using Framework.GameSystem;
+﻿using GameSystem.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Framework.GameSystem
+namespace GameSystem.Framework
 {
     public partial class GameSystemManager
     {

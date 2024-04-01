@@ -1,10 +1,10 @@
-﻿using Framework.GameSystem.Assets;
-using Framework.Logging;
+﻿using GameSystem.Framework.Assets;
+using Logging;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Framework.GameSystem
+namespace GameSystem.Framework
 {
     public partial class GameSystemManager
     {

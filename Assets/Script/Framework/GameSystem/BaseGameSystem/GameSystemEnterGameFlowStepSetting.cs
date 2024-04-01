@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 
-namespace Framework.GameSystem
+namespace GameSystem.Framework
 {
 #if UNITY_EDITOR
     /// <summary>

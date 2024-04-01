@@ -1,13 +1,13 @@
-﻿using Framework.GameSystem;
+﻿using GameSystem.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
-using Framework.Logging;
-using Framework.Utility;
+using Logging;
+using Utility;
 
-namespace Framework.GameSystem
+namespace GameSystem.Framework
 {
     /// <summary>
     /// 各系統管理者

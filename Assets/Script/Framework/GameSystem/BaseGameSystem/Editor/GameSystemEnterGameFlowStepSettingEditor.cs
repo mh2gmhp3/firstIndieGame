@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UEditor = UnityEditor.Editor;
-using Framework.Logging;
-using Framework.GameSystem;
+using Logging;
+using GameSystem.Framework;
 using System;
 
 namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting

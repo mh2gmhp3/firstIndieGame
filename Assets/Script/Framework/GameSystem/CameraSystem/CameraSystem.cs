@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Framework.GameSystem.Camera
+namespace GameSystem.Framework.Camera
 {
     [GameSystem(GameSystemPriority.CAMERA_SYSTEM)]
     public partial class CameraSystem : BaseGameSystem

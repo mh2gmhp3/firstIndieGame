@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Framework.GameSystem.Assets
+namespace GameSystem.Framework.Assets
 {
     [GameSystem(GameSystemPriority.ASSETS_SYSTEM)]
     public partial class AssetsSystem : BaseGameSystem

@@ -1,10 +1,10 @@
-﻿using Framework.Logging;
+﻿using Logging;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Framework.GameSystem
+namespace GameSystem.Framework
 {
     /// <summary>
     /// 基礎系統

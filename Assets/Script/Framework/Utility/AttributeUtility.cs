@@ -1,11 +1,8 @@
-﻿using Framework.GameSystem;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using UnityEngine;
 
-namespace Framework.Utility
+namespace Utility
 {
     public static class AttributeUtility
     {
