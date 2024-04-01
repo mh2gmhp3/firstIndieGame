@@ -42,12 +42,15 @@ namespace GameSystem.Framework
         where T : BaseGameSystem<T>
     {
         protected GameSystemManager _gameSystemManager;
+
         protected static T _instance;
+        protected Transform _transform;
 
         void IBaseGameSystem.InitBaseGameSystem(GameSystemManager gameSystemManager)
         {
             _gameSystemManager = gameSystemManager;
             _instance = this as T;
+            _transform = this.transform;
         }
 
         bool IBaseGameSystem.Init()
