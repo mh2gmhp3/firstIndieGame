@@ -37,7 +37,7 @@ namespace GameSystem.Framework
         /// <summary>
         /// 檔案路徑 TODO 盡可能拆出去
         /// </summary>
-        public static string RESOURCE_PATH = "Setting/GameSystem/GameSystemEnterGameFlowStepSetting";
+        public static string RESOURCE_FRAMEWORK_PATH = "Framework/Setting/GameSystem/GameSystemEnterGameFlowStepSetting";
 
         public List<int> EnterGameFlowStep = new List<int>();
 

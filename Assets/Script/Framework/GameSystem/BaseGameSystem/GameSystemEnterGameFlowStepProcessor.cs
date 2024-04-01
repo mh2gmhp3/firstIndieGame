@@ -50,7 +50,7 @@ namespace GameSystem.Framework
                 _flowStepQueue = new Queue<int>();
 
                 _enterGameFlowStepSetting =
-                    AssetsSystem.LoadAssets<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_PATH);
+                    AssetsSystem.LoadAssets<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_FRAMEWORK_PATH);
                 if (_enterGameFlowStepSetting == null)
                 {
                     Log.LogError("GameSystemEnterGameFlowStepProcessor construct error _enterGameFlowStepSetting is null");
