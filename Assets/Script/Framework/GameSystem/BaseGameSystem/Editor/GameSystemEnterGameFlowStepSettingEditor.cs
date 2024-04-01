@@ -12,6 +12,8 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
     [CustomEditor(typeof(GameSystemEnterGameFlowStepSetting))]
     public class GameSystemEnterGameFlowStepSettingEditor : UEditor
     {
+        public GUISkin _guiSkin;
+
         private GameSystemEnterGameFlowStepSetting _instance = null;
 
         private HashSet<string> _stepConfigName = new HashSet<string>();
