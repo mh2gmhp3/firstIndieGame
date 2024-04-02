@@ -4,7 +4,8 @@
     {
         public enum EnterGameFlowStep
         {
-            Init_GUIRoot = 1,
+            Init_BaseMainCamera = 1,
+            Init_GUIRoot = 2,
         }
     }
 }
