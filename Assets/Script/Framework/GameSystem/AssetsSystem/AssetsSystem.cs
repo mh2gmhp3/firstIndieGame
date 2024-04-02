@@ -166,6 +166,7 @@ namespace GameSystem.Framework.Assets
             }
 
             var loadResult = Resources.Load<T>(path);
+            _pathToLoadedAsset.Add(path, loadResult);
             return loadResult;
         }
 
