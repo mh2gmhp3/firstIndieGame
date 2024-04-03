@@ -11,6 +11,29 @@ namespace GameMainSystem
     [GameSystem(GameSystemPriority.GAME_MAIN_SYSTEM)]
     public class GameMainSystem : BaseGameSystem<GameMainSystem>
     {
+        private const string INPUT_SETTING = "Setting/InputSetting";
+        public GameInputReceiver _inputReceiver = null;
 
+        protected override void DoEnterGameFlowEnterStep(int flowStep)
+        {
+            if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameController)
+            {
+                var inputSetting = AssetsSystem.LoadAssets<InputSetting>(INPUT_SETTING);
+                _inputReceiver = new GameInputReceiver(OnKeyDown, OnKeyUp);
+                InputSystem.SetInputProcessor(new GameInputProcessor());
+                InputSystem.SetInputSetting(inputSetting);
+                InputSystem.RegisterInputReceiver(_inputReceiver);
+            }
+        }
+
+        private void OnKeyDown(KeyCode keyCode, string command)
+        {
+            Log.LogInfo($"OnKeyDown KeyCode:{keyCode}, Command:{command}");
+        }
+
+        private void OnKeyUp(KeyCode keyCode, string command)
+        {
+            Log.LogInfo($"OnKeyUp KeyCode:{keyCode}, Command:{command}");
+        }
     }
 }
