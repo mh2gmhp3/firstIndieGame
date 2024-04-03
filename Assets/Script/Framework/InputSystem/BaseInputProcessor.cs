@@ -9,7 +9,7 @@ namespace InputSystem
     {
         public void DetectKeyboardInput();
 
-        public void SetInputSetting(KeyboardInputSetting keyboardInputSetting);
+        public void SetInputSetting(InputSetting inputSetting);
 
         public void RegisterInputReceiver(IInputReceiver inputReceiver);
         public void UnRegisterInputReceiver(IInputReceiver inputReceiver);
@@ -24,6 +24,12 @@ namespace InputSystem
     {
         public KeyCode KeyCode;
         public string Command;
+
+        public KeyboardRuntimeInputSetting(KeyboardInputSetting keyboardInputSetting)
+        {
+            KeyCode = keyboardInputSetting.KeyCode;
+            Command = keyboardInputSetting.Command;
+        }
     }
 
     public abstract class BaseInputProcessor<T> : IInputProcessor
@@ -55,9 +61,17 @@ namespace InputSystem
             }
         }
 
-        public void SetInputSetting(KeyboardInputSetting keyboardInputSetting)
+        public void SetInputSetting(InputSetting inputSetting)
         {
+            if (inputSetting == null)
+                return;
 
+            _keyboardRuntimeSettings.Clear();
+            for (int i = 0; i < inputSetting.KeyboardInputSettingList.Count; i++)
+            {
+                _keyboardRuntimeSettings.Add(
+                    new KeyboardRuntimeInputSetting(inputSetting.KeyboardInputSettingList[i]));
+            }
         }
 
         public void RegisterInputReceiver(IInputReceiver inputReceiver)

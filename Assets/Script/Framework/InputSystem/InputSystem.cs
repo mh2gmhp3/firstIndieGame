@@ -46,14 +46,14 @@ namespace InputSystem
 
         #region Public Static Method SetInputSetting
 
-        public static void SetInputSetting(KeyboardInputSetting keyboardInputSetting)
+        public static void SetInputSetting(InputSetting inputSetting)
         {
-            _instance.DoSetInputSetting(keyboardInputSetting);
+            _instance.DoSetInputSetting(inputSetting);
         }
 
-        private void DoSetInputSetting(KeyboardInputSetting keyboardInputSetting)
+        private void DoSetInputSetting(InputSetting inputSetting)
         {
-            _inputProcessor.SetInputSetting(keyboardInputSetting);
+            _inputProcessor.SetInputSetting(inputSetting);
         }
 
         #endregion
