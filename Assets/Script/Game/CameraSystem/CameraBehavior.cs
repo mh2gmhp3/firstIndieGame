@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CameraSystem
+namespace CameraModule
 {
     public class CameraBehavior : ICameraBehavior
     {

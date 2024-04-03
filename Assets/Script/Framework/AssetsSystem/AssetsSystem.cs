@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UObject = UnityEngine.Object;
 
-namespace AssetsSystem
+namespace AssetsModule
 {
     /*
         TODO 需處裡讀取行為設定檔 對應設定檔給特定實作類處理

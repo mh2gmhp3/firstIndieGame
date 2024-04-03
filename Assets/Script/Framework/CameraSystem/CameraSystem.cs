@@ -1,12 +1,12 @@
 ﻿using GameSystem;
-using AssetsSystem;
+using AssetsModule;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utility;
 using Logging;
 
-namespace CameraSystem
+namespace CameraModule
 {
     [GameSystem(GameSystemPriority.CAMERA_SYSTEM)]
     public partial class CameraSystem : BaseGameSystem<CameraSystem>
@@ -23,7 +23,7 @@ namespace CameraSystem
         {
             if (flowStep == (int)EnterGameFlowStepDefine.FrameworkEnterGameFlowStep.Init_BaseMainCamera)
             {
-                var go = AssetsSystem.AssetsSystem.LoadAssets<GameObject>(CAMERA_RESOURCE_FRAMEWORK_PATH);
+                var go = AssetsSystem.LoadAssets<GameObject>(CAMERA_RESOURCE_FRAMEWORK_PATH);
                 _cameraGo = ObjectUtility.InstantiateWithoutClone(go);
                 _cameraTrans = _cameraGo.transform;
                 _cameraTrans.SetParent(_transform);

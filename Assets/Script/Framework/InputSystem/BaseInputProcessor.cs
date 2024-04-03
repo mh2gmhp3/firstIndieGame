@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace InputSystem
+namespace InputModule
 {
     public interface IInputProcessor
     {

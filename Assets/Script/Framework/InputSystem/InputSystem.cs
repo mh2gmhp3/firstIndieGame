@@ -1,4 +1,4 @@
-﻿using CameraSystem;
+﻿using CameraModule;
 using GameSystem;
 using Logging;
 using System;
@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace InputSystem
+namespace InputModule
 {
     [GameSystem(GameSystemPriority.INPUT_SYSTEM)]
     public partial class InputSystem : BaseGameSystem<InputSystem>
