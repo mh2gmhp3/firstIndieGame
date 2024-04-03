@@ -4,7 +4,7 @@
     {
         public enum EnterGameFlowStep
         {
-
+            Init_GameCamera = 3,
         }
     }
 }

@@ -86,7 +86,7 @@ namespace AssetsSystem
             CheckRequestLoaded();
         }
 
-        #region Public Static LoadAssets
+        #region Public Static Method LoadAssets
 
         /// <summary>
         /// 讀取資源
@@ -100,6 +100,25 @@ namespace AssetsSystem
             return _instance.DoLoadAssets<T>(path);
         }
 
+        private T DoLoadAssets<T>(string path)
+            where T : UObject
+        {
+            if (_pathToLoadedAsset.TryGetValue(path, out UObject asset))
+            {
+                var result = asset as T;
+                if (result != null)
+                    return result;
+            }
+
+            var loadResult = Resources.Load<T>(path);
+            _pathToLoadedAsset.Add(path, loadResult);
+            return loadResult;
+        }
+
+        #endregion
+
+        #region Public Static Method LoadAssetsAsync
+
         /// <summary>
         /// 非同步讀取資源
         /// 作用於EnterGameFlowStep與Update
@@ -109,6 +128,31 @@ namespace AssetsSystem
         public static void LoadAssetsAsync(string path, Action<UObject> onLoaded)
         {
             _instance.DoLoadAssetsAsync(path, onLoaded);
+        }
+
+        private void DoLoadAssetsAsync(string path, Action<UObject> onLoaded)
+        {
+            if (_pathToLoadingRequest.TryGetValue(path, out LoadingRequest loadingRequest))
+            {
+                loadingRequest.AddOnLoaded(onLoaded);
+                return;
+            }
+
+            if (_pathToLoadedAsset.TryGetValue(path, out UObject result))
+            {
+                onLoaded.Invoke(result);
+                return;
+            }
+
+            ResourceRequest resourceRequest = Resources.LoadAsync(path);
+            LoadingRequest newLoadingRequest =
+                new LoadingRequest(
+                    path,
+                    resourceRequest,
+                    onLoaded);
+
+            _pathToLoadingRequest.Add(path, newLoadingRequest);
+            _loadingRequest.Add(newLoadingRequest);
         }
 
         #endregion
@@ -146,50 +190,6 @@ namespace AssetsSystem
             }
 
             return _loadingRequest.Count == 0;
-        }
-
-        #endregion
-
-        #region Private Method Do LoadAssets
-
-        private T DoLoadAssets<T>(string path)
-            where T : UObject
-        {
-            if (_pathToLoadedAsset.TryGetValue(path, out UObject asset))
-            {
-                var result = asset as T;
-                if (result != null)
-                    return result;
-            }
-
-            var loadResult = Resources.Load<T>(path);
-            _pathToLoadedAsset.Add(path, loadResult);
-            return loadResult;
-        }
-
-        private void DoLoadAssetsAsync(string path, Action<UObject> onLoaded)
-        {
-            if (_pathToLoadingRequest.TryGetValue(path, out LoadingRequest loadingRequest))
-            {
-                loadingRequest.AddOnLoaded(onLoaded);
-                return;
-            }
-
-            if (_pathToLoadedAsset.TryGetValue(path, out UObject result))
-            {
-                onLoaded.Invoke(result);
-                return;
-            }
-
-            ResourceRequest resourceRequest = Resources.LoadAsync(path);
-            LoadingRequest newLoadingRequest =
-                new LoadingRequest(
-                    path,
-                    resourceRequest,
-                    onLoaded);
-
-            _pathToLoadingRequest.Add(path, newLoadingRequest);
-            _loadingRequest.Add(newLoadingRequest);
         }
 
         #endregion

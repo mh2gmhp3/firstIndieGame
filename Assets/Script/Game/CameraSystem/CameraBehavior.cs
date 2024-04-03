@@ -4,43 +4,32 @@ using UnityEngine;
 
 namespace CameraSystem
 {
-    public interface ICameraBehavior
+    public class CameraBehavior : ICameraBehavior
     {
-        public void SetCamera(
-            GameObject cameraGo,
-            Transform cameraTrans,
-            Camera camera,
-            Transform cameraSystemTrans);
+        private Transform _cameraTrans = null;
 
-        public void DoUpdate();
-        public void DoFixedUpdate();
-        public void DoLateUpdate();
-    }
-
-    public class DefaultCameraBehavior : ICameraBehavior
-    {
         void ICameraBehavior.SetCamera(
             GameObject cameraGo,
             Transform cameraTrans,
             Camera camera,
             Transform cameraSystemTrans)
         {
-            //do nothing
+            _cameraTrans = cameraTrans;
         }
 
         void ICameraBehavior.DoUpdate()
         {
-            //do nothing
+
         }
 
         void ICameraBehavior.DoFixedUpdate()
         {
-            //do nothing
+
         }
 
         void ICameraBehavior.DoLateUpdate()
         {
-            //do nothing
+
         }
     }
 }
