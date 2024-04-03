@@ -5,21 +5,6 @@ using UnityEngine.UIElements;
 
 namespace InputModule
 {
-    public interface IInputProcessor
-    {
-        public void DetectKeyboardInput();
-
-        public void SetInputSetting(InputSetting inputSetting);
-
-        public void RegisterInputReceiver(IInputReceiver inputReceiver);
-        public void UnRegisterInputReceiver(IInputReceiver inputReceiver);
-    }
-
-    public interface IInputReceiver
-    {
-
-    }
-
     public class KeyboardRuntimeInputSetting
     {
         public KeyCode KeyCode;
@@ -96,10 +81,5 @@ namespace InputModule
 
         protected virtual void OnKeyDown(KeyCode keyCode, string command) { }
         protected virtual void OnKeyUp(KeyCode keyCode, string command) { }
-    }
-
-    public class DefaultInputProcessor : BaseInputProcessor<IInputReceiver>
-    {
-
     }
 }
