@@ -1,35 +1,11 @@
-﻿using System.Collections;
+﻿using Logging;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace CameraModule
 {
-    public class CameraBehavior : ICameraBehavior
+    public class CameraBehavior : BaseCameraBehavior
     {
-        private Transform _cameraTrans = null;
-
-        void ICameraBehavior.SetCamera(
-            GameObject cameraGo,
-            Transform cameraTrans,
-            Camera camera,
-            Transform cameraSystemTrans)
-        {
-            _cameraTrans = cameraTrans;
-        }
-
-        void ICameraBehavior.DoUpdate()
-        {
-
-        }
-
-        void ICameraBehavior.DoFixedUpdate()
-        {
-
-        }
-
-        void ICameraBehavior.DoLateUpdate()
-        {
-
-        }
     }
 }

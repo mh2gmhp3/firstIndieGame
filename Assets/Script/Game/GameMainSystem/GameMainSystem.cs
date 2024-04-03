@@ -1,4 +1,5 @@
 ﻿using AssetsModule;
+using CameraModule;
 using GameSystem;
 using InputModule;
 using Logging;
@@ -16,7 +17,11 @@ namespace GameMainSystem
 
         protected override void DoEnterGameFlowEnterStep(int flowStep)
         {
-            if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameController)
+            if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameCamera)
+            {
+                CameraSystem.SetCameraBehavior(new CameraBehavior());
+            }
+            else if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameController)
             {
                 var inputSetting = AssetsSystem.LoadAssets<InputSetting>(INPUT_SETTING);
                 _inputReceiver = new GameInputReceiver(OnKeyDown, OnKeyUp);

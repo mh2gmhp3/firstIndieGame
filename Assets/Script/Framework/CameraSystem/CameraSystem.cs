@@ -77,5 +77,19 @@ namespace CameraModule
         }
 
         #endregion
+
+        #region Public Static Method CameraCommand
+
+        public static void CameraCommand(ICameraCommand target)
+        {
+            _instance.DoCameraCommand(target);
+        }
+
+        private void DoCameraCommand(ICameraCommand target)
+        {
+            _cameraBehavior.CameraCommand(target);
+        }
+
+        #endregion
     }
 }

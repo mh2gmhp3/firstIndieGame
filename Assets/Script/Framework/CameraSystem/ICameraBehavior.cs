@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using Logging;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace CameraModule
@@ -12,35 +15,113 @@ namespace CameraModule
             Camera camera,
             Transform cameraSystemTrans);
 
+        public void CameraCommand(ICameraCommand command);
+
         public void DoUpdate();
         public void DoFixedUpdate();
         public void DoLateUpdate();
     }
 
-    public class DefaultCameraBehavior : ICameraBehavior
+    public abstract class BaseCameraBehavior : ICameraBehavior
     {
-        void ICameraBehavior.SetCamera(
+        protected GameObject _cameraGo;
+        protected Transform _cameraTrans;
+        protected Camera _camera;
+
+        protected Dictionary<int, CameraCommandMethod> _commandIdToMethod;
+
+        public BaseCameraBehavior()
+        {
+            InitCommandMethod();
+        }
+
+        private void InitCommandMethod()
+        {
+            _commandIdToMethod = new Dictionary<int, CameraCommandMethod>();
+            Type type = GetType();
+            MethodInfo[] methodInfos =
+                type.GetMethods(
+                    BindingFlags.Public |
+                    BindingFlags.NonPublic |
+                    BindingFlags.Instance);
+            foreach (var methodInfo in methodInfos)
+            {
+                var attr = methodInfo.GetCustomAttribute<CameraCommandAttribute>();
+                if (attr == null)
+                    continue;
+
+                if (_commandIdToMethod.ContainsKey(attr.CommandId))
+                {
+                    Log.LogWarning(
+                        $"{GetType().Name} InitCommandMethod, " +
+                        $"duplicate commandId Id:{attr.CommandId}");
+                    continue;
+                }
+
+                CameraCommandMethod delg =
+                    methodInfo.CreateDelegate(typeof(CameraCommandMethod), this) as CameraCommandMethod;
+                if (delg == null)
+                {
+                    Log.LogWarning(
+                        $"{GetType().Name} InitCommandMethod, " +
+                        $"CreateDelegate failed commandId Id:{attr.CommandId}");
+                    continue;
+                }
+
+                _commandIdToMethod.Add(attr.CommandId, delg);
+            }
+        }
+
+        public virtual void SetCamera(
             GameObject cameraGo,
             Transform cameraTrans,
             Camera camera,
             Transform cameraSystemTrans)
         {
-            //do nothing
+            _cameraGo = cameraGo;
+            _cameraTrans = cameraTrans;
+            _camera = camera;
         }
 
-        void ICameraBehavior.DoUpdate()
+        public virtual void CameraCommand(ICameraCommand command)
         {
-            //do nothing
+            if (command == null)
+                return;
+
+            if (!_commandIdToMethod.TryGetValue(command.CommandId, out var method))
+            {
+                Log.LogWarning($"{GetType().Name} CameraCommand, " +
+                    $"Command not found Id:{command.CommandId}");
+                return;
+            }
+
+            method.Invoke(command);
         }
 
-        void ICameraBehavior.DoFixedUpdate()
+        public virtual void DoUpdate()
         {
-            //do nothing
+
         }
 
-        void ICameraBehavior.DoLateUpdate()
+        public virtual void DoFixedUpdate()
         {
-            //do nothing
+
         }
+
+        public virtual void DoLateUpdate()
+        {
+
+        }
+
+        [CameraCommand((int)CameraCommandDefine.BaseCommand.LookAtPosition)]
+        protected virtual void LookAtPosition(ICameraCommand command)
+        {
+
+        }
+    }
+
+    public class DefaultCameraBehavior : BaseCameraBehavior
+    {
+
     }
 }
