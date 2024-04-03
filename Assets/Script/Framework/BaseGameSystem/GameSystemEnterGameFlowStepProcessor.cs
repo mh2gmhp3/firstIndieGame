@@ -1,10 +1,10 @@
-﻿using GameSystem.Framework.Assets;
+﻿using AssetsSystem;
 using Logging;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameSystem.Framework
+namespace GameSystem
 {
     public partial class GameSystemManager
     {
@@ -50,7 +50,7 @@ namespace GameSystem.Framework
                 _flowStepQueue = new Queue<int>();
 
                 _enterGameFlowStepSetting =
-                    AssetsSystem.LoadAssets<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_FRAMEWORK_PATH);
+                    AssetsSystem.AssetsSystem.LoadAssets<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_FRAMEWORK_PATH);
                 if (_enterGameFlowStepSetting == null)
                 {
                     Log.LogError("GameSystemEnterGameFlowStepProcessor construct error _enterGameFlowStepSetting is null");

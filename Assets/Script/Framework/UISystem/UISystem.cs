@@ -1,10 +1,11 @@
-﻿using GameSystem.Framework.Assets;
+﻿using AssetsSystem;
+using GameSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utility;
 
-namespace GameSystem.Framework.UI
+namespace UISystem
 {
     [GameSystem(GameSystemPriority.UI_SYSTEM)]
     public partial class UISystem : BaseGameSystem<UISystem>
@@ -17,9 +18,9 @@ namespace GameSystem.Framework.UI
 
         protected override void DoEnterGameFlowEnterStep(int flowStep)
         {
-            if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GUIRoot)
+            if (flowStep == (int)EnterGameFlowStepDefine.FrameworkEnterGameFlowStep.Init_GUIRoot)
             {
-                var obj = AssetsSystem.LoadAssets<GameObject>(GUI_ROOT_RESOURCE_PATH);
+                var obj = AssetsSystem.AssetsSystem.LoadAssets<GameObject>(GUI_ROOT_RESOURCE_PATH);
                 _guiRoot = ObjectUtility.InstantiateWithoutClone(obj);
                 _guiRootTrans = _guiRoot.transform;
                 _guiRootRectTrans = _guiRootTrans as RectTransform;

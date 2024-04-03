@@ -1,10 +1,11 @@
-﻿using GameSystem.Framework.Assets;
+﻿using GameSystem;
+using AssetsSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utility;
 
-namespace GameSystem.Framework.Camera
+namespace CameraSystem
 {
     [GameSystem(GameSystemPriority.CAMERA_SYSTEM)]
     public partial class CameraSystem : BaseGameSystem<CameraSystem>
@@ -16,9 +17,9 @@ namespace GameSystem.Framework.Camera
 
         protected override void DoEnterGameFlowEnterStep(int flowStep)
         {
-            if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_BaseMainCamera)
+            if (flowStep == (int)EnterGameFlowStepDefine.FrameworkEnterGameFlowStep.Init_BaseMainCamera)
             {
-                var go = AssetsSystem.LoadAssets<GameObject>(CAMERA_RESOURCE_FRAMEWORK_PATH);
+                var go = AssetsSystem.AssetsSystem.LoadAssets<GameObject>(CAMERA_RESOURCE_FRAMEWORK_PATH);
                 _cameraGo = ObjectUtility.InstantiateWithoutClone(go);
                 _cametaTrans = _cameraGo.transform;
                 _cametaTrans.SetParent(_transform);

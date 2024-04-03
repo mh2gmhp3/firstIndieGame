@@ -1,4 +1,4 @@
-﻿using GameSystem.Framework;
+﻿using GameSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using UnityEngine;
 using Logging;
 using Utility;
 
-namespace GameSystem.Framework
+namespace GameSystem
 {
     /// <summary>
     /// 各系統管理者

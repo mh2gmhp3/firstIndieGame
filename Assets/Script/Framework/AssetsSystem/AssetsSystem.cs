@@ -1,13 +1,10 @@
-﻿using Logging;
+﻿using GameSystem;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UObject = UnityEngine.Object;
 
-namespace GameSystem.Framework.Assets
+namespace AssetsSystem
 {
     /*
         TODO 需處裡讀取行為設定檔 對應設定檔給特定實作類處理

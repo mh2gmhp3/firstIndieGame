@@ -1,9 +1,10 @@
-﻿using Logging;
+﻿using GameSystem;
+using Logging;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameSystem.Framework.Input
+namespace InputSystem
 {
     [GameSystem(GameSystemPriority.INPUT_SYSTEM)]
     public partial class InputSystem : BaseGameSystem<InputSystem>

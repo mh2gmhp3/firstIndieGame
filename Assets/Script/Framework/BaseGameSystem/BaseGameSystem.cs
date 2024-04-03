@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace GameSystem.Framework
+namespace GameSystem
 {
     /// <summary>
     /// 基礎系統

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using UEditor = UnityEditor.Editor;
 using Logging;
-using GameSystem.Framework;
+using GameSystem;
 using System;
 
 namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting

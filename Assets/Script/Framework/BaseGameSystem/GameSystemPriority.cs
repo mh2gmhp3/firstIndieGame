@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameSystem.Framework
+namespace GameSystem
 {
     /// <summary>
     /// 各系統修先權 TODO 如果很長改要抽成Setting避免每次Compiler都要跑
