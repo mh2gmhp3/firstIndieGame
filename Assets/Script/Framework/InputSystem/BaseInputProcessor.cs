@@ -15,6 +15,12 @@ namespace InputModule
             KeyCode = keyboardInputSetting.KeyCode;
             Command = keyboardInputSetting.Command;
         }
+
+        public KeyboardRuntimeInputSetting(KeyCode keyCode, string command)
+        {
+            KeyCode = keyCode;
+            Command = command;
+        }
     }
 
     public abstract class BaseInputProcessor<T> : IInputProcessor
@@ -46,7 +52,7 @@ namespace InputModule
             }
         }
 
-        public void SetInputSetting(InputSetting inputSetting)
+        public virtual void SetInputSetting(InputSetting inputSetting)
         {
             if (inputSetting == null)
                 return;
