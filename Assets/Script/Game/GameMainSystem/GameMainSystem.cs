@@ -6,6 +6,7 @@ using Logging;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 
 namespace GameMainSystem
 {
@@ -28,6 +29,19 @@ namespace GameMainSystem
                 InputSystem.SetInputProcessor(new GameInputProcessor());
                 InputSystem.SetInputSetting(inputSetting);
                 InputSystem.RegisterInputReceiver(_inputReceiver);
+            }
+            else if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameTest)
+            {
+                var testCharacterAssets = AssetsSystem.LoadAssets<GameObject>("Prototype/TestObject/Character_Sphere");
+                var testCharacterGo = ObjectUtility.InstantiateWithoutClone(testCharacterAssets);
+                var textCharacterTrans = testCharacterGo.transform;
+                CameraSystem.CameraCommand(
+                    new FollowTarget
+                    {
+                        CommandId = (int)CameraCommandDefine.BaseCommand.FollowTarget,
+                        TargetTrans = textCharacterTrans,
+                        Distance = 10,
+                    });
             }
         }
 

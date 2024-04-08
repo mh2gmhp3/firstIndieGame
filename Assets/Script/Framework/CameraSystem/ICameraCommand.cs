@@ -8,13 +8,6 @@ namespace CameraModule
     public interface ICameraCommand
     {
         public int CommandId { get; set; }
-        public Vector3 Target { get; set; }
-    }
-
-    public class CameraCommand : ICameraCommand
-    {
-        public int CommandId { get; set; }
-        public Vector3 Target { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Method)]

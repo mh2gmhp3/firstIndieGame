@@ -6,6 +6,7 @@
         {
             Init_GameCamera = 3,
             Init_GameController = 4,
+            Init_GameTest = 5,
         }
     }
 }

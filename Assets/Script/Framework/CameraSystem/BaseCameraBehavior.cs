@@ -7,7 +7,14 @@ using UnityEngine;
 
 namespace CameraModule
 {
-    public abstract class BaseCameraBehavior : ICameraBehavior
+    [Flags]
+    public enum BaseCameraState
+    {
+        None = 0000_0000_0000,
+        FollowTarget = 0000_0000_0001,
+    }
+
+    public abstract partial class BaseCameraBehavior : ICameraBehavior
     {
         protected GameObject _cameraGo;
         protected Transform _cameraTrans;
@@ -15,9 +22,13 @@ namespace CameraModule
 
         protected Dictionary<int, CameraCommandMethod> _commandIdToMethod;
 
+        protected BaseCameraState _state = BaseCameraState.None;
+
         public BaseCameraBehavior()
         {
             InitCommandMethod();
+
+            _followTargetProcessor = new FollowTargetProcessor(this);
         }
 
         private void InitCommandMethod()
@@ -85,7 +96,10 @@ namespace CameraModule
 
         public virtual void DoUpdate()
         {
-
+            if (_state.HasFlag(BaseCameraState.FollowTarget))
+            {
+                _followTargetProcessor.Update();
+            }
         }
 
         public virtual void DoFixedUpdate()
@@ -94,12 +108,6 @@ namespace CameraModule
         }
 
         public virtual void DoLateUpdate()
-        {
-
-        }
-
-        [CameraCommand((int)CameraCommandDefine.BaseCommand.LookAtPosition)]
-        protected virtual void LookAtPosition(ICameraCommand command)
         {
 
         }
