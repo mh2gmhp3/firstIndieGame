@@ -11,7 +11,7 @@ namespace InputModule
         where T : IInputReceiver
     {
         /// <summary>
-        /// 運行時的各KeyCode對應行為的命令
+        /// 運行時的各KeyCode對應觸發行為的命令
         /// </summary>
         protected class RuntimeKeyCodeTriggerCommand
         {
