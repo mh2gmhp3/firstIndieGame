@@ -3,9 +3,16 @@ using UnityEngine;
 
 namespace InputModule
 {
+    /// <summary>
+    /// 基本輸入處理者
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class BaseInputProcessor<T> : IInputProcessor
         where T : IInputReceiver
     {
+        /// <summary>
+        /// 運行時的各KeyCode對應行為的命令
+        /// </summary>
         protected class RuntimeKeyCodeTriggerCommand
         {
             public List<string> KeyDownCommandList = new List<string>();
@@ -28,16 +35,37 @@ namespace InputModule
             }
         }
 
+        /// <summary>
+        /// 監聽的KeyCodeList
+        /// </summary>
         protected List<KeyCode> _observerKeyCodeList = new List<KeyCode>();
+        /// <summary>
+        /// 監聽的KeyCode觸發命令
+        /// </summary>
         protected Dictionary<KeyCode, RuntimeKeyCodeTriggerCommand> _keyCodeToTriggerCommandListDic =
               new Dictionary<KeyCode, RuntimeKeyCodeTriggerCommand>();
+        /// <summary>
+        /// 當前按著的KeyCode
+        /// </summary>
         protected List<KeyCode> _holdKeyCodeList = new List<KeyCode>();
 
+        /// <summary>
+        /// 監聽的AxisList
+        /// </summary>
         protected List<string> _observerAxisList = new List<string>();
+        /// <summary>
+        /// Axis的值
+        /// </summary>
         protected Dictionary<string, float> _axisToValueDic =
               new Dictionary<string, float>();
+        /// <summary>
+        /// 當前偵有變動的Axis
+        /// </summary>
         protected List<string> _changedAxisList = new List<string>();
 
+        /// <summary>
+        /// 輸入接收者列表
+        /// </summary>
         protected List<T> _inputReceiverList = new List<T>();
 
         public virtual void DetectInput()

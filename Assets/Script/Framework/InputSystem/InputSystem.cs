@@ -26,6 +26,10 @@ namespace InputModule
 
         #region Public Static Method SetInputProcessor
 
+        /// <summary>
+        /// 設定輸入處理者
+        /// </summary>
+        /// <param name="inputProcessor"></param>
         public static void SetInputProcessor(IInputProcessor inputProcessor)
         {
             _instance.DoSetInputProcessor(inputProcessor);
@@ -46,6 +50,10 @@ namespace InputModule
 
         #region Public Static Method SetInputSetting
 
+        /// <summary>
+        /// 設定輸入設定
+        /// </summary>
+        /// <param name="inputSetting"></param>
         public static void SetInputSetting(InputSetting inputSetting)
         {
             _instance.DoSetInputSetting(inputSetting);
@@ -60,6 +68,10 @@ namespace InputModule
 
         #region Public Static Method RegisterInputReceiver
 
+        /// <summary>
+        /// 註冊輸入接收者
+        /// </summary>
+        /// <param name="inputReceiver"></param>
         public static void RegisterInputReceiver(IInputReceiver inputReceiver)
         {
             _instance.DoRegisterInputReceiver(inputReceiver);
@@ -74,6 +86,10 @@ namespace InputModule
 
         #region Public Static Method UnRegisterInputReceiver
 
+        /// <summary>
+        /// 反註冊輸入接收者
+        /// </summary>
+        /// <param name="inputReceiver"></param>
         public static void UnRegisterInputReceiver(IInputReceiver inputReceiver)
         {
             _instance.DoUnRegisterInputReceiver(inputReceiver);
