@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e16b8c6c777c55f47b11194f8514bbbb, type: 3}
   m_Name: InputSetting
   m_EditorClassIdentifier: 
-  KeyboardInputSettingList:
-  - KeyCode: 97
-    Command: as
+  InputCommandList: []
+  InputAxisList: []

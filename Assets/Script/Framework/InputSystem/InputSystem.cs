@@ -21,7 +21,7 @@ namespace InputModule
 
         protected override void DoUpdate()
         {
-            _inputProcessor.DetectKeyboardInput();
+            _inputProcessor.DetectInput();
         }
 
         #region Public Static Method SetInputProcessor

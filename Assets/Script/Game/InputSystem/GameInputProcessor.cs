@@ -27,5 +27,16 @@ namespace InputModule
                 _inputReceiverList[i].OnKeyUp.Invoke(keyCode, command);
             }
         }
+
+        protected override void OnKeyHold(KeyCode keyCode, string command)
+        {
+            for (int i = 0; i < _inputReceiverList.Count; i++)
+            {
+                if (_inputReceiverList[i].OnKeyHold == null)
+                    continue;
+
+                _inputReceiverList[i].OnKeyHold.Invoke(keyCode, command);
+            }
+        }
     }
 }

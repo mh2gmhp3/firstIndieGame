@@ -6,7 +6,7 @@ namespace InputModule
 {
     public interface IInputProcessor
     {
-        public void DetectKeyboardInput();
+        public void DetectInput();
 
         public void SetInputSetting(InputSetting inputSetting);
 

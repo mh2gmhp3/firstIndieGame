@@ -8,26 +8,26 @@ namespace InputModule
 {
     public class AllInpuPrcocessor : BaseInputProcessor<IInputReceiver>
     {
-        public override void DetectKeyboardInput()
-        {
-            float x = Input.GetAxis("Horizontal");
-            float y = Input.GetAxis("Vertical");
-            if (x != 0 || y != 0)
-                Log.LogInfo(new Vector2(x, y));
-
-            base.DetectKeyboardInput();
-        }
-
         public override void SetInputSetting(InputSetting inputSetting)
         {
-            _keyboardRuntimeSettings.Clear();
+            _observerKeyCodeList.Clear();
+            _keyCodeToTriggerCommandListDic.Clear();
             var allKeys = Enum.GetValues(typeof(KeyCode));
-            foreach (KeyCode key in allKeys)
+            foreach (KeyCode keyCode in allKeys)
             {
-                _keyboardRuntimeSettings.Add(
-                    new KeyboardRuntimeInputSetting(
-                        key,
-                        key.ToString()));
+                //Unity對應多平台KeyCode內有相同的編號
+                if (_keyCodeToTriggerCommandListDic.ContainsKey(keyCode))
+                    continue;
+
+                var keyCodeTriggerCommand = new RuntimeKeyCodeTriggerCommand();
+
+                string keyCodeString = keyCode.ToString();
+                keyCodeTriggerCommand.KeyDownCommandList.Add(keyCodeString);
+                keyCodeTriggerCommand.KeyUpCommandList.Add(keyCodeString);
+                keyCodeTriggerCommand.KeyHoldCommandList.Add(keyCodeString);
+
+                _observerKeyCodeList.Add(keyCode);
+                _keyCodeToTriggerCommandListDic.Add(keyCode, keyCodeTriggerCommand);
             }
         }
 
@@ -39,6 +39,11 @@ namespace InputModule
         protected override void OnKeyUp(KeyCode keyCode, string command)
         {
             Log.LogInfo($"OnKeyUp : {keyCode}");
+        }
+
+        protected override void OnKeyHold(KeyCode keyCode, string command)
+        {
+            Log.LogInfo($"OnKeyHold : {keyCode}");
         }
     }
 }
