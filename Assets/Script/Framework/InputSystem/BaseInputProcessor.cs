@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace InputModule
 {
