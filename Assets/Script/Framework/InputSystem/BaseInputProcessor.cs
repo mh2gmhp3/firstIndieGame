@@ -40,6 +40,7 @@ namespace InputModule
         protected List<string> _observerAxisList = new List<string>();
         protected Dictionary<string, float> _axisToValueDic =
               new Dictionary<string, float>();
+        protected List<string> _changedAxisList = new List<string>();
 
         protected List<T> _inputReceiverList = new List<T>();
 
@@ -117,6 +118,9 @@ namespace InputModule
             }
         }
 
+        /// <summary>
+        /// 偵測輸入的KeyCode
+        /// </summary>
         protected virtual void DetectInputKeyCode()
         {
             int count = _observerKeyCodeList.Count;
@@ -176,12 +180,16 @@ namespace InputModule
             }
         }
 
+        /// <summary>
+        /// 偵測輸入的Axis
+        /// </summary>
         protected virtual void DetectInputAxis()
         {
             int count = _observerAxisList.Count;
             if (count == 0)
                 return;
 
+            _changedAxisList.Clear();
             for (int i = 0; i < count; i++)
             {
                 var axis = _observerAxisList[i];
@@ -189,15 +197,38 @@ namespace InputModule
                 if (_axisToValueDic[axis] != newValue)
                 {
                     _axisToValueDic[axis] = newValue;
-                    OnAxisValueChanged(axis, newValue);
+                    _changedAxisList.Add(axis);
                 }
+            }
+            if (_changedAxisList.Count > 0)
+            {
+                OnAxisValueChanged(_changedAxisList);
             }
         }
 
+        /// <summary>
+        /// 當KeyCode按下時呼叫
+        /// </summary>
+        /// <param name="keyCode"></param>
+        /// <param name="command"></param>
         protected virtual void OnKeyDown(KeyCode keyCode, string command) { }
+        /// <summary>
+        /// 當KeyCode放開時呼叫
+        /// </summary>
+        /// <param name="keyCode"></param>
+        /// <param name="command"></param>
         protected virtual void OnKeyUp(KeyCode keyCode, string command) { }
+        /// <summary>
+        /// 當KeyCode按著時呼叫
+        /// </summary>
+        /// <param name="keyCode"></param>
+        /// <param name="command"></param>
         protected virtual void OnKeyHold(KeyCode keyCode, string command) { }
 
-        protected virtual void OnAxisValueChanged(string axis, float value) { }
+        /// <summary>
+        /// 於Axis變動時呼叫 傳入當偵所有變動的Axis
+        /// </summary>
+        /// <param name="axisList"></param>
+        protected virtual void OnAxisValueChanged(List<string> axisList) { }
     }
 }

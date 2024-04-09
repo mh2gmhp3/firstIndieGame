@@ -38,5 +38,16 @@ namespace InputModule
                 _inputReceiverList[i].OnKeyHold.Invoke(keyCode, command);
             }
         }
+
+        protected override void OnAxisValueChanged(List<string> axisList)
+        {
+            for (int i = 0; i < _inputReceiverList.Count; i++)
+            {
+                if (_inputReceiverList[i].OnKeyHold == null)
+                    continue;
+
+                _inputReceiverList[i].OnAxisValueChanged(axisList, _axisToValueDic);
+            }
+        }
     }
 }
