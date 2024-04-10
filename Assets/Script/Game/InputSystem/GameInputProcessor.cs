@@ -46,7 +46,9 @@ namespace InputModule
                 if (_inputReceiverList[i].OnKeyHold == null)
                     continue;
 
-                _inputReceiverList[i].OnAxisValueChanged(axisList, _axisToValueDic);
+                _inputReceiverList[i].OnAxisValueChanged(
+                    axisList,
+                    _axisToValueDic);
             }
         }
     }
