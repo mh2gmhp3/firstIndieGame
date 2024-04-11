@@ -11,7 +11,12 @@ namespace CameraModule
     public enum BaseCameraState
     {
         None = 0000_0000_0000,
-        FollowTarget = 0000_0000_0001,
+
+        //0000_0000_0001~0000_0000_1000 遊戲主要攝影機模式
+        ThirdPersonMode = 0000_0000_0001,
+
+        //攝影機特殊行為
+        FollowTarget = 0000_0001_0000,
     }
 
     public abstract partial class BaseCameraBehavior : ICameraBehavior
@@ -29,6 +34,7 @@ namespace CameraModule
             InitCommandMethod();
 
             _followTargetProcessor = new FollowTargetProcessor(this);
+            _thirdPersonModeProcessor = new ThirdPersonModeProcessor(this);
         }
 
         private void InitCommandMethod()
@@ -68,6 +74,16 @@ namespace CameraModule
             }
         }
 
+        protected void RaiseStateFlag(BaseCameraState state)
+        {
+            _state |= state;
+        }
+
+        protected void FallStateFlag(BaseCameraState state)
+        {
+            _state ^= state;
+        }
+
         public virtual void SetCamera(
             GameObject cameraGo,
             Transform cameraTrans,
@@ -96,9 +112,14 @@ namespace CameraModule
 
         public virtual void DoUpdate()
         {
+            //TODO 這部分應該可以改成各自Flag呼叫對應的Processor
             if (_state.HasFlag(BaseCameraState.FollowTarget))
             {
                 _followTargetProcessor.Update();
+            }
+            else if (_state.HasFlag(BaseCameraState.ThirdPersonMode))
+            {
+                _thirdPersonModeProcessor.Update();
             }
         }
 

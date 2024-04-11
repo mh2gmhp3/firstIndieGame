@@ -18,12 +18,12 @@ namespace CameraModule
 
     public partial class BaseCameraBehavior
     {
-        public class FollowTargetProcessor
+        protected class FollowTargetProcessor
         {
-            private BaseCameraBehavior _baseCameraBehavior;
+            protected BaseCameraBehavior _baseCameraBehavior;
 
-            private Transform _targetTrans;
-            private float _distance;
+            protected Transform _targetTrans;
+            protected float _distance;
 
             public FollowTargetProcessor(BaseCameraBehavior baseCameraBehavior)
             {
@@ -57,7 +57,7 @@ namespace CameraModule
             }
         }
 
-        private FollowTargetProcessor _followTargetProcessor;
+        protected FollowTargetProcessor _followTargetProcessor;
 
         [CameraCommand((int)CameraCommandDefine.BaseCommand.FollowTarget)]
         protected virtual void FollowTarget(ICameraCommand command)
@@ -69,7 +69,7 @@ namespace CameraModule
                 followTarget.TargetTrans,
                 followTarget.Distance);
 
-            _state |= BaseCameraState.FollowTarget;
+            RaiseStateFlag(BaseCameraState.FollowTarget);
         }
     }
 }

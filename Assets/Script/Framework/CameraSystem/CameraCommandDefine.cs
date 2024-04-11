@@ -8,8 +8,10 @@ namespace CameraModule
     {
         public enum BaseCommand
         {
-            LookAtPosition = 1,
-            FollowTarget = 2,
+            ThirdPersonMode = 1,
+
+            LookAtPosition = 10,
+            FollowTarget = 11,
         }
     }
 }
