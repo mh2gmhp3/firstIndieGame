@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: InputSetting
   m_EditorClassIdentifier: 
   InputCommandList: []
-  InputAxisList: []
+  InputAxisList:
+  - Axis: Horizontal
+  - Axis: Vertical
+  - Axis: Left Trigger
+  - Axis: Right Trigger
