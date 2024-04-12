@@ -112,15 +112,7 @@ namespace CameraModule
 
         public virtual void DoUpdate()
         {
-            //TODO 這部分應該可以改成各自Flag呼叫對應的Processor
-            if (_state.HasFlag(BaseCameraState.FollowTarget))
-            {
-                _followTargetProcessor.Update();
-            }
-            else if (_state.HasFlag(BaseCameraState.ThirdPersonMode))
-            {
-                _thirdPersonModeProcessor.Update();
-            }
+
         }
 
         public virtual void DoFixedUpdate()
@@ -130,7 +122,15 @@ namespace CameraModule
 
         public virtual void DoLateUpdate()
         {
-
+            //TODO 這部分應該可以改成各自Flag呼叫對應的Processor
+            if (_state.HasFlag(BaseCameraState.FollowTarget))
+            {
+                _followTargetProcessor.LateUpdate();
+            }
+            else if (_state.HasFlag(BaseCameraState.ThirdPersonMode))
+            {
+                _thirdPersonModeProcessor.LateUpdate();
+            }
         }
     }
 }

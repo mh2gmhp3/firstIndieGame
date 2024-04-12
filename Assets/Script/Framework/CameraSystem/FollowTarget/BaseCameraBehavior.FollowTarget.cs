@@ -14,6 +14,11 @@ namespace CameraModule
         public int CommandId { get; set; }
         public Transform TargetTrans { get; set; }
         public float Distance { get; set; }
+
+        public FollowTarget()
+        {
+            CommandId = (int)CameraCommandDefine.BaseCommand.FollowTarget;
+        }
     }
 
     public partial class BaseCameraBehavior
@@ -36,7 +41,7 @@ namespace CameraModule
                 _distance = distance;
             }
 
-            public void Update()
+            public void LateUpdate()
             {
                 if (_targetTrans == null)
                     return;

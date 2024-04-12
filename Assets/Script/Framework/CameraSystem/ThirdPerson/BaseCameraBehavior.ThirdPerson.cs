@@ -5,6 +5,14 @@ using UnityEngine.Rendering;
 
 namespace CameraModule
 {
+    public interface IUpdateThirdPersonScreenAxisData : ICameraCommand
+    {
+        /// <summary>
+        /// 螢幕XY軸操作值
+        /// </summary>
+        public Vector2 ScreenAxis { get; set; }
+    }
+
     public interface IThirdPersonModeCommandData : ICameraCommand
     {
         /// <summary>
@@ -20,9 +28,24 @@ namespace CameraModule
         /// </summary>
         public float Distance { get; set; }
         /// <summary>
-        /// 設定時攝影機觀看對象的方向
+        /// 攝影機旋轉靈敏度
         /// </summary>
-        public Vector3 Direction { get; set; }
+        public float CameraRotateSensitivity { get; set; }
+        /// <summary>
+        /// 螢幕XY軸操作值
+        /// </summary>
+        public Vector2 ScreenAxisValue { get; set; }
+    }
+
+    public class UpdateThirdPersonScreenAxisData : IUpdateThirdPersonScreenAxisData
+    {
+        public int CommandId { get; set; }
+        public Vector2 ScreenAxis { get; set; }
+
+        public UpdateThirdPersonScreenAxisData()
+        {
+            CommandId = (int)CameraCommandDefine.BaseCommand.UpdateThirdPersonScreenAxisValue;
+        }
     }
 
     public class ThirdPersonModeCommandData : IThirdPersonModeCommandData
@@ -31,7 +54,13 @@ namespace CameraModule
         public Transform TargetTrans { get; set; }
         public Vector3 FocusTargetOffset { get; set; }
         public float Distance { get; set; }
-        public Vector3 Direction { get; set; }
+        public float CameraRotateSensitivity { get; set; }
+        public Vector2 ScreenAxisValue { get; set; }
+
+        public ThirdPersonModeCommandData()
+        {
+            CommandId = (int)CameraCommandDefine.BaseCommand.SetThirdPersonMode;
+        }
     }
 
     public partial class BaseCameraBehavior
@@ -44,7 +73,10 @@ namespace CameraModule
             protected Vector3 _focusTargetOffset;
 
             protected float _distance;
-            protected Vector3 _direction;
+            protected float _cameraRotateSensitivity = 10;
+            protected Vector2 _screenAxis;
+
+            protected Vector2 _cameraRotateValue = Vector2.zero;
 
             protected bool _active;
 
@@ -60,32 +92,62 @@ namespace CameraModule
                 _focusTargetOffset = commandData.FocusTargetOffset;
 
                 _distance = commandData.Distance;
-                _direction = commandData.Direction;
+                _screenAxis = commandData.ScreenAxisValue;
+
+                _cameraRotateSensitivity = commandData.CameraRotateSensitivity;
 
                 _active = true;
             }
 
-            public void Update()
+            public void UpdateScreenAxis(IUpdateThirdPersonScreenAxisData commandData)
+            {
+                _screenAxis = commandData.ScreenAxis;
+            }
+
+            public void LateUpdate()
             {
                 if (!_active)
                     return;
                 if (_targetTrans == null)
                     return;
 
+                _cameraRotateValue.x += _screenAxis.x * _cameraRotateSensitivity * Time.deltaTime;
+                _cameraRotateValue.y -= _screenAxis.y * _cameraRotateSensitivity * Time.deltaTime;
 
+                _cameraRotateValue.x = _cameraRotateValue.x < 0 ?
+                    _cameraRotateValue.x + 360 :
+                    _cameraRotateValue.x;
+                _cameraRotateValue.x = _cameraRotateValue.x > 360 ?
+                    _cameraRotateValue.x - 360 :
+                    _cameraRotateValue.x;
+
+                var rotationEuler = Quaternion.Euler(_cameraRotateValue.y, _cameraRotateValue.x, 0);
+                var cameraPosition = rotationEuler * new Vector3(0, 0, -_distance) + _targetTrans.position;
+
+                _baseCameraBehavior._cameraTrans.rotation = rotationEuler;
+                _baseCameraBehavior._cameraTrans.position = cameraPosition;
             }
         }
 
         protected ThirdPersonModeProcessor _thirdPersonModeProcessor;
 
-        [CameraCommand((int)CameraCommandDefine.BaseCommand.ThirdPersonMode)]
-        protected virtual void ThirdPersonMode(ICameraCommand command)
+        [CameraCommand((int)CameraCommandDefine.BaseCommand.SetThirdPersonMode)]
+        protected virtual void SetThirdPersonMode(ICameraCommand command)
         {
             if (!(command is IThirdPersonModeCommandData commandData))
                 return;
 
             _thirdPersonModeProcessor.InitThirdPersonMode(commandData);
             RaiseStateFlag(BaseCameraState.ThirdPersonMode);
+        }
+
+        [CameraCommand((int)CameraCommandDefine.BaseCommand.UpdateThirdPersonScreenAxisValue)]
+        protected virtual void UpdateThirdPersonScreenAxisValue(ICameraCommand command)
+        {
+            if (!(command is IUpdateThirdPersonScreenAxisData commandData))
+                return;
+
+            _thirdPersonModeProcessor.UpdateScreenAxis(commandData);
         }
     }
 }

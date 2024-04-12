@@ -1,4 +1,5 @@
 ﻿using AssetsModule;
+using CameraModule;
 using InputModule;
 using Logging;
 using System.Collections;
@@ -24,6 +25,21 @@ namespace GameMainSystem
             //InputSystem.SetInputProcessor(new AllInpuPrcocessor());
             InputSystem.SetInputSetting(inputSetting);
             InputSystem.RegisterInputReceiver(_inputReceiver);
+
+            _inputReceiver.RegisterAxisValueChangedEvent(
+                new List<string>
+                {
+                    "Mouse X",
+                    "Mouse Y"
+                },
+                OnScreenAxisChanged);
+            _inputReceiver.RegisterAxisValueChangedEvent(
+                new List<string>
+                {
+                    "Right Stick Horizontal",
+                    "Right Stick Vertical"
+                },
+                OnScreenAxisChanged);
         }
 
         private void OnKeyDown(KeyCode keyCode, string command)
@@ -39,6 +55,14 @@ namespace GameMainSystem
         private void OnKeyHold(KeyCode keyCode, string command)
         {
             Log.LogInfo($"OnKeyHold KeyCode:{keyCode}, Command:{command}");
+        }
+
+        private UpdateThirdPersonScreenAxisData _updateThirdPersonScreenAxisData =
+            new UpdateThirdPersonScreenAxisData();
+        private void OnScreenAxisChanged(List<float> values)
+        {
+            _updateThirdPersonScreenAxisData.ScreenAxis = new Vector2(values[0], values[1]);
+            CameraSystem.CameraCommand(_updateThirdPersonScreenAxisData);
         }
     }
 }

@@ -15,11 +15,13 @@ namespace GameMainSystem
             var testCharacterGo = ObjectUtility.InstantiateWithoutClone(testCharacterAssets);
             var textCharacterTrans = testCharacterGo.transform;
             CameraSystem.CameraCommand(
-                new FollowTarget
+                new ThirdPersonModeCommandData
                 {
-                    CommandId = (int)CameraCommandDefine.BaseCommand.FollowTarget,
                     TargetTrans = textCharacterTrans,
+                    FocusTargetOffset = Vector3.zero,
                     Distance = 10,
+                    CameraRotateSensitivity = 50,
+                    ScreenAxisValue = Vector2.zero,
                 });
         }
     }

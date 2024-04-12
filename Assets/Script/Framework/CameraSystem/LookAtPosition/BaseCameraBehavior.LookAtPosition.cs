@@ -13,6 +13,11 @@ namespace CameraModule
     {
         public int CommandId { get; set; }
         public Vector3 Position { get; set; }
+
+        public LookAtPosition()
+        {
+            CommandId = (int)CameraCommandDefine.BaseCommand.LookAtPosition;
+        }
     }
 
     public partial class BaseCameraBehavior
