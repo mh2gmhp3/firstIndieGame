@@ -18,3 +18,7 @@ MonoBehaviour:
   - Axis: Vertical
   - Axis: Left Trigger
   - Axis: Right Trigger
+  - Axis: Mouse X
+  - Axis: Mouse Y
+  - Axis: Right Stick Horizontal
+  - Axis: Right Stick Vertical
