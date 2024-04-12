@@ -18,7 +18,7 @@ namespace GameMainSystem
                 new ThirdPersonModeCommandData
                 {
                     TargetTrans = textCharacterTrans,
-                    FocusTargetOffset = Vector3.zero,
+                    FocusTargetOffset = new Vector3(0, 0.5f, 0),
                     Distance = 10,
                     CameraRotateSensitivity = 50,
                     ScreenAxisValue = Vector2.zero,

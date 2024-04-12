@@ -80,6 +80,8 @@ namespace CameraModule
 
             protected bool _active;
 
+            private Vector3 _lookAtPosition = Vector3.zero;
+
             public ThirdPersonModeProcessor(BaseCameraBehavior baseCameraBehavior)
             {
                 _baseCameraBehavior = baseCameraBehavior;
@@ -122,10 +124,22 @@ namespace CameraModule
                     _cameraRotateValue.x;
 
                 var rotationEuler = Quaternion.Euler(_cameraRotateValue.y, _cameraRotateValue.x, 0);
-                var cameraPosition = rotationEuler * new Vector3(0, 0, -_distance) + _targetTrans.position;
+                _lookAtPosition = _targetTrans.position +
+                    Quaternion.Euler(_baseCameraBehavior._cameraTrans.forward) * _focusTargetOffset;
+                var cameraPosition = rotationEuler * new Vector3(0, 0, -_distance) + _lookAtPosition;
 
                 _baseCameraBehavior._cameraTrans.rotation = rotationEuler;
                 _baseCameraBehavior._cameraTrans.position = cameraPosition;
+            }
+
+            public void DoDrawGizmos()
+            {
+#if UNITY_EDITOR
+                Color color = Gizmos.color;
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(_lookAtPosition, 0.5f);
+                Gizmos.color = color;
+#endif
             }
         }
 

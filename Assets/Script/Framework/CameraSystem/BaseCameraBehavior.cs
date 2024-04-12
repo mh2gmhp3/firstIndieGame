@@ -132,5 +132,10 @@ namespace CameraModule
                 _thirdPersonModeProcessor.LateUpdate();
             }
         }
+
+        public virtual void DoDrawGizmos()
+        {
+            _thirdPersonModeProcessor.DoDrawGizmos();
+        }
     }
 }

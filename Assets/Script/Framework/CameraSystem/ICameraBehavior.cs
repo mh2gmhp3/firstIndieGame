@@ -20,5 +20,6 @@ namespace CameraModule
         public void DoUpdate();
         public void DoFixedUpdate();
         public void DoLateUpdate();
+        public void DoDrawGizmos();
     }
 }

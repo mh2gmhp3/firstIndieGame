@@ -52,6 +52,13 @@ namespace CameraModule
             _cameraBehavior.DoLateUpdate();
         }
 
+        private void OnDrawGizmos()
+        {
+            if (_cameraBehavior == null)
+                return;
+            _cameraBehavior.DoDrawGizmos();
+        }
+
         #region Public Static Method SetCameraBehavior
 
         public static void SetCameraBehavior(ICameraBehavior cameraBehavior)
