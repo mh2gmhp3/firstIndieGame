@@ -40,7 +40,7 @@ namespace GameSystem
             /// </summary>
             private bool _active = false;
 
-            public GameSystemEnterGameFlowStepProcessor(List<IBaseGameSystem> initSystemList)
+            public GameSystemEnterGameFlowStepProcessor(List<IBaseGameSystem> initSystemList, bool testMode)
             {
                 _enterGameFlowStepGameSystemList = new List<IBaseGameSystem>();
                 _enterGameFlowStepGameSystemList.AddRange(initSystemList);
@@ -49,8 +49,16 @@ namespace GameSystem
                 _processEnterGameFlowStepGameSystemList = new List<IBaseGameSystem>();
                 _flowStepQueue = new Queue<int>();
 
-                _enterGameFlowStepSetting =
-                    AssetsSystem.LoadAssets<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_FRAMEWORK_PATH);
+                if (testMode)
+                {
+                    _enterGameFlowStepSetting =
+                        AssetsSystem.LoadAssets<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_FRAMEWORK_TEST_MODE_PATH);
+                }
+                else
+                {
+                    _enterGameFlowStepSetting =
+                        AssetsSystem.LoadAssets<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_FRAMEWORK_PATH);
+                }
                 if (_enterGameFlowStepSetting == null)
                 {
                     Log.LogError("GameSystemEnterGameFlowStepProcessor construct error _enterGameFlowStepSetting is null");

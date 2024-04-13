@@ -58,6 +58,11 @@ namespace GameSystem
         private GameSystemEnterGameFlowStepProcessor _enterGameFlowStepProcessor;
 
         /// <summary>
+        /// 是否啟用測試模式
+        /// </summary>
+        private bool _testMode = false;
+
+        /// <summary>
         /// GameSystemManager唯一實體
         /// </summary>
         private static GameSystemManager _instance = null;
@@ -66,12 +71,13 @@ namespace GameSystem
         /// 初始化實體
         /// 建立單一實體GameSystemManager 並初始化
         /// </summary>
-        public static void InitInstance()
+        public static void InitInstance(bool testMode = false)
         {
             GameObject systemManagerGo = new GameObject("GameSystemManager");
             GameSystemManager systemManager = systemManagerGo.AddComponent<GameSystemManager>();
             _instance = systemManager;
             DontDestroyOnLoad(_instance);
+            _instance._testMode = testMode;
             _instance.Init();
         }
 
@@ -132,7 +138,7 @@ namespace GameSystem
         {
             _initProcessor = new GameSystemInitProcessor(_gameSystemList);
             _updateProcessor = new GameSystemUpdateProcessor(_gameSystemList);
-            _enterGameFlowStepProcessor = new GameSystemEnterGameFlowStepProcessor(_gameSystemList);
+            _enterGameFlowStepProcessor = new GameSystemEnterGameFlowStepProcessor(_gameSystemList, _testMode);
         }
 
         private void InitAllGameSystem()
