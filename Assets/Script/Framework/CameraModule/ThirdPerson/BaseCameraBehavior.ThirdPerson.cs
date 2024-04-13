@@ -5,6 +5,8 @@ using UnityEngine.Rendering;
 
 namespace CameraModule
 {
+    #region IUpdateThirdPersonScreenAxisData
+
     public interface IUpdateThirdPersonScreenAxisData : ICameraCommand
     {
         /// <summary>
@@ -12,6 +14,21 @@ namespace CameraModule
         /// </summary>
         public Vector2 ScreenAxis { get; set; }
     }
+
+    public class UpdateThirdPersonScreenAxisData : IUpdateThirdPersonScreenAxisData
+    {
+        public int CommandId { get; set; }
+        public Vector2 ScreenAxis { get; set; }
+
+        public UpdateThirdPersonScreenAxisData()
+        {
+            CommandId = (int)CameraCommandDefine.BaseCommand.UpdateThirdPersonScreenAxisValue;
+        }
+    }
+
+    #endregion
+
+    #region IThirdPersonModeCommandData
 
     public interface IThirdPersonModeCommandData : ICameraCommand
     {
@@ -37,17 +54,6 @@ namespace CameraModule
         public Vector2 ScreenAxisValue { get; set; }
     }
 
-    public class UpdateThirdPersonScreenAxisData : IUpdateThirdPersonScreenAxisData
-    {
-        public int CommandId { get; set; }
-        public Vector2 ScreenAxis { get; set; }
-
-        public UpdateThirdPersonScreenAxisData()
-        {
-            CommandId = (int)CameraCommandDefine.BaseCommand.UpdateThirdPersonScreenAxisValue;
-        }
-    }
-
     public class ThirdPersonModeCommandData : IThirdPersonModeCommandData
     {
         public int CommandId { get; set; }
@@ -62,6 +68,8 @@ namespace CameraModule
             CommandId = (int)CameraCommandDefine.BaseCommand.SetThirdPersonMode;
         }
     }
+
+    #endregion
 
     public partial class BaseCameraBehavior
     {
@@ -128,8 +136,20 @@ namespace CameraModule
                     Quaternion.Euler(_baseCameraBehavior._cameraTrans.forward) * _focusTargetOffset;
                 var cameraPosition = rotationEuler * new Vector3(0, 0, -_distance) + _lookAtPosition;
 
+                bool needNotify = false;
+                needNotify |= _baseCameraBehavior._cameraTrans.rotation != rotationEuler;
+                needNotify |= _baseCameraBehavior._cameraTrans.position != cameraPosition;
+
                 _baseCameraBehavior._cameraTrans.rotation = rotationEuler;
                 _baseCameraBehavior._cameraTrans.position = cameraPosition;
+
+                if (needNotify)
+                {
+                    _baseCameraBehavior.CameraNotify(
+                        CameraNotifyReason.ThirdPersonModify,
+                        _baseCameraBehavior._cameraTrans.position,
+                        _baseCameraBehavior._cameraTrans.rotation);
+                }
             }
 
             public void DoDrawGizmos()

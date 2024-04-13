@@ -18,7 +18,7 @@ namespace GameMainSystem
         {
             if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameCamera)
             {
-                CameraSystem.SetCameraBehavior(new GameCameraBehavior());
+                InitCamera();
             }
             else if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameController)
             {

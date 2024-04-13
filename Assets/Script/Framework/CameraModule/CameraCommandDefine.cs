@@ -13,6 +13,9 @@ namespace CameraModule
 
             LookAtPosition = 10,
             FollowTarget = 11,
+
+            RegisterCameraNotifyTarget = 20,
+            UnRegisterCameraNotifyTarget = 21,
         }
     }
 }
