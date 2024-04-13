@@ -9,6 +9,6 @@ namespace SceneModule
     [GameSystem(GameSystemPriority.SCENE_SYSTEM)]
     public class SceneSystem : BaseGameSystem<SceneSystem>
     {
-        public List<Type> a = new List<Type>();
+
     }
 }
