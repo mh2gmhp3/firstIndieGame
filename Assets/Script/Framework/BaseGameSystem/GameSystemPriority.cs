@@ -13,5 +13,6 @@ namespace GameSystem
         public const int INPUT_SYSTEM = 1;
         public const int UI_SYSTEM = 2;
         public const int CAMERA_SYSTEM = 3;
+        public const int SCENE_SYSTEM = 4;
     }
 }
