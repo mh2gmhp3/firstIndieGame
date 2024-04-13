@@ -68,6 +68,11 @@ namespace GameSystem
         private static GameSystemManager _instance = null;
 
         /// <summary>
+        /// 獲取是否啟用測試模式
+        /// </summary>
+        public bool TestMode => _testMode;
+
+        /// <summary>
         /// 初始化實體
         /// 建立單一實體GameSystemManager 並初始化
         /// </summary>
