@@ -18,7 +18,7 @@ namespace GameMainSystem
         {
             if (notifyReason == (int)BaseCameraBehavior.CameraNotifyReason.ThirdPersonModify)
             {
-
+                _characterController.SetMoveQuaternion(rotation);
             }
         }
     }

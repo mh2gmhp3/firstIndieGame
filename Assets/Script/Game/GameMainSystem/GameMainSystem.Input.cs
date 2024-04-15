@@ -40,6 +40,13 @@ namespace GameMainSystem
                     "Right Stick Vertical"
                 },
                 OnScreenAxisChanged);
+            _inputReceiver.RegisterAxisValueChangedEvent(
+                new List<string>
+                {
+                    "Horizontal",
+                    "Vertical"
+                },
+                OnMovementAxisChanged);
         }
 
         private void OnKeyDown(KeyCode keyCode, string command)
@@ -63,6 +70,11 @@ namespace GameMainSystem
         {
             _updateThirdPersonScreenAxisData.ScreenAxis = new Vector2(values[0], values[1]);
             CameraSystem.CameraCommand(_updateThirdPersonScreenAxisData);
+        }
+
+        private void OnMovementAxisChanged(List<float> values)
+        {
+            _characterController.SetMoveAxis(new Vector3(values[0], 0, values[1]));
         }
     }
 }

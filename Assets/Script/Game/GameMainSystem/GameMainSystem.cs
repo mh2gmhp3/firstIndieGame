@@ -29,5 +29,10 @@ namespace GameMainSystem
                 InitGameTest();
             }
         }
+
+        protected override void DoLateUpdate()
+        {
+            _characterController.DoLateUpdate();
+        }
     }
 }
