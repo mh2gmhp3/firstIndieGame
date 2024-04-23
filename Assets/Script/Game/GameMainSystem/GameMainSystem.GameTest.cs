@@ -1,5 +1,6 @@
 ﻿using AssetsModule;
 using CameraModule;
+using SceneModule;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,7 @@ namespace GameMainSystem
                     CameraRotateSensitivity = 50,
                     ScreenAxisValue = Vector2.zero,
                 });
+            SceneSystem.SwitchStage(new SwitchStageData("world_map_test"));
         }
     }
 }

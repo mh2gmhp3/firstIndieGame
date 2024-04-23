@@ -28,6 +28,10 @@ namespace GameMainSystem
             {
                 InitGameTest();
             }
+            else if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameScene)
+            {
+                InitGameScene();
+            }
         }
 
         protected override void DoLateUpdate()
