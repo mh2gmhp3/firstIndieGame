@@ -34,9 +34,9 @@ namespace GameMainSystem
             }
         }
 
-        protected override void DoLateUpdate()
+        protected override void DoFixedUpdate()
         {
-            _characterController.DoLateUpdate();
+            _characterController.DoFixedUpdate();
         }
     }
 }

@@ -155,10 +155,10 @@ namespace CameraModule
             public void DoDrawGizmos()
             {
 #if UNITY_EDITOR
-                Color color = Gizmos.color;
-                Gizmos.color = Color.red;
-                Gizmos.DrawSphere(_lookAtPosition, 0.5f);
-                Gizmos.color = color;
+                //Color color = Gizmos.color;
+                //Gizmos.color = Color.red;
+                //Gizmos.DrawSphere(_lookAtPosition, 0.5f);
+                //Gizmos.color = color;
 #endif
             }
         }

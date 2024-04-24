@@ -12,10 +12,10 @@ namespace GameMainSystem
     {
         private void InitGameTest()
         {
-            var testCharacterAssets = AssetsSystem.LoadAssets<GameObject>("Prototype/TestObject/Character_Sphere");
+            var testCharacterAssets = AssetsSystem.LoadAssets<GameObject>("Prototype/TestObject/Character_Root");
             var testCharacterGo = ObjectUtility.InstantiateWithoutClone(testCharacterAssets);
             var testCharacterTrans = testCharacterGo.transform;
-            _characterController.SetCharacterTransform(testCharacterTrans);
+            _characterController.SetCharacterRoot(testCharacterGo);
             _characterController.SetEnable(true);
             CameraSystem.CameraCommand(
                 new ThirdPersonModeCommandData

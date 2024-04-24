@@ -15,9 +15,14 @@ namespace GameMainSystem
         private bool _enable = false;
 
         /// <summary>
-        /// 角色Transform
+        /// 角色Root Transform
         /// </summary>
         private Transform _characterTrans = null;
+
+        /// <summary>
+        /// 角色Root Rigidbody
+        /// </summary>
+        private Rigidbody _characterRigidbody = null;
 
         /// <summary>
         /// 移動輸入軸
@@ -28,18 +33,18 @@ namespace GameMainSystem
         /// </summary>
         private Quaternion _moveQuaternion = Quaternion.identity;
 
-        public void DoLateUpdate()
+        public void DoFixedUpdate()
         {
             if (!_enable)
                 return;
 
-            if (_characterTrans == null)
+            if (_characterRigidbody == null)
                 return;
 
             //之後要考慮其他狀態 目前只處裡操作移動 需考慮外在因素引響的移動
             float speed = 10;
             Vector3 moveForward = _moveQuaternion * _moveAxis;
-            _characterTrans.position += moveForward * speed * Time.deltaTime;
+            _characterRigidbody.velocity = moveForward * speed;
         }
 
         /// <summary>
@@ -52,12 +57,13 @@ namespace GameMainSystem
         }
 
         /// <summary>
-        /// 設定角色Transform
+        /// 設定角色Root
         /// </summary>
         /// <param name="transform"></param>
-        public void SetCharacterTransform(Transform transform)
+        public void SetCharacterRoot(GameObject root)
         {
-            _characterTrans = transform;
+            _characterTrans = root.transform;
+            _characterRigidbody = root.GetComponent<Rigidbody>();
         }
 
         /// <summary>
