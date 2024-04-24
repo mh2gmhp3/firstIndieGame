@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,6 +33,25 @@ namespace GameMainSystem
         /// </summary>
         private Quaternion _moveQuaternion = Quaternion.identity;
 
+        /// <summary>
+        /// 是否在地面
+        /// </summary>
+        private bool _isGround = false;
+
+        public void DoUpdate()
+        {
+            if (!_enable)
+                return;
+
+            if (_characterTrans == null)
+                return;
+
+            _isGround = Physics.Raycast(
+                _characterTrans.position + Vector3.up * 0.01f,
+                Vector3.down,
+                0.2f);
+        }
+
         public void DoFixedUpdate()
         {
             if (!_enable)
@@ -44,7 +63,14 @@ namespace GameMainSystem
             //之後要考慮其他狀態 目前只處裡操作移動 需考慮外在因素引響的移動
             float speed = 10;
             Vector3 moveForward = _moveQuaternion * _moveAxis;
-            _characterRigidbody.velocity = moveForward * speed;
+            var movement = moveForward * speed;
+
+            //gravity
+            float gravityValue = 10;
+            var gravityDirection = _isGround ? Vector3.zero : Vector3.down;
+            var gravity = gravityDirection * gravityValue;
+
+            _characterRigidbody.velocity = movement + gravity;
         }
 
         /// <summary>

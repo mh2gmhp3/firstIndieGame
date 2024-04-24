@@ -34,6 +34,11 @@ namespace GameMainSystem
             }
         }
 
+        protected override void DoUpdate()
+        {
+            _characterController.DoUpdate();
+        }
+
         protected override void DoFixedUpdate()
         {
             _characterController.DoFixedUpdate();
