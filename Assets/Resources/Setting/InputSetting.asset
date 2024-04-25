@@ -12,7 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e16b8c6c777c55f47b11194f8514bbbb, type: 3}
   m_Name: InputSetting
   m_EditorClassIdentifier: 
-  InputCommandList: []
+  InputCommandList:
+  - Command: jump
+    AssignKeyCodeTriggerSettingList:
+    - KeyCode: 32
+      Type: 0
+    - KeyCode: 330
+      Type: 0
   InputAxisList:
   - Axis: Horizontal
   - Axis: Vertical

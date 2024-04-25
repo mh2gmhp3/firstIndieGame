@@ -52,6 +52,10 @@ namespace GameMainSystem
         private void OnKeyDown(KeyCode keyCode, string command)
         {
             Log.LogInfo($"OnKeyDown KeyCode:{keyCode}, Command:{command}");
+            if (command == "jump")
+            {
+                _characterController.Jump();
+            }
         }
 
         private void OnKeyUp(KeyCode keyCode, string command)

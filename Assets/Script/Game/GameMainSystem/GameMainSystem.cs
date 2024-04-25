@@ -43,5 +43,10 @@ namespace GameMainSystem
         {
             _characterController.DoFixedUpdate();
         }
+
+        private void OnGUI()
+        {
+            _characterController.DoOnGUI();
+        }
     }
 }
