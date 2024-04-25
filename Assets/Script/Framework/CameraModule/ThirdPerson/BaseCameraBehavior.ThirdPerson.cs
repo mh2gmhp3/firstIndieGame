@@ -86,6 +86,8 @@ namespace CameraModule
 
             protected Vector2 _cameraRotateValue = Vector2.zero;
 
+            protected float _camMoveSpeed = 10f;
+
             protected bool _active;
 
             private Vector3 _lookAtPosition = Vector3.zero;
@@ -114,7 +116,7 @@ namespace CameraModule
                 _screenAxis = commandData.ScreenAxis;
             }
 
-            public void LateUpdate()
+            public void FixedUpdate()
             {
                 if (!_active)
                     return;
@@ -134,14 +136,26 @@ namespace CameraModule
                 var rotationEuler = Quaternion.Euler(_cameraRotateValue.y, _cameraRotateValue.x, 0);
                 _lookAtPosition = _targetTrans.position +
                     Quaternion.Euler(_baseCameraBehavior._cameraTrans.forward) * _focusTargetOffset;
-                var cameraPosition = rotationEuler * new Vector3(0, 0, -_distance) + _lookAtPosition;
+
+                float maxDistance = _distance;
+                if (Physics.Raycast(_lookAtPosition, (_baseCameraBehavior._cameraTrans.position - _lookAtPosition).normalized, out RaycastHit hitInfo))
+                {
+                    maxDistance = Mathf.Clamp(maxDistance, 0, hitInfo.distance);
+                }
+
+                var cameraPosition = rotationEuler * new Vector3(0, 0, -maxDistance) + _lookAtPosition;
 
                 bool needNotify = false;
                 needNotify |= _baseCameraBehavior._cameraTrans.rotation != rotationEuler;
                 needNotify |= _baseCameraBehavior._cameraTrans.position != cameraPosition;
 
                 _baseCameraBehavior._cameraTrans.rotation = rotationEuler;
-                _baseCameraBehavior._cameraTrans.position = cameraPosition;
+                _baseCameraBehavior._cameraTrans.position =
+                    Vector3.Lerp(
+                        _baseCameraBehavior._cameraTrans.position,
+                        cameraPosition,
+                        _camMoveSpeed * Time.deltaTime);
+                //_baseCameraBehavior._cameraTrans.position = cameraPosition;
 
                 if (needNotify)
                 {

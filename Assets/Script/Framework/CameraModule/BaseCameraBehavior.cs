@@ -117,7 +117,10 @@ namespace CameraModule
 
         public virtual void DoFixedUpdate()
         {
-
+            if (_state.HasFlag(BaseCameraState.ThirdPersonMode))
+            {
+                _thirdPersonModeProcessor.FixedUpdate();
+            }
         }
 
         public virtual void DoLateUpdate()
@@ -126,10 +129,6 @@ namespace CameraModule
             if (_state.HasFlag(BaseCameraState.FollowTarget))
             {
                 _followTargetProcessor.LateUpdate();
-            }
-            else if (_state.HasFlag(BaseCameraState.ThirdPersonMode))
-            {
-                _thirdPersonModeProcessor.LateUpdate();
             }
         }
 
