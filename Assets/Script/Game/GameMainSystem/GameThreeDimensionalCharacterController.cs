@@ -44,12 +44,16 @@ namespace GameMainSystem
         /// </summary>
         private bool _isGround = false;
 
+        private float _moveSpeed = 8f;
+
+        private float _airSpeedMultiplier = 0.7f;
+
         private float _characterRotateDurationTimePreAngle = 0.2f;
         private float _characterRotateStartTime = 0;
         private float _characterRotateEndTime = 0f;
 
         private bool _isFalling = false;
-        private float _fallingMaxTime = 0.3f;
+        private float _fallingMaxTime = 0.5f;
         private float _fallingStartTime = 0;
         private float _fallingForce = 5;
         private float _fallingMaxForce = 20;
@@ -78,10 +82,18 @@ namespace GameMainSystem
 
             var rayStartPoint = _rootTrans.position + Vector3.up * 0.01f;
 
-            _isGround = Physics.Raycast(
+            if (Physics.Raycast(
                 rayStartPoint,
                 Vector3.down,
-                0.2f);
+                out var hitInfo,
+                1f))
+            {
+                _isGround = (hitInfo.point - _rootTrans.position).sqrMagnitude < 0.01;
+            }
+            else
+            {
+                _isGround = false;
+            }
 
             if (Physics.Raycast(
                 rayStartPoint,
@@ -90,7 +102,7 @@ namespace GameMainSystem
                 1))
             {
                 float angle = Vector3.Angle(Vector3.up, _slopHit.normal);
-                _isSlope = angle != 0 && angle < 60f;
+                _isSlope = angle != 0 && angle < 45f;
             }
             else
             {
@@ -107,7 +119,8 @@ namespace GameMainSystem
                 return;
 
             //movement
-            float speed = 10;
+            float speedMultiplier = _isGround ? 1 : _airSpeedMultiplier;
+            float speed = _moveSpeed * speedMultiplier;
             Vector3 moveForward = _moveQuaternion * _moveAxis;
             if (_isSlope)
             {
@@ -216,11 +229,11 @@ namespace GameMainSystem
                 $"distance:{_slopHit.distance}\n" +
                 $"angle:{Vector3.Angle(Vector3.up, _slopHit.normal)}";
             GUI.TextArea(new Rect(25, 25, 100, 200), hitInfo);
-            Debug.DrawLine(
-                rayStartPoint,
-                rayStartPoint + new Vector3(_characterTrans.forward.x, 0, _characterTrans.forward.z) * 1,
-                Color.green,
-                0.1f);
+            //Debug.DrawLine(
+            //    rayStartPoint,
+            //    rayStartPoint + new Vector3(_characterTrans.forward.x, 0, _characterTrans.forward.z) * 1,
+            //    Color.green,
+            //    0.1f);
 #endif
         }
 
