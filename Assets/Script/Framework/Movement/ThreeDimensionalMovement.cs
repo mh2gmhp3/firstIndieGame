@@ -93,6 +93,8 @@ namespace Movement
         [SerializeField]
         private bool _isSlope = false;
         [SerializeField]
+        private float _slopeAngle = 45f;
+        [SerializeField]
         private RaycastHit _slopHit;
 
         public void DoUpdate()
@@ -103,16 +105,16 @@ namespace Movement
             if (_rootTrans == null)
                 return;
 
-            var rayStartPoint = _rootTrans.position + Vector3.up * 0.01f;
+            var rayStartPoint = _rootTrans.position + Vector3.up * 0.1f;
 
             if (Physics.Raycast(
                 rayStartPoint,
-                new Vector3(_characterTrans.forward.x, 0, _characterTrans.forward.z),
+                Vector3.down,
                 out _slopHit,
                 1))
             {
                 float angle = Vector3.Angle(Vector3.up, _slopHit.normal);
-                _isSlope = angle != 0 && angle < 45f;
+                _isSlope = angle != 0 && angle < _slopeAngle;
             }
             else
             {
@@ -245,7 +247,7 @@ namespace Movement
             if (_rootTrans == null)
                 return;
 
-            var rayStartPoint = _rootTrans.position + Vector3.up * 0.01f;
+            var rayStartPoint = _rootTrans.position + Vector3.up * 0.1f;
             string hitInfo =
                 $"colliderInstanceID:{_slopHit.colliderInstanceID}\n" +
                 $"point:{_slopHit.point}\n" +
