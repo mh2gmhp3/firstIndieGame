@@ -6,6 +6,7 @@ namespace GameMainSystem
 {
     public partial class GameMainSystem
     {
+        [SerializeField]
         private GameThreeDimensionalCharacterController _characterController =
             new GameThreeDimensionalCharacterController();
     }
