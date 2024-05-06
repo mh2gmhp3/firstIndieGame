@@ -257,7 +257,7 @@ namespace Movement
             GUI.TextArea(new Rect(25, 25, 100, 200), hitInfo);
             //Debug.DrawLine(
             //    rayStartPoint,
-            //    rayStartPoint + new Vector3(_characterTrans.forward.x, 0, _characterTrans.forward.z) * 1,
+            //    rayStartPoint + Vector3.down * 1,
             //    Color.green,
             //    0.1f);
 #endif
