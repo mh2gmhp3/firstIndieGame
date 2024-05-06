@@ -48,7 +48,7 @@ namespace GameMainSystem
 
         private float _airSpeedMultiplier = 0.7f;
 
-        private float _characterRotateDurationTimePreAngle = 0.2f;
+        private float _characterRotateDurationTimePreAngle = 10f;
         private float _characterRotateStartTime = 0;
         private float _characterRotateEndTime = 0f;
 
@@ -56,7 +56,7 @@ namespace GameMainSystem
         private float _fallingMaxTime = 0.5f;
         private float _fallingStartTime = 0;
         private float _fallingForce = 5;
-        private float _fallingMaxForce = 20;
+        private float _fallingMaxForce = 15;
 
         private bool _inputtedJump = false;
         private bool _isJumping = false;
@@ -70,8 +70,6 @@ namespace GameMainSystem
         private bool _isSlope = false;
         private RaycastHit _slopHit;
 
-        private Vector3 RootForward => _moveQuaternion * Vector3.forward;
-
         public void DoUpdate()
         {
             if (!_enable)
@@ -81,19 +79,6 @@ namespace GameMainSystem
                 return;
 
             var rayStartPoint = _rootTrans.position + Vector3.up * 0.01f;
-
-            if (Physics.Raycast(
-                rayStartPoint,
-                Vector3.down,
-                out var hitInfo,
-                1f))
-            {
-                _isGround = (hitInfo.point - _rootTrans.position).sqrMagnitude < 0.01;
-            }
-            else
-            {
-                _isGround = false;
-            }
 
             if (Physics.Raycast(
                 rayStartPoint,
@@ -107,6 +92,19 @@ namespace GameMainSystem
             else
             {
                 _isSlope = false;
+            }
+
+            if (Physics.Raycast(
+                rayStartPoint,
+                Vector3.down,
+                out var hitInfo,
+                1f))
+            {
+                _isGround = (hitInfo.point - _rootTrans.position).sqrMagnitude < (_isSlope ? 0.1 : 0.01);
+            }
+            else
+            {
+                _isGround = false;
             }
         }
 
@@ -153,7 +151,8 @@ namespace GameMainSystem
                     _characterTrans.rotation = Quaternion.Lerp(
                         _characterTrans.rotation,
                         rotation,
-                        Mathf.Clamp01(_characterRotateStartTime / _characterRotateEndTime));
+                        _characterRotateDurationTimePreAngle * Time.deltaTime);
+                    //Mathf.Clamp01(_characterRotateStartTime / _characterRotateEndTime));
                 }
                 else
                 {
