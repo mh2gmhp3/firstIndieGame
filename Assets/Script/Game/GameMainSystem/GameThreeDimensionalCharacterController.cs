@@ -1,3 +1,4 @@
+using GameMainSystem.Attack;
 using Logging;
 using Movement;
 using System;
@@ -15,9 +16,12 @@ namespace GameMainSystem
     {
         [SerializeField]
         private ThreeDimensionalMovement _movement = new ThreeDimensionalMovement();
+        [SerializeField]
+        private CharacterAttackController _attackController = new CharacterAttackController();
 
         public void DoUpdate()
         {
+            _attackController.DoUpdate();
             _movement.DoUpdate();
         }
 
@@ -70,6 +74,26 @@ namespace GameMainSystem
         public void Jump()
         {
             _movement.Jump();
+        }
+
+        public void MainAttack()
+        {
+            _attackController.TriggerMainAttack();
+        }
+
+        public void SubAttack()
+        {
+            _attackController.TriggerSubAttack();
+        }
+
+        public void SetCombinationList(List<AttackCombination> combinationList)
+        {
+            _attackController.SetCombinationList(combinationList);
+        }
+
+        public void SetNowCombination(int index)
+        {
+            _attackController.SetNowCombination(index);
         }
     }
 }

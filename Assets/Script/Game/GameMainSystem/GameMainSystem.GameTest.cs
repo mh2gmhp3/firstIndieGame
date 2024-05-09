@@ -1,5 +1,6 @@
 ﻿using AssetsModule;
 using CameraModule;
+using GameMainSystem.Attack;
 using SceneModule;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,6 +28,20 @@ namespace GameMainSystem
                     ScreenAxisValue = Vector2.zero,
                 });
             SceneSystem.SwitchStage(new SwitchStageData("world_map_test"));
+
+            //測試攻擊
+            List<AttackCombination> attackCombinationList = new List<AttackCombination>();
+            List<AttackBehavior> mainAttackBehaviorList = new List<AttackBehavior>();
+            mainAttackBehaviorList.Add(new AttackBehavior("mainAttack 1", 0.1f, 0.5f));
+            mainAttackBehaviorList.Add(new AttackBehavior("mainAttack 2", 0.2f, 0.5f));
+            mainAttackBehaviorList.Add(new AttackBehavior("mainAttack 3", 0.2f, 0.5f));
+            List<AttackBehavior> subAttackBehaviorList = new List<AttackBehavior>();
+            subAttackBehaviorList.Add(new AttackBehavior("subAttack 1", 0.1f, 0.5f));
+            subAttackBehaviorList.Add(new AttackBehavior("subAttack 2", 0.2f, 0.5f));
+            subAttackBehaviorList.Add(new AttackBehavior("subAttack 3", 0.2f, 0.5f));
+            attackCombinationList.Add(new AttackCombination(mainAttackBehaviorList, subAttackBehaviorList));
+            _characterController.SetCombinationList(attackCombinationList);
+            _characterController.SetNowCombination(0);
         }
     }
 }

@@ -19,6 +19,12 @@ MonoBehaviour:
       Type: 0
     - KeyCode: 330
       Type: 0
+  - Command: mainattack
+    AssignKeyCodeTriggerSettingList:
+    - KeyCode: 323
+      Type: 0
+    - KeyCode: 335
+      Type: 0
   InputAxisList:
   - Axis: Horizontal
   - Axis: Vertical

@@ -51,10 +51,14 @@ namespace GameMainSystem
 
         private void OnKeyDown(KeyCode keyCode, string command)
         {
-            Log.LogInfo($"OnKeyDown KeyCode:{keyCode}, Command:{command}");
+            //Log.LogInfo($"OnKeyDown KeyCode:{keyCode}, Command:{command}");
             if (command == "jump")
             {
                 _characterController.Jump();
+            }
+            else if (command == "mainattack")
+            {
+                _characterController.MainAttack();
             }
         }
 
