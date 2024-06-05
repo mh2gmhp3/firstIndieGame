@@ -44,6 +44,8 @@ namespace GameMainSystem
             _movement.SetEnable(enable);
         }
 
+        #region Movement
+
         /// <summary>
         /// 設定角色Root
         /// </summary>
@@ -76,6 +78,10 @@ namespace GameMainSystem
             _movement.Jump();
         }
 
+        #endregion
+
+        #region Attack
+
         public void MainAttack()
         {
             _attackController.TriggerMainAttack();
@@ -95,5 +101,7 @@ namespace GameMainSystem
         {
             _attackController.SetNowCombination(index);
         }
+
+        #endregion
     }
 }
