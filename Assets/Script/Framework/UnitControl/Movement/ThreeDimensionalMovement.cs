@@ -162,6 +162,7 @@ namespace Movement
             float speedMultiplier = _isGround ? 1 : _airSpeedMultiplier;
             float speed = _moveSpeed * speedMultiplier;
             Vector3 moveForward = _moveQuaternion * _moveAxis;
+            Vector3 lookForward = moveForward;
             if (_isSlope)
             {
                 moveForward = Vector3.ProjectOnPlane(moveForward, _slopHit.normal).normalized;
@@ -175,7 +176,7 @@ namespace Movement
             //rotate character
             if (_moveAxis.sqrMagnitude > 0)
             {
-                var rotation = Quaternion.LookRotation(moveForward);
+                var rotation = Quaternion.LookRotation(lookForward);
                 var angle = Quaternion.Angle(rotation, _characterTrans.rotation);
                 if (angle != 0)
                 {
