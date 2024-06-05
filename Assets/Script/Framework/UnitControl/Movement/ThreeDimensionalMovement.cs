@@ -54,6 +54,10 @@ namespace Movement
         /// </summary>
         [SerializeField]
         private bool _isGround = false;
+        [SerializeField]
+        private float _isGroundCheckDistance = 0.65f;
+        [SerializeField]
+        private RaycastHit _groundHits;
 
         [SerializeField]
         private float _moveSpeed = 8f;
@@ -135,10 +139,10 @@ namespace Movement
             if (Physics.Raycast(
                 rayStartPoint,
                 Vector3.down,
-                out var hitInfo,
-                1f))
+                out _groundHits,
+                _isGroundCheckDistance))
             {
-                _isGround = (hitInfo.point - _rootTrans.position).sqrMagnitude < (_isSlope ? 0.1 : 0.01);
+                _isGround = true;//(_groundHits.point - _rootTrans.position).sqrMagnitude < (_isSlope ? 0.1 : 0.01);
             }
             else
             {
@@ -229,6 +233,12 @@ namespace Movement
                 _isFalling = false;
             }
 
+            if (!_isGround && _groundHits.collider != null &&(_groundHits.point - _rootTrans.position).sqrMagnitude > 0.01)
+            {
+                float fixGroundY = _groundHits.point.y - _rootTrans.position.y;
+                _rootRigidbody.velocity += new Vector3(0, fixGroundY, 0);
+            }
+
             if (_inputtedJump)
             {
                 _isJumping = true;
@@ -280,7 +290,7 @@ namespace Movement
             GUI.TextArea(new Rect(25, 25, 100, 200), hitInfo);
             Debug.DrawLine(
                 rayStartPoint,
-                rayStartPoint + Vector3.down * 1,
+                rayStartPoint + Vector3.down * _isGroundCheckDistance,
                 Color.green,
                 0.1f);
 #endif
