@@ -12,6 +12,7 @@ namespace Movement
 
         public void SetEnable(bool enable);
         public void SetMovementTargetRoot(GameObject root);
+        public void SetMovementAnimationController(IMovementAnimationController movementAnimationController);
 
         public void SetMoveAxis(Vector3 axis);
         public void SetMoveQuaternion(Quaternion quaternion);

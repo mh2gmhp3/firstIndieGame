@@ -33,6 +33,12 @@ namespace Movement
         private Transform _characterTrans = null;
 
         /// <summary>
+        /// 移動動畫控制
+        /// </summary>
+        [SerializeField]
+        private IMovementAnimationController _movementAnimationController = null;
+
+        /// <summary>
         /// 移動輸入軸
         /// </summary>
         [SerializeField]
@@ -97,6 +103,11 @@ namespace Movement
         [SerializeField]
         private RaycastHit _slopHit;
 
+        public ThreeDimensionalMovement()
+        {
+            _movementAnimationController = new DefaultMovementAnimationController();
+        }
+
         public void DoUpdate()
         {
             if (!_enable)
@@ -105,7 +116,7 @@ namespace Movement
             if (_rootTrans == null)
                 return;
 
-            var rayStartPoint = _rootTrans.position + Vector3.up * 0.1f;
+            var rayStartPoint = _rootTrans.position + Vector3.up * 0.5f;
 
             if (Physics.Raycast(
                 rayStartPoint,
@@ -152,6 +163,8 @@ namespace Movement
                 moveForward = Vector3.ProjectOnPlane(moveForward, _slopHit.normal).normalized;
             }
 
+            _movementAnimationController.MoveInput(_moveAxis, _moveQuaternion);
+
             var movement = moveForward * speed;
             _rootRigidbody.velocity = movement;
 
@@ -187,6 +200,9 @@ namespace Movement
                 }
             }
 
+            bool oriIsJumping = _isJumping;
+            bool oriIsFalling = _isFalling;
+
             //gravity falling
             if (!_isGround && !_isJumping)
             {
@@ -205,6 +221,7 @@ namespace Movement
 
                     var gravity = Vector3.down * fallingForceValue;
                     _rootRigidbody.velocity += gravity;
+                    _movementAnimationController.OnFalling(fallingElapsedTime, _fallingMaxTime);
                 }
             }
             else
@@ -231,11 +248,17 @@ namespace Movement
 
                 if (jumpElapsedTime > _jumpLimitTime)
                     _isJumping = false;
+
+                _movementAnimationController.OnJumping(_jumpCount, jumpElapsedTime, _jumpLimitTime);
             }
 
             //reset jump
             if (_isGround && !_isJumping && !_isFalling)
+            {
                 _jumpCount = 0;
+                if (oriIsJumping || oriIsFalling)
+                    _movementAnimationController.OnLand();
+            }
         }
 
         public void DoOnGUI()
@@ -247,7 +270,7 @@ namespace Movement
             if (_rootTrans == null)
                 return;
 
-            var rayStartPoint = _rootTrans.position + Vector3.up * 0.1f;
+            var rayStartPoint = _rootTrans.position + Vector3.up * 0.5f;
             string hitInfo =
                 $"colliderInstanceID:{_slopHit.colliderInstanceID}\n" +
                 $"point:{_slopHit.point}\n" +
@@ -255,11 +278,11 @@ namespace Movement
                 $"distance:{_slopHit.distance}\n" +
                 $"angle:{Vector3.Angle(Vector3.up, _slopHit.normal)}";
             GUI.TextArea(new Rect(25, 25, 100, 200), hitInfo);
-            //Debug.DrawLine(
-            //    rayStartPoint,
-            //    rayStartPoint + Vector3.down * 1,
-            //    Color.green,
-            //    0.1f);
+            Debug.DrawLine(
+                rayStartPoint,
+                rayStartPoint + Vector3.down * 1,
+                Color.green,
+                0.1f);
 #endif
         }
 
@@ -276,6 +299,15 @@ namespace Movement
 
             //TODO setting or mono
             _characterTrans = _rootTrans.GetChild(0);
+        }
+
+        public void SetMovementAnimationController(IMovementAnimationController movementAnimationController)
+        {
+            //null不設定 避免為null的狀態
+            if (movementAnimationController == null)
+                return;
+
+            _movementAnimationController = movementAnimationController;
         }
 
         public void SetMoveAxis(Vector3 axis)
