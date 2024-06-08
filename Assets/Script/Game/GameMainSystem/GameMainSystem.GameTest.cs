@@ -1,6 +1,7 @@
 ﻿using AssetsModule;
 using CameraModule;
 using GameMainSystem.Attack;
+using Movement;
 using SceneModule;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,8 +17,12 @@ namespace GameMainSystem
             var testCharacterAssets = AssetsSystem.LoadAssets<GameObject>("Prototype/TestObject/Character_Root");
             var testCharacterGo = ObjectUtility.InstantiateWithoutClone(testCharacterAssets);
             var testCharacterTrans = testCharacterGo.transform;
+            var animator = testCharacterTrans.GetChild(0).GetChild(0).GetComponent<Animator>();
             _characterController.SetCharacterRoot(testCharacterGo);
             _characterController.SetEnable(true);
+            var gameAniController = new GameAnimationController();
+            gameAniController.SetAnimatior(animator);
+            _characterController.SetMovementAnimationController(gameAniController);
             CameraSystem.CameraCommand(
                 new ThirdPersonModeCommandData
                 {

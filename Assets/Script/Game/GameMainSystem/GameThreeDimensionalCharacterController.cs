@@ -55,6 +55,11 @@ namespace GameMainSystem
             _movement.SetMovementTargetRoot(root);
         }
 
+        public void SetMovementAnimationController(IMovementAnimationController movementAnimationController)
+        {
+            _movement.SetMovementAnimationController(movementAnimationController);
+        }
+
         /// <summary>
         /// 設定移動輸入軸
         /// </summary>
