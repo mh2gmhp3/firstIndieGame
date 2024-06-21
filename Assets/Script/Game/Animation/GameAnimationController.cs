@@ -23,7 +23,6 @@ namespace Movement
 
         public void MoveInput(Vector3 axis, Quaternion quaternion)
         {
-            _animator.GetCurrentAnimatorStateInfo(0);
             if (axis.sqrMagnitude != 0)
             {
                 CrossFade(RUN, 2f);
