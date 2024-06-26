@@ -1,4 +1,6 @@
 ﻿using Logging;
+using Mono.Cecil;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,7 +25,7 @@ namespace GameMainSystem.Collision
             public Dictionary<int, Collider> IdToColliderDic =
                new Dictionary<int, Collider>();
 
-            private Dictionary<int, int> _instancIdToId =
+            private Dictionary<int, int> _instancIdToIdDic =
                 new Dictionary<int, int>();
 
             public void FillColliders(RegisterColliderData colliderData)
@@ -34,28 +36,66 @@ namespace GameMainSystem.Collision
                     int id = idToCollider.Key;
                     var collider = idToCollider.Value;
                     IdToColliderDic.Add(idToCollider.Key, collider);
-                    _instancIdToId.Add(collider.GetInstanceID(), id);
+                    _instancIdToIdDic.Add(collider.GetInstanceID(), id);
                 }
             }
 
             public bool TryGetColliderId(int instanceId, out int colliderId)
             {
-                return _instancIdToId.TryGetValue(instanceId, out colliderId);
+                return _instancIdToIdDic.TryGetValue(instanceId, out colliderId);
             }
         }
 
+        #region Registered Collider
+
         private int _nextGroupId = 0;
 
-        private Dictionary<int, ColliderGroup> _groupIdToColliderGroup =
+        private Dictionary<int, ColliderGroup> _groupIdToColliderGroupDic =
             new Dictionary<int, ColliderGroup>();
 
-        private Dictionary<int, int> _instancIdToGroupId =
+        private Dictionary<int, int> _instancIdToGroupIdDic =
             new Dictionary<int, int>();
+
+        #endregion
+
+        #region CollisionArea
+
+        //TODO 先評估看看Activator.CreateInstance在創建時的消耗 因為有Pool基本上也不會太多次 如果真的有消耗嘗試改用已經實例化出來的做Copy
+        private Dictionary<int, Type> _areaTypeToAreaClassTypeDic =
+            new Dictionary<int, Type>();
+
+        private Dictionary<int, Queue<CollisionArea>> _areaTypeToAreaPoolDic =
+            new Dictionary<int, Queue<CollisionArea>>();
+
+        private List<CollisionArea> _runingCollisionAreaList =
+            new List<CollisionArea>();
+
+        private List<CollisionArea> _endCollisionAreaList =
+            new List<CollisionArea>();
+
+        #endregion
 
         public CollisionAreaManager()
         {
-            var collisionAreaTypeList = AttributeUtility.GetAllAtttibuteTypeList<CollisionAreaAttribute>();
+            CollectionCollisionAreaType();
         }
+
+        #region Pubilc Method Update DrawGizmos
+
+        public void DoUpdate()
+        {
+            ProcessCollisionArea();
+        }
+
+        public void DoDrawGizmos()
+        {
+            for (int i = 0; i < _runingCollisionAreaList.Count; i++)
+            {
+                _runingCollisionAreaList[i].DoDrawGizmos();
+            }
+        }
+
+        #endregion
 
         #region Public Method RegisterCollider UnregisterCollider
 
@@ -92,11 +132,11 @@ namespace GameMainSystem.Collision
 
         #endregion
 
-        #region Public
+        #region Public Method CreateCollisionArea
 
         public void CreateCollisionArea(ICollisionAreaSetupData setupData)
         {
-
+            InternalCreateCollisionArea(setupData);
         }
 
         #endregion
@@ -106,16 +146,18 @@ namespace GameMainSystem.Collision
         bool ICollisionAreaManager.TryGetColliderId(int instanceId, out int colliderId)
         {
             colliderId = 0;
-            if (!_instancIdToGroupId.TryGetValue(instanceId, out int groupId))
+            if (!_instancIdToGroupIdDic.TryGetValue(instanceId, out int groupId))
                 return false;
 
-            if (!_groupIdToColliderGroup.TryGetValue(groupId, out var group))
+            if (!_groupIdToColliderGroupDic.TryGetValue(groupId, out var group))
                 return false;
 
             return group.TryGetColliderId(instanceId, out colliderId);
         }
 
         #endregion
+
+        #region Private Method ColliderGroup
 
         private int GetNextGroupId()
         {
@@ -136,7 +178,7 @@ namespace GameMainSystem.Collision
                 }
 
                 int colliderInsId = collider.GetInstanceID();
-                if (_instancIdToGroupId.ContainsKey(colliderInsId))
+                if (_instancIdToGroupIdDic.ContainsKey(colliderInsId))
                 {
                     msg += $"Id:{idToCollider.Key} Collider is exist InsId:{colliderInsId}\n";
                     continue;
@@ -149,7 +191,7 @@ namespace GameMainSystem.Collision
         private void AddCollider(int groupId, RegisterColliderData colliderData)
         {
             //groupId基本上是遞增的 照正常來說不可能有重複的 必免內部使用錯誤先直接return
-            if (_groupIdToColliderGroup.ContainsKey(groupId))
+            if (_groupIdToColliderGroupDic.ContainsKey(groupId))
             {
                 Log.LogError("GroupId duplicate");
                 return;
@@ -166,15 +208,15 @@ namespace GameMainSystem.Collision
                     Log.LogWarning($"GroupId:{groupId} have null collider");
                     continue;
                 }
-                _instancIdToGroupId.Add(collider.GetInstanceID(), groupId);
+                _instancIdToGroupIdDic.Add(collider.GetInstanceID(), groupId);
             }
 
-            _groupIdToColliderGroup.Add(groupId, newColliderGroup);
+            _groupIdToColliderGroupDic.Add(groupId, newColliderGroup);
         }
 
         private void RemoveCollider(int groupId)
         {
-            if (!_groupIdToColliderGroup.TryGetValue(groupId, out var colliderGroup))
+            if (!_groupIdToColliderGroupDic.TryGetValue(groupId, out var colliderGroup))
             {
                 Log.LogError("GroupId not exist");
                 return;
@@ -187,10 +229,115 @@ namespace GameMainSystem.Collision
                     Log.LogWarning($"GroupId:{groupId} have null collider");
                     continue;
                 }
-                _instancIdToGroupId.Remove(collider.GetInstanceID());
+                _instancIdToGroupIdDic.Remove(collider.GetInstanceID());
             }
 
-            _groupIdToColliderGroup.Remove(groupId);
+            _groupIdToColliderGroupDic.Remove(groupId);
         }
+
+        #endregion
+
+        #region Private Method CollisionArea
+
+        private void CollectionCollisionAreaType()
+        {
+            var collisionAreaTypeList = AttributeUtility.GetAllAtttibuteTypeList<CollisionAreaAttribute>();
+            for (int i = 0; i < collisionAreaTypeList.Count; i++)
+            {
+                int areaType = collisionAreaTypeList[i].Attribute.AreaType;
+                var classType = collisionAreaTypeList[i].Type;
+
+                if (_areaTypeToAreaClassTypeDic.ContainsKey(areaType))
+                {
+                    Log.LogWarning($"AreaType:{areaType} have duplicates type:{classType.Name} ignore this type", true);
+                    continue;
+                }
+
+                _areaTypeToAreaClassTypeDic.Add(areaType, classType);
+            }
+        }
+
+        private void InternalCreateCollisionArea(ICollisionAreaSetupData setupData)
+        {
+            if (setupData == null)
+            {
+                Log.LogWarning("SetupData is null, do not create CollsionArea");
+                return;
+            }
+
+            if (!TryGetCollisionArea(setupData.AreaType, out var collisionArea))
+            {
+                Log.LogWarning("SetupData Invalid, get collisionArea failed");
+                return;
+            }
+
+            collisionArea.Setup(setupData);
+            collisionArea.DoCreate();
+            _runingCollisionAreaList.Add(collisionArea);
+        }
+
+        private void ProcessCollisionArea()
+        {
+            for (int i = 0; i < _runingCollisionAreaList.Count; i++)
+            {
+                var runingCollisionArea = _runingCollisionAreaList[i];
+                runingCollisionArea.DoUpdate();
+                if (runingCollisionArea.IsEnd)
+                    _endCollisionAreaList.Add(runingCollisionArea);
+            }
+
+            int endCount = _endCollisionAreaList.Count;
+            if (endCount > 0)
+            {
+                for (int i = 0; i < endCount; i++)
+                {
+                    var endCollisionArea = _endCollisionAreaList[i];
+                    _runingCollisionAreaList.Remove(endCollisionArea);
+                    RecycleCollisionArea(endCollisionArea);
+                }
+                _endCollisionAreaList.Clear();
+            }
+        }
+
+        private bool TryGetCollisionArea(int areaType, out CollisionArea collisionArea)
+        {
+            if (_areaTypeToAreaPoolDic.TryGetValue(areaType, out var pool) &&
+                pool.Count > 0)
+            {
+                collisionArea =  pool.Dequeue();
+                return true;
+            }
+
+            if (!_areaTypeToAreaClassTypeDic.TryGetValue(areaType, out var classType))
+            {
+                collisionArea = null;
+                Log.LogError($"AreaType:{areaType} ClassType not exist");
+                return false;
+            }
+
+            collisionArea = Activator.CreateInstance(classType, this, areaType) as CollisionArea;
+            return true;
+        }
+
+        private void RecycleCollisionArea(CollisionArea collisionArea)
+        {
+            if (collisionArea == null)
+            {
+                Log.LogWarning("collisionArea is null, do not recycle CollsionArea");
+                return;
+            }
+
+            int areaType = collisionArea.AreaType;
+            if (!_areaTypeToAreaPoolDic.TryGetValue(areaType, out var pool))
+            {
+                pool = new Queue<CollisionArea>();
+                _areaTypeToAreaPoolDic.Add(areaType, pool);
+            }
+
+            collisionArea.DoRecycle();
+            pool.Enqueue(collisionArea);
+        }
+
+        #endregion
     }
 }

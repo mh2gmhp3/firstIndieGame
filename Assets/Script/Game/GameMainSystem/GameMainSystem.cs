@@ -37,6 +37,7 @@ namespace GameMainSystem
         protected override void DoUpdate()
         {
             _characterController.DoUpdate();
+            _collisionAreaManager.DoUpdate();
         }
 
         protected override void DoFixedUpdate()
@@ -47,6 +48,11 @@ namespace GameMainSystem
         private void OnGUI()
         {
             _characterController.DoOnGUI();
+        }
+
+        private void OnDrawGizmos()
+        {
+            _collisionAreaManager.DoDrawGizmos();
         }
     }
 }
