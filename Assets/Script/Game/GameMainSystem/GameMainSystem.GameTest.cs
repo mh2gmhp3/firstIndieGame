@@ -1,6 +1,7 @@
 ﻿using AssetsModule;
 using CameraModule;
 using GameMainSystem.Attack;
+using GameMainSystem.Collision;
 using Movement;
 using SceneModule;
 using System.Collections;
@@ -47,6 +48,14 @@ namespace GameMainSystem
             attackCombinationList.Add(new AttackCombination(mainAttackBehaviorList, subAttackBehaviorList));
             _characterController.SetCombinationList(attackCombinationList);
             _characterController.SetNowCombination(0);
+
+            var characterCollider = testCharacterTrans.GetChild(0).GetComponent<Collider>();
+            var testColliderGroup = new CollisionAreaManager.RegisterColliderData();
+            testColliderGroup.IdToRegisterColliderDic.Add(1, characterCollider);
+            int groupId = _collisionAreaManager.RegisterCollider(testColliderGroup);
+            var testCollisionAreaSetupData = new TestCollisionAreaSetupData();
+            testCollisionAreaSetupData.TriggerReceiver = new TestCollisionAreaTriggerReceiver();
+            _collisionAreaManager.CreateCollisionArea(testCollisionAreaSetupData);
         }
     }
 }

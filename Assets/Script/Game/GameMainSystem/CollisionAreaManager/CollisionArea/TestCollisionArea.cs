@@ -1,10 +1,19 @@
-﻿using Mono.Cecil;
+﻿using Logging;
+using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameMainSystem.Collision
 {
+    public class TestCollisionAreaTriggerReceiver : ICollisionAreaTriggerReceiver
+    {
+        public void OnTrigger(int groupId, int colliderId)
+        {
+            Log.LogInfo($"OnTrigger GroupId:{groupId} ColliderId:{colliderId}", true);
+        }
+    }
+
     public class TestCollisionAreaSetupData : ICollisionAreaSetupData
     {
         public int AreaType { get => (int)CollisionAreaDefine.AreaType.Test; }
@@ -29,13 +38,17 @@ namespace GameMainSystem.Collision
     {
         private RaycastHit _hit;
 
+        //讓對同群組的只會碰撞一次
+        //TODO 可能都會使用? 泛用的話拉到底層
+        private HashSet<int> _colliedGroupIdSet = new HashSet<int>();
+
         public TestCollisionArea(ICollisionAreaManager collisionAreaManager, int areaType) : base(collisionAreaManager, areaType)
         {
         }
 
         protected override void DoSetup(ICollisionAreaSetupData setupData)
         {
-
+            _colliedGroupIdSet.Clear();
         }
 
         public override void DoUpdate()
@@ -48,11 +61,24 @@ namespace GameMainSystem.Collision
                 return;
             }
 
-            Physics.Raycast(
+            if (!Physics.Raycast(
                 _worldPosition,
                 _direction,
                 out _hit,
-                1);
+                1))
+            {
+                return;
+            }
+
+            if (!TryGetColliderId(_hit.colliderInstanceID, out int groupId, out int colliderId))
+                return;
+
+            if (_colliedGroupIdSet.Contains(groupId))
+                return;
+
+            _colliedGroupIdSet.Add(groupId);
+
+            NotifyTriggerReceiver(groupId, colliderId);
         }
 
         public override void DoDrawGizmos()
