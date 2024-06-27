@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Logging;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,12 +7,12 @@ namespace GameMainSystem.Collision
 {
     public interface ICollisionAreaManager
     {
-        public bool TryGetColliderId(int instanceId, out int colliderId);
+        public bool TryGetColliderId(int instanceId, out int groupId, out int colliderId);
     }
 
     public interface ICollisionAreaTriggerReceiver
     {
-        public void OnTrigger();
+        public void OnTrigger(int groupId, int colliderId);
     }
 
     public interface ICollisionAreaSetupData
@@ -41,6 +42,8 @@ namespace GameMainSystem.Collision
         protected float _endTime;
         protected float _timeDuration;
 
+        protected ICollisionAreaTriggerReceiver _triggerReceiver;
+
         public int AreaType => _areaType;
 
         public bool IsEnd => Time.time >= _endTime;
@@ -61,9 +64,20 @@ namespace GameMainSystem.Collision
             _areaType = areaType;
         }
 
-        protected bool TryGetColliderId(int instanceId, out int colliderId)
+        protected bool TryGetColliderId(int instanceId, out int groupId, out int colliderId)
         {
-            return _collisionAreaManager.TryGetColliderId(instanceId, out colliderId);
+            return _collisionAreaManager.TryGetColliderId(instanceId, out groupId, out colliderId);
+        }
+
+        protected void NotifyTriggerReceiver(int groupId, int colliderId)
+        {
+            if (_triggerReceiver == null)
+            {
+                Log.LogWarning($"TriggerReceiver not set, notify failed, GroupId:{groupId} ColliderId:{colliderId}");
+                return;
+            }
+
+            _triggerReceiver.OnTrigger(groupId, colliderId);
         }
 
         public void Setup(ICollisionAreaSetupData setupData)
@@ -76,6 +90,8 @@ namespace GameMainSystem.Collision
 
             //強制限制一定要0.01秒持續時間
             _timeDuration = Mathf.Max(setupData.TimeDuration, 0.01f);
+
+            _triggerReceiver = setupData.TriggerReceiver;
         }
 
         protected virtual void DoSetup(ICollisionAreaSetupData setupData) { }

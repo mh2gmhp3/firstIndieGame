@@ -113,9 +113,9 @@ namespace GameMainSystem.Collision
                 return 0;
             }
 
-            if (CheckColliderIsValid(colliderData, out string msg))
+            if (!CheckColliderIsValid(colliderData, out string msg))
             {
-                Log.LogWarning($"RegisterColliderData Invalid Msg:\n{msg}");
+                Log.LogWarning($"RegisterColliderData Invalid Msg:\n{msg}", true);
                 return 0;
             }
 
@@ -143,10 +143,10 @@ namespace GameMainSystem.Collision
 
         #region Imp ICollisionAreaManager
 
-        bool ICollisionAreaManager.TryGetColliderId(int instanceId, out int colliderId)
+        bool ICollisionAreaManager.TryGetColliderId(int instanceId, out int groupId, out int colliderId)
         {
             colliderId = 0;
-            if (!_instancIdToGroupIdDic.TryGetValue(instanceId, out int groupId))
+            if (!_instancIdToGroupIdDic.TryGetValue(instanceId, out groupId))
                 return false;
 
             if (!_groupIdToColliderGroupDic.TryGetValue(groupId, out var group))
