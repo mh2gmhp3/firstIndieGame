@@ -49,13 +49,14 @@ namespace GameMainSystem
             _characterController.SetCombinationList(attackCombinationList);
             _characterController.SetNowCombination(0);
 
+            //測試註冊Collider
             var characterCollider = testCharacterTrans.GetChild(0).GetComponent<Collider>();
             var testColliderGroup = new CollisionAreaManager.RegisterColliderData();
             testColliderGroup.IdToRegisterColliderDic.Add(1, characterCollider);
             int groupId = _collisionAreaManager.RegisterCollider(testColliderGroup);
-            var testCollisionAreaSetupData = new TestCollisionAreaSetupData();
-            testCollisionAreaSetupData.TriggerReceiver = new TestCollisionAreaTriggerReceiver();
-            _collisionAreaManager.CreateCollisionArea(testCollisionAreaSetupData);
+
+            //測試發送碰撞區域請求 用Update TestMode 測試連送
+            //CreateTestCollisionArea(10);
         }
     }
 }

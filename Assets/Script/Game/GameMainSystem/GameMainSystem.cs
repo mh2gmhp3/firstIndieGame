@@ -38,6 +38,11 @@ namespace GameMainSystem
         {
             _characterController.DoUpdate();
             _collisionAreaManager.DoUpdate();
+
+            if (TestMode)
+            {
+                RepeatCreateTestCollisionArea();
+            }
         }
 
         protected override void DoFixedUpdate()

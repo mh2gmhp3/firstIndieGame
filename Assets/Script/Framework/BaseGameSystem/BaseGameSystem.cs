@@ -46,6 +46,8 @@ namespace GameSystem
         protected static T _instance;
         protected Transform _transform;
 
+        protected bool TestMode => _gameSystemManager.TestMode;
+
         void IBaseGameSystem.InitBaseGameSystem(GameSystemManager gameSystemManager)
         {
             _gameSystemManager = gameSystemManager;

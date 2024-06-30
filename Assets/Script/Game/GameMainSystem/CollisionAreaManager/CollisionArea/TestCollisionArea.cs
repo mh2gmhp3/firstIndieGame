@@ -24,12 +24,12 @@ namespace GameMainSystem.Collision
 
         public ICollisionAreaTriggerReceiver TriggerReceiver { get; set; }
 
-        public TestCollisionAreaSetupData()
+        public TestCollisionAreaSetupData(float direction)
         {
             WorldPosition = Vector3.zero + new Vector3(0, 1, 0);
             Direction = Vector3.forward;
 
-            TimeDuration = 10;
+            TimeDuration = direction;
         }
     }
 
