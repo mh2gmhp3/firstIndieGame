@@ -92,6 +92,8 @@ namespace GameMainSystem.Collision
             _timeDuration = Mathf.Max(setupData.TimeDuration, 0.01f);
 
             _triggerReceiver = setupData.TriggerReceiver;
+
+            DoSetup(setupData);
         }
 
         protected virtual void DoSetup(ICollisionAreaSetupData setupData) { }
