@@ -48,6 +48,7 @@ namespace GameMainSystem
         private void OnGUI()
         {
             _characterController.DoOnGUI();
+            _collisionAreaManager.DoOnGUI();
         }
 
         private void OnDrawGizmos()

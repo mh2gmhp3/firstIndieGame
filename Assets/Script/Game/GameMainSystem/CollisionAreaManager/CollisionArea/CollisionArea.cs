@@ -101,6 +101,7 @@ namespace GameMainSystem.Collision
         public virtual void DoCreate() { }
         public virtual void DoUpdate() { }
         public virtual void DoRecycle() { }
+        public virtual void DoOnGUI() { }
         public virtual void DoDrawGizmos() { }
     }
 }

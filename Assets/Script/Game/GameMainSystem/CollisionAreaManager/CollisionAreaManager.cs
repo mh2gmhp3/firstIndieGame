@@ -87,6 +87,14 @@ namespace GameMainSystem.Collision
             ProcessCollisionArea();
         }
 
+        public void DoOnGUI()
+        {
+            for (int i = 0; i < _runingCollisionAreaList.Count; i++)
+            {
+                _runingCollisionAreaList[i].DoOnGUI();
+            }
+        }
+
         public void DoDrawGizmos()
         {
             for (int i = 0; i < _runingCollisionAreaList.Count; i++)
