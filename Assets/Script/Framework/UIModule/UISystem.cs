@@ -89,10 +89,23 @@ namespace UIModule
                         Log.LogError($"UIWindows:{name} can't Create");
                         return;
                     }
-                    AddLoadedUIWindow(name, windows);
-                    //先關閉
-                    windows.Close();
+                    HandleLoadedPreLoadUIWindows(
+                        name,
+                        windows,
+                        onLoadedCallback);
                 });
+        }
+
+        private void HandleLoadedPreLoadUIWindows(
+            string name,
+            UIWindows windows,
+            Action<UIWindows> onLoadedCallback = null)
+        {
+            AddLoadedUIWindow(name, windows);
+            //先關閉
+            windows.Close();
+            if (onLoadedCallback != null)
+                onLoadedCallback.Invoke(windows);
         }
 
         private void DoOpenUIWindows(string name, UIData uiData, Action<UIWindows> onOpenCallback = null)
