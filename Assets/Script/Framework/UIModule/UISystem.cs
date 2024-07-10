@@ -86,7 +86,7 @@ namespace UIModule
                     _loadingWindowsNameSet.Remove(name);
                     if (!TryCreateUIwindows(obj, out var windows))
                     {
-                        Log.LogError($"UIWindows:{name} can't Create");
+                        Log.LogError($"UIWindows:{name} can't Create", true);
                         return;
                     }
                     HandleLoadedPreLoadUIWindows(
@@ -130,7 +130,7 @@ namespace UIModule
                     _loadingWindowsNameSet.Remove(name);
                     if (!TryCreateUIwindows(obj, out var windows))
                     {
-                        Log.LogError($"UIWindows:{name} can't Create");
+                        Log.LogError($"UIWindows:{name} can't Create", true);
                         return;
                     }
                     HandleLoadedOpenUIWindows(
