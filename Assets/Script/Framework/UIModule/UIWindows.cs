@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UIModule
 {
@@ -12,6 +13,7 @@ namespace UIModule
         public override void Init()
         {
             _canvas = gameObject.GetComponent<Canvas>();
+            _canvas.overrideSorting = true;
         }
 
         public void SetSortingLayer(string sortingLayerName, int sortingOrder)
@@ -22,7 +24,6 @@ namespace UIModule
                 return;
             }
 
-            _canvas.overrideSorting = true;
             _canvas.sortingLayerName = sortingLayerName;
             _canvas.sortingOrder = sortingOrder;
         }
