@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ComponentUtility;
 
 namespace UIModule
 {
     public class UIBase : MonoBehaviour, IUIDataNotifyReceiver
     {
         private UIData _uiData = null;
+
+        protected ObjectReference _objReference = new ObjectReference();
 
         #region IUIDataNotifyReceiver
 
