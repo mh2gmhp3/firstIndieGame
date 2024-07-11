@@ -22,7 +22,7 @@ namespace Logging
 
         private static string GetMessage(object message, bool withMethod)
         {
-            string msg = message.ToString();
+            string msg = message == null? "null message" : message.ToString();
             if (withMethod)
                 msg = GetCallerMethodName(3) + " " + msg;
             //GetCallerMethodName => 0
