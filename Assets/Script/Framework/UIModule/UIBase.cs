@@ -9,7 +9,8 @@ namespace UIModule
     {
         private UIData _uiData = null;
 
-        protected ObjectReference _objReference = new ObjectReference();
+        [SerializeField]
+        protected GameObjectReferenceDatabase _gameObjectReferenceDb = new GameObjectReferenceDatabase();
 
         #region IUIDataNotifyReceiver
 
