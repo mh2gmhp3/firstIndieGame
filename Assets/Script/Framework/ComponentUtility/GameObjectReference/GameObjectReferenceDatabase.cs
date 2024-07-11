@@ -14,6 +14,7 @@ namespace ComponentUtility
         public class GameObjectReference
         {
             public string Name;
+            public string TypeName;
             public List<GameObject> GameObjectList =
                new List<GameObject>();
         }
@@ -22,18 +23,11 @@ namespace ComponentUtility
         private List<GameObjectReference> _gameObjectReferenceList =
             new List<GameObjectReference>();
 
-        [SerializeField]
-        private Dictionary<string, List<Object>> _nameToObjectListDic =
-            new Dictionary<string, List<Object>>();
-
 #if UNITY_EDITOR
-
         public List<GameObjectReference> GameObjectReferenceList => _gameObjectReferenceList;
-
 #endif
 
 #if UNITY_EDITOR
-
         public void AddObject(GameObject go)
         {
             if (go == null)
@@ -46,11 +40,11 @@ namespace ComponentUtility
 
             var newGoRef = new GameObjectReference();
             newGoRef.Name = name;
+            newGoRef.TypeName = go.GetType().Name;
             newGoRef.GameObjectList = new List<GameObject>() { go };
 
             _gameObjectReferenceList.Add(newGoRef);
         }
-
 #endif
 
         public T GetObject<T>(string name) where T : Object
