@@ -12,6 +12,12 @@ namespace UIModule
         [SerializeField]
         protected GameObjectReferenceDatabase _gameObjectReferenceDb = new GameObjectReferenceDatabase();
 
+#if UNITY_EDITOR
+
+        public GameObjectReferenceDatabase GameObjectReferenceDb => _gameObjectReferenceDb;
+
+#endif
+
         #region IUIDataNotifyReceiver
 
         public void Notify(UIData uiData)

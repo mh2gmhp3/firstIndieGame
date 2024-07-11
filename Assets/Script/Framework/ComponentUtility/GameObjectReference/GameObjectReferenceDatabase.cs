@@ -17,6 +17,19 @@ namespace ComponentUtility
             public string TypeName;
             public List<GameObject> GameObjectList =
                new List<GameObject>();
+
+#if UNITY_EDITOR
+            public void AddGameObject(GameObject go)
+            {
+                if (go == null)
+                    return;
+
+                if (GameObjectList.Contains(go))
+                    return;
+
+                GameObjectList.Add(go);
+            }
+#endif
         }
 
         [SerializeField]
