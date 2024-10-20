@@ -10,7 +10,7 @@ namespace UIModule
     {
         protected Canvas _canvas;
 
-        public override void Init()
+        public override void DoInit()
         {
             _canvas = gameObject.GetComponent<Canvas>();
             _canvas.overrideSorting = true;

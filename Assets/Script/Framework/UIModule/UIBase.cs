@@ -7,6 +7,11 @@ namespace UIModule
 {
     public class UIBase : MonoBehaviour, IUIDataNotifyReceiver
     {
+        /// <summary>
+        /// 是否初始化過
+        /// </summary>
+        private bool _inited = false;
+
         private UIData _uiData = null;
 
         [SerializeField]
@@ -26,7 +31,18 @@ namespace UIModule
 
         #endregion
 
-        public virtual void Init() { }
+        public void Init()
+        {
+            if (_inited)
+                return;
+
+            DoInit();
+
+            _inited = true;
+        }
+
+        public virtual void DoInit() { }
+
         public void Open(UIData uiData)
         {
             gameObject.SetActive(true);

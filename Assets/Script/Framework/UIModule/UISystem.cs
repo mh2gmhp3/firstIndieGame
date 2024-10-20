@@ -101,7 +101,7 @@ namespace UIModule
             UIWindows windows,
             Action<UIWindows> onLoadedCallback = null)
         {
-            AddLoadedUIWindow(name, windows);
+            AddLoadedAndInitUIWindow(name, windows);
             //先關閉
             windows.Close();
             if (onLoadedCallback != null)
@@ -147,9 +147,7 @@ namespace UIModule
             UIData uiData,
             Action<UIWindows> onOpenCallback = null)
         {
-            AddLoadedUIWindow(name, windows);
-
-            windows.Init();
+            AddLoadedAndInitUIWindow(name, windows);
             OnOpenUIWindows(
                 name,
                 windows,
@@ -170,12 +168,13 @@ namespace UIModule
                 onOpenCallback.Invoke(windows);
         }
 
-        private void AddLoadedUIWindow(string name, UIWindows windows)
+        private void AddLoadedAndInitUIWindow(string name, UIWindows windows)
         {
             if (_nameToWindows.ContainsKey(name))
                 return;
 
             _nameToWindows.Add(name, windows);
+            windows.Init();
         }
 
         private void DoCloseUIWindows(string name)
