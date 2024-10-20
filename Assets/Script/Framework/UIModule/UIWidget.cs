@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace UIModule
 {
+    /// <summary>
+    /// UI小型介面
+    /// </summary>
     public class UIWidget : UIBase
     {
 

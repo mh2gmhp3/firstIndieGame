@@ -6,16 +6,24 @@ using UnityEngine.UI;
 
 namespace UIModule
 {
+    /// <summary>
+    /// UI主要介面
+    /// </summary>
     public class UIWindows : UIBase
     {
         protected Canvas _canvas;
 
-        public override void DoInit()
+        protected override void DoInit()
         {
             _canvas = gameObject.GetComponent<Canvas>();
             _canvas.overrideSorting = true;
         }
 
+        /// <summary>
+        /// 設置階層
+        /// </summary>
+        /// <param name="sortingLayerName"></param>
+        /// <param name="sortingOrder"></param>
         public void SetSortingLayer(string sortingLayerName, int sortingOrder)
         {
             if (_canvas == null)

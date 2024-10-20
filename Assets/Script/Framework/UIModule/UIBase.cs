@@ -5,6 +5,9 @@ using Framework.ComponentUtility;
 
 namespace UIModule
 {
+    /// <summary>
+    /// UI基礎類別
+    /// </summary>
     public class UIBase : MonoBehaviour, IUIDataNotifyReceiver
     {
         /// <summary>
@@ -12,12 +15,21 @@ namespace UIModule
         /// </summary>
         private bool _inited = false;
 
+        /// <summary>
+        /// 介面主要資料
+        /// </summary>
         private UIData _uiData = null;
 
+        /// <summary>
+        /// 介面ReferenceDB 記錄所有Reference
+        /// </summary>
         [SerializeField]
         protected ObjectReferenceDatabase _objectReferenceDb = new ObjectReferenceDatabase();
 
 #if UNITY_EDITOR
+        /// <summary>
+        /// 介面ReferenceDB 記錄所有Reference for Editor
+        /// </summary>
         public ObjectReferenceDatabase ObjectReferenceDb => _objectReferenceDb;
 
 #endif
@@ -31,6 +43,9 @@ namespace UIModule
 
         #endregion
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
         public void Init()
         {
             if (_inited)
@@ -41,20 +56,37 @@ namespace UIModule
             _inited = true;
         }
 
-        public virtual void DoInit() { }
-
+        /// <summary>
+        /// 開啟
+        /// </summary>
+        /// <param name="uiData"></param>
         public void Open(UIData uiData)
         {
             gameObject.SetActive(true);
             DoOpen(uiData);
         }
+
+        /// <summary>
+        /// 關閉
+        /// </summary>
         public void Close()
         {
             gameObject.SetActive(false);
             DoClose();
         }
 
+        /// <summary>
+        /// 初始化時呼叫
+        /// </summary>
+        protected virtual void DoInit() { }
+        /// <summary>
+        /// 開啟時呼叫
+        /// </summary>
+        /// <param name="uiData"></param>
         protected virtual void DoOpen(UIData uiData) { }
+        /// <summary>
+        /// 關閉時呼叫
+        /// </summary>
         protected virtual void DoClose() { }
     }
 }
