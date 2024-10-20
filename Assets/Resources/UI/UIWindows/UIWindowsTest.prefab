@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8018172698465106874}
   - component: {fileID: 7089455329990781721}
-  - component: {fileID: 9128268789869766365}
+  - component: {fileID: 4283745734649961625}
   m_Layer: 5
   m_Name: UIWindowsTest
   m_TagString: Untagged
@@ -60,7 +60,7 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_TargetDisplay: 0
---- !u!114 &9128268789869766365
+--- !u!114 &4283745734649961625
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -72,6 +72,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87290fa83f444af42ae1c9e0fe26dc56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameObjectReferenceDb:
+    _gameObjectReferenceList:
+    - Name: UIWindowsTest
+      TypeName: RectTransform
+      GameObjectList:
+      - {fileID: 618326368360499993}
+    - Name: Button (Legacy)
+      TypeName: GameObject
+      GameObjectList:
+      - {fileID: 3776773052472023679}
 --- !u!1 &3776773052472023679
 GameObject:
   m_ObjectHideFlags: 0

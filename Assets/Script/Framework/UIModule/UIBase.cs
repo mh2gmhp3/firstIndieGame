@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ComponentUtility;
+using Framework.ComponentUtility;
 
 namespace UIModule
 {
@@ -10,11 +10,10 @@ namespace UIModule
         private UIData _uiData = null;
 
         [SerializeField]
-        protected GameObjectReferenceDatabase _gameObjectReferenceDb = new GameObjectReferenceDatabase();
+        protected ObjectReferenceDatabase _objectReferenceDb = new ObjectReferenceDatabase();
 
 #if UNITY_EDITOR
-
-        public GameObjectReferenceDatabase GameObjectReferenceDb => _gameObjectReferenceDb;
+        public ObjectReferenceDatabase ObjectReferenceDb => _objectReferenceDb;
 
 #endif
 

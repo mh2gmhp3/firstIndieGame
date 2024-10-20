@@ -1,8 +1,5 @@
-﻿using ComponentUtility;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Framework.ComponentUtility.Editor;
 using UnityEditor;
-using UnityEngine;
 
 namespace UIModule
 {
@@ -21,11 +18,11 @@ namespace UIModule
             }
         }
 
-        private GameObjectReferenceDatabaseEditorGUI _gameObjectReferenceDatabaseEditorGUI;
+        private ObjectReferenceDatabaseEditorGUI _objectReferenceDatabaseEditorGUI;
 
         public void OnEnable()
         {
-            _gameObjectReferenceDatabaseEditorGUI = new GameObjectReferenceDatabaseEditorGUI(Target.GameObjectReferenceDb);
+            _objectReferenceDatabaseEditorGUI = new ObjectReferenceDatabaseEditorGUI(Target.ObjectReferenceDb);
         }
 
         public override void OnInspectorGUI()
@@ -34,7 +31,7 @@ namespace UIModule
             serializedObject.ApplyModifiedProperties();
             serializedObject.Update();
 
-            _gameObjectReferenceDatabaseEditorGUI.OnGUI();
+            _objectReferenceDatabaseEditorGUI.OnGUI();
         }
     }
 }
