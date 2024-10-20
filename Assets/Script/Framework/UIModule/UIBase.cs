@@ -8,7 +8,7 @@ namespace UIModule
     /// <summary>
     /// UI基礎類別
     /// </summary>
-    public class UIBase : MonoBehaviour, IUIDataNotifyReceiver
+    public abstract class UIBase : MonoBehaviour, IUIDataNotifyReceiver
     {
         /// <summary>
         /// 是否初始化過
