@@ -64,6 +64,7 @@ namespace Framework.ComponentUtility
 
                 ObjectList.Clear();
                 ObjectList.AddRange(newTypeObjectList);
+                TypeName = type.Name;
             }
 #endif
         }
