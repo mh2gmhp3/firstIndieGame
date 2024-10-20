@@ -77,7 +77,7 @@ MonoBehaviour:
   _objectReferenceDb:
     _objectReferenceList:
     - Name: Button (Legacy)
-      TypeName: GameObject
+      TypeName: Button
       ObjectList:
       - {fileID: 6671588107212360418}
       - {fileID: 6111280351221650932}
