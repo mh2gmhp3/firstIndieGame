@@ -51,6 +51,8 @@ namespace UIModule
             if (_inited)
                 return;
 
+            InitComponentRefreence();
+            InitComponentEvent();
             DoInit();
 
             _inited = true;
@@ -88,5 +90,14 @@ namespace UIModule
         /// 關閉時呼叫
         /// </summary>
         protected virtual void DoClose() { }
+
+        /// <summary>
+        /// 初始化Component參考
+        /// </summary>
+        protected abstract void InitComponentRefreence();
+        /// <summary>
+        /// 初始化Compnent事件
+        /// </summary>
+        protected abstract void InitComponentEvent();
     }
 }
