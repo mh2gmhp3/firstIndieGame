@@ -26,6 +26,7 @@ namespace GameMainSystem
             InputSystem.SetInputSetting(inputSetting);
             InputSystem.RegisterInputReceiver(_inputReceiver);
 
+            //滑鼠
             _inputReceiver.RegisterAxisValueChangedEvent(
                 new List<string>
                 {
@@ -33,6 +34,7 @@ namespace GameMainSystem
                     "Mouse Y"
                 },
                 OnScreenAxisChanged);
+            //右搖桿
             _inputReceiver.RegisterAxisValueChangedEvent(
                 new List<string>
                 {
@@ -40,6 +42,7 @@ namespace GameMainSystem
                     "Right Stick Vertical"
                 },
                 OnScreenAxisChanged);
+            //左搖桿或鍵盤WASD方向
             _inputReceiver.RegisterAxisValueChangedEvent(
                 new List<string>
                 {
