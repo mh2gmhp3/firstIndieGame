@@ -1,0 +1,7 @@
+﻿namespace UIModule.Game
+{
+    public partial class #SCRIPT_NAME# : UIBase
+    {
+
+    }
+}

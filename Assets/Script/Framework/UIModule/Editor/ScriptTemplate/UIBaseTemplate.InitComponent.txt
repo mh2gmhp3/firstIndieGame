@@ -1,0 +1,17 @@
+﻿namespace UIModule.Game
+{
+    public partial class #SCRIPT_NAME# : UIBase
+    {
+        protected override void InitComponentRefreence()
+        {
+            //#INIT_REF#
+            //#INIT_REF#
+        }
+
+        protected override void InitComponentEvent()
+        {
+            //#INIT_EVENT#
+            //#INIT_EVENT#
+        }
+    }
+}
