@@ -71,7 +71,12 @@ namespace Framework.ComponentUtility.Editor
                 {
                     objectReference.ChangeType(typeList[newTypeIndex]);
                 }
-                GUILayout.TextField(objectReference.Name);
+                var newName = GUILayout.TextField(objectReference.Name);
+                if (objectReference.Name != newName)
+                {
+                    //TODO Check
+                    objectReference.Name = newName;
+                }
                 if (GUILayout.Button("X", GUILayout.Width(100)))
                     delete = true;
             }
