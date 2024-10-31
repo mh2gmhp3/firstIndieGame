@@ -34,21 +34,21 @@ namespace UIModule
         private RectTransform _guiRootRectTrans = null;
 
         /// <summary>
-        /// 已經讀取好的Windows
+        /// 已經讀取好的Window
         /// </summary>
-        private Dictionary<string, UIWindows> _nameToWindows =
-            new Dictionary<string, UIWindows>();
+        private Dictionary<string, UIWindow> _nameToWindow =
+            new Dictionary<string, UIWindow>();
 
         /// <summary>
-        /// 正在讀取的Windows
+        /// 正在讀取的Window
         /// </summary>
-        private HashSet<string> _loadingWindowsNameSet =
+        private HashSet<string> _loadingWindowNameSet =
             new HashSet<string>();
 
         /// <summary>
-        /// Windows Prefab Resource路徑
+        /// Window Prefab Resource路徑
         /// </summary>
-        private string _uiWindowsPath = "UI/UIWindows";
+        private string _uiWindowPath = "UI/UIWindow";
 
         //TODO 暫時測試用
         private int _nowTopSortingOrder = 0;
@@ -69,248 +69,248 @@ namespace UIModule
         #region Public Static Method UIWindow
 
         /// <summary>
-        /// 預先讀取Windows
+        /// 預先讀取Window
         /// </summary>
         /// <param name="name"></param>
         /// <param name="onLoadedCallback"></param>
-        public static void PreLoadUIWindows(string name, Action<UIWindows> onLoadedCallback = null)
+        public static void PreLoadUIWindow(string name, Action<UIWindow> onLoadedCallback = null)
         {
-            _instance.DoPreLoadUIWindows(name, onLoadedCallback);
+            _instance.DoPreLoadUIWindow(name, onLoadedCallback);
         }
 
         /// <summary>
-        /// 開啟Windows
+        /// 開啟Window
         /// </summary>
         /// <param name="name"></param>
         /// <param name="uiData"></param>
         /// <param name="onOpenCallback"></param>
-        public static void OpenUIWindows(string name, UIData uiData, Action<UIWindows> onOpenCallback = null)
+        public static void OpenUIWindow(string name, UIData uiData, Action<UIWindow> onOpenCallback = null)
         {
-            _instance.DoOpenUIWindows(name, uiData, onOpenCallback);
+            _instance.DoOpenUIWindow(name, uiData, onOpenCallback);
         }
 
         /// <summary>
-        /// 關閉Windows
+        /// 關閉Window
         /// </summary>
         /// <param name="name"></param>
-        public static void CloseUIWindows(string name)
+        public static void CloseUIWindow(string name)
         {
-            _instance.DoCloseUIWindows(name);
+            _instance.DoCloseUIWindow(name);
         }
 
         #endregion
 
-        #region Private Method UIWindows
+        #region Private Method UIWindow
 
         /// <summary>
-        /// 預先讀取Windows 預先讀取不開啟
+        /// 預先讀取Window 預先讀取不開啟
         /// </summary>
         /// <param name="name"></param>
         /// <param name="onLoadedCallback"></param>
-        private void DoPreLoadUIWindows(string name, Action<UIWindows> onLoadedCallback = null)
+        private void DoPreLoadUIWindow(string name, Action<UIWindow> onLoadedCallback = null)
         {
             //存在直接呼叫callback
-            if (_nameToWindows.TryGetValue(name, out UIWindows windows))
+            if (_nameToWindow.TryGetValue(name, out UIWindow window))
             {
                 Log.LogWarning($"{name} is already preload");
                 if (onLoadedCallback != null)
-                    onLoadedCallback.Invoke(windows);
+                    onLoadedCallback.Invoke(window);
                 return;
             }
 
             //讀取中
-            if (_loadingWindowsNameSet.Contains(name))
+            if (_loadingWindowNameSet.Contains(name))
                 return;
 
-            _loadingWindowsNameSet.Add(name);
-            AssetsSystem.LoadAssetsAsync(GetWindowsPath(name),
+            _loadingWindowNameSet.Add(name);
+            AssetsSystem.LoadAssetsAsync(GetWindowPath(name),
                 (obj) =>
                 {
-                    _loadingWindowsNameSet.Remove(name);
-                    if (!TryCreateUIwindows(obj, out var windows))
+                    _loadingWindowNameSet.Remove(name);
+                    if (!TryCreateUIWindow(obj, out var window))
                     {
-                        Log.LogError($"UIWindows:{name} can't Create", true);
+                        Log.LogError($"UIWindow:{name} can't Create", true);
                         return;
                     }
-                    HandleLoadedPreLoadUIWindows(
+                    HandleLoadedPreLoadUIWindow(
                         name,
-                        windows,
+                        window,
                         onLoadedCallback);
                 });
         }
 
         /// <summary>
-        /// 處理讀取好預先讀取的Windows
+        /// 處理讀取好預先讀取的Window
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="windows"></param>
+        /// <param name="window"></param>
         /// <param name="onLoadedCallback"></param>
-        private void HandleLoadedPreLoadUIWindows(
+        private void HandleLoadedPreLoadUIWindow(
             string name,
-            UIWindows windows,
-            Action<UIWindows> onLoadedCallback = null)
+            UIWindow window,
+            Action<UIWindow> onLoadedCallback = null)
         {
-            //添加與初始化Windows
-            AddLoadedAndInitUIWindow(name, windows);
+            //添加與初始化Window
+            AddLoadedAndInitUIWindow(name, window);
             //先關閉
-            windows.Close();
+            window.Close();
             if (onLoadedCallback != null)
-                onLoadedCallback.Invoke(windows);
+                onLoadedCallback.Invoke(window);
         }
 
         /// <summary>
-        /// 開啟Windows
+        /// 開啟Window
         /// </summary>
         /// <param name="name"></param>
         /// <param name="uiData"></param>
         /// <param name="onOpenCallback"></param>
-        private void DoOpenUIWindows(string name, UIData uiData, Action<UIWindows> onOpenCallback = null)
+        private void DoOpenUIWindow(string name, UIData uiData, Action<UIWindow> onOpenCallback = null)
         {
             //已存在直接開啟
-            if (_nameToWindows.TryGetValue(name, out UIWindows windows))
+            if (_nameToWindow.TryGetValue(name, out UIWindow window))
             {
-                OnOpenUIWindows(
+                OnOpenUIWindow(
                     name,
-                    windows,
+                    window,
                     uiData,
                     onOpenCallback);
                 return;
             }
 
             //讀取中
-            if (_loadingWindowsNameSet.Contains(name))
+            if (_loadingWindowNameSet.Contains(name))
                 return;
 
-            _loadingWindowsNameSet.Add(name);
-            AssetsSystem.LoadAssetsAsync(GetWindowsPath(name),
+            _loadingWindowNameSet.Add(name);
+            AssetsSystem.LoadAssetsAsync(GetWindowPath(name),
                 (obj) =>
                 {
-                    _loadingWindowsNameSet.Remove(name);
-                    if (!TryCreateUIwindows(obj, out var windows))
+                    _loadingWindowNameSet.Remove(name);
+                    if (!TryCreateUIWindow(obj, out var window))
                     {
-                        Log.LogError($"UIWindows:{name} can't Create", true);
+                        Log.LogError($"UIWindow:{name} can't Create", true);
                         return;
                     }
-                    HandleLoadedOpenUIWindows(
+                    HandleLoadedOpenUIWindow(
                         name,
-                        windows,
+                        window,
                         uiData,
                         onOpenCallback);
                 });
         }
 
         /// <summary>
-        /// 處裡讀取好要開啟的Windows
+        /// 處裡讀取好要開啟的Window
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="windows"></param>
+        /// <param name="window"></param>
         /// <param name="uiData"></param>
         /// <param name="onOpenCallback"></param>
-        private void HandleLoadedOpenUIWindows(
+        private void HandleLoadedOpenUIWindow(
             string name,
-            UIWindows windows,
+            UIWindow window,
             UIData uiData,
-            Action<UIWindows> onOpenCallback = null)
+            Action<UIWindow> onOpenCallback = null)
         {
-            //添加與初始化Windows
-            AddLoadedAndInitUIWindow(name, windows);
-            OnOpenUIWindows(
+            //添加與初始化Window
+            AddLoadedAndInitUIWindow(name, window);
+            OnOpenUIWindow(
                 name,
-                windows,
+                window,
                 uiData,
                 onOpenCallback);
         }
 
         /// <summary>
-        /// 執行開啟Windows
+        /// 執行開啟Window
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="windows"></param>
+        /// <param name="window"></param>
         /// <param name="uiData"></param>
         /// <param name="onOpenCallback"></param>
-        private void OnOpenUIWindows(
+        private void OnOpenUIWindow(
             string name,
-            UIWindows windows,
+            UIWindow window,
             UIData uiData,
-            Action<UIWindows> onOpenCallback = null)
+            Action<UIWindow> onOpenCallback = null)
         {
             //獲取階層
-            GetWindowsSorting(name, out string sortingLayerName, out int sortingOrder);
-            windows.SetSortingLayer(sortingLayerName, sortingOrder);
+            GetWindowSorting(name, out string sortingLayerName, out int sortingOrder);
+            window.SetSortingLayer(sortingLayerName, sortingOrder);
             //開啟
-            windows.Open(uiData);
+            window.Open(uiData);
             if (onOpenCallback != null)
-                onOpenCallback.Invoke(windows);
+                onOpenCallback.Invoke(window);
         }
 
         /// <summary>
-        /// 添加與初始化Windows
+        /// 添加與初始化Window
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="windows"></param>
-        private void AddLoadedAndInitUIWindow(string name, UIWindows windows)
+        /// <param name="window"></param>
+        private void AddLoadedAndInitUIWindow(string name, UIWindow window)
         {
-            if (_nameToWindows.ContainsKey(name))
+            if (_nameToWindow.ContainsKey(name))
                 return;
 
-            _nameToWindows.Add(name, windows);
-            windows.Init();
+            _nameToWindow.Add(name, window);
+            window.Init();
         }
 
         /// <summary>
-        /// 關閉Windows
+        /// 關閉Window
         /// </summary>
         /// <param name="name"></param>
-        private void DoCloseUIWindows(string name)
+        private void DoCloseUIWindow(string name)
         {
-            if (!_nameToWindows.TryGetValue(name, out UIWindows windows))
+            if (!_nameToWindow.TryGetValue(name, out UIWindow window))
                 return;
 
-            windows.Close();
+            window.Close();
         }
 
         /// <summary>
-        /// 嘗試建立Windows實體
+        /// 嘗試建立Window實體
         /// </summary>
         /// <param name="obj"></param>
-        /// <param name="windows"></param>
+        /// <param name="window"></param>
         /// <returns></returns>
-        private bool TryCreateUIwindows(UObject obj, out UIWindows windows)
+        private bool TryCreateUIWindow(UObject obj, out UIWindow window)
         {
-            windows = null;
+            window = null;
             if (obj == null)
                 return false;
 
-            windows = obj.GetComponent<UIWindows>();
-            if (windows == null)
+            window = obj.GetComponent<UIWindow>();
+            if (window == null)
                 return false;
 
             var go = ObjectUtility.InstantiateWithoutClone(obj);
-            windows = go.GetComponent<UIWindows>();
-            windows.transform.SetParent(_guiRootTrans);
+            window = go.GetComponent<UIWindow>();
+            window.transform.SetParent(_guiRootTrans);
             return true;
         }
 
         /// <summary>
-        /// 獲取Windows階層
+        /// 獲取Window階層
         /// </summary>
         /// <param name="name"></param>
         /// <param name="sortingLayerName"></param>
         /// <param name="sortingOrder"></param>
-        private void GetWindowsSorting(string name, out string sortingLayerName, out int sortingOrder)
+        private void GetWindowSorting(string name, out string sortingLayerName, out int sortingOrder)
         {
             sortingLayerName = "Default";
             sortingOrder = ++_nowTopSortingOrder;
         }
 
         /// <summary>
-        /// 獲取Windows Resource prefab路徑
+        /// 獲取Window Resource prefab路徑
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        private string GetWindowsPath(string name)
+        private string GetWindowPath(string name)
         {
-            return _uiWindowsPath + "/" + name;
+            return _uiWindowPath + "/" + name;
         }
 
         #endregion

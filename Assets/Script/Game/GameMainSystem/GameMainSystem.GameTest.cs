@@ -59,7 +59,7 @@ namespace GameMainSystem
             //測試發送碰撞區域請求 用Update TestMode 測試連送
             //CreateTestCollisionArea(10);
 
-            UISystem.OpenUIWindows("UIWindowsTest", null);
+            UISystem.OpenUIWindow("UIWindowsTest", null);
         }
     }
 }

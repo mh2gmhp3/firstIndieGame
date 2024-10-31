@@ -9,7 +9,7 @@ namespace UIModule
     /// <summary>
     /// UI主要介面
     /// </summary>
-    public abstract class UIWindows : UIBase
+    public abstract class UIWindow : UIBase
     {
         protected Canvas _canvas;
 

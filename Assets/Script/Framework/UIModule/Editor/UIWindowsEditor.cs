@@ -3,16 +3,16 @@ using UnityEditor;
 
 namespace UIModule
 {
-    [CustomEditor(typeof(UIWindows))]
+    [CustomEditor(typeof(UIWindow))]
     public class UIWindowsEditor : Editor
     {
-        private UIWindows _target = null;
-        private UIWindows Target
+        private UIWindow _target = null;
+        private UIWindow Target
         {
             get
             {
                 if (_target == null)
-                    _target = target as UIWindows;
+                    _target = target as UIWindow;
 
                 return _target;
             }
@@ -27,7 +27,7 @@ namespace UIModule
 
         public override void OnInspectorGUI()
         {
-            Undo.RecordObject(Target, "UIWindows");
+            Undo.RecordObject(Target, "UIWindow");
             serializedObject.ApplyModifiedProperties();
             serializedObject.Update();
 
