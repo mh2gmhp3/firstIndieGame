@@ -13,6 +13,9 @@ namespace Framework.Editor.Utility
         /// <param name="obj"></param>
         public static void AddComponentUncheckedUndoable(GameObject go, UnityEngine.Object obj)
         {
+            if (go == null || obj == null)
+                return;
+
             MethodInfo addScriptMethod = typeof(InternalEditorUtility).GetMethod(
                "AddScriptComponentUncheckedUndoable",
                BindingFlags.Static | BindingFlags.NonPublic);
