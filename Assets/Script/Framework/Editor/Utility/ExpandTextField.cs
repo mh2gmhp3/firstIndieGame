@@ -15,6 +15,8 @@ namespace Framework.Editor.Utility
 
         public string Text => _text;
 
+        public bool Expand => _expand;
+
         /// <summary>
         /// 觸發擴展
         /// </summary>
