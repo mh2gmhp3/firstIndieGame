@@ -109,6 +109,7 @@ namespace UIModule
 
             if (_targetSerializedObject != null)
             {
+                Undo.RecordObject(_targetSerializedObject.targetObject, "UIWindows");
                 _targetSerializedObject.ApplyModifiedProperties();
                 _targetSerializedObject.Update();
             }
