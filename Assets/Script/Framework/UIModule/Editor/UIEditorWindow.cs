@@ -9,6 +9,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using Utility;
 using static PlasticPipe.PlasticProtocol.Messages.Serialization.ItemHandlerMessagesSerialization;
 using static UnityEngine.GraphicsBuffer;
 
@@ -41,8 +42,8 @@ namespace UIModule
 
         #region Setting 應該要抽出去
 
-        private string UI_SCRIPT_TAMPLATE_FILE_MAIN_PATH = "Assets/Script/Framework/UIModule/Editor/ScriptTemplate/UIBaseTemplate.txt";
-        private string UI_SCRIPT_TAMPLATE_FILE_INIT_COMPONENT_PATH = "Assets/Script/Framework/UIModule/Editor/ScriptTemplate/UIBaseTemplate.InitComponent.txt";
+        private string UI_SCRIPT_TAMPLATE_FILE_MAIN_PATH = "Assets/Script/Framework/UIModule/Editor/ScriptTemplate";
+        private string UI_SCRIPT_TAMPLATE_FILE_NAME_FORMAT = "{0}Template";
         private string UI_SCRIPT_INIT_COMPONENT_FILE_NAME = "InitComponent";
         private string UI_SCRIPT_FOLDER_PATH = "Assets/Script/Game/UIModule/Script";
 
@@ -56,10 +57,14 @@ namespace UIModule
 
         private ObjectReferenceDatabaseEditorGUI _objRefEditorGUI = null;
         private ExpandTextField _newUIComponentName = new ExpandTextField();
+        private int _newUIComponentTypeIndex = 0;
+
+        private string[] _uiTypeNames = null;
 
         private void OnEnable()
         {
             _instance = this;
+            InitUIType();
             if (_targetGameObject != null)
                 SetEditTarget(_targetGameObject);
         }
@@ -97,9 +102,16 @@ namespace UIModule
                 using (new EditorGUILayout.HorizontalScope(CommonGUIStyle.Default_Box))
                 {
                     _newUIComponentName.DrawTextFieldIfExpand();
+                    if (_newUIComponentName.Expand)
+                    {
+                        _newUIComponentTypeIndex = EditorGUILayout.Popup(_newUIComponentTypeIndex, _uiTypeNames);
+                    }
                     if (_newUIComponentName.DrawButtonIfExpand("新增"))
                     {
-                        if (AddNewUICompnent(_newUIComponentName.Text))
+                        string uiTypeName = _uiTypeNames.Length > 0 ?
+                            _uiTypeNames[_newUIComponentTypeIndex] :
+                            string.Empty;
+                        if (AddNewUICompnent(_newUIComponentName.Text, uiTypeName))
                         {
                             _newUIComponentName.Reset();
                         }
@@ -109,7 +121,7 @@ namespace UIModule
 
             if (_targetSerializedObject != null)
             {
-                Undo.RecordObject(_targetSerializedObject.targetObject, "UIWindows");
+                Undo.RecordObject(_targetSerializedObject.targetObject, "UIWindow");
                 _targetSerializedObject.ApplyModifiedProperties();
                 _targetSerializedObject.Update();
             }
@@ -119,6 +131,20 @@ namespace UIModule
                 _objRefEditorGUI.OnGUI();
             }
         }
+
+        #region UIType
+
+        private void InitUIType()
+        {
+            var uiTypeList = TypeUtility.GetTypeListByInheritsType<UIBase>(false);
+            _uiTypeNames = new string[uiTypeList.Count];
+            for (int i = 0; i < uiTypeList.Count; i++)
+            {
+                _uiTypeNames[i] = uiTypeList[i].Name;
+            }
+        }
+
+        #endregion
 
         #region EditTarget
 
@@ -176,16 +202,19 @@ namespace UIModule
         /// </summary>
         /// <param name="newAddComonentName"></param>
         /// <returns></returns>
-        private bool AddNewUICompnent(string newAddComonentName)
+        private bool AddNewUICompnent(string newAddComonentName, string uiTypeName)
         {
-            if (string.IsNullOrEmpty(newAddComonentName))
+            if (string.IsNullOrEmpty(newAddComonentName) ||
+                string.IsNullOrEmpty(uiTypeName))
                 return false;
 
+            var newAddComonentFolderPath = Path.Combine(UI_SCRIPT_FOLDER_PATH, uiTypeName);
+
             string newAddComponentFilePath = Path.Combine(
-                UI_SCRIPT_FOLDER_PATH,
+                newAddComonentFolderPath,
                 $"{newAddComonentName}.cs");
             string newAddComponentInitCompFilePath = Path.Combine(
-                UI_SCRIPT_FOLDER_PATH,
+                newAddComonentFolderPath,
                 $"{newAddComonentName}.{UI_SCRIPT_INIT_COMPONENT_FILE_NAME}.cs");
 
             List<TemplateReplaceText> templateReplaceTexts
@@ -198,13 +227,22 @@ namespace UIModule
                     }
                 };
 
-            var scriptObj = ScriptGenerator.GenScript(
+            var templateFileName = string.Format(UI_SCRIPT_TAMPLATE_FILE_NAME_FORMAT, uiTypeName);
+
+            var templateMainPath = Path.Combine(
                 UI_SCRIPT_TAMPLATE_FILE_MAIN_PATH,
+                $"{templateFileName}.txt");
+            var templateInitCompPath = Path.Combine(
+                UI_SCRIPT_TAMPLATE_FILE_MAIN_PATH,
+                $"{templateFileName}.{UI_SCRIPT_INIT_COMPONENT_FILE_NAME}.txt");
+
+            var scriptObj = ScriptGenerator.GenScript(
+                templateMainPath,
                 newAddComponentFilePath,
                 templateReplaceTexts);
 
             ScriptGenerator.GenScript(
-                UI_SCRIPT_TAMPLATE_FILE_INIT_COMPONENT_PATH,
+                templateInitCompPath,
                 newAddComponentInitCompFilePath,
                 templateReplaceTexts);
 

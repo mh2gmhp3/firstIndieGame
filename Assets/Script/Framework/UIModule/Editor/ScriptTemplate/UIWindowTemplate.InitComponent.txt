@@ -1,6 +1,6 @@
 ﻿namespace UIModule.Game
 {
-    public partial class #SCRIPT_NAME# : UIBase
+    public partial class #SCRIPT_NAME# : UIWindow
     {
         protected override void InitComponentRefreence()
         {
