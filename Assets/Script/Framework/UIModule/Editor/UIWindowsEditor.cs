@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace UIModule
 {
-    [CustomEditor(typeof(UIWindow))]
+    [CustomEditor(typeof(UIWindow), true)]
     public class UIWindowsEditor : Editor
     {
         private UIWindow _target = null;
@@ -18,20 +18,16 @@ namespace UIModule
             }
         }
 
-        private ObjectReferenceDatabaseEditorGUI _objectReferenceDatabaseEditorGUI;
+        private UIBaseEditorGUI _uiBaseEditorGUI;
 
         public void OnEnable()
         {
-            _objectReferenceDatabaseEditorGUI = new ObjectReferenceDatabaseEditorGUI(Target.ObjectReferenceDb);
+            _uiBaseEditorGUI = new UIBaseEditorGUI(Target);
         }
 
         public override void OnInspectorGUI()
         {
-            Undo.RecordObject(Target, "UIWindow");
-            serializedObject.ApplyModifiedProperties();
-            serializedObject.Update();
-
-            _objectReferenceDatabaseEditorGUI.OnGUI();
+            _uiBaseEditorGUI.OnGUI();
         }
     }
 }

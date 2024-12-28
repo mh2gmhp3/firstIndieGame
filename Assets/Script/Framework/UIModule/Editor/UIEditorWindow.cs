@@ -53,9 +53,8 @@ namespace UIModule
 
         private GameObject _targetGameObject = null;
         private UIBase _targetUIBase = null;
-        private SerializedObject _targetSerializedObject = null;
 
-        private ObjectReferenceDatabaseEditorGUI _objRefEditorGUI = null;
+        private UIBaseEditorGUI _uiBaseEditorGUI = null;
         private ExpandTextField _newUIComponentName = new ExpandTextField();
         private int _newUIComponentTypeIndex = 0;
 
@@ -119,16 +118,9 @@ namespace UIModule
                 }
             }
 
-            if (_targetSerializedObject != null)
+            if (_uiBaseEditorGUI != null)
             {
-                Undo.RecordObject(_targetSerializedObject.targetObject, "UIWindow");
-                _targetSerializedObject.ApplyModifiedProperties();
-                _targetSerializedObject.Update();
-            }
-
-            if (_objRefEditorGUI != null)
-            {
-                _objRefEditorGUI.OnGUI();
+                _uiBaseEditorGUI.OnGUI();
             }
         }
 
@@ -169,18 +161,13 @@ namespace UIModule
             if (uiBase != null && uiBase != _targetUIBase)
             {
                 _targetUIBase = uiBase;
-                _targetSerializedObject = new SerializedObject(_targetUIBase);
+                _uiBaseEditorGUI = new UIBaseEditorGUI(_targetUIBase);
             }
             else
             {
                 _targetUIBase = null;
-                _targetSerializedObject = null;
+                _uiBaseEditorGUI = null;
             }
-
-            if (_targetUIBase != null)
-                _objRefEditorGUI = new ObjectReferenceDatabaseEditorGUI(_targetUIBase.ObjectReferenceDb);
-            else
-                _objRefEditorGUI = null;
         }
 
         /// <summary>
@@ -190,7 +177,7 @@ namespace UIModule
         {
             _targetGameObject = null;
             _targetUIBase = null;
-            _objRefEditorGUI = null;
+            _uiBaseEditorGUI = null;
         }
 
         #endregion
