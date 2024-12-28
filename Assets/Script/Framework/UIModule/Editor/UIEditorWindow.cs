@@ -10,8 +10,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 using Utility;
-using static PlasticPipe.PlasticProtocol.Messages.Serialization.ItemHandlerMessagesSerialization;
-using static UnityEngine.GraphicsBuffer;
+using static UIModule.UIEditorDefine;
 
 namespace UIModule
 {
@@ -37,15 +36,6 @@ namespace UIModule
             window.SetEditTarget(Selection.activeGameObject);
             _instance = window;
         }
-
-        #endregion
-
-        #region Setting 應該要抽出去
-
-        private string UI_SCRIPT_TAMPLATE_FILE_MAIN_PATH = "Assets/Script/Framework/UIModule/Editor/ScriptTemplate";
-        private string UI_SCRIPT_TAMPLATE_FILE_NAME_FORMAT = "{0}Template";
-        private string UI_SCRIPT_INIT_COMPONENT_FILE_NAME = "InitComponent";
-        private string UI_SCRIPT_FOLDER_PATH = "Assets/Script/Game/UIModule/Script";
 
         #endregion
 
@@ -110,7 +100,7 @@ namespace UIModule
                         string uiTypeName = _uiTypeNames.Length > 0 ?
                             _uiTypeNames[_newUIComponentTypeIndex] :
                             string.Empty;
-                        if (AddNewUICompnent(_newUIComponentName.Text, uiTypeName))
+                        if (AddNewUIComponent(_newUIComponentName.Text, uiTypeName))
                         {
                             _newUIComponentName.Reset();
                         }
@@ -187,22 +177,20 @@ namespace UIModule
         /// <summary>
         /// 新增新的UIComponent
         /// </summary>
-        /// <param name="newAddComonentName"></param>
+        /// <param name="newAddComponentName"></param>
         /// <returns></returns>
-        private bool AddNewUICompnent(string newAddComonentName, string uiTypeName)
+        private bool AddNewUIComponent(string newAddComponentName, string uiTypeName)
         {
-            if (string.IsNullOrEmpty(newAddComonentName) ||
+            if (string.IsNullOrEmpty(newAddComponentName) ||
                 string.IsNullOrEmpty(uiTypeName))
                 return false;
 
-            var newAddComonentFolderPath = Path.Combine(UI_SCRIPT_FOLDER_PATH, uiTypeName);
-
-            string newAddComponentFilePath = Path.Combine(
-                newAddComonentFolderPath,
-                $"{newAddComonentName}.cs");
-            string newAddComponentInitCompFilePath = Path.Combine(
-                newAddComonentFolderPath,
-                $"{newAddComonentName}.{UI_SCRIPT_INIT_COMPONENT_FILE_NAME}.cs");
+            string newAddComponentFilePath = GetUIScriptPath(
+                uiTypeName,
+                newAddComponentName);
+            string newAddComponentInitCompFilePath = GetUIScriptInitComponentPath(
+                uiTypeName,
+                newAddComponentName);
 
             List<TemplateReplaceText> templateReplaceTexts
                 = new List<TemplateReplaceText>
@@ -210,7 +198,7 @@ namespace UIModule
                     new TemplateReplaceText
                     {
                         Mark = "#SCRIPT_NAME#",
-                        Text = newAddComonentName
+                        Text = newAddComponentName
                     }
                 };
 
