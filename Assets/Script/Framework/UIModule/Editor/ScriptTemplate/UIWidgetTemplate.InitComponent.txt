@@ -2,6 +2,9 @@
 {
     public partial class #SCRIPT_NAME# : UIWidget
     {
+        //#REF#
+        //#REF#
+
         protected override void InitComponentRefreence()
         {
             //#INIT_REF#
