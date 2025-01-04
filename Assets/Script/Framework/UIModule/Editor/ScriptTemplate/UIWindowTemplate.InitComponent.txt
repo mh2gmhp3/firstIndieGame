@@ -16,5 +16,8 @@
             //#INIT_EVENT#
             //#INIT_EVENT#
         }
+
+        //#EVENT#
+        //#EVENT#
     }
 }
