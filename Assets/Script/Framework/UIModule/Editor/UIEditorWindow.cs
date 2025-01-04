@@ -192,14 +192,10 @@ namespace UIModule
                 uiTypeName,
                 newAddComponentName);
 
-            List<TemplateReplaceText> templateReplaceTexts
-                = new List<TemplateReplaceText>
+            List<ReplaceText> templateReplaceTexts
+                = new List<ReplaceText>
                 {
-                    new TemplateReplaceText
-                    {
-                        Mark = "#SCRIPT_NAME#",
-                        Text = newAddComponentName
-                    }
+                    new ReplaceText("#SCRIPT_NAME#", newAddComponentName)
                 };
 
             var templateFileName = string.Format(UI_SCRIPT_TAMPLATE_FILE_NAME_FORMAT, uiTypeName);

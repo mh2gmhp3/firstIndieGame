@@ -6,12 +6,6 @@ using UnityEngine;
 
 namespace Framework.Editor.ScriptGenerator
 {
-    public struct TemplateReplaceText
-    {
-        public string Mark;
-        public string Text;
-    }
-
     public class ScriptGenerator
     {
          /// <summary>
@@ -23,7 +17,7 @@ namespace Framework.Editor.ScriptGenerator
         public static Object GenScript(
             string templatePath,
             string generatedScriptPath,
-            List<TemplateReplaceText> templateReplaceTextList)
+            List<ReplaceText> templateReplaceTextList)
         {
             if (!File.Exists(templatePath))
             {
