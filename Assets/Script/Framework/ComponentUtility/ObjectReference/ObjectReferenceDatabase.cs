@@ -66,6 +66,15 @@ namespace Framework.ComponentUtility
                 ObjectList.AddRange(newTypeObjectList);
                 TypeName = type.Name;
             }
+
+            /// <summary>
+            /// 是否為多個物件
+            /// </summary>
+            /// <returns></returns>
+            public bool IsMultiple()
+            {
+                return ObjectList.Count > 0;
+            }
 #endif
         }
 

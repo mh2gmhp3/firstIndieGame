@@ -455,7 +455,7 @@ namespace Framework.ComponentUtility.Editor
             if (objectReference == null)
                 return result;
 
-            if (objectReference.ObjectList.Count > 1)
+            if (objectReference.IsMultiple())
                 return $"List<{objectReference.TypeName}>";
             else
                 return $"{objectReference.TypeName}";
@@ -485,7 +485,7 @@ namespace Framework.ComponentUtility.Editor
             if (objectReference == null)
                 return result;
 
-            if (objectReference.ObjectList.Count > 1)
+            if (objectReference.IsMultiple())
                 return $"_objectReferenceDb.GetObjectList<{objectReference.TypeName}>(\"{objectReference.Name}\")";
             else
                 return $"_objectReferenceDb.GetObject<{objectReference.TypeName}>(\"{objectReference.Name}\")";
