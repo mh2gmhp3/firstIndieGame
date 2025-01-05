@@ -89,6 +89,8 @@ namespace Framework.ComponentUtility.Editor
         private const string EVENT_FORMAT_REGISTER_SUFFIX = "Register";
         /// <summary>事件方法格式字尾</summary>
         private const string EVENT_FORMAT_METHOD_SUFFIX = "Method";
+        /// <summary>事件方法列表格式標記</summary>
+        private const string EVENT_FORMAT_LIST_MARK = "List";
 
         /// <summary>所有區域標記</summary>
         private static readonly HashSet<string> ALL_REGION_MARK_SET = new HashSet<string>()
@@ -589,8 +591,12 @@ namespace Framework.ComponentUtility.Editor
             if (!objectReference.TryGetObjectType(out var type))
                 return false;
 
+            var formatName = objectReference.IsMultiple() ?
+                $"{type.FullName}.{EVENT_FORMAT_LIST_MARK}.{EVENT_FORMAT_REGISTER_SUFFIX}" :
+                $"{type.FullName}.{EVENT_FORMAT_REGISTER_SUFFIX}";
+
             return TryGenEventLines(
-                $"{type.FullName}.{EVENT_FORMAT_REGISTER_SUFFIX}",
+                formatName,
                 replaceTextList,
                 out result) && result.Count != 0;
         }
@@ -612,8 +618,12 @@ namespace Framework.ComponentUtility.Editor
             if (!objectReference.TryGetObjectType(out var type))
                 return false;
 
+            var formatName = objectReference.IsMultiple() ?
+                $"{type.FullName}.{EVENT_FORMAT_LIST_MARK}.{EVENT_FORMAT_METHOD_SUFFIX}" :
+                $"{type.FullName}.{EVENT_FORMAT_METHOD_SUFFIX}";
+
             return TryGenEventLines(
-                $"{type.FullName}.{EVENT_FORMAT_METHOD_SUFFIX}",
+                formatName,
                 replaceTextList,
                 out result) && result.Count != 0;
         }

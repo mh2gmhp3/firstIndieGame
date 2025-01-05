@@ -21,3 +21,12 @@ MonoBehaviour:
     Type: 0
     FormatString: private void OnClick_#VAR_NAME#()
     FormatFile: {fileID: 0}
+  - Name: UnityEngine.UI.Button.List.Register
+    Type: 0
+    FormatString: "for(int i = 0; i < #VAR_NAME#.Count; i++)\n{\n\tvar index = i;\n\t#VAR_NAME#[index].onClick.AddListener(()
+      => {OnClick_#VAR_NAME#(index);});\n}"
+    FormatFile: {fileID: 0}
+  - Name: UnityEngine.UI.Button.List.Method
+    Type: 0
+    FormatString: private void OnClick_#VAR_NAME#(int index)
+    FormatFile: {fileID: 0}
