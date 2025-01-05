@@ -288,7 +288,7 @@ namespace Framework.ComponentUtility.Editor
             for (int i = 0; i < numOfWriteContentList; i++)
             {
                 var writeContentLines = writeContentCallback.Invoke(writeContentList[i]);
-                for (int j = writeContentLines.Count - 1; j >= 0; j--)
+                for (int j = 0; j < writeContentLines.Count; j++)
                 {
                     lines.Insert(insertIndex, indent + writeContentLines[j]);
                     insertIndex++;
