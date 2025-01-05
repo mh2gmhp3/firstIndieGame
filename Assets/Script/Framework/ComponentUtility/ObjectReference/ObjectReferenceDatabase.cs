@@ -162,7 +162,7 @@ namespace Framework.ComponentUtility
 
                 for (int j = 0; j < objRef.ObjectList.Count; j++)
                 {
-                    T resultObj = GetObjectByType(objRef.ObjectList[0], type) as T;
+                    T resultObj = GetObjectByType(objRef.ObjectList[j], type) as T;
                     if (resultObj == null)
                     {
                         Log.LogError(
