@@ -37,6 +37,14 @@ namespace UIModule
             _instance = window;
         }
 
+        public static void OpenWindow(GameObject editGo)
+        {
+            var window = GetWindow<UIEditorWindow>();
+            window.SetEditTarget(editGo);
+            _instance = window;
+        }
+
+
         #endregion
 
         private static UIEditorWindow _instance = null;

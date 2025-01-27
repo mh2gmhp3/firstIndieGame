@@ -1,5 +1,6 @@
 ﻿using Framework.ComponentUtility.Editor;
 using UnityEditor;
+using UnityEngine;
 
 namespace UIModule
 {
@@ -27,6 +28,8 @@ namespace UIModule
 
         public override void OnInspectorGUI()
         {
+            if (GUILayout.Button("開啟編輯視窗"))
+                UIEditorWindow.OpenWindow(Target.gameObject);
             _uiBaseEditorGUI.OnGUI();
         }
     }
