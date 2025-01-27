@@ -382,6 +382,7 @@ namespace Framework.ComponentUtility.Editor
 
             var objectRefList = objectRefDB.ObjectReferenceList;
             int numOfObjectRefList = objectRefList.Count;
+            bool haveMult = false;
             for (int i = 0; i < numOfObjectRefList; i++)
             {
                 var objectRef = objectRefList[i];
@@ -389,7 +390,12 @@ namespace Framework.ComponentUtility.Editor
                     continue;
 
                 result.Add(type.Namespace);
+                haveMult |= objectRef.IsMultiple();
             }
+
+            //有多個直接拿HashSet的Namespace來用跟List一樣
+            if (haveMult)
+                result.Add(result.GetType().Namespace);
 
             return result.ToList();
         }
