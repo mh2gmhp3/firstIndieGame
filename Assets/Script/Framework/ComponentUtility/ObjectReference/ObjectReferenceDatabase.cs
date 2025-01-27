@@ -73,7 +73,7 @@ namespace Framework.ComponentUtility
             /// <returns></returns>
             public bool IsMultiple()
             {
-                return ObjectList.Count > 0;
+                return ObjectList.Count > 1;
             }
 #endif
         }
