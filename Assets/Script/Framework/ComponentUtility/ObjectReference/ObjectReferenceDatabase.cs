@@ -110,10 +110,15 @@ namespace Framework.ComponentUtility
 
         public T GetObject<T>(string name) where T : Object
         {
+            Type type = typeof(T);
+
             for (int i = 0; i < _objectReferenceList.Count; i++)
             {
                 var objRef = _objectReferenceList[i];
                 if (objRef.Name != name)
+                    continue;
+
+                if (objRef.TypeName != type.Name)
                     continue;
 
                 if (objRef.ObjectList.Count == 0)
@@ -122,7 +127,6 @@ namespace Framework.ComponentUtility
                     return null;
                 }
 
-                Type type = typeof(T);
                 T resultObj = GetObjectByType(objRef.ObjectList[0], type) as T;
                 if (resultObj == null)
                 {
