@@ -1,4 +1,5 @@
 ﻿using Framework.Editor.Utility;
+using Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,13 +70,20 @@ namespace Framework.ComponentUtility.Editor
                 var newTypeIndex = EditorGUILayout.Popup(nowTypeIndex, popCompTypeNameList.ToArray());
                 if (newTypeIndex != nowTypeIndex)
                 {
-                    objectReference.ChangeType(typeList[newTypeIndex]);
+                    var newType = typeList[newTypeIndex];
+                    if (!_target.DuplicateTypeAndName(newType, objectReference.Name))
+                        objectReference.ChangeType(typeList[newTypeIndex]);
+                    else
+                        Log.LogError("無法使用此類型，已有重複類型與名稱");
                 }
                 var newName = GUILayout.TextField(objectReference.Name);
                 if (objectReference.Name != newName)
                 {
-                    //TODO Check
-                    objectReference.Name = newName;
+                    var nowType = typeList[newTypeIndex];
+                    if (!_target.DuplicateTypeAndName(nowType, newName))
+                        objectReference.Name = newName;
+                    else
+                        Log.LogError("無法命名，已有重複類型與名稱");
                 }
                 if (GUILayout.Button("X", GUILayout.Width(100)))
                     delete = true;

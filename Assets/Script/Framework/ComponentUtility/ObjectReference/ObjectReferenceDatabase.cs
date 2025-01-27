@@ -106,6 +106,28 @@ namespace Framework.ComponentUtility
 
             _objectReferenceList.Add(newGoRef);
         }
+
+        /// <summary>
+        /// 重複類型與名稱
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool DuplicateTypeAndName(Type type, string name)
+        {
+            string typeName = type.Name;
+            for (int i = 0; i < _objectReferenceList.Count; i++)
+            {
+                var objectRef = _objectReferenceList[i];
+                if (objectRef.TypeName == typeName &&
+                    objectRef.Name == name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 #endif
 
         public T GetObject<T>(string name) where T : Object
