@@ -30,3 +30,21 @@ MonoBehaviour:
     Type: 0
     FormatString: private void OnClick_#VAR_NAME#(int index)
     FormatFile: {fileID: 0}
+  - Name: UIModule.UIWidget.Register
+    Type: 0
+    FormatString: '#VAR_NAME#.RegisterWidgetEvent(OnWidgetEvent_#VAR_NAME#);'
+    FormatFile: {fileID: 0}
+  - Name: UIModule.UIWidget.Method
+    Type: 0
+    FormatString: private void OnWidgetEvent_#VAR_NAME#(WidgetEventData eventData)
+    FormatFile: {fileID: 0}
+  - Name: UIModule.UIWidget.List.Register
+    Type: 0
+    FormatString: "for(int i = 0; i < #VAR_NAME#.Count; i++)\n{\n\tvar index = i;\n\t#VAR_NAME#[index].RegisterWidgetEvent((evData)
+      => {OnWidgetEvent_#VAR_NAME#(index, evData);});\n}"
+    FormatFile: {fileID: 0}
+  - Name: UIModule.UIWidget.List.Method
+    Type: 0
+    FormatString: private void OnWidgetEvent_#VAR_NAME#(int index, WidgetEventData
+      eventData)
+    FormatFile: {fileID: 0}
