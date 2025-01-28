@@ -2,12 +2,10 @@
 using Framework.Editor.FormatContentGenerator;
 using Logging;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 using static Framework.ComponentUtility.ObjectReferenceDatabase;
 
 namespace Framework.ComponentUtility.Editor
@@ -590,21 +588,40 @@ namespace Framework.ComponentUtility.Editor
         private static bool TryGenEventRegisterLines(
             this ObjectReference objectReference,
             List<ReplaceText> replaceTextList,
-            out List<string> result)
+            out List<string> eventLine)
         {
-            result = null;
+            eventLine = null;
 
             if (!objectReference.TryGetObjectType(out var type))
                 return false;
 
-            var formatName = objectReference.IsMultiple() ?
-                $"{type.FullName}.{EVENT_FORMAT_LIST_MARK}.{EVENT_FORMAT_REGISTER_SUFFIX}" :
-                $"{type.FullName}.{EVENT_FORMAT_REGISTER_SUFFIX}";
+            eventLine = new List<string>();
+            var evnetTypeList = new List<Type> { type };
+            if (ObjectReferenceDatabaseBaseTypeEventSetting.TryGetBaseTypeToSearchEvent(
+                type,
+                out var eventBaseTypeList))
+            {
+                evnetTypeList.AddRange(eventBaseTypeList);
+            }
 
-            return TryGenEventLines(
-                formatName,
-                replaceTextList,
-                out result) && result.Count != 0;
+            for (int i = 0; i < evnetTypeList.Count; i++)
+            {
+                var evnetType = evnetTypeList[i];
+                var formatName = objectReference.IsMultiple() ?
+                    $"{evnetType.FullName}.{EVENT_FORMAT_LIST_MARK}.{EVENT_FORMAT_REGISTER_SUFFIX}" :
+                    $"{evnetType.FullName}.{EVENT_FORMAT_REGISTER_SUFFIX}";
+
+                if (TryGenEventLines(
+                    formatName,
+                    replaceTextList,
+                    out var result) && result.Count != 0)
+                {
+                    eventLine.AddRange(result);
+                    if (i != evnetTypeList.Count - 1)
+                        eventLine.Add(string.Empty);
+                }
+            }
+            return eventLine.Count > 0;
         }
 
         /// <summary>
@@ -617,21 +634,40 @@ namespace Framework.ComponentUtility.Editor
         private static bool TryGenEventMethodLines(
             this ObjectReference objectReference,
             List<ReplaceText> replaceTextList,
-            out List<string> result)
+            out List<string> eventLine)
         {
-            result = null;
+            eventLine = null;
 
             if (!objectReference.TryGetObjectType(out var type))
                 return false;
 
-            var formatName = objectReference.IsMultiple() ?
-                $"{type.FullName}.{EVENT_FORMAT_LIST_MARK}.{EVENT_FORMAT_METHOD_SUFFIX}" :
-                $"{type.FullName}.{EVENT_FORMAT_METHOD_SUFFIX}";
+            eventLine = new List<string>();
+            var evnetTypeList = new List<Type> { type };
+            if (ObjectReferenceDatabaseBaseTypeEventSetting.TryGetBaseTypeToSearchEvent(
+                type,
+                out var eventBaseTypeList))
+            {
+                evnetTypeList.AddRange(eventBaseTypeList);
+            }
 
-            return TryGenEventLines(
-                formatName,
-                replaceTextList,
-                out result) && result.Count != 0;
+            for (int i = 0; i < evnetTypeList.Count; i++)
+            {
+                var evnetType = evnetTypeList[i];
+                var formatName = objectReference.IsMultiple() ?
+                    $"{evnetType.FullName}.{EVENT_FORMAT_LIST_MARK}.{EVENT_FORMAT_METHOD_SUFFIX}" :
+                    $"{evnetType.FullName}.{EVENT_FORMAT_METHOD_SUFFIX}";
+
+                if (TryGenEventLines(
+                    formatName,
+                    replaceTextList,
+                    out var result) && result.Count != 0)
+                {
+                    eventLine.AddRange(result);
+                    if (i != evnetTypeList.Count - 1)
+                        eventLine.Add(string.Empty);
+                }
+            }
+            return eventLine.Count > 0;
         }
 
         /// <summary>
