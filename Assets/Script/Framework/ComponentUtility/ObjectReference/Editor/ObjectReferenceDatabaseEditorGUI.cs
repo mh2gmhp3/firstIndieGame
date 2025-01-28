@@ -1,4 +1,5 @@
-﻿using Framework.Editor.Utility;
+﻿using Extension;
+using Framework.Editor.Utility;
 using Logging;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,8 @@ namespace Framework.ComponentUtility.Editor
                 GUILayout.Space(10);
                 _dragAndDropHandler.AddArea(boxArea, AddObjectReference);
 
+                //Delete null ref
+                _target.ObjectReferenceList.RemoveIf((obj) => obj == null);
                 for (int i = 0; i < _target.ObjectReferenceList.Count; i++)
                 {
                     DrawGUIObjectReference(_target.ObjectReferenceList[i], out bool delete);
@@ -61,6 +64,9 @@ namespace Framework.ComponentUtility.Editor
             delete = false;
             if (objectReference == null)
                 return;
+
+            //Delete null ref
+            objectReference.ObjectList.RemoveIf(obj => obj == null);
 
             EditorGUILayout.BeginHorizontal();
             {
