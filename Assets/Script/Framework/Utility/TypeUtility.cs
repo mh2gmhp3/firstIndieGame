@@ -42,5 +42,27 @@ namespace Utility
 
             return result;
         }
+
+        /// <summary>
+        /// 獲取指定類型的基類列表
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static List<Type> GetBaseTypeList(Type type)
+        {
+            List<Type> result = new List<Type>();
+
+            if (type == null)
+                return result;
+
+            Type baseType = type.BaseType;
+            while (baseType != null)
+            {
+                result.Add(baseType);
+                baseType = baseType.BaseType;
+            }
+
+            return result;
+        }
     }
 }
