@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameMainSystem.Attack
+namespace GameMainModule.Attack
 {
     //TODO 先對應一般連擊用的組合 之後有需要對遠程子彈編輯在處理
     [Serializable]

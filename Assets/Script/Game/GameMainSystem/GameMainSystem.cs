@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utility;
 
-namespace GameMainSystem
+namespace GameMainModule
 {
     [GameSystem(GameSystemPriority.GAME_MAIN_SYSTEM)]
     public partial class GameMainSystem : BaseGameSystem<GameMainSystem>

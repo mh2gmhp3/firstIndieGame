@@ -1,4 +1,4 @@
-using GameMainSystem.Attack;
+using GameMainModule.Attack;
 using Logging;
 using Movement;
 using System;
@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameMainSystem
+namespace GameMainModule
 {
     /// <summary>
     /// 三維空間的角色控制器

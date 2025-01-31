@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace GameMainSystem.Attack
+namespace GameMainModule.Attack
 {
     [Serializable]
     public class CharacterAttackController

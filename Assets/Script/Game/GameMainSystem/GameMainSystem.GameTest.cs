@@ -1,7 +1,7 @@
 ﻿using AssetsModule;
 using CameraModule;
-using GameMainSystem.Attack;
-using GameMainSystem.Collision;
+using GameMainModule.Attack;
+using GameMainModule.Collision;
 using Movement;
 using SceneModule;
 using System.Collections;
@@ -10,7 +10,7 @@ using UIModule;
 using UnityEngine;
 using Utility;
 
-namespace GameMainSystem
+namespace GameMainModule
 {
     public partial class GameMainSystem
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameMainSystem.Collision
+namespace GameMainModule.Collision
 {
     public class CollisionAreaDefine
     {

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameMainSystem.Collision
+namespace GameMainModule.Collision
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class CollisionAreaAttribute : Attribute

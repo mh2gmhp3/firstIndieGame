@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameMainSystem
+namespace GameMainModule
 {
     public partial class GameMainSystem : ICameraNotifyTarget
     {
