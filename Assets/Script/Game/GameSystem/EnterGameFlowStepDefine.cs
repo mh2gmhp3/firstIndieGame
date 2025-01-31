@@ -8,6 +8,7 @@
             Init_GameController = 4,
             Init_GameTest = 5,
             Init_GameScene = 6,
+            Init_GameMain = 7,
         }
     }
 }

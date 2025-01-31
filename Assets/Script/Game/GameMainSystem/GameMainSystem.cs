@@ -5,6 +5,7 @@ using InputModule;
 using Logging;
 using System.Collections;
 using System.Collections.Generic;
+using UIModule;
 using UnityEngine;
 using Utility;
 
@@ -32,6 +33,15 @@ namespace GameMainModule
             {
                 InitGameScene();
             }
+            else if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameMain)
+            {
+                InitGameMain();
+            }
+        }
+
+        protected override bool DoEnterGameFlowProcessStep(int flowStep)
+        {
+            return base.DoEnterGameFlowProcessStep(flowStep);
         }
 
         protected override void DoUpdate()
