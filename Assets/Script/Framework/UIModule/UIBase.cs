@@ -21,6 +21,11 @@ namespace UIModule
         private UIData _uiData = null;
 
         /// <summary>
+        /// RectTransform
+        /// </summary>
+        protected RectTransform _rectTransform;
+
+        /// <summary>
         /// 介面ReferenceDB 記錄所有Reference
         /// </summary>
         [SerializeField]
@@ -50,6 +55,8 @@ namespace UIModule
         {
             if (_inited)
                 return;
+
+            _rectTransform = this.transform as RectTransform;
 
             InitComponentRefreence();
             InitComponentEvent();
