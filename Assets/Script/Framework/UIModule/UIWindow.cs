@@ -12,6 +12,7 @@ namespace UIModule
     /// </summary>
     public abstract class UIWindow : UIBase
     {
+        public string WindowName;
         protected Canvas _canvas;
 
         protected override void DoInit()
@@ -37,6 +38,21 @@ namespace UIModule
 
             _canvas.sortingLayerName = sortingLayerName;
             _canvas.sortingOrder = sortingOrder;
+        }
+
+        /// <summary>
+        /// 設定顯示
+        /// </summary>
+        public void SetVisible(bool visible)
+        {
+            if (visible)
+            {
+                UISystem.OpenUIWindow(WindowName, _uiData);
+            }
+            else
+            {
+                UISystem.CloseUIWindow(WindowName);
+            }
         }
     }
 }

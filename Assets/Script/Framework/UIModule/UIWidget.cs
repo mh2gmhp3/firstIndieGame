@@ -51,5 +51,36 @@ namespace UIModule
 
             _widgetEvent.Invoke(eventData);
         }
+
+        /// <summary>
+        /// 設定UIData
+        /// </summary>
+        /// <param name="data"></param>
+        public void SetData(IUIData data)
+        {
+            Init();
+            SetUIData(data);
+            DoSetData();
+        }
+
+        /// <summary>
+        /// 設定顯示
+        /// </summary>
+        public void SetVisible(bool visible)
+        {
+            if (visible)
+            {
+                Open(_uiData);
+            }
+            else
+            {
+                Close();
+            }
+        }
+
+        /// <summary>
+        /// 於設定UIData時呼叫
+        /// </summary>
+        protected abstract void DoSetData();
     }
 }

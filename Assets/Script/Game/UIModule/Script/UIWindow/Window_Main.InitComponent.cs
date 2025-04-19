@@ -17,7 +17,7 @@ namespace UIModule.Game
         private Widget_Button Widget_Button_Info;
         //#REF#
 
-        protected override void InitComponentRefreence()
+        protected override void InitComponentReference()
         {
             //#INIT_REF#
             Widget_Button_StartNew = _objectReferenceDb.GetObject<Widget_Button>("StartNew");

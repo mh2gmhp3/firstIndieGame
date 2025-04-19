@@ -18,7 +18,7 @@ namespace UIModule
         /// <summary>
         /// 介面主要資料
         /// </summary>
-        private UIData _uiData = null;
+        protected IUIData _uiData = null;
 
         /// <summary>
         /// RectTransform
@@ -41,9 +41,9 @@ namespace UIModule
 
         #region IUIDataNotifyReceiver
 
-        public void Notify(UIData uiData)
+        public void Notify(IUIData uiData, IUIDataNotifyInfo notifyInfo)
         {
-
+            DoNotify(uiData, notifyInfo);
         }
 
         #endregion
@@ -58,7 +58,7 @@ namespace UIModule
 
             _rectTransform = this.transform as RectTransform;
 
-            InitComponentRefreence();
+            InitComponentReference();
             InitComponentEvent();
             DoInit();
 
@@ -69,9 +69,10 @@ namespace UIModule
         /// 開啟
         /// </summary>
         /// <param name="uiData"></param>
-        public void Open(UIData uiData)
+        public void Open(IUIData uiData)
         {
             gameObject.SetActive(true);
+            SetUIData(uiData);
             DoOpen(uiData);
         }
 
@@ -81,7 +82,18 @@ namespace UIModule
         public void Close()
         {
             gameObject.SetActive(false);
+            IUIData.RemoveNotifyReceiver(_uiData, this);
             DoClose();
+        }
+
+        /// <summary>
+        /// 設定UIData
+        /// </summary>
+        /// <param name="uiData"></param>
+        protected void SetUIData(IUIData uiData)
+        {
+            _uiData = uiData;
+            IUIData.AddNotifyReceiver(_uiData, this);
         }
 
         /// <summary>
@@ -92,16 +104,23 @@ namespace UIModule
         /// 開啟時呼叫
         /// </summary>
         /// <param name="uiData"></param>
-        protected virtual void DoOpen(UIData uiData) { }
+        protected virtual void DoOpen(IUIData uiData) { }
         /// <summary>
         /// 關閉時呼叫
         /// </summary>
         protected virtual void DoClose() { }
 
         /// <summary>
+        /// 接收UIData通知
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="notifyInfo"></param>
+        protected virtual void DoNotify(IUIData data, IUIDataNotifyInfo notifyInfo) { }
+
+        /// <summary>
         /// 初始化Component參考
         /// </summary>
-        protected abstract void InitComponentRefreence();
+        protected abstract void InitComponentReference();
         /// <summary>
         /// 初始化Compnent事件
         /// </summary>

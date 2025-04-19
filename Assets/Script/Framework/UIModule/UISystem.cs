@@ -84,7 +84,7 @@ namespace UIModule
         /// <param name="name"></param>
         /// <param name="uiData"></param>
         /// <param name="onOpenCallback"></param>
-        public static void OpenUIWindow(string name, UIData uiData, Action<UIWindow> onOpenCallback = null)
+        public static void OpenUIWindow(string name, IUIData uiData, Action<UIWindow> onOpenCallback = null)
         {
             _instance.DoOpenUIWindow(name, uiData, onOpenCallback);
         }
@@ -164,7 +164,7 @@ namespace UIModule
         /// <param name="name"></param>
         /// <param name="uiData"></param>
         /// <param name="onOpenCallback"></param>
-        private void DoOpenUIWindow(string name, UIData uiData, Action<UIWindow> onOpenCallback = null)
+        private void DoOpenUIWindow(string name, IUIData uiData, Action<UIWindow> onOpenCallback = null)
         {
             //已存在直接開啟
             if (_nameToWindow.TryGetValue(name, out UIWindow window))
@@ -209,7 +209,7 @@ namespace UIModule
         private void HandleLoadedOpenUIWindow(
             string name,
             UIWindow window,
-            UIData uiData,
+            IUIData uiData,
             Action<UIWindow> onOpenCallback = null)
         {
             //添加與初始化Window
@@ -231,7 +231,7 @@ namespace UIModule
         private void OnOpenUIWindow(
             string name,
             UIWindow window,
-            UIData uiData,
+            IUIData uiData,
             Action<UIWindow> onOpenCallback = null)
         {
             //獲取階層
@@ -254,6 +254,7 @@ namespace UIModule
                 return;
 
             _nameToWindow.Add(name, window);
+            window.WindowName = name;
             window.Init();
         }
 

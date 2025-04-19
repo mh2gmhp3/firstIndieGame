@@ -2,13 +2,13 @@
 {
     public partial class Window_Main : UIWindow
     {
-        protected override void DoOpen(UIData uiData)
+        protected override void DoOpen(IUIData uiData)
         {
-            Widget_Button_StartNew.SetContent("開始新遊戲");
-            Widget_Button_Continue.SetContent("繼續遊戲");
-            Widget_Button_Load.SetContent("讀取遊戲");
-            Widget_Button_Setting.SetContent("設定");
-            Widget_Button_Info.SetContent("遊戲資訊");
+            Widget_Button_StartNew.SetData(new Widget_Button.ButtonData("開始新遊戲"));
+            Widget_Button_Continue.SetData(new Widget_Button.ButtonData("繼續遊戲"));
+            Widget_Button_Load.SetData(new Widget_Button.ButtonData("讀取遊戲"));
+            Widget_Button_Setting.SetData(new Widget_Button.ButtonData("設定"));
+            Widget_Button_Info.SetData(new Widget_Button.ButtonData("遊戲資訊"));
         }
     }
 }

@@ -8,7 +8,7 @@ namespace UIModule.Game
         private Text Text_Content;
         //#REF#
 
-        protected override void InitComponentRefreence()
+        protected override void InitComponentReference()
         {
             //#INIT_REF#
             Button_Obj = _objectReferenceDb.GetObject<Button>("Obj");
