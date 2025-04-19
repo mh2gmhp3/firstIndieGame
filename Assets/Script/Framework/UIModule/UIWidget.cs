@@ -70,17 +70,31 @@ namespace UIModule
         {
             if (visible)
             {
-                Open(_uiData);
+                gameObject.SetActive(true);
             }
             else
             {
-                Close();
+                gameObject.SetActive(false);
             }
+        }
+
+        protected sealed override void DoNotify(IUIData data, IUIDataNotifyInfo notifyInfo)
+        {
+            if (_uiData != data)
+                return;
+
+            OnUIDataNotify(notifyInfo);
         }
 
         /// <summary>
         /// 於設定UIData時呼叫
         /// </summary>
         protected abstract void DoSetData();
+
+        /// <summary>
+        /// 接收UIData通知
+        /// </summary>
+        /// <param name="notifyInfo"></param>
+        protected abstract void OnUIDataNotify(IUIDataNotifyInfo notifyInfo);
     }
 }

@@ -99,7 +99,7 @@ namespace UIModule
         {
             if (data == null)
             {
-                Log.LogError("UIData.AddNotifyReceiver Error : data is null");
+                //允許不註冊資料
                 return;
             }
 

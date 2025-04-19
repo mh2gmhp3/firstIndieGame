@@ -10,5 +10,15 @@
             Widget_Button_Setting.SetData(new Widget_Button.ButtonData("設定"));
             Widget_Button_Info.SetData(new Widget_Button.ButtonData("遊戲資訊"));
         }
+
+        protected override void DoClose()
+        {
+
+        }
+
+        protected override void DoNotify(IUIData data, IUIDataNotifyInfo notifyInfo)
+        {
+
+        }
     }
 }

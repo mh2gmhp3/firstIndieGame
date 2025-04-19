@@ -12,6 +12,9 @@ namespace UIModule
     /// </summary>
     public abstract class UIWindow : UIBase
     {
+        /// <summary>
+        /// 視窗名稱
+        /// </summary>
         public string WindowName;
         protected Canvas _canvas;
 
@@ -41,6 +44,27 @@ namespace UIModule
         }
 
         /// <summary>
+        /// 開啟
+        /// </summary>
+        /// <param name="uiData"></param>
+        public void Open(IUIData uiData)
+        {
+            gameObject.SetActive(true);
+            SetUIData(uiData);
+            DoOpen(uiData);
+        }
+
+        /// <summary>
+        /// 關閉
+        /// </summary>
+        public void Close()
+        {
+            gameObject.SetActive(false);
+            ClearUIData();
+            DoClose();
+        }
+
+        /// <summary>
         /// 設定顯示
         /// </summary>
         public void SetVisible(bool visible)
@@ -54,5 +78,15 @@ namespace UIModule
                 UISystem.CloseUIWindow(WindowName);
             }
         }
+
+        /// <summary>
+        /// 開啟時呼叫
+        /// </summary>
+        /// <param name="uiData"></param>
+        protected virtual void DoOpen(IUIData uiData) { }
+        /// <summary>
+        /// 關閉時呼叫
+        /// </summary>
+        protected virtual void DoClose() { }
     }
 }

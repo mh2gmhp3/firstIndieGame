@@ -1,4 +1,6 @@
-﻿namespace UIModule.Game
+﻿using Logging;
+
+namespace UIModule.Game
 {
     public partial class Widget_Button : UIWidget
     {
@@ -19,6 +21,11 @@
         }
 
         protected override void DoSetData()
+        {
+            OnUIDataNotify(default);
+        }
+
+        protected override void OnUIDataNotify(IUIDataNotifyInfo notifyInfo)
         {
             if (_uiData is ButtonData buttonData)
             {

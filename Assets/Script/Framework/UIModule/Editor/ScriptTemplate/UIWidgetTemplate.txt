@@ -2,6 +2,14 @@
 {
     public partial class #SCRIPT_NAME# : UIWidget
     {
+        protected override void DoSetData()
+        {
+            OnUIDataNotify(default);
+        }
 
+        protected override void OnUIDataNotify(IUIDataNotifyInfo notifyInfo)
+        {
+
+        }
     }
 }

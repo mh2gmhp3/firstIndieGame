@@ -2,6 +2,19 @@
 {
     public partial class #SCRIPT_NAME# : UIWindow
     {
+        protected override void DoOpen(IUIData uiData)
+        {
 
+        }
+
+        protected override void DoClose()
+        {
+
+        }
+
+        protected override void DoNotify(IUIData data, IUIDataNotifyInfo notifyInfo)
+        {
+
+        }
     }
 }

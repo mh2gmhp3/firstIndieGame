@@ -66,27 +66,6 @@ namespace UIModule
         }
 
         /// <summary>
-        /// 開啟
-        /// </summary>
-        /// <param name="uiData"></param>
-        public void Open(IUIData uiData)
-        {
-            gameObject.SetActive(true);
-            SetUIData(uiData);
-            DoOpen(uiData);
-        }
-
-        /// <summary>
-        /// 關閉
-        /// </summary>
-        public void Close()
-        {
-            gameObject.SetActive(false);
-            IUIData.RemoveNotifyReceiver(_uiData, this);
-            DoClose();
-        }
-
-        /// <summary>
         /// 設定UIData
         /// </summary>
         /// <param name="uiData"></param>
@@ -97,25 +76,18 @@ namespace UIModule
         }
 
         /// <summary>
+        /// 清空UIData
+        /// </summary>
+        protected void ClearUIData()
+        {
+            IUIData.RemoveNotifyReceiver(_uiData, this);
+            _uiData = null;
+        }
+
+        /// <summary>
         /// 初始化時呼叫
         /// </summary>
         protected virtual void DoInit() { }
-        /// <summary>
-        /// 開啟時呼叫
-        /// </summary>
-        /// <param name="uiData"></param>
-        protected virtual void DoOpen(IUIData uiData) { }
-        /// <summary>
-        /// 關閉時呼叫
-        /// </summary>
-        protected virtual void DoClose() { }
-
-        /// <summary>
-        /// 接收UIData通知
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="notifyInfo"></param>
-        protected virtual void DoNotify(IUIData data, IUIDataNotifyInfo notifyInfo) { }
 
         /// <summary>
         /// 初始化Component參考
@@ -125,5 +97,12 @@ namespace UIModule
         /// 初始化Compnent事件
         /// </summary>
         protected abstract void InitComponentEvent();
+
+        /// <summary>
+        /// 接收UIData通知
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="notifyInfo"></param>
+        protected abstract void DoNotify(IUIData data, IUIDataNotifyInfo notifyInfo);
     }
 }
