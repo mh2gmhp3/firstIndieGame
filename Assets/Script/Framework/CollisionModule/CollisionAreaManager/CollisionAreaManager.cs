@@ -1,33 +1,55 @@
 ﻿using Logging;
-using Mono.Cecil;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 using Utility;
-using static UnityEngine.ParticleSystem;
 
 namespace CollisionModule
 {
+    /// <summary>
+    /// 碰撞區塊管理者
+    /// <para>可註冊Collider來與其他的單位碰撞</para>
+    /// </summary>
     public class CollisionAreaManager : ICollisionAreaManager
     {
+        /// <summary>
+        /// 要註冊的Collider資料
+        /// </summary>
         public class RegisterColliderData
         {
+            /// <summary>
+            /// 自訂Id對註冊的Collider
+            /// </summary>
             public Dictionary<int, Collider> IdToRegisterColliderDic =
                new Dictionary<int, Collider>();
 
+            /// <summary>
+            /// 是否有任何Collider
+            /// </summary>
             public bool HaveCollider => IdToRegisterColliderDic.Count > 0;
         }
 
+        /// <summary>
+        /// Collider群組 註冊個Collider
+        /// </summary>
         public class ColliderGroup
         {
+            /// <summary>
+            /// Id對Collider
+            /// </summary>
             public Dictionary<int, Collider> IdToColliderDic =
                new Dictionary<int, Collider>();
 
+            /// <summary>
+            /// Unity InstanceId對應Collider 反查用
+            /// </summary>
             private Dictionary<int, int> _instancIdToIdDic =
                 new Dictionary<int, int>();
 
+            /// <summary>
+            /// 使用註冊資料填充
+            /// </summary>
+            /// <param name="colliderData"></param>
             public void FillColliders(RegisterColliderData colliderData)
             {
                 IdToColliderDic.Clear();
@@ -40,6 +62,12 @@ namespace CollisionModule
                 }
             }
 
+            /// <summary>
+            /// 獲取Collider
+            /// </summary>
+            /// <param name="instanceId"></param>
+            /// <param name="colliderId"></param>
+            /// <returns></returns>
             public bool TryGetColliderId(int instanceId, out int colliderId)
             {
                 return _instancIdToIdDic.TryGetValue(instanceId, out colliderId);
@@ -48,11 +76,20 @@ namespace CollisionModule
 
         #region Registered Collider
 
+        /// <summary>
+        /// 下一個ColliderGroupId
+        /// </summary>
         private int _nextGroupId = 0;
 
+        /// <summary>
+        /// GroupId對ColliderGroup
+        /// </summary>
         private Dictionary<int, ColliderGroup> _groupIdToColliderGroupDic =
             new Dictionary<int, ColliderGroup>();
 
+        /// <summary>
+        /// Unity InstanceId對GroupId 反查用
+        /// </summary>
         private Dictionary<int, int> _instancIdToGroupIdDic =
             new Dictionary<int, int>();
 
@@ -61,15 +98,27 @@ namespace CollisionModule
         #region CollisionArea
 
         //TODO 先評估看看Activator.CreateInstance在創建時的消耗 因為有Pool基本上也不會太多次 如果真的有消耗嘗試改用已經實例化出來的做Copy
+        /// <summary>
+        /// 各類型CollisionAreae的Type
+        /// </summary>
         private Dictionary<int, Type> _areaTypeToAreaClassTypeDic =
             new Dictionary<int, Type>();
 
+        /// <summary>
+        /// 各類型CollisionAreae的Pool
+        /// </summary>
         private Dictionary<int, Queue<CollisionArea>> _areaTypeToAreaPoolDic =
             new Dictionary<int, Queue<CollisionArea>>();
 
+        /// <summary>
+        /// 運行中的CollisionArea
+        /// </summary>
         private List<CollisionArea> _runingCollisionAreaList =
             new List<CollisionArea>();
 
+        /// <summary>
+        /// 不再使用的CollisionArea
+        /// </summary>
         private List<CollisionArea> _endCollisionAreaList =
             new List<CollisionArea>();
 
@@ -82,11 +131,17 @@ namespace CollisionModule
 
         #region Pubilc Method Update DrawGizmos
 
+        /// <summary>
+        /// Update時需要自行呼叫 不呼叫CollisionArea將不會更新
+        /// </summary>
         public void DoUpdate()
         {
             ProcessCollisionArea();
         }
 
+        /// <summary>
+        /// 需要繪製GUI時呼叫
+        /// </summary>
         public void DoOnGUI()
         {
             for (int i = 0; i < _runingCollisionAreaList.Count; i++)
@@ -95,6 +150,9 @@ namespace CollisionModule
             }
         }
 
+        /// <summary>
+        /// 需要繪製Gizmos時呼叫
+        /// </summary>
         public void DoDrawGizmos()
         {
             for (int i = 0; i < _runingCollisionAreaList.Count; i++)
@@ -107,6 +165,11 @@ namespace CollisionModule
 
         #region Public Method RegisterCollider UnregisterCollider
 
+        /// <summary>
+        /// 註冊Collider
+        /// </summary>
+        /// <param name="colliderData"></param>
+        /// <returns></returns>
         public int RegisterCollider(RegisterColliderData colliderData)
         {
             if (colliderData == null)
@@ -133,6 +196,10 @@ namespace CollisionModule
             return newGroupId;
         }
 
+        /// <summary>
+        /// 反註冊Collider
+        /// </summary>
+        /// <param name="groupId"></param>
         public void UnregisterCollider(int groupId)
         {
             RemoveCollider(groupId);
@@ -142,6 +209,10 @@ namespace CollisionModule
 
         #region Public Method CreateCollisionArea
 
+        /// <summary>
+        /// 創建碰撞區域
+        /// </summary>
+        /// <param name="setupData"></param>
         public void CreateCollisionArea(ICollisionAreaSetupData setupData)
         {
             InternalCreateCollisionArea(setupData);

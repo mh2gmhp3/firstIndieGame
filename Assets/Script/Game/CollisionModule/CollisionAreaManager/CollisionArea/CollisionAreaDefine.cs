@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace CollisionModule
+﻿namespace CollisionModule
 {
     public class CollisionAreaDefine
     {

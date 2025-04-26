@@ -1,33 +1,68 @@
 ﻿using Logging;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CollisionModule
 {
+    /// <summary>
+    /// 碰撞區域管理者
+    /// </summary>
     public interface ICollisionAreaManager
     {
+        /// <summary>
+        /// 獲取碰撞群組Id與Collider自定義Id
+        /// </summary>
+        /// <param name="instanceId"></param>
+        /// <param name="groupId"></param>
+        /// <param name="colliderId"></param>
+        /// <returns></returns>
         public bool TryGetColliderId(int instanceId, out int groupId, out int colliderId);
     }
 
+    /// <summary>
+    /// 碰撞區域觸發接收者
+    /// </summary>
     public interface ICollisionAreaTriggerReceiver
     {
+        /// <summary>
+        /// 碰撞觸發時
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="colliderId"></param>
         public void OnTrigger(int groupId, int colliderId);
     }
 
+    /// <summary>
+    /// 碰撞區域設置資料
+    /// </summary>
     public interface ICollisionAreaSetupData
     {
+        /// <summary>
+        /// 區域類型
+        /// </summary>
         public int AreaType { get; }
 
+        /// <summary>
+        /// 世界座標
+        /// </summary>
         public Vector3 WorldPosition { get; set; }
+        /// <summary>
+        /// 方向
+        /// </summary>
         public Vector3 Direction { get; set; }
-
+        /// <summary>
+        /// 持續時間
+        /// </summary>
         public float TimeDuration { get; set; }
-
+        /// <summary>
+        /// 觸發接收者
+        /// </summary>
         public ICollisionAreaTriggerReceiver TriggerReceiver { get; set; }
     }
 
     //先嘗試看看把碰撞後要觸發的行為在CollsionArea內處裡掉 只會有跟CollisionAreaManager碰撞單位的行為
+    /// <summary>
+    /// 碰撞區域
+    /// </summary>
     public abstract class CollisionArea
     {
         //ICollisionAreaManager設定成private 對此的動作用protected包避免直接對此variable做操作
