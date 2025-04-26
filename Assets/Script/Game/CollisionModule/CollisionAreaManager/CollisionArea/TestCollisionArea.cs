@@ -2,6 +2,7 @@
 using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace GameMainModule.Collision
@@ -92,6 +93,16 @@ namespace GameMainModule.Collision
             Debug.DrawLine(_worldPosition, _hit.point, Color.red);
             Gizmos.DrawWireSphere(_hit.point, 0.1f);
             Gizmos.color = oriColor;
+
+            Color ori = Handles.color;
+            Handles.color = Color.red;
+            Handles.DrawSolidArc(
+                _worldPosition,
+                Vector3.up,
+                Vector3.forward,
+                90,
+                2);
+            Handles.color = ori;
         }
     }
 }

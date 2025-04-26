@@ -130,7 +130,7 @@ namespace GameMainModule.Collision
             int newGroupId = GetNextGroupId();
             AddCollider(newGroupId, colliderData);
 
-            return 0;
+            return newGroupId;
         }
 
         public void UnregisterCollider(int groupId)
