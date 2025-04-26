@@ -8,7 +8,7 @@ using UnityEngine.Pool;
 using Utility;
 using static UnityEngine.ParticleSystem;
 
-namespace GameMainModule.Collision
+namespace CollisionModule
 {
     public class CollisionAreaManager : ICollisionAreaManager
     {

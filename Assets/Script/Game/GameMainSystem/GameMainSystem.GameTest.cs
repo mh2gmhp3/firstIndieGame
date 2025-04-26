@@ -1,7 +1,7 @@
 ﻿using AssetsModule;
 using CameraModule;
 using GameMainModule.Attack;
-using GameMainModule.Collision;
+using CollisionModule;
 using Movement;
 using SceneModule;
 using System.Collections;

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace GameMainModule.Collision
+namespace CollisionModule
 {
     public class TestCollisionAreaTriggerReceiver : ICollisionAreaTriggerReceiver
     {
