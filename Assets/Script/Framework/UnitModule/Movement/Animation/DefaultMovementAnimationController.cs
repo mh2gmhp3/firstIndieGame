@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Movement
+namespace UnitModule.Movement
 {
     public class DefaultMovementAnimationController : IMovementAnimationController
     {
