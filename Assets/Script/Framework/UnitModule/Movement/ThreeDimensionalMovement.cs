@@ -66,11 +66,11 @@ namespace UnitModule.Movement
         private float _airSpeedMultiplier = 0.7f;
 
         [SerializeField]
-        private float _characterRotateDurationTimePreAngle = 10f;
+        private float _rotateDurationTimePreAngle = 10f;
         [SerializeField]
-        private float _characterRotateStartTime = 0;
+        private float _rotateStartTime = 0;
         [SerializeField]
-        private float _characterRotateEndTime = 0f;
+        private float _rotateEndTime = 0f;
 
         [SerializeField]
         private bool _isFalling = false;
@@ -181,8 +181,8 @@ namespace UnitModule.Movement
                 if (angle != 0)
                 {
 
-                    _characterRotateStartTime = Time.time;
-                    _characterRotateEndTime = Time.time + (angle * _characterRotateDurationTimePreAngle);
+                    _rotateStartTime = Time.time;
+                    _rotateEndTime = Time.time + (angle * _rotateDurationTimePreAngle);
 
                     //Log.LogInfo(
                     //    $"rotation:{rotation} " +
@@ -196,7 +196,7 @@ namespace UnitModule.Movement
                     _characterTrans.rotation = Quaternion.Lerp(
                         _characterTrans.rotation,
                         rotation,
-                        _characterRotateDurationTimePreAngle * Time.deltaTime);
+                        _rotateDurationTimePreAngle * Time.deltaTime);
                     //Mathf.Clamp01(_characterRotateStartTime / _characterRotateEndTime));
                 }
                 else
