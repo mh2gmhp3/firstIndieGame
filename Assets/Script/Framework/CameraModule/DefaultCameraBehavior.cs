@@ -6,6 +6,20 @@ namespace CameraModule
 {
     public class DefaultCameraBehavior : BaseCameraBehavior
     {
+        public override void DoDrawGizmos()
+        {
+        }
 
+        public override void DoFixedUpdate()
+        {
+        }
+
+        public override void DoLateUpdate()
+        {
+        }
+
+        public override void DoUpdate()
+        {
+        }
     }
 }

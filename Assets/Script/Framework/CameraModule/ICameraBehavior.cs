@@ -9,6 +9,10 @@ namespace CameraModule
 {
     public interface ICameraBehavior
     {
+        public GameObject CameraGo { get; }
+        public Transform CameraTrans { get; }
+        public Camera Camera { get; }
+
         public void SetCamera(
             GameObject cameraGo,
             Transform cameraTrans,

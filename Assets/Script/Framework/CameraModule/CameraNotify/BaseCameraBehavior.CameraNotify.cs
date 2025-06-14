@@ -62,7 +62,7 @@ namespace CameraModule
         private List<ICameraNotifyTarget> _cameraNotifyTargetList =
             new List<ICameraNotifyTarget>();
 
-        protected void CameraNotify(CameraNotifyReason notifyReason, Vector3 position, Quaternion rotation)
+        public void CameraNotify(CameraNotifyReason notifyReason, Vector3 position, Quaternion rotation)
         {
             CameraNotify((int)notifyReason, position, rotation);
         }

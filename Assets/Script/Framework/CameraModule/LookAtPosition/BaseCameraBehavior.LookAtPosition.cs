@@ -28,7 +28,7 @@ namespace CameraModule
             if (!(command is ILookAtPosition lookAtPosition))
                 return;
 
-            _cameraTrans.LookAt(lookAtPosition.Position);
+            CameraTrans.LookAt(lookAtPosition.Position);
         }
     }
 }

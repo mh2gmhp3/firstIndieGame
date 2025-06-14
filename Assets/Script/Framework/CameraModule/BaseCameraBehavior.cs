@@ -7,18 +7,6 @@ using UnityEngine;
 
 namespace CameraModule
 {
-    [Flags]
-    public enum BaseCameraState
-    {
-        None = 0000_0000_0000,
-
-        //0000_0000_0001~0000_0000_1000 遊戲主要攝影機模式
-        ThirdPersonMode = 0000_0000_0001,
-
-        //攝影機特殊行為
-        FollowTarget = 0000_0001_0000,
-    }
-
     public abstract partial class BaseCameraBehavior : ICameraBehavior
     {
         protected GameObject _cameraGo;
@@ -27,14 +15,17 @@ namespace CameraModule
 
         protected Dictionary<int, CameraCommandMethod> _commandIdToMethod;
 
-        protected BaseCameraState _state = BaseCameraState.None;
+        protected long _state = 0;
+
+        public GameObject CameraGo => _cameraGo;
+
+        public Transform CameraTrans => _cameraTrans;
+
+        public Camera Camera => _camera;
 
         public BaseCameraBehavior()
         {
             InitCommandMethod();
-
-            _followTargetProcessor = new FollowTargetProcessor(this);
-            _thirdPersonModeProcessor = new ThirdPersonModeProcessor(this);
         }
 
         private void InitCommandMethod()
@@ -74,14 +65,19 @@ namespace CameraModule
             }
         }
 
-        protected void RaiseStateFlag(BaseCameraState state)
+        protected void RaiseStateFlag(long state)
         {
             _state |= state;
         }
 
-        protected void FallStateFlag(BaseCameraState state)
+        protected void FallStateFlag(long state)
         {
-            _state ^= state;
+            _state &= ~state;
+        }
+
+        protected bool StateHasFlag(long state)
+        {
+            return (_state & state) != 0;
         }
 
         public virtual void SetCamera(
@@ -110,31 +106,9 @@ namespace CameraModule
             method.Invoke(command);
         }
 
-        public virtual void DoUpdate()
-        {
-
-        }
-
-        public virtual void DoFixedUpdate()
-        {
-            if (_state.HasFlag(BaseCameraState.ThirdPersonMode))
-            {
-                _thirdPersonModeProcessor.FixedUpdate();
-            }
-        }
-
-        public virtual void DoLateUpdate()
-        {
-            //TODO 這部分應該可以改成各自Flag呼叫對應的Processor
-            if (_state.HasFlag(BaseCameraState.FollowTarget))
-            {
-                _followTargetProcessor.LateUpdate();
-            }
-        }
-
-        public virtual void DoDrawGizmos()
-        {
-            _thirdPersonModeProcessor.DoDrawGizmos();
-        }
+        public abstract void DoUpdate();
+        public abstract void DoFixedUpdate();
+        public abstract void DoLateUpdate();
+        public abstract void DoDrawGizmos();
     }
 }
