@@ -107,6 +107,13 @@ namespace UnitModule.Movement
         [SerializeField]
         private RaycastHit _slopHit;
 
+        [SerializeField]
+        private float _landingStiffTime = 0.5f;
+        [SerializeField]
+        private float _landingStartTime = 0f;
+        [SerializeField]
+        private bool _landingStiff = false;
+
         public ThreeDimensionalMovement()
         {
             _movementAnimationController = new DefaultMovementAnimationController();
@@ -168,9 +175,28 @@ namespace UnitModule.Movement
                 moveForward = Vector3.ProjectOnPlane(moveForward, _slopHit.normal).normalized;
             }
 
-            _movementAnimationController.MoveInput(_moveAxis, _moveQuaternion);
-
             var movement = moveForward * speed;
+
+            //landing effect Movement
+            if (_landingStiff)
+            {
+                if (Time.time - _landingStartTime >= _landingStiffTime)
+                {
+                    _landingStiff = false;
+                }
+            }
+            if (_landingStiff)
+            {
+                //清空移動輸入的方向
+                movement = Vector3.zero;
+            }
+            else
+            {
+                //沒有僵直才發出移動動畫通知
+                _movementAnimationController.MoveInput(_moveAxis, _moveQuaternion);
+            }
+
+
             _rootRigidbody.velocity = movement;
 
             //rotate character
@@ -268,7 +294,11 @@ namespace UnitModule.Movement
             {
                 _jumpCount = 0;
                 if (oriIsJumping || oriIsFalling)
+                {
                     _movementAnimationController.OnLand();
+                    _landingStartTime = Time.time;
+                    _landingStiff = true;
+                }
             }
         }
 
