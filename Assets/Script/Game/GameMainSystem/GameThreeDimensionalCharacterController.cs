@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnitModule;
 
 namespace GameMainModule
 {
@@ -49,10 +50,10 @@ namespace GameMainModule
         /// <summary>
         /// 設定角色Root
         /// </summary>
-        /// <param name="transform"></param>
-        public void SetCharacterRoot(GameObject root)
+        /// <param name="unitData"></param>
+        public void SetMovementUnitData(UnitData unitData)
         {
-            _movement.SetMovementTargetRoot(root);
+            _movement.SetMovementUnitData(unitData);
         }
 
         public void SetMovementAnimationController(IMovementAnimationController movementAnimationController)

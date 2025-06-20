@@ -303,13 +303,12 @@ namespace UnitModule.Movement
             _enable = enable;
         }
 
-        public void SetMovementTargetRoot(GameObject root)
+        public void SetMovementUnitData(UnitData unitData)
         {
-            _rootTrans = root.transform;
-            _rootRigidbody = root.GetComponent<Rigidbody>();
+            _rootTrans = unitData.Transform;
+            _rootRigidbody = unitData.Rigidbody;
 
-            //TODO setting or mono
-            _characterTrans = _rootTrans.GetChild(0);
+            _characterTrans = unitData.RotateTransform;
         }
 
         public void SetMovementAnimationController(IMovementAnimationController movementAnimationController)

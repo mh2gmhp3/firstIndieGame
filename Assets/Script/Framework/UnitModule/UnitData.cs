@@ -27,9 +27,17 @@ namespace UnitModule
     public class UnitData
     {
         /// <summary>
-        /// Transform
+        /// 座標移動用的Transform
         /// </summary>
         public Transform Transform;
+        /// <summary>
+        /// 旋轉用的Transform
+        /// </summary>
+        public Transform RotateTransform;
+        /// <summary>
+        /// 相機觀看中心點的Transform
+        /// </summary>
+        public Transform CameraLookupCenterTransform;
         /// <summary>
         /// Animator
         /// </summary>

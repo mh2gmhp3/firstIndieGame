@@ -27,12 +27,12 @@ namespace GameMainModule
         private void InitTestPlayerCharacterUnit()
         {
             //讀取Prefab
-            var testCharacterAssets = AssetsSystem.LoadAssets<GameObject>("Prototype/TestObject/Character_Root");
+            var testCharacterAssets = AssetsSystem.LoadAssets<GameObject>("Prototype/TestObject/Character_02/Character_Root");
             var testCharacterGo = ObjectUtility.InstantiateWithoutClone(testCharacterAssets);
-            var testCharacterUnitData = testCharacterGo.GetComponent<GameUnit>();
-            var unitData = testCharacterUnitData.UnitData;
+            var testCharacterGameUnit = testCharacterGo.GetComponent<GameUnit>();
+            var unitData = testCharacterGameUnit.UnitData;
             //玩家角色控制
-            _characterController.SetCharacterRoot(testCharacterGo);
+            _characterController.SetMovementUnitData(testCharacterGameUnit.UnitData);
             _characterController.SetEnable(true);
             //動畫控制
             var gameAniController = new GameAnimationController();
@@ -42,7 +42,7 @@ namespace GameMainModule
             CameraSystem.CameraCommand(
                 new ThirdPersonModeCommandData
                 {
-                    TargetTrans = unitData.Transform,
+                    TargetTrans = unitData.CameraLookupCenterTransform,
                     FocusTargetOffset = new Vector3(0, 0.5f, 0),
                     Distance = 10,
                     CameraRotateSensitivity = 50,
