@@ -338,7 +338,7 @@ namespace UnitModule.Movement
             _rootTrans = movementSetting.RootTransform;
             _rootRigidbody = movementSetting.Rigidbody;
 
-            _characterTrans = movementSetting.RootTransform;
+            _characterTrans = movementSetting.RotateTransform;
         }
 
         public void SetMovementAnimationController(IMovementAnimationController movementAnimationController)
