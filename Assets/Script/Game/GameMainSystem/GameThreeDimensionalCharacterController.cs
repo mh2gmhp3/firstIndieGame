@@ -51,9 +51,9 @@ namespace GameMainModule
         /// 設定角色Root
         /// </summary>
         /// <param name="unitData"></param>
-        public void SetMovementUnitData(UnitData unitData)
+        public void SetMovementSetting(UnitMovementSetting movementSetting)
         {
-            _movement.SetMovementUnitData(unitData);
+            _movement.SetMovementSetting(movementSetting);
         }
 
         public void SetMovementAnimationController(IMovementAnimationController movementAnimationController)

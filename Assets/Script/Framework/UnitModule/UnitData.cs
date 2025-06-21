@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnitModule.Movement;
 using UnityEngine;
 
 namespace UnitModule
@@ -27,25 +28,14 @@ namespace UnitModule
     public class UnitData
     {
         /// <summary>
-        /// 座標移動用的Transform
+        /// 移動用設定
         /// </summary>
-        public Transform Transform;
-        /// <summary>
-        /// 旋轉用的Transform
-        /// </summary>
-        public Transform RotateTransform;
+        public UnitMovementSetting MovementSetting = new UnitMovementSetting();
+
         /// <summary>
         /// 相機觀看中心點的Transform
         /// </summary>
         public Transform CameraLookupCenterTransform;
-        /// <summary>
-        /// Animator
-        /// </summary>
-        public Animator Animator;
-        /// <summary>
-        /// Rigidbody
-        /// </summary>
-        public Rigidbody Rigidbody;
         /// <summary>
         /// Collider列表
         /// </summary>

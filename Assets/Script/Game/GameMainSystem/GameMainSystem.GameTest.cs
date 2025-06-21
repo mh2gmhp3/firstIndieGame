@@ -32,11 +32,12 @@ namespace GameMainModule
             var testCharacterGameUnit = testCharacterGo.GetComponent<GameUnit>();
             var unitData = testCharacterGameUnit.UnitData;
             //玩家角色控制
-            _characterController.SetMovementUnitData(testCharacterGameUnit.UnitData);
+            var movementSetting = unitData.MovementSetting;
+            _characterController.SetMovementSetting(movementSetting);
             _characterController.SetEnable(true);
             //動畫控制
             var gameAniController = new GameAnimationController();
-            gameAniController.SetAnimatior(unitData.Animator);
+            gameAniController.SetAnimatior(movementSetting.Animator);
             _characterController.SetMovementAnimationController(gameAniController);
             //第三人稱相機註冊
             CameraSystem.CameraCommand(

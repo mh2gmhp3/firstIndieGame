@@ -333,12 +333,12 @@ namespace UnitModule.Movement
             _enable = enable;
         }
 
-        public void SetMovementUnitData(UnitData unitData)
+        public void SetMovementSetting(UnitMovementSetting movementSetting)
         {
-            _rootTrans = unitData.Transform;
-            _rootRigidbody = unitData.Rigidbody;
+            _rootTrans = movementSetting.RootTransform;
+            _rootRigidbody = movementSetting.Rigidbody;
 
-            _characterTrans = unitData.RotateTransform;
+            _characterTrans = movementSetting.RootTransform;
         }
 
         public void SetMovementAnimationController(IMovementAnimationController movementAnimationController)

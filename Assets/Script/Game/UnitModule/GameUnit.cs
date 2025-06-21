@@ -9,6 +9,9 @@ namespace UnitModule
     /// </summary>
     public class GameUnit : MonoBehaviour
     {
-        public UnitData UnitData;
+        [SerializeField]
+        private UnitData _unitData;
+
+        public UnitData UnitData => _unitData;
     }
 }

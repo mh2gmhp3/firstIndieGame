@@ -11,7 +11,7 @@ namespace UnitModule.Movement
         public void DoOnGUI();
 
         public void SetEnable(bool enable);
-        public void SetMovementUnitData(UnitData unitData);
+        public void SetMovementSetting(UnitMovementSetting movementSetting);
         public void SetMovementAnimationController(IMovementAnimationController movementAnimationController);
 
         public void SetMoveAxis(Vector3 axis);
