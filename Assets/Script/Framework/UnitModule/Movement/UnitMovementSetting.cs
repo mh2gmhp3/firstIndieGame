@@ -5,14 +5,6 @@ using UnityEngine;
 
 namespace UnitModule.Movement
 {
-    [Serializable]
-    public class UnitMovementRaycastSetting
-    {
-        public Vector3 Position;
-        public Vector3 Direction;
-        public float Distance;
-    }
-
     /// <summary>
     /// 單位移動使用資料設定
     /// </summary>
@@ -37,7 +29,20 @@ namespace UnitModule.Movement
         /// </summary>
         public Rigidbody Rigidbody;
 
-        [Header("地面射線偏移 以RootTransform為基準")]
-        public List<UnitMovementRaycastSetting> GroundRaycastSetting = new List<UnitMovementRaycastSetting>();
+        /// <summary>
+        /// 地面射線 以RootTransform為基準
+        /// </summary>
+        [Header("地面射線 以RootTransform為基準")]
+        public Vector3 GroundRaycastStartPositionWithRootTransform;
+        /// <summary>
+        /// 地面射線長度
+        /// </summary>
+        [Header("地面射線")]
+        public float GroundRaycastDistance;
+        /// <summary>
+        /// 斜坡射線長度
+        /// </summary>
+        [Header("斜坡射線")]
+        public float SlopRaycastDistance;
     }
 }

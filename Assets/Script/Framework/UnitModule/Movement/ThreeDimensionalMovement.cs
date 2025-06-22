@@ -19,18 +19,17 @@ namespace UnitModule.Movement
         /// </summary>
         [SerializeField]
         private Transform _rootTrans = null;
+        /// <summary>
+        /// Rotate Transform
+        /// </summary>
+        [SerializeField]
+        private Transform _rotateTrans = null;
 
         /// <summary>
         /// Root Rigidbody
         /// </summary>
         [SerializeField]
         private Rigidbody _rootRigidbody = null;
-
-        /// <summary>
-        /// Character Transform
-        /// </summary>
-        [SerializeField]
-        private Transform _characterTrans = null;
 
         /// <summary>
         /// 移動動畫控制
@@ -55,9 +54,7 @@ namespace UnitModule.Movement
         [SerializeField]
         private bool _isGround = false;
         [SerializeField]
-        private float _isGroundCheckDistance = 0.65f;
-        [SerializeField]
-        private RaycastHit _groundHits;
+        private RaycastHit _groundHit;
 
         [SerializeField]
         private float _moveSpeed = 8f;
@@ -103,7 +100,7 @@ namespace UnitModule.Movement
         [SerializeField]
         private bool _isSlope = false;
         [SerializeField]
-        private float _slopeAngle = 45f;
+        private float _slopeAngle = 60f;
         [SerializeField]
         private RaycastHit _slopHit;
 
@@ -113,6 +110,8 @@ namespace UnitModule.Movement
         private float _landingStartTime = 0f;
         [SerializeField]
         private bool _landingStiff = false;
+
+        private UnitMovementSetting _movementSetting;
 
         public ThreeDimensionalMovement()
         {
@@ -127,13 +126,16 @@ namespace UnitModule.Movement
             if (_rootTrans == null)
                 return;
 
-            var rayStartPoint = _rootTrans.position + Vector3.up * 0.5f;
+            if (_movementSetting == null)
+                return;
+
+            var rayStartPoint = _rootTrans.position + _movementSetting.GroundRaycastStartPositionWithRootTransform;
 
             if (Physics.Raycast(
                 rayStartPoint,
                 Vector3.down,
                 out _slopHit,
-                1))
+                _movementSetting.SlopRaycastDistance))
             {
                 float angle = Vector3.Angle(Vector3.up, _slopHit.normal);
                 _isSlope = angle != 0 && angle < _slopeAngle;
@@ -146,10 +148,10 @@ namespace UnitModule.Movement
             if (Physics.Raycast(
                 rayStartPoint,
                 Vector3.down,
-                out _groundHits,
-                _isGroundCheckDistance))
+                out _groundHit,
+                _movementSetting.GroundRaycastDistance))
             {
-                _isGround = true;//(_groundHits.point - _rootTrans.position).sqrMagnitude < (_isSlope ? 0.1 : 0.01);
+                _isGround = true;
             }
             else
             {
@@ -203,7 +205,7 @@ namespace UnitModule.Movement
             if (_moveAxis.sqrMagnitude > 0)
             {
                 var rotation = Quaternion.LookRotation(lookForward);
-                var angle = Quaternion.Angle(rotation, _characterTrans.rotation);
+                var angle = Quaternion.Angle(rotation, _rotateTrans.rotation);
                 if (angle != 0)
                 {
 
@@ -219,15 +221,15 @@ namespace UnitModule.Movement
                     //    $"TargetAng:{rotation.eulerAngles} " +
                     //    $"CharacterAngle:{_characterTrans.rotation.eulerAngles}");
 
-                    _characterTrans.rotation = Quaternion.Lerp(
-                        _characterTrans.rotation,
+                    _rotateTrans.rotation = Quaternion.Lerp(
+                        _rotateTrans.rotation,
                         rotation,
                         _rotateDurationTimePreAngle * Time.deltaTime);
                     //Mathf.Clamp01(_characterRotateStartTime / _characterRotateEndTime));
                 }
                 else
                 {
-                    _characterTrans.rotation = rotation;
+                    _rotateTrans.rotation = rotation;
                 }
             }
 
@@ -260,10 +262,10 @@ namespace UnitModule.Movement
                 _isFalling = false;
             }
 
-            if (!_isGround && _groundHits.collider != null &&(_groundHits.point - _rootTrans.position).sqrMagnitude > 0.01)
+            if (_isGround && !_isJumping)
             {
-                float fixGroundY = _groundHits.point.y - _rootTrans.position.y;
-                _rootRigidbody.velocity += new Vector3(0, fixGroundY, 0);
+                float fixGroundY = _groundHit.point.y - _rootTrans.position.y;
+                _rootRigidbody.velocity += new Vector3(0, fixGroundY * 10, 0);
             }
 
             if (_inputtedJump)
@@ -311,7 +313,10 @@ namespace UnitModule.Movement
             if (_rootTrans == null)
                 return;
 
-            var rayStartPoint = _rootTrans.position + Vector3.up * 0.5f;
+            if (_movementSetting == null)
+                return;
+
+            var rayStartPoint = _rootTrans.position + _movementSetting.GroundRaycastStartPositionWithRootTransform;
             string hitInfo =
                 $"colliderInstanceID:{_slopHit.colliderInstanceID}\n" +
                 $"point:{_slopHit.point}\n" +
@@ -321,9 +326,15 @@ namespace UnitModule.Movement
             GUI.TextArea(new Rect(25, 25, 100, 200), hitInfo);
             Debug.DrawLine(
                 rayStartPoint,
-                rayStartPoint + Vector3.down * _isGroundCheckDistance,
-                Color.green,
-                0.1f);
+                rayStartPoint + Vector3.down * _movementSetting.GroundRaycastDistance,
+                Color.green);
+            if (_isGround)
+            {
+                Debug.DrawLine(
+                rayStartPoint,
+                _groundHit.point,
+                Color.red);
+            }
 #endif
         }
 
@@ -335,10 +346,12 @@ namespace UnitModule.Movement
 
         public void SetMovementSetting(UnitMovementSetting movementSetting)
         {
-            _rootTrans = movementSetting.RootTransform;
-            _rootRigidbody = movementSetting.Rigidbody;
+            _movementSetting = movementSetting;
 
-            _characterTrans = movementSetting.RotateTransform;
+            _rootTrans = _movementSetting.RootTransform;
+            _rootRigidbody = _movementSetting.Rigidbody;
+
+            _rotateTrans = _movementSetting.RotateTransform;
         }
 
         public void SetMovementAnimationController(IMovementAnimationController movementAnimationController)
