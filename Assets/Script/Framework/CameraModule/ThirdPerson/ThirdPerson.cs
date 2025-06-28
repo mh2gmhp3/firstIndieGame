@@ -53,6 +53,11 @@ namespace CameraModule
         /// 螢幕XY軸操作值
         /// </summary>
         public Vector2 ScreenAxisValue { get; set; }
+
+        /// <summary>
+        /// 攝影機旋轉移動速度
+        /// </summary>
+        public float CameraSpeed { get; set; }
     }
 
     public class ThirdPersonModeCommandData : IThirdPersonModeCommandData
@@ -63,6 +68,7 @@ namespace CameraModule
         public float Distance { get; set; }
         public float CameraRotateSensitivity { get; set; }
         public Vector2 ScreenAxisValue { get; set; }
+        public float CameraSpeed { get; set; }
 
         public ThirdPersonModeCommandData()
         {
@@ -81,7 +87,7 @@ namespace CameraModule
 
         private float _distance;
         private float _cameraRotateSensitivity = 10;
-        private Vector2 _screenAxis;
+        private Vector2 _screenInputAxis;
 
         private Vector2 _cameraRotateValue = Vector2.zero;
 
@@ -103,7 +109,7 @@ namespace CameraModule
             _focusTargetOffset = commandData.FocusTargetOffset;
 
             _distance = commandData.Distance;
-            _screenAxis = commandData.ScreenAxisValue;
+            _screenInputAxis = commandData.ScreenAxisValue;
 
             _cameraRotateSensitivity = commandData.CameraRotateSensitivity;
 
@@ -112,7 +118,7 @@ namespace CameraModule
 
         public void UpdateScreenAxis(IUpdateThirdPersonScreenAxisData commandData)
         {
-            _screenAxis = commandData.ScreenAxis;
+            _screenInputAxis = commandData.ScreenAxis;
         }
 
         public void FixedUpdate()
@@ -122,8 +128,8 @@ namespace CameraModule
             if (_targetTrans == null)
                 return;
 
-            _cameraRotateValue.x += _screenAxis.x * _cameraRotateSensitivity * Time.deltaTime;
-            _cameraRotateValue.y -= _screenAxis.y * _cameraRotateSensitivity * Time.deltaTime;
+            _cameraRotateValue.x += _screenInputAxis.x * _cameraRotateSensitivity * Time.deltaTime;
+            _cameraRotateValue.y -= _screenInputAxis.y * _cameraRotateSensitivity * Time.deltaTime;
 
             _cameraRotateValue.x = _cameraRotateValue.x < 0 ?
                 _cameraRotateValue.x + 360 :
