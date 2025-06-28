@@ -27,6 +27,8 @@ namespace GameMainModule
         [SerializeField]
         private CharacterAttackController _attackController;
 
+        private GameAnimationController _animationController;
+
         private State _currentState = State.Move;
 
         public GameThreeDimensionalCharacterController()
@@ -34,6 +36,17 @@ namespace GameMainModule
             _movement = new ThreeDimensionalMovement();
             _attackController = new CharacterAttackController();
             _attackController.RegisterComboingAction(OnStartAttackComboing, OnEndAttackComboing);
+        }
+
+        public void InitController(UnitMovementSetting setting)
+        {
+            _movement.SetMovementSetting(setting);
+            _movement.SetEnable(true);
+            //動畫控制
+            _animationController = new GameAnimationController();
+            _animationController.SetAnimatior(setting.Animator);
+            _movement.SetMovementAnimationController(_animationController);
+            _attackController.SetAnimationController(_animationController);
         }
 
         public void DoUpdate()
@@ -62,20 +75,6 @@ namespace GameMainModule
         }
 
         #region Movement
-
-        /// <summary>
-        /// 設定角色Root
-        /// </summary>
-        /// <param name="unitData"></param>
-        public void SetMovementSetting(UnitMovementSetting movementSetting)
-        {
-            _movement.SetMovementSetting(movementSetting);
-        }
-
-        public void SetMovementAnimationController(IMovementAnimationController movementAnimationController)
-        {
-            _movement.SetMovementAnimationController(movementAnimationController);
-        }
 
         /// <summary>
         /// 設定移動輸入軸
@@ -152,9 +151,11 @@ namespace GameMainModule
             {
                 case State.Move:
                     _movement.SetSpeedRatio(1f);
+                    _animationController.BlockMovement = false;
                     break;
                 case State.Comboing:
                     _movement.SetSpeedRatio(0.1f);
+                    _animationController.BlockMovement = true;
                     break;
                 default:
                     break;

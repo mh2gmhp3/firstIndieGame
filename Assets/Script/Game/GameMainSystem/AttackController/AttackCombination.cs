@@ -27,6 +27,8 @@ namespace GameMainModule.Attack
         public Action _onStartComboing;
         public Action _onEndComboing;
 
+        public IAttackAnimationController _aniController;
+
         public bool IsComboing => _nowAttackBehavior != null;
 
         public AttackCombination()
@@ -72,6 +74,20 @@ namespace GameMainModule.Attack
 
         #endregion
 
+        #region Notify Animation
+
+        public void SetAnimationController(IAttackAnimationController controller)
+        {
+            _aniController = controller;
+        }
+
+        public void ClearAnimationController()
+        {
+            _aniController = null;
+        }
+
+        #endregion
+
         public void TriggerMainAttack()
         {
             TriggerAttack(_mainAttackBehaviorList);
@@ -105,6 +121,10 @@ namespace GameMainModule.Attack
                     InvokeStartComboing();
                 }
                 _nowAttackBehavior.OnStart();
+                if (_aniController != null)
+                {
+                    _aniController.OnAttack(_nowAttackBehavior.Name);
+                }
                 Log.LogInfo("Start Attack Behavior : " + _nowAttackBehavior.Name);
                 _isStartNewComboBehavior = false;
             }

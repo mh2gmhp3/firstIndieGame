@@ -33,12 +33,7 @@ namespace GameMainModule
             var unitData = testCharacterGameUnit.UnitData;
             //玩家角色控制
             var movementSetting = unitData.MovementSetting;
-            _characterController.SetMovementSetting(movementSetting);
-            _characterController.SetEnable(true);
-            //動畫控制
-            var gameAniController = new GameAnimationController();
-            gameAniController.SetAnimatior(movementSetting.Animator);
-            _characterController.SetMovementAnimationController(gameAniController);
+            _characterController.InitController(movementSetting);
             //第三人稱相機註冊
             CameraSystem.CameraCommand(
                 new ThirdPersonModeCommandData
@@ -54,9 +49,9 @@ namespace GameMainModule
             //測試攻擊
             List<AttackCombination> attackCombinationList = new List<AttackCombination>();
             List<AttackBehavior> mainAttackBehaviorList = new List<AttackBehavior>();
-            mainAttackBehaviorList.Add(new AttackBehavior("mainAttack 1", 0.1f, 0.5f));
-            mainAttackBehaviorList.Add(new AttackBehavior("mainAttack 2", 0.2f, 0.5f));
-            mainAttackBehaviorList.Add(new AttackBehavior("mainAttack 3", 0.2f, 0.5f));
+            mainAttackBehaviorList.Add(new AttackBehavior("Attack_01", 0.1f, 0.5f));
+            mainAttackBehaviorList.Add(new AttackBehavior("Attack_02", 0.2f, 1f));
+            mainAttackBehaviorList.Add(new AttackBehavior("Attack_03", 0.2f, 1.5f));
             List<AttackBehavior> subAttackBehaviorList = new List<AttackBehavior>();
             subAttackBehaviorList.Add(new AttackBehavior("subAttack 1", 0.1f, 0.5f));
             subAttackBehaviorList.Add(new AttackBehavior("subAttack 2", 0.2f, 0.5f));

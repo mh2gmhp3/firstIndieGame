@@ -7,6 +7,11 @@ using UnityEngine;
 
 namespace GameMainModule.Attack
 {
+    public interface IAttackAnimationController
+    {
+        void OnAttack(string animationName);
+    }
+
     [Serializable]
     public class CharacterAttackController
     {
@@ -23,6 +28,8 @@ namespace GameMainModule.Attack
 
         private Action _onStartComboing;
         private Action _onEndComboing;
+
+        private IAttackAnimationController _aniController;
 
         public bool IsComboing => _nowCombination != null && _nowCombination.IsComboing;
 
@@ -54,6 +61,7 @@ namespace GameMainModule.Attack
             if (_nowCombination != null)
             {
                 _nowCombination.ClearComboingAction();
+                _nowCombination.ClearAnimationController();
             }
 
             _nowCombination = combinariotn;
@@ -61,6 +69,7 @@ namespace GameMainModule.Attack
             if (_nowCombination != null)
             {
                 _nowCombination.RegisterComboingAction(_onStartComboing, _onEndComboing);
+                _nowCombination.SetAnimationController(_aniController);
             }
 
             return true;
@@ -78,6 +87,20 @@ namespace GameMainModule.Attack
         {
             _onStartComboing = null;
             _onEndComboing = null;
+        }
+
+        #endregion
+
+        #region Notify Animation
+
+        public void SetAnimationController(IAttackAnimationController controller)
+        {
+            _aniController = controller;
+        }
+
+        public void ClearAnimationController()
+        {
+            _aniController = null;
         }
 
         #endregion
