@@ -58,6 +58,8 @@ namespace UnitModule.Movement
 
         [SerializeField]
         private float _moveSpeed = 8f;
+        [SerializeField]
+        private float _moveSpeedRatio = 1f;
 
         [SerializeField]
         private float _airSpeedMultiplier = 0.7f;
@@ -112,6 +114,16 @@ namespace UnitModule.Movement
         private bool _landingStiff = false;
 
         private UnitMovementSetting _movementSetting;
+
+        public float CurrentSpeed(bool haveRatio = true)
+        {
+            if (haveRatio)
+            {
+                return _moveSpeed * _moveSpeedRatio;
+            }
+
+            return _moveSpeed;
+        }
 
         public ThreeDimensionalMovement()
         {
@@ -169,7 +181,7 @@ namespace UnitModule.Movement
 
             //movement
             float speedMultiplier = _isGround ? 1 : _airSpeedMultiplier;
-            float speed = _moveSpeed * speedMultiplier;
+            float speed = CurrentSpeed(true) * speedMultiplier;
             Vector3 moveForward = _moveQuaternion * _moveAxis;
             Vector3 lookForward = moveForward;
             if (_isSlope)
@@ -338,7 +350,6 @@ namespace UnitModule.Movement
 #endif
         }
 
-
         public void SetEnable(bool enable)
         {
             _enable = enable;
@@ -382,5 +393,19 @@ namespace UnitModule.Movement
             _jumpCount++;
             _inputtedJump = true;
         }
+
+        #region Speed
+
+        public void SetSpeed(float value)
+        {
+            _moveSpeed = value;
+        }
+
+        public void SetSpeedRatio(float ratio)
+        {
+            _moveSpeedRatio = ratio;
+        }
+
+        #endregion
     }
 }

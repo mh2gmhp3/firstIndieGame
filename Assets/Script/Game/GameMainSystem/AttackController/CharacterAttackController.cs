@@ -21,6 +21,9 @@ namespace GameMainModule.Attack
         [SerializeField]
         private int _attackComboCount = NO_ATTACK_COMBO_COUNT;
 
+        private Action _onStartComboing;
+        private Action _onEndComboing;
+
         public bool IsComboing => _nowCombination != null && _nowCombination.IsComboing;
 
         /// <summary>
@@ -48,9 +51,36 @@ namespace GameMainModule.Attack
             if (!_combinationList.TryGet(index, out var combinariotn))
                 return false;
 
+            if (_nowCombination != null)
+            {
+                _nowCombination.ClearComboingAction();
+            }
+
             _nowCombination = combinariotn;
+
+            if (_nowCombination != null)
+            {
+                _nowCombination.RegisterComboingAction(_onStartComboing, _onEndComboing);
+            }
+
             return true;
         }
+
+        #region Notify Combo
+
+        public void RegisterComboingAction(Action onStart, Action onEnd)
+        {
+            _onStartComboing = onStart;
+            _onEndComboing = onEnd;
+        }
+
+        public void ClearComboingAction()
+        {
+            _onStartComboing = null;
+            _onEndComboing = null;
+        }
+
+        #endregion
 
         public void DoUpdate()
         {

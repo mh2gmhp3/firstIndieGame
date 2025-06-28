@@ -15,10 +15,26 @@ namespace GameMainModule
     [Serializable]
     public class GameThreeDimensionalCharacterController
     {
+        //TODO 先開始加入部分狀態Flag 避免直接bool到時混亂
+        public enum State
+        {
+            Move,
+            Comboing,
+        }
+
         [SerializeField]
-        private ThreeDimensionalMovement _movement = new ThreeDimensionalMovement();
+        private ThreeDimensionalMovement _movement;
         [SerializeField]
-        private CharacterAttackController _attackController = new CharacterAttackController();
+        private CharacterAttackController _attackController;
+
+        private State _currentState = State.Move;
+
+        public GameThreeDimensionalCharacterController()
+        {
+            _movement = new ThreeDimensionalMovement();
+            _attackController = new CharacterAttackController();
+            _attackController.RegisterComboingAction(OnStartAttackComboing, OnEndAttackComboing);
+        }
 
         public void DoUpdate()
         {
@@ -106,6 +122,43 @@ namespace GameMainModule
         public void SetNowCombination(int index)
         {
             _attackController.SetNowCombination(index);
+        }
+
+        private void OnStartAttackComboing()
+        {
+            ChangeState(State.Comboing);
+        }
+
+        private void OnEndAttackComboing()
+        {
+            //TODO 不一定是直接替換回Move可能藥用回退或是檢查當前狀態的方式
+            ChangeState(State.Move);
+        }
+
+        #endregion
+
+        #region State
+
+        private void ChangeState(State state)
+        {
+            if (_currentState == state)
+            {
+                return;
+            }
+
+            _currentState = state;
+            //TODO 先簡單處理對於移動的控制
+            switch (_currentState)
+            {
+                case State.Move:
+                    _movement.SetSpeedRatio(1f);
+                    break;
+                case State.Comboing:
+                    _movement.SetSpeedRatio(0.1f);
+                    break;
+                default:
+                    break;
+            }
         }
 
         #endregion

@@ -24,6 +24,9 @@ namespace GameMainModule.Attack
         [SerializeField]
         private int _currentComboIndex = -1;
 
+        public Action _onStartComboing;
+        public Action _onEndComboing;
+
         public bool IsComboing => _nowAttackBehavior != null;
 
         public AttackCombination()
@@ -36,6 +39,38 @@ namespace GameMainModule.Attack
             _mainAttackBehaviorList = mainAttackBehaviorList;
             _subAttackBehaviorList = subAttackBehaviorList;
         }
+
+        #region Notify Combo
+
+        public void RegisterComboingAction(Action onStart, Action onEnd)
+        {
+            _onStartComboing = onStart;
+            _onEndComboing = onEnd;
+        }
+
+        public void ClearComboingAction()
+        {
+            _onStartComboing = null;
+            _onEndComboing = null;
+        }
+
+        private void InvokeStartComboing()
+        {
+            if (_onStartComboing != null)
+            {
+                _onStartComboing.Invoke();
+            }
+        }
+
+        private void InvokeEndComboing()
+        {
+            if (_onEndComboing != null)
+            {
+                _onEndComboing.Invoke();
+            }
+        }
+
+        #endregion
 
         public void TriggerMainAttack()
         {
@@ -65,6 +100,10 @@ namespace GameMainModule.Attack
 
             if (_isStartNewComboBehavior)
             {
+                if (_currentComboIndex == 0)
+                {
+                    InvokeStartComboing();
+                }
                 _nowAttackBehavior.OnStart();
                 Log.LogInfo("Start Attack Behavior : " + _nowAttackBehavior.Name);
                 _isStartNewComboBehavior = false;
@@ -80,6 +119,7 @@ namespace GameMainModule.Attack
                 if (_nextAttackBehavior == null)
                 {
                     _nowAttackBehavior = null;
+                    InvokeEndComboing();
                 }
                 else
                 {
