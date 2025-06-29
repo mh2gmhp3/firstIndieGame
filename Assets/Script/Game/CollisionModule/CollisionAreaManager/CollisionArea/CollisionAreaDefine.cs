@@ -5,6 +5,7 @@
         public enum AreaType
         {
             Test = 0,
+            Quad,
         }
     }
 }
