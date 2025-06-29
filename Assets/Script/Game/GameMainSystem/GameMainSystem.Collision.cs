@@ -24,7 +24,7 @@ namespace GameMainModule
         {
             var testCollisionAreaSetupData = new TestCollisionAreaSetupData(direction);
             testCollisionAreaSetupData.TriggerReceiver = new TestCollisionAreaTriggerReceiver();
-            _collisionAreaManager.CreateCollisionArea(testCollisionAreaSetupData);
+            CollisionAreaManager.CreateCollisionArea(testCollisionAreaSetupData);
         }
 
         private void RepeatCreateTestCollisionArea()

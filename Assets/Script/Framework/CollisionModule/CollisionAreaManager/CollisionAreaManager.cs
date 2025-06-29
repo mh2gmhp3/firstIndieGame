@@ -124,8 +124,11 @@ namespace CollisionModule
 
         #endregion
 
+        private static CollisionAreaManager _instance = null;
+
         public CollisionAreaManager()
         {
+            _instance = this;
             CollectionCollisionAreaType();
         }
 
@@ -163,59 +166,52 @@ namespace CollisionModule
 
         #endregion
 
-        #region Public Method RegisterCollider UnregisterCollider
+        #region Public Static Method RegisterCollider UnregisterCollider
 
         /// <summary>
         /// 註冊Collider
         /// </summary>
         /// <param name="colliderData"></param>
         /// <returns></returns>
-        public int RegisterCollider(RegisterColliderData colliderData)
+        public static int RegisterCollider(RegisterColliderData colliderData)
         {
-            if (colliderData == null)
+            if (_instance == null)
             {
-                Log.LogError("RegisterColliderData is null", true);
                 return 0;
             }
 
-            if (!colliderData.HaveCollider)
-            {
-                Log.LogWarning("RegisterColliderData Collider is empty", true);
-                return 0;
-            }
-
-            if (!CheckColliderIsValid(colliderData, out string msg))
-            {
-                Log.LogWarning($"RegisterColliderData Invalid Msg:\n{msg}", true);
-                return 0;
-            }
-
-            int newGroupId = GetNextGroupId();
-            AddCollider(newGroupId, colliderData);
-
-            return newGroupId;
+            return _instance.InternalRegisterCollider(colliderData);
         }
 
         /// <summary>
         /// 反註冊Collider
         /// </summary>
         /// <param name="groupId"></param>
-        public void UnregisterCollider(int groupId)
+        public static void UnregisterCollider(int groupId)
         {
-            RemoveCollider(groupId);
+            if (_instance == null)
+            {
+                return;
+            }
+
+            _instance.RemoveCollider(groupId);
         }
 
         #endregion
 
-        #region Public Method CreateCollisionArea
+        #region Public Static Method CreateCollisionArea
 
         /// <summary>
         /// 創建碰撞區域
         /// </summary>
         /// <param name="setupData"></param>
-        public void CreateCollisionArea(ICollisionAreaSetupData setupData)
+        public static void CreateCollisionArea(ICollisionAreaSetupData setupData)
         {
-            InternalCreateCollisionArea(setupData);
+            if (_instance == null)
+            {
+                return;
+            }
+            _instance.InternalCreateCollisionArea(setupData);
         }
 
         #endregion
@@ -241,6 +237,32 @@ namespace CollisionModule
         private int GetNextGroupId()
         {
             return _nextGroupId++;
+        }
+
+        private int InternalRegisterCollider(RegisterColliderData colliderData)
+        {
+            if (colliderData == null)
+            {
+                Log.LogError("RegisterColliderData is null", true);
+                return 0;
+            }
+
+            if (!colliderData.HaveCollider)
+            {
+                Log.LogWarning("RegisterColliderData Collider is empty", true);
+                return 0;
+            }
+
+            if (!CheckColliderIsValid(colliderData, out string msg))
+            {
+                Log.LogWarning($"RegisterColliderData Invalid Msg:\n{msg}", true);
+                return 0;
+            }
+
+            int newGroupId = GetNextGroupId();
+            AddCollider(newGroupId, colliderData);
+
+            return newGroupId;
         }
 
         private bool CheckColliderIsValid(RegisterColliderData colliderData, out string msg)

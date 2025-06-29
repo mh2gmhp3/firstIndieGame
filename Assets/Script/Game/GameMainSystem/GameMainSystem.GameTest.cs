@@ -61,7 +61,7 @@ namespace GameMainModule
             _characterController.SetNowCombination(0);
 
             //測試註冊Collider
-            int groupId = _collisionAreaManager.RegisterCollider(unitData.GetColliderData());
+            int groupId = CollisionAreaManager.RegisterCollider(unitData.GetColliderData());
         }
     }
 }
