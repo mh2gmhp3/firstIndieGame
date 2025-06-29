@@ -13,7 +13,7 @@ namespace GameMainModule
     /// 三維空間的角色控制器
     /// </summary>
     [Serializable]
-    public class GameThreeDimensionalCharacterController
+    public class GameThreeDimensionalCharacterController : IAttackCombinationObserver
     {
         //TODO 先開始加入部分狀態Flag 避免直接bool到時混亂
         public enum State
@@ -35,7 +35,7 @@ namespace GameMainModule
         {
             _movement = new ThreeDimensionalMovement();
             _attackController = new CharacterAttackController();
-            _attackController.RegisterComboingAction(OnStartAttackComboing, OnEndAttackComboing);
+            _attackController.AddObserver(this);
         }
 
         public void InitController(UnitMovementSetting setting)
@@ -45,8 +45,8 @@ namespace GameMainModule
             //動畫控制
             _animationController = new GameAnimationController();
             _animationController.SetAnimatior(setting.Animator);
-            _movement.SetMovementAnimationController(_animationController);
-            _attackController.SetAnimationController(_animationController);
+            _movement.AddObserver(_animationController);
+            _attackController.AddObserver(_animationController);
         }
 
         public void DoUpdate()
@@ -123,17 +123,6 @@ namespace GameMainModule
             _attackController.SetNowCombination(index);
         }
 
-        private void OnStartAttackComboing()
-        {
-            ChangeState(State.Comboing);
-        }
-
-        private void OnEndAttackComboing()
-        {
-            //TODO 不一定是直接替換回Move可能藥用回退或是檢查當前狀態的方式
-            ChangeState(State.Move);
-        }
-
         #endregion
 
         #region State
@@ -163,5 +152,24 @@ namespace GameMainModule
         }
 
         #endregion
+
+        #region IAttackCombinationObserver
+        public void OnStartAttackBehavior(string behaviorName)
+        {
+            //do nothing
+        }
+
+        public void OnStartComboing()
+        {
+            ChangeState(State.Comboing);
+        }
+
+        public void OnEndComboing()
+        {
+            ChangeState(State.Move);
+        }
+
+        #endregion
+
     }
 }

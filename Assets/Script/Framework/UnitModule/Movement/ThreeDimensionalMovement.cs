@@ -32,10 +32,10 @@ namespace UnitModule.Movement
         private Rigidbody _rootRigidbody = null;
 
         /// <summary>
-        /// 移動動畫控制
+        /// 移動行為觀察者
         /// </summary>
         [SerializeField]
-        private IMovementAnimationController _movementAnimationController = null;
+        private List<IMovementObserver> _observerList = new List<IMovementObserver>();
 
         /// <summary>
         /// 移動輸入軸
@@ -127,7 +127,7 @@ namespace UnitModule.Movement
 
         public ThreeDimensionalMovement()
         {
-            _movementAnimationController = new DefaultMovementAnimationController();
+
         }
 
         public void DoUpdate()
@@ -207,7 +207,7 @@ namespace UnitModule.Movement
             else
             {
                 //沒有僵直才發出移動動畫通知
-                _movementAnimationController.MoveInput(_moveAxis, _moveQuaternion);
+                NotifyMoveInput(_moveAxis, _moveQuaternion);
             }
 
 
@@ -266,7 +266,7 @@ namespace UnitModule.Movement
 
                     var gravity = Vector3.down * fallingForceValue;
                     _rootRigidbody.velocity += gravity;
-                    _movementAnimationController.OnFalling(fallingElapsedTime, _fallingMaxTime);
+                    NotifyFalling(fallingElapsedTime, _fallingMaxTime);
                 }
             }
             else
@@ -300,7 +300,7 @@ namespace UnitModule.Movement
                 if (jumpElapsedTime > _jumpLimitTime)
                     _isJumping = false;
 
-                _movementAnimationController.OnJumping(_jumpCount, jumpElapsedTime, _jumpLimitTime);
+                NotifyJumping(_jumpCount, jumpElapsedTime, _jumpLimitTime);
             }
 
             //reset jump
@@ -309,7 +309,7 @@ namespace UnitModule.Movement
                 _jumpCount = 0;
                 if (oriIsJumping || oriIsFalling)
                 {
-                    _movementAnimationController.OnLand();
+                    NotifyLand();
                     _landingStartTime = Time.time;
                     _landingStiff = true;
                 }
@@ -365,14 +365,87 @@ namespace UnitModule.Movement
             _rotateTrans = _movementSetting.RotateTransform;
         }
 
-        public void SetMovementAnimationController(IMovementAnimationController movementAnimationController)
-        {
-            //null不設定 避免為null的狀態
-            if (movementAnimationController == null)
-                return;
+        #region IMovementObserver
 
-            _movementAnimationController = movementAnimationController;
+        public void AddObserver(IMovementObserver observer)
+        {
+            if (observer == null)
+            {
+                return;
+            }
+
+            if (_observerList.Contains(observer))
+            {
+                return;
+            }
+
+            _observerList.Add(observer);
         }
+
+        public void RemoveObserver(IMovementObserver observer)
+        {
+            if (observer == null)
+            {
+                return;
+            }
+
+            _observerList.Remove(observer);
+        }
+
+        public void ClearObserver()
+        {
+            _observerList.Clear();
+        }
+
+        public void NotifyMoveInput(Vector3 axis, Quaternion quaternion)
+        {
+            for (int i = 0; i < _observerList.Count; i++)
+            {
+                var observer = _observerList[i];
+                if (observer != null)
+                {
+                    observer.MoveInput(axis, quaternion);
+                }
+            }
+        }
+
+        public void NotifyJumping(int jumpCount, float jumpElapsedTime, float jumpLimitTime)
+        {
+            for (int i = 0; i < _observerList.Count; i++)
+            {
+                var observer = _observerList[i];
+                if (observer != null)
+                {
+                    observer.OnJumping(jumpCount, jumpElapsedTime, jumpLimitTime);
+                }
+            }
+        }
+
+        public void NotifyFalling(float fallingElapsedTime, float fallingMaxTime)
+        {
+            for (int i = 0; i < _observerList.Count; i++)
+            {
+                var observer = _observerList[i];
+                if (observer != null)
+                {
+                    observer.OnFalling(fallingElapsedTime, fallingMaxTime);
+                }
+            }
+        }
+
+        public void NotifyLand()
+        {
+            for (int i = 0; i < _observerList.Count; i++)
+            {
+                var observer = _observerList[i];
+                if (observer != null)
+                {
+                    observer.OnLand();
+                }
+            }
+        }
+
+        #endregion
 
         public void SetMoveAxis(Vector3 axis)
         {

@@ -24,10 +24,7 @@ namespace GameMainModule.Attack
         [SerializeField]
         private int _currentComboIndex = -1;
 
-        public Action _onStartComboing;
-        public Action _onEndComboing;
-
-        public IAttackAnimationController _aniController;
+        public List<IAttackCombinationObserver> _observerList = new List<IAttackCombinationObserver>();
 
         public bool IsComboing => _nowAttackBehavior != null;
 
@@ -42,48 +39,85 @@ namespace GameMainModule.Attack
             _subAttackBehaviorList = subAttackBehaviorList;
         }
 
-        #region Notify Combo
+        #region IAttackCombinationObserver
 
-        public void RegisterComboingAction(Action onStart, Action onEnd)
+        public void AddObserverList(List<IAttackCombinationObserver> observerList)
         {
-            _onStartComboing = onStart;
-            _onEndComboing = onEnd;
-        }
-
-        public void ClearComboingAction()
-        {
-            _onStartComboing = null;
-            _onEndComboing = null;
-        }
-
-        private void InvokeStartComboing()
-        {
-            if (_onStartComboing != null)
+            if (observerList == null)
             {
-                _onStartComboing.Invoke();
+                return;
+            }
+
+            for (int i = 0; i < observerList.Count; i++)
+            {
+                AddObserver(observerList[i]);
             }
         }
 
-        private void InvokeEndComboing()
+        public void AddObserver(IAttackCombinationObserver observer)
         {
-            if (_onEndComboing != null)
+            if (observer == null)
             {
-                _onEndComboing.Invoke();
+                return;
+            }
+
+            if (_observerList.Contains(observer))
+            {
+                return;
+            }
+
+            _observerList.Add(observer);
+        }
+
+        public void RemoveObserver(IAttackCombinationObserver observer)
+        {
+            if (observer == null)
+            {
+                return;
+            }
+
+            _observerList.Remove(observer);
+        }
+
+        public void ClearObserverList()
+        {
+            _observerList.Clear();;
+        }
+
+        private void NotifyStartAttackBehavior(string behaviorName)
+        {
+            for (int i = 0; i < _observerList.Count; i++)
+            {
+                var observer = _observerList[i];
+                if (observer != null)
+                {
+                    observer.OnStartAttackBehavior(behaviorName);
+                }
             }
         }
 
-        #endregion
-
-        #region Notify Animation
-
-        public void SetAnimationController(IAttackAnimationController controller)
+        private void NotifyStartComboing()
         {
-            _aniController = controller;
+            for (int i = 0; i < _observerList.Count; i++)
+            {
+                var observer = _observerList[i];
+                if (observer != null)
+                {
+                    observer.OnStartComboing();
+                }
+            }
         }
 
-        public void ClearAnimationController()
+        private void NotifyEndComboing()
         {
-            _aniController = null;
+            for (int i = 0; i < _observerList.Count; i++)
+            {
+                var observer = _observerList[i];
+                if (observer != null)
+                {
+                    observer.OnEndComboing();
+                }
+            }
         }
 
         #endregion
@@ -118,13 +152,10 @@ namespace GameMainModule.Attack
             {
                 if (_currentComboIndex == 0)
                 {
-                    InvokeStartComboing();
+                    NotifyStartComboing();
                 }
                 _nowAttackBehavior.OnStart();
-                if (_aniController != null)
-                {
-                    _aniController.OnAttack(_nowAttackBehavior.Name);
-                }
+                NotifyStartAttackBehavior(_nowAttackBehavior.Name);
                 Log.LogInfo("Start Attack Behavior : " + _nowAttackBehavior.Name);
                 _isStartNewComboBehavior = false;
             }
@@ -139,7 +170,7 @@ namespace GameMainModule.Attack
                 if (_nextAttackBehavior == null)
                 {
                     _nowAttackBehavior = null;
-                    InvokeEndComboing();
+                    NotifyEndComboing();
                 }
                 else
                 {

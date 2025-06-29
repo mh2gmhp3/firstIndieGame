@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UnitModule.Movement
 {
-    public interface IMovementAnimationController
+    public interface IMovementObserver
     {
         public void MoveInput(Vector3 axis, Quaternion quaternion);
 

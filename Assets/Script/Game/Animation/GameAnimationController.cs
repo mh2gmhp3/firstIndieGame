@@ -7,7 +7,7 @@ using UnityEngine;
 namespace UnitModule.Movement
 {
     //TODO 先只處理IMovementAnimationController 這個應該會觸里程能夠吃所有操作動作的動畫控制 避免需要另外的管理器管理動畫相互關係的狀態
-    public class GameAnimationController : IMovementAnimationController, IAttackAnimationController
+    public class GameAnimationController : IMovementObserver, IAttackCombinationObserver
     {
         private enum State
         {
@@ -59,7 +59,7 @@ namespace UnitModule.Movement
             _animator = animator;
         }
 
-        #region IMovementAnimationController
+        #region IMovementObserver
 
         public void MoveInput(Vector3 axis, Quaternion quaternion)
         {
@@ -122,16 +122,26 @@ namespace UnitModule.Movement
 
         #endregion
 
-        #region IAttackAnimationController
+        #region IAttackCombinationObserver
 
-        public void OnAttack(string animationName)
+        public void OnStartAttackBehavior(string behaviorName)
         {
-            if (!Enum.TryParse(animationName, out State stateObj))
+            if (!Enum.TryParse(behaviorName, out State stateObj))
             {
                 return;
             }
 
             ChangeState(stateObj);
+        }
+
+        public void OnStartComboing()
+        {
+
+        }
+
+        public void OnEndComboing()
+        {
+
         }
 
         #endregion

@@ -12,7 +12,7 @@ namespace UnitModule.Movement
 
         public void SetEnable(bool enable);
         public void SetMovementSetting(UnitMovementSetting movementSetting);
-        public void SetMovementAnimationController(IMovementAnimationController movementAnimationController);
+        public void AddObserver(IMovementObserver movementAnimationController);
 
         public void SetMoveAxis(Vector3 axis);
         public void SetMoveQuaternion(Quaternion quaternion);

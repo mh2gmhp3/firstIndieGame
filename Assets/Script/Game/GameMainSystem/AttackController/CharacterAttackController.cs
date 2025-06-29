@@ -7,9 +7,12 @@ using UnityEngine;
 
 namespace GameMainModule.Attack
 {
-    public interface IAttackAnimationController
+    public interface IAttackCombinationObserver
     {
-        void OnAttack(string animationName);
+        void OnStartAttackBehavior(string behaviorName);
+
+        void OnStartComboing();
+        void OnEndComboing();
     }
 
     [Serializable]
@@ -26,10 +29,7 @@ namespace GameMainModule.Attack
         [SerializeField]
         private int _attackComboCount = NO_ATTACK_COMBO_COUNT;
 
-        private Action _onStartComboing;
-        private Action _onEndComboing;
-
-        private IAttackAnimationController _aniController;
+        private List<IAttackCombinationObserver> _observerList = new List<IAttackCombinationObserver>();
 
         public bool IsComboing => _nowCombination != null && _nowCombination.IsComboing;
 
@@ -60,47 +60,49 @@ namespace GameMainModule.Attack
 
             if (_nowCombination != null)
             {
-                _nowCombination.ClearComboingAction();
-                _nowCombination.ClearAnimationController();
+                _nowCombination.ClearObserverList();
             }
 
             _nowCombination = combinariotn;
 
             if (_nowCombination != null)
             {
-                _nowCombination.RegisterComboingAction(_onStartComboing, _onEndComboing);
-                _nowCombination.SetAnimationController(_aniController);
+                _nowCombination.AddObserverList(_observerList);
             }
 
             return true;
         }
 
-        #region Notify Combo
+        #region IAttackCombinationObserver
 
-        public void RegisterComboingAction(Action onStart, Action onEnd)
+        public void AddObserver(IAttackCombinationObserver observer)
         {
-            _onStartComboing = onStart;
-            _onEndComboing = onEnd;
+            if (observer == null)
+            {
+                return;
+            }
+
+            if (_observerList.Contains(observer))
+            {
+                return;
+            }
+
+            _observerList.Add(observer);
         }
 
-        public void ClearComboingAction()
+        public void RemoveObserver(IAttackCombinationObserver observer)
         {
-            _onStartComboing = null;
-            _onEndComboing = null;
+            if (observer == null)
+            {
+                return;
+            }
+
+            _observerList.Remove(observer);
         }
 
-        #endregion
-
-        #region Notify Animation
-
-        public void SetAnimationController(IAttackAnimationController controller)
+        public void ClearObserverList()
         {
-            _aniController = controller;
-        }
-
-        public void ClearAnimationController()
-        {
-            _aniController = null;
+            _observerList.Clear();
         }
 
         #endregion
