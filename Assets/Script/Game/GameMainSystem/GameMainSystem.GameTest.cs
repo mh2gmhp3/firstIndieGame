@@ -62,6 +62,12 @@ namespace GameMainModule
 
             //測試註冊Collider
             int groupId = CollisionAreaManager.RegisterCollider(unitData.GetColliderData());
+
+            var testNpcCharacterGo = ObjectUtility.InstantiateWithoutClone(testCharacterAssets);
+            var testNpcCharacterGameUnit = testNpcCharacterGo.GetComponent<GameUnit>();
+            testNpcCharacterGameUnit.transform.position = new Vector3(5, 0, 0);
+            var unitNpcData = testNpcCharacterGameUnit.UnitData;
+            CollisionAreaManager.RegisterCollider(unitNpcData.GetColliderData());
         }
     }
 }
