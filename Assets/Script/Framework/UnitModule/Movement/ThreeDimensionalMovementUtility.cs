@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Extension;
+using System;
 using UnityEngine;
 
 namespace UnitModule.Movement
@@ -227,7 +228,7 @@ namespace UnitModule.Movement
             var jumpElapedTime = movementData.JumpData.JumpElapsedTime();
             var jumpVelocity = movementSetting.JumpVelocityCurve.Evaluate(jumpElapedTime);
             movementData.UnitMovementSetting.Rigidbody.velocity += Vector3.up * jumpVelocity;
-            return jumpElapedTime < movementSetting.JumpVelocityCurve.keys[movementSetting.JumpVelocityCurve.length - 1].time;
+            return jumpElapedTime < movementSetting.JumpVelocityCurve.LastKey().time;
         }
 
         public static void FixGroundPoint(MovementData movementData)
