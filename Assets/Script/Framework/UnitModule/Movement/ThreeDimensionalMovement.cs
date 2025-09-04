@@ -58,7 +58,7 @@ namespace UnitModule.Movement
             if (_stateMachine.CurStateIns == null)
                 return;
 
-            ThreeDimensionalMovementUtility.ResetRigibidy(_movementData);
+            ThreeDimensionalMovementUtility.ResetRigibody(_movementData);
             _stateMachine.CurStateIns.DoFixedUpdate();
         }
 

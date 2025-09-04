@@ -171,7 +171,7 @@ namespace UnitModule.Movement
                 out movementData.SlopeHit);
         }
 
-        public static void ResetRigibidy(MovementData movementData)
+        public static void ResetRigibody(MovementData movementData)
         {
             if (movementData == null || !movementData.IsValid())
                 return;
