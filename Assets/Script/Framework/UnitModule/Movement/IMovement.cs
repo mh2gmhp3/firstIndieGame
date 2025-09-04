@@ -4,18 +4,64 @@ using UnityEngine;
 
 namespace UnitModule.Movement
 {
+    public enum MovementState
+    {
+        Idle,
+
+        Walk,
+        Run,
+
+        Jump,
+
+        Fall,
+
+        Land,
+
+        //可透過外部行為暫停移動狀態
+        Block
+    }
+
     public interface IMovement
     {
-        public void DoUpdate();
-        public void DoFixedUpdate();
-        public void DoOnGUI();
+        #region Unity Life Cycle
 
-        public void SetEnable(bool enable);
-        public void SetMovementSetting(UnitMovementSetting movementSetting);
-        public void AddObserver(IMovementObserver movementAnimationController);
+        void DoUpdate();
+        void DoFixedUpdate();
 
-        public void SetMoveAxis(Vector3 axis);
-        public void SetMoveQuaternion(Quaternion quaternion);
-        public void Jump();
+        #endregion
+
+        #region Unity Editor
+
+        void DoOnGUI();
+
+        #endregion
+
+        #region Basic Set
+
+        void SetEnable(bool enable);
+        void SetMovementSetting(UnitMovementSetting unitMovementSetting, MovementSetting movementSetting);
+
+        #endregion
+
+        #region Input
+
+        void SetMoveAxis(Vector3 axis);
+        void SetMoveQuaternion(Quaternion quaternion);
+        void InputCommand(int command);
+
+        #endregion
+
+        #region State
+
+        void SetState(MovementState state, bool force = false);
+
+        #endregion
+
+        #region Observer
+
+        void AddObserver(IMovementObserver movementAnimationController);
+        void RemoveObserver(IMovementObserver observer);
+
+        #endregion
     }
 }

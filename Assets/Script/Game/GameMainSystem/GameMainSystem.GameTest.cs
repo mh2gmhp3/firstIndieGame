@@ -32,8 +32,10 @@ namespace GameMainModule
             var testCharacterGameUnit = testCharacterGo.GetComponent<GameUnit>();
             var unitData = testCharacterGameUnit.UnitData;
             //玩家角色控制
-            var movementSetting = unitData.MovementSetting;
-            _characterController.InitController(movementSetting);
+            //角色移動設定
+            var movementSetting = AssetsSystem.LoadAssets<MovementSetting>("Setting/MovementSetting");
+            var unitMovementSetting = unitData.MovementSetting;
+            _characterController.InitController(unitMovementSetting, movementSetting);
             //第三人稱相機註冊
             CameraSystem.CameraCommand(
                 new ThirdPersonModeCommandData

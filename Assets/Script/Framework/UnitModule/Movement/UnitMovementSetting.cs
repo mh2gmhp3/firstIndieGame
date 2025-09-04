@@ -43,6 +43,25 @@ namespace UnitModule.Movement
         /// 斜坡射線長度
         /// </summary>
         [Header("斜坡射線")]
-        public float SlopRaycastDistance;
+        public float SlopeRaycastDistance;
+
+        public bool IsValid()
+        {
+            if (RootTransform == null)
+                return false;
+            if (RotateTransform == null)
+                return false;
+            if (Animator == null)
+                return false;
+            if (Rigidbody == null)
+                return false;
+
+            return true;
+        }
+
+        public Vector3 GetGroundRaycastWorldPoint()
+        {
+            return RootTransform.position + GroundRaycastStartPositionWithRootTransform;
+        }
     }
 }

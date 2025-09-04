@@ -1,11 +1,8 @@
 using GameMainModule.Attack;
-using Logging;
-using UnitModule.Movement;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using UnitModule.Movement;
 using UnityEngine;
-using UnitModule;
 
 namespace GameMainModule
 {
@@ -18,8 +15,9 @@ namespace GameMainModule
         //TODO 先開始加入部分狀態Flag 避免直接bool到時混亂
         public enum State
         {
-            Move,
-            Comboing,
+            None     = 0,
+            Movement = 1 << 0,
+            Comboing = 1 << 1,
         }
 
         [SerializeField]
@@ -27,26 +25,28 @@ namespace GameMainModule
         [SerializeField]
         private CharacterAttackController _attackController;
 
-        private GameAnimationController _animationController;
+        private GameUnitAnimationController _animationController;
 
-        private State _currentState = State.Move;
+        private State _currentState = State.None;
 
         public GameThreeDimensionalCharacterController()
         {
             _movement = new ThreeDimensionalMovement();
             _attackController = new CharacterAttackController();
             _attackController.AddObserver(this);
+            _animationController = new GameUnitAnimationController();
         }
 
-        public void InitController(UnitMovementSetting setting)
+        public void InitController(UnitMovementSetting unityMovementSetting, MovementSetting movementSetting)
         {
-            _movement.SetMovementSetting(setting);
+            _movement.SetMovementSetting(unityMovementSetting, movementSetting);
             _movement.SetEnable(true);
             //動畫控制
-            _animationController = new GameAnimationController();
-            _animationController.SetAnimatior(setting.Animator);
+            _animationController.SetAnimatior(unityMovementSetting.Animator);
             _movement.AddObserver(_animationController);
             _attackController.AddObserver(_animationController);
+
+            _currentState = State.Movement;
         }
 
         public void DoUpdate()
@@ -96,7 +96,7 @@ namespace GameMainModule
 
         public void Jump()
         {
-            _movement.Jump();
+            _movement.InputCommand((int)MovementInputCommand.Jump);
         }
 
         #endregion
@@ -135,19 +135,13 @@ namespace GameMainModule
             }
 
             _currentState = state;
-            //TODO 先簡單處理對於移動的控制
-            switch (_currentState)
+            if (state == State.Comboing)
             {
-                case State.Move:
-                    _movement.SetSpeedRatio(1f);
-                    _animationController.BlockMovement = false;
-                    break;
-                case State.Comboing:
-                    _movement.SetSpeedRatio(0.1f);
-                    _animationController.BlockMovement = true;
-                    break;
-                default:
-                    break;
+                _movement.SetState(MovementState.Block);
+            }
+            else if (state == State.Movement)
+            {
+                _movement.CancelBlockState();
             }
         }
 
@@ -166,7 +160,7 @@ namespace GameMainModule
 
         public void OnEndComboing()
         {
-            ChangeState(State.Move);
+            ChangeState(State.Movement);
         }
 
         #endregion

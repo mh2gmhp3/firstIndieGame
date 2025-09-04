@@ -1,13 +1,13 @@
-﻿using GameMainModule.Attack;
+﻿using CollisionModule;
+using GameMainModule.Attack;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnitModule.Movement
 {
     //TODO 先只處理IMovementAnimationController 這個應該會觸里程能夠吃所有操作動作的動畫控制 避免需要另外的管理器管理動畫相互關係的狀態
-    public class GameAnimationController : IMovementObserver, IAttackCombinationObserver
+    public class GameUnitAnimationController : IMovementObserver, IAttackCombinationObserver
     {
         private enum State
         {
@@ -52,72 +52,36 @@ namespace UnitModule.Movement
 
         #endregion
 
-        public bool BlockMovement = false;
-
         public void SetAnimatior(Animator animator)
         {
             _animator = animator;
         }
 
         #region IMovementObserver
-
-        public void MoveInput(Vector3 axis, Quaternion quaternion)
+        public void OnStateChanged(int oriState, int newState)
         {
-            if (BlockMovement)
+            var movementState = (MovementState)newState;
+            switch (movementState)
             {
-                return;
+                case MovementState.Idle:
+                    ChangeState(State.Idle);
+                    break;
+                case MovementState.Walk:
+                    ChangeState(State.Run);
+                    break;
+                case MovementState.Run:
+                    ChangeState(State.Run);
+                    break;
+                case MovementState.Jump:
+                    ChangeState(State.Jump_d);
+                    break;
+                case MovementState.Fall:
+                    ChangeState(State.Fall_d);
+                    break;
+                case MovementState.Land:
+                    ChangeState(State.Fall_e);
+                    break;
             }
-
-            if (_state == State.Jump_d ||
-                _state == State.Jump_s ||
-                _state == State.Fall_d)
-            {
-                return;
-            }
-
-            if (axis.sqrMagnitude >= 0.7)
-            {
-                ChangeState(State.Run);
-                return;
-            }
-
-            if (axis.sqrMagnitude > 0)
-            {
-                ChangeState(State.Walk);
-                return;
-            }
-
-            ChangeState(State.Idle);
-        }
-
-        public void OnFalling(float fallingElapsedTime, float fallingMaxTime)
-        {
-            if (BlockMovement)
-            {
-                return;
-            }
-
-            ChangeState(State.Fall_d);
-        }
-
-        public void OnJumping(int jumpCount, float jumpElapsedTime, float jumpLimitTime)
-        {
-            if (BlockMovement)
-            {
-                return;
-            }
-
-            ChangeState(State.Jump_d);
-        }
-
-        public void OnLand()
-        {
-            if (BlockMovement)
-            {
-                return;
-            }
-
-            ChangeState(State.Fall_e);
         }
 
         #endregion
@@ -130,6 +94,31 @@ namespace UnitModule.Movement
             {
                 return;
             }
+
+            float dir = 0.5f;
+            switch (stateObj)
+            {
+                case State.Attack_01:
+                    dir = 0.3f;
+                    break;
+                case State.Attack_02:
+                    dir = 0.6f;
+                    break;
+                case State.Attack_03:
+                    dir = 0.9f;
+                    break;
+                default:
+                    break;
+            }
+
+            CollisionAreaManager.CreateCollisionArea(
+                new QuadCollisionAreaSetupData(
+                    _animator.transform.position + new Vector3(0f, 2.5f, 0f),
+                    Vector3.forward,
+                    dir,
+                    5f,
+                    5f,
+                    new TestCollisionAreaTriggerReceiver()));
 
             ChangeState(stateObj);
         }
