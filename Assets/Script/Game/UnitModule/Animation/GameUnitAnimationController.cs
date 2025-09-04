@@ -102,10 +102,10 @@ namespace UnitModule.Movement
                     dir = 0.3f;
                     break;
                 case State.Attack_02:
-                    dir = 0.6f;
+                    dir = 0.3f;
                     break;
                 case State.Attack_03:
-                    dir = 0.9f;
+                    dir = 0.3f;
                     break;
                 default:
                     break;

@@ -12,17 +12,24 @@ namespace Utility
             get { return _observerList; }
         }
 
+        public void AddObservers(IEnumerable<T> observers)
+        {
+            if (observers == null)
+                return;
+
+            foreach (var observer in observers)
+            {
+                AddObserver(observer);
+            }
+        }
+
         public void AddObserver(T observer)
         {
             if (observer == null)
-            {
                 return;
-            }
 
             if (_observerList.Contains(observer))
-            {
                 return;
-            }
 
             _observerList.Add(observer);
         }
@@ -30,11 +37,14 @@ namespace Utility
         public void RemoveObserver(T observer)
         {
             if (observer == null)
-            {
                 return;
-            }
 
             _observerList.Remove(observer);
+        }
+
+        public void ClearObservers()
+        {
+            _observerList.Clear();
         }
     }
 }

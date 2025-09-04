@@ -4,29 +4,45 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 
 namespace GameMainModule.Attack
 {
+    public interface IAttackCombinationObserver
+    {
+        void OnStartAttackBehavior(string behaviorName);
+
+        void OnStartComboing();
+        void OnEndComboing();
+    }
+
     //TODO 先對應一般連擊用的組合 之後有需要對遠程子彈編輯在處理
     [Serializable]
     public class AttackCombination
     {
-        [SerializeField]
         private List<AttackBehavior> _mainAttackBehaviorList = new List<AttackBehavior>();
-        [SerializeField]
         private List<AttackBehavior> _subAttackBehaviorList = new List<AttackBehavior>();
 
         private AttackBehavior _nowAttackBehavior = null;
         private AttackBehavior _nextAttackBehavior = null;
 
-        [SerializeField]
-        private bool _isStartNewComboBehavior = false;
-        [SerializeField]
+        /// <summary>
+        /// 可開關保留Combo狀態<see cref="KeepComboing(bool)"/>
+        /// <para>開啟時: 不會因為不輸入斷掉Combo，下次輸入時繼續Combo，最終Combo後繼續輸入不會重新Combo，必須關閉。Combo開始與繼續都會通知開始 沒輸入導致Combo中斷通知結束</para>
+        /// <para>關閉時: 不輸入斷掉Combo。 Combo開始通知開始 Combo結束通知結束</para>
+        /// </summary>
+        private bool _keepComboing = false;
+        private bool _isKeeping = false;
+
+        /// <summary>
+        /// 控制Combo開始與結束通知
+        /// </summary>
+        private bool _isProcessingCombo = false;
         private int _currentComboIndex = -1;
 
-        public List<IAttackCombinationObserver> _observerList = new List<IAttackCombinationObserver>();
+        private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
 
-        public bool IsComboing => _nowAttackBehavior != null;
+        public bool IsComboing => _nowAttackBehavior != null || _nextAttackBehavior != null;
 
         public AttackCombination()
         {
@@ -43,52 +59,29 @@ namespace GameMainModule.Attack
 
         public void AddObserverList(List<IAttackCombinationObserver> observerList)
         {
-            if (observerList == null)
-            {
-                return;
-            }
-
-            for (int i = 0; i < observerList.Count; i++)
-            {
-                AddObserver(observerList[i]);
-            }
+            _observerController.AddObservers(observerList);
         }
 
         public void AddObserver(IAttackCombinationObserver observer)
         {
-            if (observer == null)
-            {
-                return;
-            }
-
-            if (_observerList.Contains(observer))
-            {
-                return;
-            }
-
-            _observerList.Add(observer);
+            _observerController.AddObserver(observer);
         }
 
         public void RemoveObserver(IAttackCombinationObserver observer)
         {
-            if (observer == null)
-            {
-                return;
-            }
-
-            _observerList.Remove(observer);
+            _observerController.RemoveObserver(observer);
         }
 
         public void ClearObserverList()
         {
-            _observerList.Clear();;
+            _observerController.ClearObservers();;
         }
 
         private void NotifyStartAttackBehavior(string behaviorName)
         {
-            for (int i = 0; i < _observerList.Count; i++)
+            for (int i = 0; i < _observerController.ObserverList.Count; i++)
             {
-                var observer = _observerList[i];
+                var observer = _observerController.ObserverList[i];
                 if (observer != null)
                 {
                     observer.OnStartAttackBehavior(behaviorName);
@@ -98,9 +91,9 @@ namespace GameMainModule.Attack
 
         private void NotifyStartComboing()
         {
-            for (int i = 0; i < _observerList.Count; i++)
+            for (int i = 0; i < _observerController.ObserverList.Count; i++)
             {
-                var observer = _observerList[i];
+                var observer = _observerController.ObserverList[i];
                 if (observer != null)
                 {
                     observer.OnStartComboing();
@@ -110,9 +103,9 @@ namespace GameMainModule.Attack
 
         private void NotifyEndComboing()
         {
-            for (int i = 0; i < _observerList.Count; i++)
+            for (int i = 0; i < _observerController.ObserverList.Count; i++)
             {
-                var observer = _observerList[i];
+                var observer = _observerController.ObserverList[i];
                 if (observer != null)
                 {
                     observer.OnEndComboing();
@@ -134,7 +127,9 @@ namespace GameMainModule.Attack
 
         public void Reset()
         {
-            _isStartNewComboBehavior = false;
+            _keepComboing = false;
+            _isKeeping = false;
+            _isProcessingCombo = false;
             _currentComboIndex = -1;
 
             if (_nowAttackBehavior != null)
@@ -146,38 +141,69 @@ namespace GameMainModule.Attack
         public void DoUpdate()
         {
             if (_nowAttackBehavior == null)
-                return;
-
-            if (_isStartNewComboBehavior)
             {
-                if (_currentComboIndex == 0)
+                if (_nextAttackBehavior == null)
+                    return;
+
+                _nowAttackBehavior = _nextAttackBehavior;
+                _nextAttackBehavior = null;
+
+                //每次有新的
+                _isKeeping = false;
+                _nowAttackBehavior.OnStart();
+                if (!_isProcessingCombo)
                 {
                     NotifyStartComboing();
+                    _isProcessingCombo = true;
                 }
-                _nowAttackBehavior.OnStart();
                 NotifyStartAttackBehavior(_nowAttackBehavior.Name);
-                Log.LogInfo("Start Attack Behavior : " + _nowAttackBehavior.Name);
-                _isStartNewComboBehavior = false;
             }
 
-            _nowAttackBehavior.OnUpdate();
-
-            if (_nowAttackBehavior.IsEnd)
+            if (_isKeeping)
             {
-                _nowAttackBehavior.OnEnd();
-                Log.LogInfo("End Attack Behavior : " + _nowAttackBehavior.Name);
-                //沒有輸入下一個 停止
                 if (_nextAttackBehavior == null)
                 {
+                    if (_keepComboing)
+                        return;
+
+                    // 不保留後 沒有下一個行為就清空
                     _nowAttackBehavior = null;
-                    NotifyEndComboing();
+                    _currentComboIndex = -1;
                 }
                 else
                 {
-                    _nowAttackBehavior = _nextAttackBehavior;
-                    _nextAttackBehavior = null;
-                    _isStartNewComboBehavior = true;
+                    // 有下一個行為就繼續下一個行為
+                    _nowAttackBehavior = null;
                 }
+            }
+            else if (_nowAttackBehavior.IsEnd)
+            {
+                _nowAttackBehavior.OnEnd();
+                if (_nextAttackBehavior == null)
+                {
+                    NotifyEndComboing();
+                    _isProcessingCombo = false;
+                    Log.LogInfo("NotifyEndComboing");
+                    if (_keepComboing)
+                    {
+                        _isKeeping = true;
+                    }
+                    else
+                    {
+                        // 不保留連段 清空
+                        _nowAttackBehavior = null;
+                        _currentComboIndex = -1;
+                    }
+                }
+                else
+                {
+                    // 清掉當前行為在下一偵開始下個行為
+                    _nowAttackBehavior = null;
+                }
+            }
+            else
+            {
+                _nowAttackBehavior.OnUpdate();
             }
         }
 
@@ -186,42 +212,20 @@ namespace GameMainModule.Attack
             if (attackBehaviorList == null)
                 return;
 
-            if (NeedStartNewCombo())
-            {
-                StartNewCombo(attackBehaviorList);
-            }
-            else
-            {
-                if (!_nowAttackBehavior.CanNextBehavior)
-                {
-                    Log.LogInfo("Attack Behavior Lock Next : " + _nowAttackBehavior.Name);
-                    return;
-                }
-
-                if (_nextAttackBehavior != null)
-                    return;
-
-                _currentComboIndex++;
-                if (!attackBehaviorList.TryGet(_currentComboIndex, out var result))
-                    return;
-
-                _nextAttackBehavior = result;
-            }
-        }
-
-        private bool NeedStartNewCombo()
-        {
-            return _nowAttackBehavior == null;
-        }
-
-        private void StartNewCombo(List<AttackBehavior> attackBehaviorList)
-        {
-            if (!attackBehaviorList.TryGetFirst(out var firstBehavior))
+            if (_nowAttackBehavior != null && !_nowAttackBehavior.CanNextBehavior)
                 return;
 
-            _nowAttackBehavior = firstBehavior;
-            _isStartNewComboBehavior = true;
-            _currentComboIndex = 0;
+            _currentComboIndex++;
+            //allready last Comboing
+            if (!attackBehaviorList.TryGet(_currentComboIndex, out var nextBehavior))
+                return;
+
+            _nextAttackBehavior = nextBehavior;
+        }
+
+        public void KeepComboing(bool keep)
+        {
+            _keepComboing = keep;
         }
     }
 }

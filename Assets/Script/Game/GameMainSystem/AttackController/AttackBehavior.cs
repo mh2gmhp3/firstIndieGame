@@ -50,7 +50,7 @@ namespace GameMainModule.Attack
 
         public void OnEnd()
         {
-            Reset();
+
         }
 
         public void Reset()

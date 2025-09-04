@@ -4,32 +4,20 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Utility;
 
 namespace GameMainModule.Attack
 {
-    public interface IAttackCombinationObserver
-    {
-        void OnStartAttackBehavior(string behaviorName);
-
-        void OnStartComboing();
-        void OnEndComboing();
-    }
-
     [Serializable]
     public class CharacterAttackController
     {
-        private const int NO_ATTACK_COMBO_COUNT = 0;
-
         [SerializeField]
         private List<AttackCombination> _combinationList =
             new List<AttackCombination>();
 
         private AttackCombination _nowCombination;
 
-        [SerializeField]
-        private int _attackComboCount = NO_ATTACK_COMBO_COUNT;
-
-        private List<IAttackCombinationObserver> _observerList = new List<IAttackCombinationObserver>();
+        private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
 
         public bool IsComboing => _nowCombination != null && _nowCombination.IsComboing;
 
@@ -67,7 +55,7 @@ namespace GameMainModule.Attack
 
             if (_nowCombination != null)
             {
-                _nowCombination.AddObserverList(_observerList);
+                _nowCombination.AddObserverList(_observerController.ObserverList);
             }
 
             return true;
@@ -77,32 +65,17 @@ namespace GameMainModule.Attack
 
         public void AddObserver(IAttackCombinationObserver observer)
         {
-            if (observer == null)
-            {
-                return;
-            }
-
-            if (_observerList.Contains(observer))
-            {
-                return;
-            }
-
-            _observerList.Add(observer);
+            _observerController.AddObserver(observer);
         }
 
         public void RemoveObserver(IAttackCombinationObserver observer)
         {
-            if (observer == null)
-            {
-                return;
-            }
-
-            _observerList.Remove(observer);
+            _observerController.RemoveObserver(observer);
         }
 
         public void ClearObserverList()
         {
-            _observerList.Clear();
+            _observerController.ClearObservers();
         }
 
         #endregion
@@ -129,6 +102,14 @@ namespace GameMainModule.Attack
                 return;
 
             _nowCombination.TriggerSubAttack();
+        }
+
+        public void KeepComboing(bool keep)
+        {
+            if (_nowCombination == null)
+                return;
+
+            _nowCombination.KeepComboing(keep);
         }
     }
 }

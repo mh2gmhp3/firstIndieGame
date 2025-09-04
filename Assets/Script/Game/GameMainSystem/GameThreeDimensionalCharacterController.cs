@@ -10,7 +10,7 @@ namespace GameMainModule
     /// 三維空間的角色控制器
     /// </summary>
     [Serializable]
-    public class GameThreeDimensionalCharacterController : IAttackCombinationObserver
+    public class GameThreeDimensionalCharacterController : IAttackCombinationObserver, IMovementObserver
     {
         //TODO 先開始加入部分狀態Flag 避免直接bool到時混亂
         public enum State
@@ -32,6 +32,7 @@ namespace GameMainModule
         public GameThreeDimensionalCharacterController()
         {
             _movement = new ThreeDimensionalMovement();
+            _movement.AddObserver(this);
             _attackController = new CharacterAttackController();
             _attackController.AddObserver(this);
             _animationController = new GameUnitAnimationController();
@@ -165,5 +166,13 @@ namespace GameMainModule
 
         #endregion
 
+        #region IMovementObserver
+
+        public void OnStateChanged(int oriState, int newState)
+        {
+            _attackController.KeepComboing(!_movement.IsGround);
+        }
+
+        #endregion
     }
 }

@@ -51,9 +51,9 @@ namespace GameMainModule
             //測試攻擊
             List<AttackCombination> attackCombinationList = new List<AttackCombination>();
             List<AttackBehavior> mainAttackBehaviorList = new List<AttackBehavior>();
-            mainAttackBehaviorList.Add(new AttackBehavior("Attack_01", 0.1f, 0.5f));
-            mainAttackBehaviorList.Add(new AttackBehavior("Attack_02", 0.2f, 1f));
-            mainAttackBehaviorList.Add(new AttackBehavior("Attack_03", 0.2f, 1.5f));
+            mainAttackBehaviorList.Add(new AttackBehavior("Attack_01", 0.1f, 0.3f));
+            mainAttackBehaviorList.Add(new AttackBehavior("Attack_02", 0.1f, 0.3f));
+            mainAttackBehaviorList.Add(new AttackBehavior("Attack_03", 0.1f, 0.3f));
             List<AttackBehavior> subAttackBehaviorList = new List<AttackBehavior>();
             subAttackBehaviorList.Add(new AttackBehavior("subAttack 1", 0.1f, 0.5f));
             subAttackBehaviorList.Add(new AttackBehavior("subAttack 2", 0.2f, 0.5f));

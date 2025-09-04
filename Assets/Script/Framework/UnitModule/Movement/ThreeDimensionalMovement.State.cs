@@ -11,6 +11,17 @@ namespace UnitModule.Movement
         private SimpleStateMachine<MovementState, State> _stateMachine = new SimpleStateMachine<MovementState, State>();
         private StateCommonData _commonData = null;
 
+        public bool IsGround
+        {
+            get
+            {
+                if (_commonData == null)
+                    return false;
+
+                return _commonData.MovementData.IsGround;
+            }
+        }
+
         private void InitState(MovementData movementData)
         {
             _commonData = new StateCommonData(this, movementData);
