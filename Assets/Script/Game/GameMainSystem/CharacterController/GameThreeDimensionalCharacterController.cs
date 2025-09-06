@@ -1,4 +1,5 @@
-﻿using GameMainModule.Attack;
+﻿using GameMainModule.Animation;
+using GameMainModule.Attack;
 using System;
 using System.Collections.Generic;
 using UnitModule.Movement;
@@ -19,7 +20,7 @@ namespace GameMainModule
         private MovementData _movementData;
         [SerializeField]
         private CharacterAttackController _characterAttackController = new CharacterAttackController();
-        private GameUnitAnimationController _animationController = new GameUnitAnimationController();
+        private AnimatorController _animatorController = new AnimatorController();
 
         private GameCharacterStateContext _characterStateContext;
 
@@ -29,14 +30,19 @@ namespace GameMainModule
 
         }
 
-        public void InitController(UnitMovementSetting unityMovementSetting, MovementSetting movementSetting)
+        public void InitController(
+            UnitMovementSetting unityMovementSetting,
+            MovementSetting movementSetting,
+            AnimatorTransitionSetting transitionSetting)
         {
             _movementData = new MovementData(unityMovementSetting, movementSetting);
-            _characterStateContext = new GameCharacterStateContext(_movementData, _characterAttackController);
+            _characterStateContext = new GameCharacterStateContext(
+                _movementData,
+                _characterAttackController,
+                _animatorController);
 
             //Animator
-            _animationController.SetAnimatior(unityMovementSetting.Animator);
-            _characterAttackController.AddObserver(_animationController);
+            _animatorController.Init(unityMovementSetting.Animator, transitionSetting);
 
             //State
             _characterStateMachine.AddState(CharacterState.Idle, new IdleState(_characterStateContext));
@@ -46,7 +52,6 @@ namespace GameMainModule
             _characterStateMachine.AddState(CharacterState.Fall, new FallState(_characterStateContext));
             _characterStateMachine.AddState(CharacterState.Land, new LandState(_characterStateContext));
             _characterStateMachine.AddState(CharacterState.Attack, new AttackState(_characterStateContext));
-            _characterStateMachine.SetStateChangeEvent(OnStateChanged);
             _characterStateMachine.SetState(CharacterState.Idle, true);
 
             //State Transition
@@ -185,10 +190,5 @@ namespace GameMainModule
         }
 
         #endregion
-
-        public void OnStateChanged(CharacterState oriState, CharacterState newState)
-        {
-            _animationController.OnStateChanged((int)oriState, (int)newState);
-        }
     }
 }

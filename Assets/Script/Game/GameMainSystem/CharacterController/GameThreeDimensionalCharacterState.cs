@@ -1,4 +1,5 @@
-﻿using GameMainModule.Attack;
+﻿using GameMainModule.Animation;
+using GameMainModule.Attack;
 using System.Collections;
 using System.Collections.Generic;
 using UnitModule.Movement;
@@ -25,11 +26,16 @@ namespace GameMainModule
     {
         public MovementData MovementData;
         public CharacterAttackController AttackController;
+        public AnimatorController AnimatorController;
 
-        public GameCharacterStateContext(MovementData movementData, CharacterAttackController attackController)
+        public GameCharacterStateContext(
+            MovementData movementData,
+            CharacterAttackController attackController,
+            AnimatorController animatorController)
         {
             MovementData = movementData;
             AttackController = attackController;
+            AnimatorController = animatorController;
         }
 
         public void ResetTrigger()
@@ -44,12 +50,14 @@ namespace GameMainModule
         protected GameCharacterStateContext _context;
         protected MovementData _movementData;
         protected CharacterAttackController _attackController;
+        protected AnimatorController _animatorController;
 
         protected GameCharacterState(GameCharacterStateContext context)
         {
             _context = context;
             _movementData = context.MovementData;
             _attackController = context.AttackController;
+            _animatorController = context.AnimatorController;
         }
 
         public sealed override void DoUpdate()
@@ -77,6 +85,11 @@ namespace GameMainModule
         {
         }
 
+        public override void DoEnter(CharacterState previousState)
+        {
+            _animatorController.CrossFade("Idle");
+        }
+
         public override void OnFixedUpdate()
         {
             ThreeDimensionalMovementUtility.FixGroundPoint(_movementData);
@@ -87,6 +100,11 @@ namespace GameMainModule
     {
         public WalkState(GameCharacterStateContext context) : base(context)
         {
+        }
+
+        public override void DoEnter(CharacterState previousState)
+        {
+            _animatorController.CrossFade("Walk");
         }
 
         public override void OnFixedUpdate()
@@ -100,6 +118,11 @@ namespace GameMainModule
     {
         public RunState(GameCharacterStateContext context) : base(context)
         {
+        }
+
+        public override void DoEnter(CharacterState previousState)
+        {
+            _animatorController.CrossFade("Run");
         }
 
         public override void OnFixedUpdate()
@@ -123,6 +146,7 @@ namespace GameMainModule
         public override void DoEnter(CharacterState previousState)
         {
             _movementData.JumpData.StartJump();
+            _animatorController.CrossFade("Jump_s");
         }
 
         public override void OnUpdate()
@@ -130,6 +154,7 @@ namespace GameMainModule
             if (_movementData.JumpData.JumpTrigger && _movementData.JumpData.CanJump())
             {
                 _movementData.JumpData.StartJump();
+                _animatorController.CrossFade("Jump_s");
             }
         }
 
@@ -149,6 +174,7 @@ namespace GameMainModule
         public override void DoEnter(CharacterState previousState)
         {
             _movementData.FallData.StartFall();
+            _animatorController.CrossFade("Fall_d");
         }
 
         public override void OnFixedUpdate()
@@ -173,6 +199,7 @@ namespace GameMainModule
         {
             _movementData.JumpData.ResetJump();
             _movementData.LandData.StartLand();
+            _animatorController.CrossFade("Fall_e");
         }
 
         public override void OnFixedUpdate()
@@ -181,11 +208,11 @@ namespace GameMainModule
         }
     }
 
-    public class AttackState : GameCharacterState
+    public class AttackState : GameCharacterState, IAttackCombinationObserver
     {
         public AttackState(GameCharacterStateContext context) : base(context)
         {
-
+            _attackController.AddObserver(this);
         }
 
         public override void DoEnter(CharacterState previousState)
@@ -198,5 +225,24 @@ namespace GameMainModule
         {
             _attackController.DoUpdate();
         }
+
+        #region IAttackCombinationObserver
+
+        public void OnStartAttackBehavior(string behaviorName)
+        {
+            _animatorController.CrossFade(behaviorName);
+        }
+
+        public void OnStartComboing()
+        {
+
+        }
+
+        public void OnEndComboing()
+        {
+
+        }
+
+        #endregion
     }
 }

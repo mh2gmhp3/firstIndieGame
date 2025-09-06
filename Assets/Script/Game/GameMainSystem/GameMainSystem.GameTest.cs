@@ -10,6 +10,7 @@ using UIModule;
 using UnityEngine;
 using Utility;
 using UnitModule;
+using GameMainModule.Animation;
 
 namespace GameMainModule
 {
@@ -35,7 +36,9 @@ namespace GameMainModule
             //角色移動設定
             var movementSetting = AssetsSystem.LoadAssets<MovementSetting>("Setting/MovementSetting");
             var unitMovementSetting = unitData.MovementSetting;
-            _characterController.InitController(unitMovementSetting, movementSetting);
+            //角色動畫控制
+            var animatorTransitionSetting = AssetsSystem.LoadAssets<AnimatorTransitionSetting>("Setting/AnimatorTransitionSetting/PrototypeCharacter.asset");
+            _characterController.InitController(unitMovementSetting, movementSetting, animatorTransitionSetting);
             //第三人稱相機註冊
             CameraSystem.CameraCommand(
                 new ThirdPersonModeCommandData
