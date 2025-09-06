@@ -40,9 +40,13 @@ namespace GameMainModule.Attack
         private bool _isProcessingCombo = false;
         private int _currentComboIndex = -1;
 
+        private bool _mainTrigger = false;
+        private bool _subTriggger = false;
+
         private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
 
         public bool IsComboing => _nowAttackBehavior != null || _nextAttackBehavior != null;
+        public bool IsProcessingCombo => _isProcessingCombo;
 
         public AttackCombination()
         {
@@ -115,15 +119,44 @@ namespace GameMainModule.Attack
 
         #endregion
 
+        #region Trigger
+
         public void TriggerMainAttack()
         {
-            TriggerAttack(_mainAttackBehaviorList);
+            _mainTrigger = true;
         }
 
         public void TriggerSubAttack()
         {
-            TriggerAttack(_subAttackBehaviorList);
+            _subTriggger = true;
         }
+
+        public void ProcessTrigger()
+        {
+            if (_mainTrigger)
+            {
+                TriggerAttack(_mainAttackBehaviorList);
+                ResetTrigger();
+            }
+            else if (_subTriggger)
+            {
+                TriggerAttack(_subAttackBehaviorList);
+                ResetTrigger();
+            }
+        }
+
+        public bool HaveTrigger()
+        {
+            return _mainTrigger || _subTriggger;
+        }
+
+        public void ResetTrigger()
+        {
+            _mainTrigger = false;
+            _subTriggger = false;
+        }
+
+        #endregion
 
         public void Reset()
         {
@@ -131,6 +164,7 @@ namespace GameMainModule.Attack
             _isKeeping = false;
             _isProcessingCombo = false;
             _currentComboIndex = -1;
+            ResetTrigger();
 
             if (_nowAttackBehavior != null)
                 _nowAttackBehavior.Reset();
@@ -140,6 +174,8 @@ namespace GameMainModule.Attack
 
         public void DoUpdate()
         {
+            ProcessTrigger();
+
             if (_nowAttackBehavior == null)
             {
                 if (_nextAttackBehavior == null)
@@ -154,6 +190,7 @@ namespace GameMainModule.Attack
                 if (!_isProcessingCombo)
                 {
                     NotifyStartComboing();
+                    Log.LogInfo("NotifyStartComboing");
                     _isProcessingCombo = true;
                 }
                 NotifyStartAttackBehavior(_nowAttackBehavior.Name);

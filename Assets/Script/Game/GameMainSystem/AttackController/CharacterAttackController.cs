@@ -20,6 +20,7 @@ namespace GameMainModule.Attack
         private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
 
         public bool IsComboing => _nowCombination != null && _nowCombination.IsComboing;
+        public bool IsProcessCombo => _nowCombination != null && _nowCombination.IsProcessingCombo;
 
         /// <summary>
         /// TODO 用來測試設定攻擊組合 實際在遊戲內應該會由另外一筆玩家編輯資料設定 而不是在運作的類別
@@ -49,6 +50,7 @@ namespace GameMainModule.Attack
             if (_nowCombination != null)
             {
                 _nowCombination.ClearObserverList();
+                _nowCombination.Reset();
             }
 
             _nowCombination = combinariotn;
@@ -88,6 +90,8 @@ namespace GameMainModule.Attack
             _nowCombination.DoUpdate();
         }
 
+        #region Trigger
+
         public void TriggerMainAttack()
         {
             if (_nowCombination == null)
@@ -102,6 +106,40 @@ namespace GameMainModule.Attack
                 return;
 
             _nowCombination.TriggerSubAttack();
+        }
+
+        public void ProcessTrigger()
+        {
+            if (_nowCombination == null)
+                return;
+
+            _nowCombination.ProcessTrigger();
+        }
+
+        public bool HaveTrigger()
+        {
+            if (_nowCombination == null)
+                return false;
+
+            return _nowCombination.HaveTrigger();
+        }
+
+        public void ResetTrigger()
+        {
+            if (_nowCombination == null)
+                return;
+
+            _nowCombination.ResetTrigger();
+        }
+
+        #endregion
+
+        public void Reset()
+        {
+            if (_nowCombination == null)
+                return;
+
+            _nowCombination.Reset();
         }
 
         public void KeepComboing(bool keep)
