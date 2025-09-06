@@ -9,7 +9,7 @@ using static UnitModule.Movement.ThreeDimensionalMovementUtility;
 namespace GameMainModule
 {
     [Serializable]
-    public class GameThreeDimensionalCharacterControllerRedo
+    public class GameThreeDimensionalCharacterController
     {
         [SerializeField]
         private StateMachine<CharacterState, GameCharacterState> _characterStateMachine =
@@ -24,7 +24,7 @@ namespace GameMainModule
         private GameCharacterStateContext _characterStateContext;
 
 
-        public GameThreeDimensionalCharacterControllerRedo()
+        public GameThreeDimensionalCharacterController()
         {
 
         }
