@@ -8,7 +8,7 @@ namespace UnitModule.Movement
     [Serializable]
     public class StateMovementSetting
     {
-        public MovementState State;
+        public int State;
 
         public float SpeedFactor = 1f;
     }
