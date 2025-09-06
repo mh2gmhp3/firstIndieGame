@@ -63,6 +63,10 @@ namespace GameMainModule
             {
                 _characterController.MainAttack();
             }
+            else if (command == "subattack")
+            {
+                _characterController.SubAttack();
+            }
         }
 
         private void OnKeyUp(KeyCode keyCode, string command)

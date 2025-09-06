@@ -23,8 +23,20 @@ MonoBehaviour:
     AssignKeyCodeTriggerSettingList:
     - KeyCode: 323
       Type: 0
-    - KeyCode: 335
+    - KeyCode: 332
       Type: 0
+  - Command: subattack
+    AssignKeyCodeTriggerSettingList:
+    - KeyCode: 324
+      Type: 0
+    - KeyCode: 333
+      Type: 0
+  - Command: run
+    AssignKeyCodeTriggerSettingList:
+    - KeyCode: 304
+      Type: 2
+    - KeyCode: 335
+      Type: 2
   InputAxisList:
   - Axis: Horizontal
   - Axis: Vertical
