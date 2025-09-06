@@ -72,7 +72,10 @@ namespace GameMainModule
 
         private void OnKeyHold(KeyCode keyCode, string command)
         {
-            Log.LogInfo($"OnKeyHold KeyCode:{keyCode}, Command:{command}");
+            if (command == "run")
+            {
+                _characterController.Run();
+            }
         }
 
         private UpdateThirdPersonScreenAxisData _updateThirdPersonScreenAxisData =

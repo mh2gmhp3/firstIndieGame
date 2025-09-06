@@ -30,11 +30,16 @@ namespace UnitModule.Movement
             public int JumpCount = 0;
 
             public float JumpStartTime;
+            public bool JumpEnd = false;
+
+            public bool JumpTrigger = false;
 
             public void StartJump()
             {
                 JumpCount++;
                 JumpStartTime = Time.time;
+                JumpEnd = false;
+                JumpTrigger = false;
             }
 
             public float JumpElapsedTime()
@@ -50,6 +55,8 @@ namespace UnitModule.Movement
             public void ResetJump()
             {
                 JumpCount = 0;
+                JumpEnd = false;
+                JumpTrigger = false;
             }
         }
 
@@ -92,7 +99,7 @@ namespace UnitModule.Movement
 
             public float Speed = 10f;
 
-            public bool Run = false;
+            public bool RunTriggered = false;
 
             #endregion
 
@@ -125,6 +132,12 @@ namespace UnitModule.Movement
                 JumpData = new JumpData();
                 FallData = new FallData();
                 LandData = new LandData();
+            }
+
+            public void ResetTrigger()
+            {
+                JumpData.JumpTrigger = false;
+                RunTriggered = false;
             }
         }
 

@@ -7,7 +7,7 @@ namespace GameMainModule
     public partial class GameMainSystem
     {
         [SerializeField]
-        private GameThreeDimensionalCharacterController _characterController =
-            new GameThreeDimensionalCharacterController();
+        private GameThreeDimensionalCharacterControllerRedo _characterController =
+            new GameThreeDimensionalCharacterControllerRedo();
     }
 }
