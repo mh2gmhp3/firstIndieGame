@@ -1,4 +1,4 @@
-﻿using AssetsModule;
+﻿using AssetModule;
 using Logging;
 using System.Collections;
 using System.Collections.Generic;
@@ -52,12 +52,12 @@ namespace GameSystem
                 if (testMode)
                 {
                     _enterGameFlowStepSetting =
-                        AssetsSystem.LoadAssets<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_FRAMEWORK_TEST_MODE_PATH);
+                        AssetSystem.LoadAsset<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_FRAMEWORK_TEST_MODE_PATH);
                 }
                 else
                 {
                     _enterGameFlowStepSetting =
-                        AssetsSystem.LoadAssets<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_FRAMEWORK_PATH);
+                        AssetSystem.LoadAsset<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_FRAMEWORK_PATH);
                 }
                 if (_enterGameFlowStepSetting == null)
                 {

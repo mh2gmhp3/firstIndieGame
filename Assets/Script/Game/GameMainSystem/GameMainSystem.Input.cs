@@ -1,4 +1,4 @@
-﻿using AssetsModule;
+﻿using AssetModule;
 using CameraModule;
 using InputModule;
 using Logging;
@@ -15,7 +15,7 @@ namespace GameMainModule
 
         private void InitInput()
         {
-            var inputSetting = AssetsSystem.LoadAssets<InputSetting>(INPUT_SETTING);
+            var inputSetting = AssetSystem.LoadAsset<InputSetting>(INPUT_SETTING);
             _inputReceiver =
                 new GameInputReceiver(
                     OnKeyDown,

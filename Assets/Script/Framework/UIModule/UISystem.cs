@@ -1,4 +1,4 @@
-﻿using AssetsModule;
+﻿using AssetModule;
 using GameSystem;
 using Logging;
 using System;
@@ -57,7 +57,7 @@ namespace UIModule
         {
             if (flowStep == (int)EnterGameFlowStepDefine.FrameworkEnterGameFlowStep.Init_GUIRoot)
             {
-                var obj = AssetsSystem.LoadAssets<GameObject>(GUI_ROOT_RESOURCE_PATH);
+                var obj = AssetSystem.LoadAsset<GameObject>(GUI_ROOT_RESOURCE_PATH);
                 _guiRoot = ObjectUtility.InstantiateWithoutClone(obj);
                 _guiRootTrans = _guiRoot.transform;
                 _guiRootRectTrans = _guiRootTrans as RectTransform;
@@ -123,7 +123,7 @@ namespace UIModule
                 return;
 
             _loadingWindowNameSet.Add(name);
-            AssetsSystem.LoadAssetsAsync(GetWindowPath(name),
+            AssetSystem.LoadAssetAsync(GetWindowPath(name),
                 (obj) =>
                 {
                     _loadingWindowNameSet.Remove(name);
@@ -182,7 +182,7 @@ namespace UIModule
                 return;
 
             _loadingWindowNameSet.Add(name);
-            AssetsSystem.LoadAssetsAsync(GetWindowPath(name),
+            AssetSystem.LoadAssetAsync(GetWindowPath(name),
                 (obj) =>
                 {
                     _loadingWindowNameSet.Remove(name);

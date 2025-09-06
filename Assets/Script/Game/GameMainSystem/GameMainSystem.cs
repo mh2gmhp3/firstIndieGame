@@ -1,4 +1,4 @@
-﻿using AssetsModule;
+﻿using AssetModule;
 using CameraModule;
 using GameSystem;
 using InputModule;

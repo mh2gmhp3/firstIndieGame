@@ -1,10 +1,11 @@
 ﻿using GameSystem;
+using Logging;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UObject = UnityEngine.Object;
 
-namespace AssetsModule
+namespace AssetModule
 {
     /*
         TODO 需處裡讀取行為設定檔 對應設定檔給特定實作類處理
@@ -14,8 +15,8 @@ namespace AssetsModule
         4.釋放
         5.改用Bundle讀取 行動平台 PC版應該暫時不用
      */
-    [GameSystem(GameSystemPriority.ASSETS_SYSTEM)]
-    public partial class AssetsSystem : BaseGameSystem<AssetsSystem>
+    [GameSystem(GameSystemPriority.ASSET_SYSTEM)]
+    public partial class AssetSystem : BaseGameSystem<AssetSystem>
     {
         private class LoadingRequest
         {
@@ -86,7 +87,7 @@ namespace AssetsModule
             CheckRequestLoaded();
         }
 
-        #region Public Static Method LoadAssets
+        #region Public Static Method LoadAsset
 
         /// <summary>
         /// 讀取資源
@@ -94,13 +95,13 @@ namespace AssetsModule
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static T LoadAssets<T>(string path)
+        public static T LoadAsset<T>(string path)
             where T : UObject
         {
-            return _instance.DoLoadAssets<T>(path);
+            return _instance.DoLoadAsset<T>(path);
         }
 
-        private T DoLoadAssets<T>(string path)
+        private T DoLoadAsset<T>(string path)
             where T : UObject
         {
             if (_pathToLoadedAsset.TryGetValue(path, out UObject asset))
@@ -111,13 +112,18 @@ namespace AssetsModule
             }
 
             var loadResult = Resources.Load<T>(path);
+            if (loadResult == null)
+            {
+                Log.LogError($"LoadAsset Failed, Path not found:{path}");
+                return null;
+            }
             _pathToLoadedAsset.Add(path, loadResult);
             return loadResult;
         }
 
         #endregion
 
-        #region Public Static Method LoadAssetsAsync
+        #region Public Static Method LoadAssetAsync
 
         /// <summary>
         /// 非同步讀取資源
@@ -125,12 +131,12 @@ namespace AssetsModule
         /// </summary>
         /// <param name="path"></param>
         /// <param name="onLoaded"></param>
-        public static void LoadAssetsAsync(string path, Action<UObject> onLoaded)
+        public static void LoadAssetAsync(string path, Action<UObject> onLoaded)
         {
-            _instance.DoLoadAssetsAsync(path, onLoaded);
+            _instance.DoLoadAssetAsync(path, onLoaded);
         }
 
-        private void DoLoadAssetsAsync(string path, Action<UObject> onLoaded)
+        private void DoLoadAssetAsync(string path, Action<UObject> onLoaded)
         {
             if (_pathToLoadingRequest.TryGetValue(path, out LoadingRequest loadingRequest))
             {

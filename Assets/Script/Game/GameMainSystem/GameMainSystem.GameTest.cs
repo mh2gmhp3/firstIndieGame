@@ -1,4 +1,4 @@
-﻿using AssetsModule;
+﻿using AssetModule;
 using CameraModule;
 using GameMainModule.Attack;
 using CollisionModule;
@@ -28,16 +28,16 @@ namespace GameMainModule
         private void InitTestPlayerCharacterUnit()
         {
             //讀取Prefab
-            var testCharacterAssets = AssetsSystem.LoadAssets<GameObject>("Prototype/TestObject/Character_02/Character_Root");
+            var testCharacterAssets = AssetSystem.LoadAsset<GameObject>("Prototype/TestObject/Character_02/Character_Root");
             var testCharacterGo = ObjectUtility.InstantiateWithoutClone(testCharacterAssets);
             var testCharacterGameUnit = testCharacterGo.GetComponent<GameUnit>();
             var unitData = testCharacterGameUnit.UnitData;
             //玩家角色控制
             //角色移動設定
-            var movementSetting = AssetsSystem.LoadAssets<MovementSetting>("Setting/MovementSetting");
+            var movementSetting = AssetSystem.LoadAsset<MovementSetting>("Setting/MovementSetting");
             var unitMovementSetting = unitData.MovementSetting;
             //角色動畫控制
-            var animatorTransitionSetting = AssetsSystem.LoadAssets<AnimatorTransitionSetting>("Setting/AnimatorTransitionSetting/PrototypeCharacter.asset");
+            var animatorTransitionSetting = AssetSystem.LoadAsset<AnimatorTransitionSetting>("Setting/AnimatorTransitionSetting/PrototypeCharacter.asset");
             _characterController.InitController(unitMovementSetting, movementSetting, animatorTransitionSetting);
             //第三人稱相機註冊
             CameraSystem.CameraCommand(

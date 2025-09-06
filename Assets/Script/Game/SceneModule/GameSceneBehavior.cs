@@ -1,4 +1,4 @@
-﻿using AssetsModule;
+﻿using AssetModule;
 using Logging;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace SceneModule
             }
 
             //TODO to base and notify switch flow to observer
-            var stageTemp = AssetsSystem.LoadAssets<GameObject>(STAGE_FOLDER_PATH + stageData.StagePath);
+            var stageTemp = AssetSystem.LoadAsset<GameObject>(STAGE_FOLDER_PATH + stageData.StagePath);
             GameObject stageGo = ObjectUtility.InstantiateWithoutClone(stageTemp);
         }
     }
