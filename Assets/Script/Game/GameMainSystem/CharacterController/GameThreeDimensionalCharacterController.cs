@@ -41,7 +41,7 @@ namespace GameMainModule
             //State
             _characterStateMachine.AddState(CharacterState.Idle, new IdleState(_characterStateContext));
             _characterStateMachine.AddState(CharacterState.Walk, new WalkState(_characterStateContext));
-            _characterStateMachine.AddState(CharacterState.Run, new WalkState(_characterStateContext));
+            _characterStateMachine.AddState(CharacterState.Run, new RunState(_characterStateContext));
             _characterStateMachine.AddState(CharacterState.Jump, new JumpState(_characterStateContext));
             _characterStateMachine.AddState(CharacterState.Fall, new FallState(_characterStateContext));
             _characterStateMachine.AddState(CharacterState.Land, new LandState(_characterStateContext));
