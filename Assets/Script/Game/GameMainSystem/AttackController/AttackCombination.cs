@@ -27,14 +27,6 @@ namespace GameMainModule.Attack
         private AttackBehavior _nextAttackBehavior = null;
 
         /// <summary>
-        /// 可開關保留Combo狀態<see cref="KeepComboing(bool)"/>
-        /// <para>開啟時: 不會因為不輸入斷掉Combo，下次輸入時繼續Combo，最終Combo後繼續輸入不會重新Combo，必須關閉。Combo開始與繼續都會通知開始 沒輸入導致Combo中斷通知結束</para>
-        /// <para>關閉時: 不輸入斷掉Combo。 Combo開始通知開始 Combo結束通知結束</para>
-        /// </summary>
-        private bool _keepComboing = false;
-        private bool _isKeeping = false;
-
-        /// <summary>
         /// 控制Combo開始與結束通知
         /// </summary>
         private bool _isProcessingCombo = false;
@@ -47,6 +39,22 @@ namespace GameMainModule.Attack
 
         public bool IsComboing => _nowAttackBehavior != null || _nextAttackBehavior != null;
         public bool IsProcessingCombo => _isProcessingCombo;
+
+        public bool IsMaxCombo
+        {
+            get
+            {
+                if (_mainTrigger)
+                {
+                    return _currentComboIndex >= _mainAttackBehaviorList.Count;
+                }
+                else if (_subTriggger)
+                {
+                    return _currentComboIndex >= _subAttackBehaviorList.Count;
+                }
+                return true;
+            }
+        }
 
         public AttackCombination()
         {
@@ -119,6 +127,71 @@ namespace GameMainModule.Attack
 
         #endregion
 
+        #region ProcessCombo
+
+        public void DoUpdate(bool keepComboOnEnd)
+        {
+            ProcessTrigger();
+
+            if (_nowAttackBehavior != null)
+            {
+                if (_nowAttackBehavior.IsEnd)
+                {
+                    _nowAttackBehavior.OnEnd();
+                    if (_nextAttackBehavior == null)
+                    {
+                        EndProcessCombo(keepComboOnEnd);
+                    }
+                    else
+                    {
+                        StartProcessComboAndNextBehavior();
+                    }
+                }
+                else
+                {
+                    _nowAttackBehavior.OnUpdate();
+                }
+            }
+            else if (_nextAttackBehavior != null)
+            {
+                StartProcessComboAndNextBehavior();
+            }
+        }
+
+        private void StartProcessComboAndNextBehavior()
+        {
+            if (_nextAttackBehavior == null)
+                return;
+
+            if (!_isProcessingCombo)
+            {
+                _isProcessingCombo = true;
+                NotifyStartComboing();
+                Log.LogInfo("NotifyStartComboing");
+            }
+
+            _nowAttackBehavior = _nextAttackBehavior;
+            _nowAttackBehavior.OnStart();
+            NotifyStartAttackBehavior(_nowAttackBehavior.Name);
+            Log.LogInfo($"NotifyStartBehaviorName:{_nowAttackBehavior.Name}");
+            _nextAttackBehavior = null;
+        }
+
+        private void EndProcessCombo(bool keepComboOnEnd)
+        {
+            if (!_isProcessingCombo)
+                return;
+
+            _isProcessingCombo = false;
+            NotifyEndComboing();
+            Log.LogInfo("NotifyEndComboing");
+            _nowAttackBehavior = null;
+            if (!keepComboOnEnd)
+                _currentComboIndex = -1;
+        }
+
+        #endregion
+
         #region Trigger
 
         public void TriggerMainAttack()
@@ -129,20 +202,6 @@ namespace GameMainModule.Attack
         public void TriggerSubAttack()
         {
             _subTriggger = true;
-        }
-
-        public void ProcessTrigger()
-        {
-            if (_mainTrigger)
-            {
-                TriggerAttack(_mainAttackBehaviorList);
-                ResetTrigger();
-            }
-            else if (_subTriggger)
-            {
-                TriggerAttack(_subAttackBehaviorList);
-                ResetTrigger();
-            }
         }
 
         public bool HaveTrigger()
@@ -156,91 +215,17 @@ namespace GameMainModule.Attack
             _subTriggger = false;
         }
 
-        #endregion
-
-        public void Reset()
+        private void ProcessTrigger()
         {
-            _keepComboing = false;
-            _isKeeping = false;
-            _isProcessingCombo = false;
-            _currentComboIndex = -1;
-            ResetTrigger();
-
-            if (_nowAttackBehavior != null)
-                _nowAttackBehavior.Reset();
-            _nowAttackBehavior = null;
-            _nextAttackBehavior = null;
-        }
-
-        public void DoUpdate()
-        {
-            ProcessTrigger();
-
-            if (_nowAttackBehavior == null)
+            if (_mainTrigger)
             {
-                if (_nextAttackBehavior == null)
-                    return;
-
-                _nowAttackBehavior = _nextAttackBehavior;
-                _nextAttackBehavior = null;
-
-                //每次有新的
-                _isKeeping = false;
-                _nowAttackBehavior.OnStart();
-                if (!_isProcessingCombo)
-                {
-                    NotifyStartComboing();
-                    Log.LogInfo("NotifyStartComboing");
-                    _isProcessingCombo = true;
-                }
-                NotifyStartAttackBehavior(_nowAttackBehavior.Name);
+                TriggerAttackRedo(_mainAttackBehaviorList);
+                ResetTrigger();
             }
-
-            if (_isKeeping)
+            else if (_subTriggger)
             {
-                if (_nextAttackBehavior == null)
-                {
-                    if (_keepComboing)
-                        return;
-
-                    // 不保留後 沒有下一個行為就清空
-                    _nowAttackBehavior = null;
-                    _currentComboIndex = -1;
-                }
-                else
-                {
-                    // 有下一個行為就繼續下一個行為
-                    _nowAttackBehavior = null;
-                }
-            }
-            else if (_nowAttackBehavior.IsEnd)
-            {
-                _nowAttackBehavior.OnEnd();
-                if (_nextAttackBehavior == null)
-                {
-                    NotifyEndComboing();
-                    _isProcessingCombo = false;
-                    Log.LogInfo("NotifyEndComboing");
-                    if (_keepComboing)
-                    {
-                        _isKeeping = true;
-                    }
-                    else
-                    {
-                        // 不保留連段 清空
-                        _nowAttackBehavior = null;
-                        _currentComboIndex = -1;
-                    }
-                }
-                else
-                {
-                    // 清掉當前行為在下一偵開始下個行為
-                    _nowAttackBehavior = null;
-                }
-            }
-            else
-            {
-                _nowAttackBehavior.OnUpdate();
+                TriggerAttackRedo(_subAttackBehaviorList);
+                ResetTrigger();
             }
         }
 
@@ -260,9 +245,45 @@ namespace GameMainModule.Attack
             _nextAttackBehavior = nextBehavior;
         }
 
-        public void KeepComboing(bool keep)
+        private void TriggerAttackRedo(List<AttackBehavior> attackBehaviorList)
         {
-            _keepComboing = keep;
+            if (attackBehaviorList == null)
+                return;
+
+            if (_nextAttackBehavior != null)
+                return;
+
+            if (_nowAttackBehavior != null && !_nowAttackBehavior.CanNextBehavior)
+                return;
+
+            _currentComboIndex++;
+            //allready last Comboing
+            if (!attackBehaviorList.TryGet(_currentComboIndex, out var nextBehavior))
+                return;
+
+            _nextAttackBehavior = nextBehavior;
         }
+
+        #endregion
+
+        #region Reset
+
+        public void Reset()
+        {
+            ResetCombo();
+            ResetTrigger();
+        }
+
+        public void ResetCombo()
+        {
+            _isProcessingCombo = false;
+            _currentComboIndex = -1;
+            if (_nowAttackBehavior != null)
+                _nowAttackBehavior.Reset();
+            _nowAttackBehavior = null;
+            _nextAttackBehavior = null;
+        }
+
+        #endregion
     }
 }

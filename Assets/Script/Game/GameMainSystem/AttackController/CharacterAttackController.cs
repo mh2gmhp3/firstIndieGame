@@ -21,6 +21,7 @@ namespace GameMainModule.Attack
 
         public bool IsComboing => _nowCombination != null && _nowCombination.IsComboing;
         public bool IsProcessCombo => _nowCombination != null && _nowCombination.IsProcessingCombo;
+        public bool IsMaxCombo => _nowCombination != null && _nowCombination.IsMaxCombo;
 
         /// <summary>
         /// TODO 用來測試設定攻擊組合 實際在遊戲內應該會由另外一筆玩家編輯資料設定 而不是在運作的類別
@@ -82,13 +83,17 @@ namespace GameMainModule.Attack
 
         #endregion
 
-        public void DoUpdate()
+        #region ProcessCombo
+
+        public void DoUpdate(bool keepComboOnEnd)
         {
             if (_nowCombination == null)
                 return;
 
-            _nowCombination.DoUpdate();
+            _nowCombination.DoUpdate(keepComboOnEnd);
         }
+
+        #endregion
 
         #region Trigger
 
@@ -106,14 +111,6 @@ namespace GameMainModule.Attack
                 return;
 
             _nowCombination.TriggerSubAttack();
-        }
-
-        public void ProcessTrigger()
-        {
-            if (_nowCombination == null)
-                return;
-
-            _nowCombination.ProcessTrigger();
         }
 
         public bool HaveTrigger()
@@ -134,6 +131,8 @@ namespace GameMainModule.Attack
 
         #endregion
 
+        #region Reset
+
         public void Reset()
         {
             if (_nowCombination == null)
@@ -142,12 +141,14 @@ namespace GameMainModule.Attack
             _nowCombination.Reset();
         }
 
-        public void KeepComboing(bool keep)
+        public void ResetCombo()
         {
             if (_nowCombination == null)
                 return;
 
-            _nowCombination.KeepComboing(keep);
+            _nowCombination.ResetCombo();
         }
+
+        #endregion
     }
 }

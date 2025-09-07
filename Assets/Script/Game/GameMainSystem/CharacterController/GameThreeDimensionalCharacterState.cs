@@ -199,6 +199,7 @@ namespace GameMainModule
         {
             _movementData.JumpData.ResetJump();
             _movementData.LandData.StartLand();
+            _attackController.ResetCombo();
             _animatorController.CrossFade("Fall_e");
         }
 
@@ -215,15 +216,29 @@ namespace GameMainModule
             _attackController.AddObserver(this);
         }
 
+        private bool KeepCombo()
+        {
+            return !_movementData.IsGround;
+        }
+
+        public override bool CanEnter()
+        {
+            if (!KeepCombo())
+                return true;
+            return !_attackController.IsMaxCombo;
+        }
+
         public override void DoEnter(CharacterState previousState)
         {
-            //_attackController.KeepComboing(!_movementData.IsGround);
-            //_attackController.ProcessTrigger();
+            if (!KeepCombo())
+            {
+                _attackController.ResetCombo();
+            }
         }
 
         public override void OnUpdate()
         {
-            _attackController.DoUpdate();
+            _attackController.DoUpdate(KeepCombo());
         }
 
         #region IAttackCombinationObserver
