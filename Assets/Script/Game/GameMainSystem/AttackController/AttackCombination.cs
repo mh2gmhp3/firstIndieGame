@@ -219,33 +219,17 @@ namespace GameMainModule.Attack
         {
             if (_mainTrigger)
             {
-                TriggerAttackRedo(_mainAttackBehaviorList);
+                TriggerAttack(_mainAttackBehaviorList);
                 ResetTrigger();
             }
             else if (_subTriggger)
             {
-                TriggerAttackRedo(_subAttackBehaviorList);
+                TriggerAttack(_subAttackBehaviorList);
                 ResetTrigger();
             }
         }
 
         private void TriggerAttack(List<AttackBehavior> attackBehaviorList)
-        {
-            if (attackBehaviorList == null)
-                return;
-
-            if (_nowAttackBehavior != null && !_nowAttackBehavior.CanNextBehavior)
-                return;
-
-            _currentComboIndex++;
-            //allready last Comboing
-            if (!attackBehaviorList.TryGet(_currentComboIndex, out var nextBehavior))
-                return;
-
-            _nextAttackBehavior = nextBehavior;
-        }
-
-        private void TriggerAttackRedo(List<AttackBehavior> attackBehaviorList)
         {
             if (attackBehaviorList == null)
                 return;
