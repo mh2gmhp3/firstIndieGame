@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SettingDataList:
   - StateName: Idle
-    NormalizedTransitionDuration: 0.5
+    NormalizedTransitionDuration: 0.2
     Layer: 0
     NormalizedTimeOffset: 0
     NormalizedTransitionTime: 0
   - StateName: Walk
-    NormalizedTransitionDuration: 1
+    NormalizedTransitionDuration: 0.2
     Layer: 0
     NormalizedTimeOffset: 0
     NormalizedTransitionTime: 0
   - StateName: Run
-    NormalizedTransitionDuration: 1
+    NormalizedTransitionDuration: 0.2
     Layer: 0
     NormalizedTimeOffset: 0
     NormalizedTransitionTime: 0
