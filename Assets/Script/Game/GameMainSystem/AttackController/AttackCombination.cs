@@ -135,6 +135,9 @@ namespace GameMainModule.Attack
 
             if (_nowAttackBehavior != null)
             {
+                //TODO考慮手感的問題 是不是在可以輸入時就直接End並跳下一個還是真的要等到結束
+                //現在在切換到其他的State時都是必須要等到ProcessingCombo結束
+                //之後有可能會有突然中斷的時候 自我行為:衝刺或跳用等迴避類行為，被動行為:擊飛或訂身等控場行為
                 if (_nowAttackBehavior.IsEnd)
                 {
                     _nowAttackBehavior.OnEnd();
