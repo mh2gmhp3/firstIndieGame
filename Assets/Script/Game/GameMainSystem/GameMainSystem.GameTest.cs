@@ -38,7 +38,8 @@ namespace GameMainModule
             var unitMovementSetting = unitData.MovementSetting;
             //角色動畫控制
             var animatorTransitionSetting = AssetSystem.LoadAsset<AnimatorTransitionSetting>("Setting/AnimatorTransitionSetting/PrototypeCharacter");
-            _characterController.InitController(unitMovementSetting, movementSetting, animatorTransitionSetting);
+            var attackBehaviorAssetSetting = AssetSystem.LoadAsset<AttackBehaviorAssetSetting>("Setting/AttackBehaviorAssetSetting/PrototypeCharacter");
+            _characterController.InitController(unitMovementSetting, movementSetting, animatorTransitionSetting, attackBehaviorAssetSetting);
             //第三人稱相機註冊
             CameraSystem.CameraCommand(
                 new ThirdPersonModeCommandData
@@ -54,14 +55,24 @@ namespace GameMainModule
             //測試攻擊
             List<AttackCombination> attackCombinationList = new List<AttackCombination>();
             List<AttackBehavior> mainAttackBehaviorList = new List<AttackBehavior>();
-            mainAttackBehaviorList.Add(new AttackBehavior("Attack_01", 0.1f, 0.3f));
-            mainAttackBehaviorList.Add(new AttackBehavior("Attack_02", 0.1f, 0.3f));
-            mainAttackBehaviorList.Add(new AttackBehavior("Attack_03", 0.1f, 0.3f));
+            if (attackBehaviorAssetSetting.TryGetGroupData(1, out var groupData))
+            {
+                for (int i = 0; i < groupData.DataList.Count; i++)
+                {
+                    var data = groupData.DataList[i];
+                    mainAttackBehaviorList.Add(new AttackBehavior(unitMovementSetting, data));
+                }
+            }
             List<AttackBehavior> subAttackBehaviorList = new List<AttackBehavior>();
-            subAttackBehaviorList.Add(new AttackBehavior("subAttack 1", 0.1f, 0.5f));
-            subAttackBehaviorList.Add(new AttackBehavior("subAttack 2", 0.2f, 0.5f));
-            subAttackBehaviorList.Add(new AttackBehavior("subAttack 3", 0.2f, 0.5f));
-            attackCombinationList.Add(new AttackCombination(mainAttackBehaviorList, subAttackBehaviorList));
+            if (attackBehaviorAssetSetting.TryGetGroupData(1, out var groupDataSub))
+            {
+                for (int i = 0; i < groupData.DataList.Count; i++)
+                {
+                    var data = groupData.DataList[i];
+                    subAttackBehaviorList.Add(new AttackBehavior(unitMovementSetting, data));
+                }
+            }
+            attackCombinationList.Add(new AttackCombination(1, mainAttackBehaviorList, subAttackBehaviorList));
             _characterController.SetCombinationList(attackCombinationList);
             _characterController.SetNowCombination(0);
 

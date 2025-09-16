@@ -9,6 +9,7 @@ namespace GameMainModule.Animation
         private Animator _animator;
         private AnimatorTransitionSetting _transitionSetting;
         private AnimatorOverrideController _animatorOverrideController;
+        private AnimationClipOverrides _clipOverrides;
 
         private float _defaultNormalizedTransitionDuration;
 
@@ -28,6 +29,8 @@ namespace GameMainModule.Animation
             _transitionSetting = transitionSetting;
             _animatorOverrideController = new AnimatorOverrideController(_animator.runtimeAnimatorController);
             _animator.runtimeAnimatorController = _animatorOverrideController;
+            _clipOverrides = new AnimationClipOverrides(_animatorOverrideController.overridesCount);
+            _animatorOverrideController.GetOverrides(_clipOverrides);
             _defaultNormalizedTransitionDuration = defaultNormalizedTransitionDuration;
         }
 
@@ -51,6 +54,15 @@ namespace GameMainModule.Animation
                     transitionSettingData.NormalizedTimeOffset,
                     transitionSettingData.NormalizedTransitionTime);
             }
+        }
+
+        public void SetOverride(Dictionary<string, AnimationClip> overrides)
+        {
+            foreach (var overridePair in overrides)
+            {
+                _clipOverrides[overridePair.Key] = overridePair.Value;
+            }
+            _animatorOverrideController.ApplyOverrides(_clipOverrides);
         }
     }
 }

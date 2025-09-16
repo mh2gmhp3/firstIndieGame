@@ -20,6 +20,8 @@ namespace GameMainModule.Attack
     [Serializable]
     public class AttackCombination
     {
+        private int _weaponGroup = 0;
+
         private List<AttackBehavior> _mainAttackBehaviorList = new List<AttackBehavior>();
         private List<AttackBehavior> _subAttackBehaviorList = new List<AttackBehavior>();
 
@@ -36,6 +38,8 @@ namespace GameMainModule.Attack
         private bool _subTriggger = false;
 
         private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
+
+        public int WeaponGroup => _weaponGroup;
 
         public bool IsComboing => _nowAttackBehavior != null || _nextAttackBehavior != null;
         public bool IsProcessingCombo => _isProcessingCombo;
@@ -61,8 +65,9 @@ namespace GameMainModule.Attack
 
         }
 
-        public AttackCombination(List<AttackBehavior> mainAttackBehaviorList, List<AttackBehavior> subAttackBehaviorList)
+        public AttackCombination(int weaponGroup, List<AttackBehavior> mainAttackBehaviorList, List<AttackBehavior> subAttackBehaviorList)
         {
+            _weaponGroup = weaponGroup;
             _mainAttackBehaviorList = mainAttackBehaviorList;
             _subAttackBehaviorList = subAttackBehaviorList;
         }

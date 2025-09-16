@@ -1,7 +1,9 @@
-﻿using Logging;
+﻿using CollisionModule;
+using Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnitModule.Movement;
 using UnityEngine;
 
 namespace GameMainModule.Attack
@@ -18,13 +20,18 @@ namespace GameMainModule.Attack
         private float _behaviorTime = 0.5f;
 
         [SerializeField]
-        private float _startElapsedTime = 0;
+        private float _elapsedTime = 0;
+
+        private UnitMovementSetting _unitMovementSetting;
+        private AttackBehaviorAssetSettingData _setting;
+
+        private int _collisionAreaId = 0;
 
         public string Name => _name;
 
-        public bool CanNextBehavior => _startElapsedTime >= _lockNextBehaviorTime;
+        public bool CanNextBehavior => _elapsedTime >= _lockNextBehaviorTime;
 
-        public bool IsEnd => _startElapsedTime > _behaviorTime;
+        public bool IsEnd => _elapsedTime > _behaviorTime;
 
         public AttackBehavior()
         {
@@ -38,24 +45,74 @@ namespace GameMainModule.Attack
             _behaviorTime = behaviorTime;
         }
 
+        /// <summary>
+        /// TODO 要加入玩家資料相關內容
+        /// </summary>
+        /// <param name="setting"></param>
+        public AttackBehavior(UnitMovementSetting unitMovementSetting, AttackBehaviorAssetSettingData setting)
+        {
+            _name = setting.AnimationClipOverrideNameAndStateName;
+            _unitMovementSetting = unitMovementSetting;
+            _setting = setting;
+        }
+
         public void OnStart()
         {
             Reset();
+
+            //每次開始要跟玩家資料和設定重新計算總時間
+            _behaviorTime = _setting.AnimationClip.length;
+            _lockNextBehaviorTime = _setting.LockNextTime;
         }
 
         public void OnUpdate()
         {
-            _startElapsedTime += Time.deltaTime;
+            CheckCollision();
+            _elapsedTime += Time.deltaTime;
         }
 
         public void OnEnd()
         {
-
+            //Area自己執行完畢會直接消失 這邊也順便處理如果有外部狀態導致Behavior中指要中斷Area
+            CollisionAreaManager.RemoveCollisionArea(_collisionAreaId);
         }
 
         public void Reset()
         {
-            _startElapsedTime = 0;
+            _elapsedTime = 0;
+            _collisionAreaId = 0;
+        }
+
+        private void CheckCollision()
+        {
+            if (_collisionAreaId != 0)
+                return;
+
+            if (_elapsedTime < _setting.CollisionAreaStartTime)
+                return;
+
+            _collisionAreaId = CollisionAreaManager.CreateCollisionArea(GetCollisionAreaSetupData(_unitMovementSetting, _setting));
+        }
+
+        private static ICollisionAreaSetupData GetCollisionAreaSetupData(
+            UnitMovementSetting unitMovementSetting,
+            AttackBehaviorAssetSettingData attackBehaviorAssetSettingData)
+        {
+            switch (attackBehaviorAssetSettingData.CollisionAreaType)
+            {
+                case CollisionAreaDefine.AreaType.Test:
+                    return new TestCollisionAreaSetupData(1);
+                case CollisionAreaDefine.AreaType.Quad:
+                    return new QuadCollisionAreaSetupData(
+                        unitMovementSetting.RootTransform.position + new Vector3(0f, 2.5f, 0f),
+                        unitMovementSetting.RotateTransform.forward,
+                        attackBehaviorAssetSettingData.CollisionAreaDuration,
+                        5f,
+                        5f,
+                        new TestCollisionAreaTriggerReceiver());
+            }
+
+            return new TestCollisionAreaSetupData(1);
         }
     }
 }

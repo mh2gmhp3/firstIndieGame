@@ -1,4 +1,5 @@
 ﻿using Extension;
+using GameMainModule.Animation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +19,9 @@ namespace GameMainModule.Attack
         private AttackCombination _nowCombination;
 
         private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
+
+        private AnimatorController _animatorController;
+        private AttackBehaviorAssetSetting _attackBehaviorAssetSetting;
 
         public bool IsComboing => _nowCombination != null && _nowCombination.IsComboing;
         public bool IsProcessCombo => _nowCombination != null && _nowCombination.IsProcessingCombo;
@@ -59,6 +63,12 @@ namespace GameMainModule.Attack
             if (_nowCombination != null)
             {
                 _nowCombination.AddObserverList(_observerController.ObserverList);
+
+                //替換攻擊動畫
+                if (_attackBehaviorAssetSetting.TryGetGroupOverrideClip(_nowCombination.WeaponGroup, out var overrides))
+                {
+                    _animatorController.SetOverride(overrides);
+                }
             }
 
             return true;
@@ -147,6 +157,16 @@ namespace GameMainModule.Attack
                 return;
 
             _nowCombination.ResetCombo();
+        }
+
+        #endregion
+
+        #region Animation Setting
+
+        public void InitAnimation(AnimatorController animatorController, AttackBehaviorAssetSetting attackBehaviorAssetSetting)
+        {
+            _animatorController = animatorController;
+            _attackBehaviorAssetSetting = attackBehaviorAssetSetting;
         }
 
         #endregion

@@ -24,7 +24,6 @@ namespace GameMainModule
 
         private GameCharacterStateContext _characterStateContext;
 
-
         public GameThreeDimensionalCharacterController()
         {
 
@@ -33,7 +32,8 @@ namespace GameMainModule
         public void InitController(
             UnitMovementSetting unityMovementSetting,
             MovementSetting movementSetting,
-            AnimatorTransitionSetting transitionSetting)
+            AnimatorTransitionSetting transitionSetting,
+            AttackBehaviorAssetSetting attackBehaviorAssetSetting)
         {
             _movementData = new MovementData(unityMovementSetting, movementSetting);
             _characterStateContext = new GameCharacterStateContext(
@@ -43,6 +43,8 @@ namespace GameMainModule
 
             //Animator
             _animatorController.Init(unityMovementSetting.Animator, transitionSetting);
+
+            _characterAttackController.InitAnimation(_animatorController, attackBehaviorAssetSetting);
 
             //State
             _characterStateMachine.AddState(CharacterState.Idle, new IdleState(_characterStateContext));
