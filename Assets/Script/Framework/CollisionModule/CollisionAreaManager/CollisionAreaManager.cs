@@ -97,6 +97,11 @@ namespace CollisionModule
 
         #region CollisionArea
 
+        /// <summary>
+        /// 下一個CollisionAreaId
+        /// </summary>
+        private int _nextAreaId = 0;
+
         //TODO 先評估看看Activator.CreateInstance在創建時的消耗 因為有Pool基本上也不會太多次 如果真的有消耗嘗試改用已經實例化出來的做Copy
         /// <summary>
         /// 各類型CollisionAreae的Type
@@ -113,7 +118,7 @@ namespace CollisionModule
         /// <summary>
         /// 運行中的CollisionArea
         /// </summary>
-        private List<CollisionArea> _runingCollisionAreaList =
+        private List<CollisionArea> _runningCollisionAreaList =
             new List<CollisionArea>();
 
         /// <summary>
@@ -147,9 +152,9 @@ namespace CollisionModule
         /// </summary>
         public void DoOnGUI()
         {
-            for (int i = 0; i < _runingCollisionAreaList.Count; i++)
+            for (int i = 0; i < _runningCollisionAreaList.Count; i++)
             {
-                _runingCollisionAreaList[i].DoOnGUI();
+                _runningCollisionAreaList[i].DoOnGUI();
             }
         }
 
@@ -158,9 +163,9 @@ namespace CollisionModule
         /// </summary>
         public void DoDrawGizmos()
         {
-            for (int i = 0; i < _runingCollisionAreaList.Count; i++)
+            for (int i = 0; i < _runningCollisionAreaList.Count; i++)
             {
-                _runingCollisionAreaList[i].DoDrawGizmos();
+                _runningCollisionAreaList[i].DoDrawGizmos();
             }
         }
 
@@ -205,13 +210,26 @@ namespace CollisionModule
         /// 創建碰撞區域
         /// </summary>
         /// <param name="setupData"></param>
-        public static void CreateCollisionArea(ICollisionAreaSetupData setupData)
+        public static int CreateCollisionArea(ICollisionAreaSetupData setupData)
+        {
+            if (_instance == null)
+            {
+                return 0;
+            }
+            return _instance.InternalCreateCollisionArea(setupData);
+        }
+
+        /// <summary>
+        /// 移除碰撞區域
+        /// </summary>
+        /// <param name="setupData"></param>
+        public static void RemoveCollisionArea(int areaId)
         {
             if (_instance == null)
             {
                 return;
             }
-            _instance.InternalCreateCollisionArea(setupData);
+            _instance.InternalRemoveCollisionArea(areaId);
         }
 
         #endregion
@@ -358,33 +376,60 @@ namespace CollisionModule
             }
         }
 
-        private void InternalCreateCollisionArea(ICollisionAreaSetupData setupData)
+        private int GetNextAreaId()
+        {
+            return _nextAreaId++;
+        }
+
+        private int InternalCreateCollisionArea(ICollisionAreaSetupData setupData)
         {
             if (setupData == null)
             {
                 Log.LogWarning("SetupData is null, do not create CollsionArea");
-                return;
+                return 0;
             }
 
             if (!TryGetCollisionArea(setupData.AreaType, out var collisionArea))
             {
                 Log.LogWarning("SetupData Invalid, get collisionArea failed");
-                return;
+                return 0;
             }
 
-            collisionArea.Setup(setupData);
+            var nextAreaId = GetNextAreaId();
+            collisionArea.Setup(nextAreaId, setupData);
             collisionArea.DoCreate();
-            _runingCollisionAreaList.Add(collisionArea);
+            _runningCollisionAreaList.Add(collisionArea);
+            return nextAreaId;
+        }
+
+        private void InternalRemoveCollisionArea(int areaId)
+        {
+            CollisionArea removeArea = null;
+            for (int i = 0; i < _runningCollisionAreaList.Count; i++)
+            {
+                var runningCollisionArea = _runningCollisionAreaList[i];
+                if (runningCollisionArea.Id != areaId)
+                    continue;
+
+                _runningCollisionAreaList.RemoveAt(i);
+                removeArea = runningCollisionArea;
+                break;
+            }
+
+            if (removeArea == null)
+                return;
+
+            _endCollisionAreaList.Add(removeArea);
         }
 
         private void ProcessCollisionArea()
         {
-            for (int i = 0; i < _runingCollisionAreaList.Count; i++)
+            for (int i = 0; i < _runningCollisionAreaList.Count; i++)
             {
-                var runingCollisionArea = _runingCollisionAreaList[i];
-                runingCollisionArea.DoUpdate();
-                if (runingCollisionArea.IsEnd)
-                    _endCollisionAreaList.Add(runingCollisionArea);
+                var runningCollisionArea = _runningCollisionAreaList[i];
+                runningCollisionArea.DoUpdate();
+                if (runningCollisionArea.IsEnd)
+                    _endCollisionAreaList.Add(runningCollisionArea);
             }
 
             int endCount = _endCollisionAreaList.Count;
@@ -393,7 +438,7 @@ namespace CollisionModule
                 for (int i = 0; i < endCount; i++)
                 {
                     var endCollisionArea = _endCollisionAreaList[i];
-                    _runingCollisionAreaList.Remove(endCollisionArea);
+                    _runningCollisionAreaList.Remove(endCollisionArea);
                     RecycleCollisionArea(endCollisionArea);
                 }
                 _endCollisionAreaList.Clear();

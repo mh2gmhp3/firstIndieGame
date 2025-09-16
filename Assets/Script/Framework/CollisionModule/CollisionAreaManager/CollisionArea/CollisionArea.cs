@@ -69,6 +69,7 @@ namespace CollisionModule
         private ICollisionAreaManager _collisionAreaManager = null;
 
         private int _areaType = 0;
+        private int _id = 0;
 
         protected Vector3 _worldPosition;
         protected Vector3 _direction;
@@ -80,6 +81,8 @@ namespace CollisionModule
         protected ICollisionAreaTriggerReceiver _triggerReceiver;
 
         public int AreaType => _areaType;
+
+        public int Id => _id;
 
         public bool IsEnd => Time.time >= _endTime;
 
@@ -115,8 +118,10 @@ namespace CollisionModule
             _triggerReceiver.OnTrigger(groupId, colliderId);
         }
 
-        public void Setup(ICollisionAreaSetupData setupData)
+        public void Setup(int id, ICollisionAreaSetupData setupData)
         {
+            _id = id;
+
             _worldPosition = setupData.WorldPosition;
             _direction = setupData.Direction;
 

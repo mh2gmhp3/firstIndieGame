@@ -23,12 +23,12 @@ namespace CollisionModule
 
         public ICollisionAreaTriggerReceiver TriggerReceiver { get; set; }
 
-        public TestCollisionAreaSetupData(float direction)
+        public TestCollisionAreaSetupData(float duration)
         {
             WorldPosition = Vector3.zero + new Vector3(0, 1, 0);
             Direction = Vector3.forward;
 
-            TimeDuration = direction;
+            TimeDuration = duration;
         }
     }
 

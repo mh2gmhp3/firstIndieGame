@@ -20,9 +20,9 @@ namespace GameMainModule
 
         #endregion
 
-        private void CreateTestCollisionArea(float direction)
+        private void CreateTestCollisionArea(float duration)
         {
-            var testCollisionAreaSetupData = new TestCollisionAreaSetupData(direction);
+            var testCollisionAreaSetupData = new TestCollisionAreaSetupData(duration);
             testCollisionAreaSetupData.TriggerReceiver = new TestCollisionAreaTriggerReceiver();
             CollisionAreaManager.CreateCollisionArea(testCollisionAreaSetupData);
         }
