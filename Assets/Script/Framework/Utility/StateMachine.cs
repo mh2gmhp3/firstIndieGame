@@ -103,7 +103,7 @@ namespace Utility
             for (int i = 0; i < _transitionList.Count; i++)
             {
                 var transition = _transitionList[i];
-                if (!transition.From.Equals(_currentStateId))
+                if (!EqualityComparer<TStateId>.Default.Equals(transition.From, _currentStateId))
                     continue;
 
                 if (!transition.Condition())
