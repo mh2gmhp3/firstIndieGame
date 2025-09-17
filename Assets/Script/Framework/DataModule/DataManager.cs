@@ -89,8 +89,8 @@ namespace DataModule
             var dataFolderPath = GetDataFolderPath(id);
             if (!Directory.Exists(dataFolderPath))
                 return false;
-
-            ClearSlotRepository();
+            //重建
+            InitSlotRepository();
             foreach (var typeNameToDataRepository in _slotTypeNameToDataRepositoryDic)
             {
                 var typeName = typeNameToDataRepository.Key;
@@ -135,17 +135,9 @@ namespace DataModule
         public void CreateNew(int id)
         {
             Delete(id);
-            ClearSlotRepository();
-            Save(id);
-        }
-
-        /// <summary>
-        /// 清空重建Slot資料庫
-        /// </summary>
-        private void ClearSlotRepository()
-        {
-            _slotTypeNameToDataRepositoryDic.Clear();
+            //直接重建
             InitSlotRepository();
+            Save(id);
         }
 
         /// <summary>
@@ -153,6 +145,7 @@ namespace DataModule
         /// </summary>
         private void InitSlotRepository()
         {
+            _slotTypeNameToDataRepositoryDic.Clear();
             var typeAndAttributeList = AttributeUtility.GetAllAtttibuteTypeList<DataRepositoryAttribute>();
             for (int i = 0; i < typeAndAttributeList.Count; i++)
             {
@@ -233,6 +226,7 @@ namespace DataModule
         /// </summary>
         private void InitGlobalRepository()
         {
+            _globalTypeNameToDataRepositoryDic.Clear();
             var typeAndAttributeList = AttributeUtility.GetAllAtttibuteTypeList<DataRepositoryAttribute>();
             for (int i = 0; i < typeAndAttributeList.Count; i++)
             {
