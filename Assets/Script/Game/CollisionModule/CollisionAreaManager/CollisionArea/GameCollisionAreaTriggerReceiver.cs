@@ -1,9 +1,6 @@
-﻿using CollisionModule;
-using GameMainModule;
+﻿using GameMainModule;
 using GameMainModule.Attack;
 using Logging;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CollisionModule
@@ -17,7 +14,7 @@ namespace CollisionModule
             _gameMainSystem = gameMainSystem;
         }
 
-        public void OnTrigger(int groupId, int colliderId, ICollisionAreaTriggerInfo triggerInfo)
+        public void OnTrigger(int groupId, int colliderId, RaycastHit hit, ICollisionAreaTriggerInfo triggerInfo)
         {
             if (!_gameMainSystem.UnitManager.TryGetUnitIdByColliderGroupId(groupId, out var unitId))
                 return;

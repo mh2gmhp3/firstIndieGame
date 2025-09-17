@@ -1,5 +1,4 @@
-﻿using Logging;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CollisionModule
 {
@@ -22,8 +21,9 @@ namespace CollisionModule
         /// </summary>
         /// <param name="groupId"></param>
         /// <param name="colliderId"></param>
+        /// <param name="hit"></param>
         /// <param name="triggerInfo"></param>
-        public void NotifyTriggerReceiver(int groupId, int colliderId, ICollisionAreaTriggerInfo triggerInfo);
+        public void NotifyTriggerReceiver(int groupId, int colliderId, RaycastHit hit, ICollisionAreaTriggerInfo triggerInfo);
     }
 
     /// <summary>
@@ -44,7 +44,9 @@ namespace CollisionModule
         /// </summary>
         /// <param name="groupId"></param>
         /// <param name="colliderId"></param>
-        public void OnTrigger(int groupId, int colliderId, ICollisionAreaTriggerInfo triggerInfo);
+        /// <param name="hit"></param>
+        /// <param name="triggerInfo"></param>
+        public void OnTrigger(int groupId, int colliderId, RaycastHit hit, ICollisionAreaTriggerInfo triggerInfo);
     }
 
     /// <summary>
@@ -120,9 +122,9 @@ namespace CollisionModule
             return _collisionAreaManager.TryGetColliderId(instanceId, out groupId, out colliderId);
         }
 
-        protected void NotifyTriggerReceiver(int groupId, int colliderId)
+        protected void NotifyTriggerReceiver(int groupId, int colliderId, RaycastHit hit)
         {
-            _collisionAreaManager.NotifyTriggerReceiver(groupId, colliderId, _setupData.TriggerInfo);
+            _collisionAreaManager.NotifyTriggerReceiver(groupId, colliderId, hit, _setupData.TriggerInfo);
         }
 
         public void Setup(int id, ICollisionAreaSetupData setupData)

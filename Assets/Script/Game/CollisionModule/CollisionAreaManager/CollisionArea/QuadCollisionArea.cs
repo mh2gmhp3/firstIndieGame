@@ -86,7 +86,7 @@ namespace CollisionModule
 
             _colliedGroupIdSet.Add(groupId);
 
-            NotifyTriggerReceiver(groupId, colliderId);
+            NotifyTriggerReceiver(groupId, colliderId, hit);
         }
 
         public override void DoDrawGizmos()

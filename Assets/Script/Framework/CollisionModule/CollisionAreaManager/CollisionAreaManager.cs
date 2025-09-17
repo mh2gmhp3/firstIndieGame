@@ -259,12 +259,12 @@ namespace CollisionModule
             return group.TryGetColliderId(instanceId, out colliderId);
         }
 
-        void ICollisionAreaManager.NotifyTriggerReceiver(int groupId, int colliderId, ICollisionAreaTriggerInfo triggerInfo)
+        void ICollisionAreaManager.NotifyTriggerReceiver(int groupId, int colliderId, RaycastHit hit, ICollisionAreaTriggerInfo triggerInfo)
         {
             if (_collisionAreaTriggerReceiver == null)
                 return;
 
-            _collisionAreaTriggerReceiver.OnTrigger(groupId, colliderId, triggerInfo);
+            _collisionAreaTriggerReceiver.OnTrigger(groupId, colliderId, hit, triggerInfo);
         }
 
         #endregion

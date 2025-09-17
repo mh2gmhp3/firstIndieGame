@@ -7,7 +7,7 @@ namespace CollisionModule
 {
     public class TestCollisionAreaTriggerReceiver : ICollisionAreaTriggerReceiver
     {
-        public void OnTrigger(int groupId, int colliderId, ICollisionAreaTriggerInfo triggerInfo)
+        public void OnTrigger(int groupId, int colliderId, RaycastHit hit, ICollisionAreaTriggerInfo triggerInfo)
         {
             Log.LogInfo($"OnTrigger GroupId:{groupId} ColliderId:{colliderId}", true);
         }
@@ -76,7 +76,7 @@ namespace CollisionModule
 
             _colliedGroupIdSet.Add(groupId);
 
-            NotifyTriggerReceiver(groupId, colliderId);
+            NotifyTriggerReceiver(groupId, colliderId, _hit);
         }
 
         public override void DoDrawGizmos()
