@@ -7,7 +7,6 @@ namespace GameMainModule
 {
     public partial class GameMainSystem
     {
-        //TODO need to init?
         private CollisionAreaManager _collisionAreaManager = new CollisionAreaManager();
 
         #region Test
@@ -20,10 +19,11 @@ namespace GameMainModule
 
         #endregion
 
+        #region Test
+
         private void CreateTestCollisionArea(float duration)
         {
             var testCollisionAreaSetupData = new TestCollisionAreaSetupData(duration);
-            testCollisionAreaSetupData.TriggerReceiver = new TestCollisionAreaTriggerReceiver();
             CollisionAreaManager.CreateCollisionArea(testCollisionAreaSetupData);
         }
 
@@ -35,6 +35,13 @@ namespace GameMainModule
 
             _testRepeatCollisionAreaElapsedTime = 0;
             CreateTestCollisionArea(_testRepeatCollisionAreaExistTime);
+        }
+
+        #endregion
+
+        public void InitCollision()
+        {
+            _collisionAreaManager.SetCollisionAreaTriggerReceiver(new GameCollisionAreaTriggerReceiver(this));
         }
     }
 }

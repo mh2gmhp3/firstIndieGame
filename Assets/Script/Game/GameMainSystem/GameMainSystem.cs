@@ -33,6 +33,10 @@ namespace GameMainModule
             {
                 InitGameScene();
             }
+            else if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameCollision)
+            {
+                InitCollision();
+            }
             else if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameMain)
             {
                 InitGameMain();

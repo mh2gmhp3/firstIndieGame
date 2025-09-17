@@ -77,13 +77,12 @@ namespace GameMainModule
             _characterController.SetNowCombination(0);
 
             //測試註冊Collider
-            int groupId = CollisionAreaManager.RegisterCollider(unitData.GetColliderData());
+            _unitManager.AddUnit(_unitManager.AllocUnitId(), testCharacterGameUnit);
 
             var testNpcCharacterGo = ObjectUtility.InstantiateWithoutClone(testCharacterAssets);
             var testNpcCharacterGameUnit = testNpcCharacterGo.GetComponent<GameUnit>();
             testNpcCharacterGameUnit.transform.position = new Vector3(5, 0, 0);
-            var unitNpcData = testNpcCharacterGameUnit.UnitData;
-            CollisionAreaManager.RegisterCollider(unitNpcData.GetColliderData());
+            _unitManager.AddUnit(_unitManager.AllocUnitId(), testNpcCharacterGameUnit);
         }
     }
 }

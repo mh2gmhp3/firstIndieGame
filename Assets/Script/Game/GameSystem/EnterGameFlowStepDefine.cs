@@ -9,6 +9,7 @@
             Init_GameTest = 5,
             Init_GameScene = 6,
             Init_GameMain = 7,
+            Init_GameCollision = 8,
         }
     }
 }
