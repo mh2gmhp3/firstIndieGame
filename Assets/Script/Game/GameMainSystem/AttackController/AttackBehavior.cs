@@ -8,6 +8,14 @@ using UnityEngine;
 
 namespace GameMainModule.Attack
 {
+    /// <summary>
+    /// 假的角色攻擊觸發資料
+    /// </summary>
+    public class FakeCharacterTriggerInfo : ICollisionAreaTriggerInfo
+    {
+        public int Attack = 20;
+    }
+
     [Serializable]
     public class AttackBehavior
     {
@@ -24,6 +32,7 @@ namespace GameMainModule.Attack
 
         private UnitMovementSetting _unitMovementSetting;
         private AttackBehaviorAssetSettingData _setting;
+        private FakeCharacterTriggerInfo _fakeCharacterTriggerInfo = new FakeCharacterTriggerInfo();
 
         private int _collisionAreaId = 0;
 
@@ -91,12 +100,16 @@ namespace GameMainModule.Attack
             if (_elapsedTime < _setting.CollisionAreaStartTime)
                 return;
 
-            _collisionAreaId = CollisionAreaManager.CreateCollisionArea(GetCollisionAreaSetupData(_unitMovementSetting, _setting));
+            _collisionAreaId = CollisionAreaManager.CreateCollisionArea(GetCollisionAreaSetupData(
+                _unitMovementSetting,
+                _setting,
+                _fakeCharacterTriggerInfo));
         }
 
         private static ICollisionAreaSetupData GetCollisionAreaSetupData(
             UnitMovementSetting unitMovementSetting,
-            AttackBehaviorAssetSettingData attackBehaviorAssetSettingData)
+            AttackBehaviorAssetSettingData attackBehaviorAssetSettingData,
+            ICollisionAreaTriggerInfo triggerInfo)
         {
             switch (attackBehaviorAssetSettingData.CollisionAreaType)
             {
@@ -109,7 +122,7 @@ namespace GameMainModule.Attack
                         attackBehaviorAssetSettingData.CollisionAreaDuration,
                         5f,
                         5f,
-                        new TestCollisionAreaTriggerReceiver());
+                        triggerInfo);
             }
 
             return new TestCollisionAreaSetupData(1);

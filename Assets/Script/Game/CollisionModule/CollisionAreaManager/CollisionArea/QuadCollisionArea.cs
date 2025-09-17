@@ -12,13 +12,18 @@ namespace CollisionModule
         public Vector3 WorldPosition { get; set; }
         public Vector3 Direction { get; set; }
         public float TimeDuration { get; set; }
-
-        public ICollisionAreaTriggerReceiver TriggerReceiver { get; set; }
+        public ICollisionAreaTriggerInfo TriggerInfo { get; set; }
 
         public float Width;
         public float Distance;
 
-        public QuadCollisionAreaSetupData(Vector3 worldPos, Vector3 direction, float duration, float width, float distance, ICollisionAreaTriggerReceiver receiver)
+        public QuadCollisionAreaSetupData(
+            Vector3 worldPos,
+            Vector3 direction,
+            float duration,
+            float width,
+            float distance,
+            ICollisionAreaTriggerInfo triggerInfo)
         {
             WorldPosition = worldPos;
             Direction = direction;
@@ -28,7 +33,7 @@ namespace CollisionModule
             Width = width;
             Distance = distance;
 
-            TriggerReceiver = receiver;
+            TriggerInfo = triggerInfo;
         }
     }
 
@@ -64,11 +69,11 @@ namespace CollisionModule
 
         public override void DoUpdate()
         {
-            var dir = Quaternion.Euler(0, 90, 0) * _direction;
-            var startPos = _worldPosition + dir * (_width / 2);
-            var endPos = _worldPosition - dir * (_width / 2);
-            _curPos = Vector3.Lerp(startPos, endPos, (Time.time - _startTime) / _timeDuration);
-            if (!Physics.Raycast(_curPos, _direction, out var hit, _distance))
+            var dir = Quaternion.Euler(0, 90, 0) * _setupData.Direction;
+            var startPos = _setupData.WorldPosition + dir * (_width / 2);
+            var endPos = _setupData.WorldPosition - dir * (_width / 2);
+            _curPos = Vector3.Lerp(startPos, endPos, (Time.time - _startTime) / _setupData.TimeDuration);
+            if (!Physics.Raycast(_curPos, _setupData.Direction, out var hit, _distance))
             {
                 return;
             }
@@ -86,7 +91,7 @@ namespace CollisionModule
 
         public override void DoDrawGizmos()
         {
-            Debug.DrawLine(_curPos, _curPos + _direction * _distance, Color.blue);
+            Debug.DrawLine(_curPos, _curPos + _setupData.Direction * _distance, Color.blue);
         }
     }
 }

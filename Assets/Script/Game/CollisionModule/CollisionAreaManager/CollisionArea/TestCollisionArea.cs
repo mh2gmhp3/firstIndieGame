@@ -7,7 +7,7 @@ namespace CollisionModule
 {
     public class TestCollisionAreaTriggerReceiver : ICollisionAreaTriggerReceiver
     {
-        public void OnTrigger(int groupId, int colliderId)
+        public void OnTrigger(int groupId, int colliderId, ICollisionAreaTriggerInfo triggerInfo)
         {
             Log.LogInfo($"OnTrigger GroupId:{groupId} ColliderId:{colliderId}", true);
         }
@@ -20,8 +20,7 @@ namespace CollisionModule
         public Vector3 WorldPosition { get; set; }
         public Vector3 Direction { get; set; }
         public float TimeDuration { get; set; }
-
-        public ICollisionAreaTriggerReceiver TriggerReceiver { get; set; }
+        public ICollisionAreaTriggerInfo TriggerInfo { get; set; }
 
         public TestCollisionAreaSetupData(float duration)
         {
@@ -61,8 +60,8 @@ namespace CollisionModule
             }
 
             if (!Physics.Raycast(
-                _worldPosition,
-                _direction,
+                _setupData.WorldPosition,
+                _setupData.Direction,
                 out _hit,
                 1))
             {
@@ -84,18 +83,18 @@ namespace CollisionModule
         {
             var oriColor = Gizmos.color;
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(_worldPosition, 0.1f);
+            Gizmos.DrawWireSphere(_setupData.WorldPosition, 0.1f);
             if (_hit.collider == null)
                 return;
 
-            Debug.DrawLine(_worldPosition, _hit.point, Color.red);
+            Debug.DrawLine(_setupData.WorldPosition, _hit.point, Color.red);
             Gizmos.DrawWireSphere(_hit.point, 0.1f);
             Gizmos.color = oriColor;
 
             Color ori = Handles.color;
             Handles.color = Color.red;
             Handles.DrawSolidArc(
-                _worldPosition,
+                _setupData.WorldPosition,
                 Vector3.up,
                 Vector3.forward,
                 90,

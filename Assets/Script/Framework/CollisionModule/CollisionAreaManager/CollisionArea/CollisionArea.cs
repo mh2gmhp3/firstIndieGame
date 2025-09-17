@@ -16,6 +16,22 @@ namespace CollisionModule
         /// <param name="colliderId"></param>
         /// <returns></returns>
         public bool TryGetColliderId(int instanceId, out int groupId, out int colliderId);
+
+        /// <summary>
+        /// 通知觸發接收者
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="colliderId"></param>
+        /// <param name="triggerInfo"></param>
+        public void NotifyTriggerReceiver(int groupId, int colliderId, ICollisionAreaTriggerInfo triggerInfo);
+    }
+
+    /// <summary>
+    /// 碰撞區域觸發後的訊息
+    /// </summary>
+    public interface ICollisionAreaTriggerInfo
+    {
+
     }
 
     /// <summary>
@@ -28,7 +44,7 @@ namespace CollisionModule
         /// </summary>
         /// <param name="groupId"></param>
         /// <param name="colliderId"></param>
-        public void OnTrigger(int groupId, int colliderId);
+        public void OnTrigger(int groupId, int colliderId, ICollisionAreaTriggerInfo triggerInfo);
     }
 
     /// <summary>
@@ -53,13 +69,14 @@ namespace CollisionModule
         /// 持續時間
         /// </summary>
         public float TimeDuration { get; set; }
+
         /// <summary>
-        /// 觸發接收者
+        /// 觸發時使用的資訊
         /// </summary>
-        public ICollisionAreaTriggerReceiver TriggerReceiver { get; set; }
+        public ICollisionAreaTriggerInfo TriggerInfo { get; set; }
     }
 
-    //先嘗試看看把碰撞後要觸發的行為在CollsionArea內處裡掉 只會有跟CollisionAreaManager碰撞單位的行為
+    //先嘗試看看把碰撞後要觸發的行為在CollisionArea內處裡掉 只會有跟CollisionAreaManager碰撞單位的行為
     /// <summary>
     /// 碰撞區域
     /// </summary>
@@ -71,14 +88,10 @@ namespace CollisionModule
         private int _areaType = 0;
         private int _id = 0;
 
-        protected Vector3 _worldPosition;
-        protected Vector3 _direction;
+        protected ICollisionAreaSetupData _setupData = null;
 
         protected float _startTime;
         protected float _endTime;
-        protected float _timeDuration;
-
-        protected ICollisionAreaTriggerReceiver _triggerReceiver;
 
         public int AreaType => _areaType;
 
@@ -92,7 +105,7 @@ namespace CollisionModule
         {
             get
             {
-                return Mathf.Clamp01(ElapsedTime / _timeDuration);
+                return Mathf.Clamp01(ElapsedTime / _setupData.TimeDuration);
             }
         }
 
@@ -109,29 +122,19 @@ namespace CollisionModule
 
         protected void NotifyTriggerReceiver(int groupId, int colliderId)
         {
-            if (_triggerReceiver == null)
-            {
-                Log.LogWarning($"TriggerReceiver not set, notify failed, GroupId:{groupId} ColliderId:{colliderId}");
-                return;
-            }
-
-            _triggerReceiver.OnTrigger(groupId, colliderId);
+            _collisionAreaManager.NotifyTriggerReceiver(groupId, colliderId, _setupData.TriggerInfo);
         }
 
         public void Setup(int id, ICollisionAreaSetupData setupData)
         {
             _id = id;
-
-            _worldPosition = setupData.WorldPosition;
-            _direction = setupData.Direction;
+            _setupData = setupData;
 
             _startTime = Time.time;
             _endTime = Time.time + setupData.TimeDuration;
 
             //強制限制一定要0.01秒持續時間
-            _timeDuration = Mathf.Max(setupData.TimeDuration, 0.01f);
-
-            _triggerReceiver = setupData.TriggerReceiver;
+            setupData.TimeDuration = Mathf.Max(setupData.TimeDuration, 0.01f);
 
             DoSetup(setupData);
         }

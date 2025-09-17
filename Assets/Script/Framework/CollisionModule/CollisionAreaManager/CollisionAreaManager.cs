@@ -127,6 +127,8 @@ namespace CollisionModule
         private List<CollisionArea> _endCollisionAreaList =
             new List<CollisionArea>();
 
+        private ICollisionAreaTriggerReceiver _collisionAreaTriggerReceiver;
+
         #endregion
 
         private static CollisionAreaManager _instance = null;
@@ -137,7 +139,16 @@ namespace CollisionModule
             CollectionCollisionAreaType();
         }
 
-        #region Pubilc Method Update DrawGizmos
+        #region Public Method
+
+        public void SetCollisionAreaTriggerReceiver(ICollisionAreaTriggerReceiver collisionAreaTriggerReceiver)
+        {
+            _collisionAreaTriggerReceiver = collisionAreaTriggerReceiver;
+        }
+
+        #endregion
+
+        #region Pubilc Unity Method  Update DrawGizmos
 
         /// <summary>
         /// Update時需要自行呼叫 不呼叫CollisionArea將不會更新
@@ -248,13 +259,21 @@ namespace CollisionModule
             return group.TryGetColliderId(instanceId, out colliderId);
         }
 
+        void ICollisionAreaManager.NotifyTriggerReceiver(int groupId, int colliderId, ICollisionAreaTriggerInfo triggerInfo)
+        {
+            if (_collisionAreaTriggerReceiver == null)
+                return;
+
+            _collisionAreaTriggerReceiver.OnTrigger(groupId, colliderId, triggerInfo);
+        }
+
         #endregion
 
         #region Private Method ColliderGroup
 
         private int GetNextGroupId()
         {
-            return _nextGroupId++;
+            return ++_nextGroupId;
         }
 
         private int InternalRegisterCollider(RegisterColliderData colliderData)
@@ -378,7 +397,7 @@ namespace CollisionModule
 
         private int GetNextAreaId()
         {
-            return _nextAreaId++;
+            return ++_nextAreaId;
         }
 
         private int InternalCreateCollisionArea(ICollisionAreaSetupData setupData)
