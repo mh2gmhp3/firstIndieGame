@@ -75,7 +75,8 @@ namespace DataModule
                 var typeName = typeNameToDataRepository.Key;
                 var dataRepository = typeNameToDataRepository.Value;
 
-                dataRepository.Save(dataFolderPath, typeName);
+                var path = Path.Combine(dataFolderPath, typeName);
+                SaveJsonFormat(path, dataRepository);
             }
         }
 
@@ -96,7 +97,8 @@ namespace DataModule
                 var typeName = typeNameToDataRepository.Key;
                 var dataRepository = typeNameToDataRepository.Value;
 
-                dataRepository.Load(dataFolderPath, typeName);
+                var path = Path.Combine(dataFolderPath, typeName);
+                LoadJsonFormat(path, dataRepository);
             }
             return true;
         }
@@ -197,7 +199,8 @@ namespace DataModule
                 var typeName = typeNameToDataRepository.Key;
                 var dataRepository = typeNameToDataRepository.Value;
 
-                dataRepository.Save(_dataRootFolderPath, typeName);
+                var path = Path.Combine(_dataRootFolderPath, typeName);
+                SaveJsonFormat(path, dataRepository);
             }
         }
 
@@ -216,7 +219,8 @@ namespace DataModule
                 var typeName = typeNameToDataRepository.Key;
                 var dataRepository = typeNameToDataRepository.Value;
 
-                dataRepository.Load(_dataRootFolderPath, typeName);
+                var path = Path.Combine(_dataRootFolderPath, typeName);
+                LoadJsonFormat(path, dataRepository);
             }
             return true;
         }
@@ -245,6 +249,32 @@ namespace DataModule
                 var dataRepository = System.Activator.CreateInstance(type, this, attribute.Version) as IDataRepository;
                 _globalTypeNameToDataRepositoryDic.Add(typeName, dataRepository);
             }
+        }
+
+        #endregion
+
+        #region JsomFormat Save Load
+
+        private void SaveJsonFormat(string path, IDataRepository dataRepository)
+        {
+            if (dataRepository == null)
+                return;
+
+            var json = dataRepository.GetJsonFormat();
+            File.WriteAllText(path, json, System.Text.Encoding.UTF8);
+        }
+
+        private void LoadJsonFormat(string path, IDataRepository dataRepository)
+        {
+            if (dataRepository == null)
+                return;
+
+            if (!File.Exists(path))
+            {
+                Log.LogWarning($"DataManager.LoadJsonFormat, file can not found Path:{path}");
+                return;
+            }
+            dataRepository.LoadJsonFormat(File.ReadAllText(path, System.Text.Encoding.UTF8));
         }
 
         #endregion

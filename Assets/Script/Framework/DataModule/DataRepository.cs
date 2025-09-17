@@ -7,8 +7,8 @@ namespace DataModule
 {
     public interface IDataRepository
     {
-        void Save(string dataFolderPath, string name);
-        void Load(string dataFolderPath, string name);
+        string GetJsonFormat();
+        void LoadJsonFormat(string json);
     }
 
     public class DataRepositoryAttribute : Attribute
@@ -43,27 +43,18 @@ namespace DataModule
 
         protected virtual void OnLoad(int currentVersion, int loadedVersion) { }
 
-        void IDataRepository.Save(string dataFolderPath, string name)
+        string IDataRepository.GetJsonFormat()
         {
-            var path = Path.Combine(dataFolderPath, name);
             var saveData = new SaveData
             {
                 Version = _version,
                 Data = _data
             };
-            var json = JsonConvert.SerializeObject(saveData);
-            File.WriteAllText(path, json, System.Text.Encoding.UTF8);
+            return JsonConvert.SerializeObject(saveData);
         }
 
-        void IDataRepository.Load(string dataFolderPath, string name)
+        void IDataRepository.LoadJsonFormat(string json)
         {
-            var path = Path.Combine(dataFolderPath, name);
-            if (!File.Exists(path))
-            {
-                Log.LogWarning($"{this.GetType().Name}.Load, file can not found Path:{path}");
-                return;
-            }
-            var json = File.ReadAllText(path, System.Text.Encoding.UTF8);
             var saveData = JsonConvert.DeserializeObject<SaveData>(json);
             _data = saveData.Data;
             OnLoad(_version, saveData.Version);
