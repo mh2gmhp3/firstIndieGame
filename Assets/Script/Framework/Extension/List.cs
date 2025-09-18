@@ -38,5 +38,51 @@ namespace Extension
                 list.RemoveAt(i);
             }
         }
+
+        public static void MoveToNext<T>(this IList<T> list, int index)
+        {
+            if (list == null)
+                return;
+            if (index >= list.Count || index < 0)
+                return;
+
+            if (index + 1 < list.Count)
+            {
+                var temp = list[index + 1];
+                list[index + 1] = list[index];
+                list[index] = temp;
+            }
+            else
+            {
+                var temp = list[index];
+                //刪除原本的
+                list.RemoveAt(index);
+                //插入第一個
+                list.Insert(0, temp);
+            }
+        }
+
+        public static void MoveToPrevious<T>(this IList<T> list, int index)
+        {
+            if (list == null)
+                return;
+            if (index >= list.Count || index < 0)
+                return;
+
+            if (index - 1 > 0)
+            {
+                var temp = list[index - 1];
+                list[index - 1] = list[index];
+                list[index] = temp;
+            }
+            else
+            {
+                var temp = list[index];
+                //刪除原本的
+                list.RemoveAt(index);
+                //加入最後
+                list.Add(temp);
+            }
+        }
     }
 }
