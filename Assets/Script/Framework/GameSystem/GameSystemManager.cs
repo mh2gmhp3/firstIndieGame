@@ -152,11 +152,11 @@ namespace GameSystem
             Log.LogInfo("InitAllGameSystem");
         }
 
-        private void OniIitialized()
+        private void OnInitialized()
         {
             _enterGameFlowStepProcessor.SetActive(true);
             SetState(GameState.ProcessingEnterGameStep);
-            Log.LogInfo("OniIitialized");
+            Log.LogInfo("OnInitialized");
         }
 
         private void OnEnterGameFlowStepFinish()
@@ -173,7 +173,7 @@ namespace GameSystem
             {
                 bool finish = _initProcessor.ProcessInit();
                 if (finish)
-                    OniIitialized();
+                    OnInitialized();
                 return;
             }
 
