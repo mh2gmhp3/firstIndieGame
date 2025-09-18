@@ -6,6 +6,7 @@ using UEditor = UnityEditor.Editor;
 using Logging;
 using GameSystem;
 using System;
+using Extension;
 
 namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
 {
@@ -23,7 +24,7 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
         private void OnEnable()
         {
             _instance = target as GameSystemEnterGameFlowStepSetting;
-            InitEdiotrSetting();
+            InitEditorSetting();
         }
 
         public override void OnInspectorGUI()
@@ -43,7 +44,7 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
             DrawStepConfigGUI();
         }
 
-        private void InitEdiotrSetting()
+        private void InitEditorSetting()
         {
             RefreshStepConfigSetting();
         }
@@ -116,12 +117,21 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
                             GUILayout.Label(stepConfig.Name);
                         }
                         GUILayout.FlexibleSpace();
+                        if (GUILayout.Button("+"))
+                        {
+                            _instance.EnterGameFlowStep.MoveToPrevious(i);
+                        }
+                        if (GUILayout.Button("-"))
+                        {
+                            _instance.EnterGameFlowStep.MoveToNext(i);
+                        }
                         if (GUILayout.Button("X"))
                         {
                             _removeStepList.Add(stepId);
                         }
                     }
                     EditorGUILayout.EndHorizontal();
+
                 }
             }
             EditorGUILayout.EndVertical();
@@ -171,7 +181,21 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
                 var stepConfig = _instance.EnterGameFlowStepConfigs[i];
                 EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
                 {
-                    GUILayout.Label($"{stepConfig.Id}", GUILayout.Width(50));
+                    var id = stepConfig.Id;
+                    EditorGUI.BeginChangeCheck();
+                    id = EditorGUILayout.IntField(id, GUILayout.Width(50));
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        var res = _instance.EnterGameFlowStepConfigs.Find(s => s.Id == id);
+                        if (res == null)
+                        {
+                            var index = _instance.EnterGameFlowStep.IndexOf(stepConfig.Id);
+                            if (index >= 0)
+                                _instance.EnterGameFlowStep[index] = id;
+                            stepConfig.Id = id;
+                            RefreshStepConfigSetting();
+                        }
+                    }
                     GUILayout.Label(stepConfig.Name);
                     GUILayout.FlexibleSpace();
                     if (!_instance.EnterGameFlowStep.Contains(stepConfig.Id))
