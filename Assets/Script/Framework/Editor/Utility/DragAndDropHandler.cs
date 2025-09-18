@@ -16,7 +16,7 @@ namespace Framework.Editor.Utility
         /// 拖曳區域結構
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public struct DragAndDropArea<T>
+        public struct DragAndDropArea
         {
             public Rect Area;
             public Action<T> Action;
@@ -31,7 +31,7 @@ namespace Framework.Editor.Utility
         /// <summary>
         /// 拖曳區域
         /// </summary>
-        private List<DragAndDropArea<T>> _areaList = new List<DragAndDropArea<T>>();
+        private List<DragAndDropArea> _areaList = new List<DragAndDropArea>();
 
         /// <summary>
         /// 清空拖曳區域
@@ -48,7 +48,7 @@ namespace Framework.Editor.Utility
         /// <param name="action"></param>
         public void AddArea(Rect rect, Action<T> action)
         {
-            _areaList.Add(new DragAndDropArea<T>(rect, action));
+            _areaList.Add(new DragAndDropArea(rect, action));
         }
 
         /// <summary>
