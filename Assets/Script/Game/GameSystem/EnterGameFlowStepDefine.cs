@@ -4,12 +4,13 @@
     {
         public enum EnterGameFlowStep
         {
-            Init_GameCamera = 3,
-            Init_GameController = 4,
-            Init_GameTest = 5,
-            Init_GameScene = 6,
-            Init_GameMain = 7,
-            Init_GameCollision = 8,
+            Init_GameCamera = 101,
+            Init_GameController = 102,
+            Init_GameScene = 103,
+            Init_GameCollision = 104,
+            Init_GameMain = 105,
+
+            Init_GameTest = 200,
         }
     }
 }
