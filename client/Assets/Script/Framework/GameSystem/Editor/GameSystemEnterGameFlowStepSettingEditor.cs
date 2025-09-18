@@ -42,6 +42,11 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
             DrawStepGUI();
             EditorGUILayout.Space(10);
             DrawStepConfigGUI();
+
+            DrawSaveGUI();
+
+            serializedObject.Update();
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void InitEditorSetting()
@@ -221,6 +226,19 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
             {
                 RefreshStepConfigSetting();
                 _removeStepConfigList.Clear();
+            }
+        }
+
+        #endregion
+
+        #region DrawSaveGUI
+
+        private void DrawSaveGUI()
+        {
+            if (GUILayout.Button("保存"))
+            {
+                EditorUtility.SetDirty(_instance);
+                AssetDatabase.SaveAssets();
             }
         }
 
