@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53af381aaa5164a45b9545fb97c726a5, type: 3}
   m_Name: GameSystemEnterGameFlowStepSetting_TestMode
   m_EditorClassIdentifier: 
-  EnterGameFlowStep: 01000000020000000300000065000000660000006700000068000000c8000000
+  EnterGameFlowStep: 0100000002000000030000000400000065000000660000006700000068000000c8000000
   EnterGameFlowStepConfigs:
   - Id: 1
     Name: Init_BaseMainCamera
@@ -20,6 +20,8 @@ MonoBehaviour:
     Name: Init_GUI_Root
   - Id: 3
     Name: Init_FormTable
+  - Id: 4
+    Name: Init_FormTableDone
   - Id: 101
     Name: Init_GameCamera
   - Id: 102
