@@ -1,17 +1,15 @@
 ﻿using AssetModule;
-using DataModule;
 using GameSystem;
 using Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Windows.Speech;
 using Utility;
 
 namespace FormModule
 {
-    public interface ITableData
+    public interface ITableRow
     {
         int Id { get; set; }
     }

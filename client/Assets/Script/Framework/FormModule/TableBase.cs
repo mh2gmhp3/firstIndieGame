@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace FormModule
 {
-    public abstract class TableBase<T> : ITable where T : ITableData
+    public abstract class TableBase<T> : ITable where T : ITableRow
     {
         private readonly List<T> _rows = new List<T>();
         private readonly Dictionary<int, T> _rowDic = new Dictionary<int, T>();
