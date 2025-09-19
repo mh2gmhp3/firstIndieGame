@@ -1,5 +1,6 @@
 ﻿using AssetModule;
 using CameraModule;
+using FormModule;
 using GameSystem;
 using InputModule;
 using Logging;
@@ -17,7 +18,11 @@ namespace GameMainModule
 
         protected override void DoEnterGameFlowEnterStep(int flowStep)
         {
-            if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameCamera)
+            if (flowStep == (int)EnterGameFlowStepDefine.FrameworkEnterGameFlowStep.Init_FormTableDone)
+            {
+                FormSystem.InitGameTableGroup();
+            }
+            else if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameCamera)
             {
                 InitCamera();
             }
