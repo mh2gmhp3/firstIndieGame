@@ -36,7 +36,7 @@ namespace FormModule
     /// <para>TODO 讀取跟反序列化先用Queue，之後真的有一次讀整個卡住的再把他分次處理</para>
     /// </summary>
     [GameSystem(GameSystemPriority.FORM_SYSTEM)]
-    public class FormSystem : BaseGameSystem<FormSystem>
+    public partial class FormSystem : BaseGameSystem<FormSystem>
     {
         private class TableInfo
         {
@@ -54,8 +54,8 @@ namespace FormModule
         private enum InitState
         {
             None,
-            InitTableInstance,
-            InitTableInstanceDone,
+            CreateTableInstance,
+            CreateTableInstanceDone,
             LoadTable,
             LoadTableDone,
             Deserialize,
@@ -94,10 +94,10 @@ namespace FormModule
                 switch (_initState)
                 {
                     case InitState.None:
-                    case InitState.InitTableInstance:
-                        InitTable();
+                    case InitState.CreateTableInstance:
+                        CreateTableInstance();
                         break;
-                    case InitState.InitTableInstanceDone:
+                    case InitState.CreateTableInstanceDone:
                     case InitState.LoadTable:
                         LoadTable();
                         break;
@@ -114,9 +114,31 @@ namespace FormModule
             return true;
         }
 
-        private void InitTable()
+        /// <summary>
+        /// 獲取Table 如果是無效類型將會回傳null
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static  T GetTable<T>() where T : class, ITable
         {
-            _initState = InitState.InitTableInstance;
+            if (_instance == null)
+                return null;
+
+            var typeName = typeof(T).Name.ToLower();
+            if (!_instance._typeNameToTableInfoDic.TryGetValue(typeName, out var tableInfo) || tableInfo.Table == null)
+            {
+                Log.LogError($"FormSystem.GetTable table not found Type:{typeName}");
+                return null;
+            }
+
+            return (T)tableInfo.Table;
+        }
+
+        #region Init
+
+        private void CreateTableInstance()
+        {
+            _initState = InitState.CreateTableInstance;
             var typeAndAttributeList = AttributeUtility.GetAllAtttibuteTypeList<TableAttribute>();
             for (int i = 0; i < typeAndAttributeList.Count; i++)
             {
@@ -134,7 +156,7 @@ namespace FormModule
                 var tableInfo = new TableInfo(typeName, attribute.SheetName, table);
                 _typeNameToTableInfoDic.Add(typeName, tableInfo);
             }
-            _initState = InitState.InitTableInstanceDone;
+            _initState = InitState.CreateTableInstanceDone;
         }
 
         private void LoadTable()
@@ -211,5 +233,7 @@ namespace FormModule
             _typeNameToTextAssetDic.Clear();
             _deserializeTableQueue.Clear();
         }
+
+        #endregion
     }
 }
