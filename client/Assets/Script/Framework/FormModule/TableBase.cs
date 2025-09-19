@@ -1,10 +1,7 @@
 ﻿using Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using static UnityEditor.Progress;
 
 namespace FormModule
 {
@@ -37,6 +34,16 @@ namespace FormModule
                 }
                 _rowDic[row.Id] = row;
             }
+            DoInit();
         }
+
+        public bool TryGetData(int id, out T data)
+        {
+            return _rowDic.TryGetValue(id, out data);
+        }
+
+        public List<T> GetDataList() { return _rows; }
+
+        protected virtual void DoInit() { }
     }
 }
