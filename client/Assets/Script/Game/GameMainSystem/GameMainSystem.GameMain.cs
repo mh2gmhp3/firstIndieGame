@@ -1,4 +1,6 @@
-﻿using Logging;
+﻿using DataModule;
+using FormModule;
+using Logging;
 using System.Collections;
 using System.Collections.Generic;
 using UIModule;
@@ -19,18 +21,33 @@ namespace GameMainModule
         public static void StartNewGame()
         {
             Log.LogInfo("開始新遊戲");
+            DataManager.CreateNew(1);
+            var attackBehaviorDataRepo = DataManager.GetDataRepository<AttackBehaviorDataRepository>();
+            var attackBehaviorDataSettingList = FormSystem.Table.AttackBehaviorSettingTable.GetDataList();
+            for (int i = 0; i < attackBehaviorDataSettingList.Count; i++)
+            {
+                attackBehaviorDataRepo.AddData(attackBehaviorDataSettingList[i].Id);
+            }
+            DataManager.Save(1);
             _instance.InitGameTest();
         }
 
         public static void ContinueGame()
         {
-            //load with playerprefs
             Log.LogInfo("繼續遊戲");
+            if (!_instance._dataManager.Exist(1))
+                return;
+            _instance._dataManager.Load(1);
+            _instance.InitGameTest();
         }
 
         public static void LoadGame()
         {
             Log.LogInfo("讀取遊戲存檔");
+            if (!_instance._dataManager.Exist(1))
+                return;
+            _instance._dataManager.Load(1);
+            _instance.InitGameTest();
         }
 
         public static void Setting()

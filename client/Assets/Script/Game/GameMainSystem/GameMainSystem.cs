@@ -44,6 +44,7 @@ namespace GameMainModule
             }
             else if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameMain)
             {
+                InitGameData();
                 InitGameMain();
             }
         }

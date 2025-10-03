@@ -49,11 +49,13 @@ namespace UIModule.Game
         private void OnWidgetEvent_Widget_Button_Continue(WidgetEventData eventData)
         {
             GameMainSystem.ContinueGame();
+            SetVisible(false);
         }
 
         private void OnWidgetEvent_Widget_Button_Load(WidgetEventData eventData)
         {
             GameMainSystem.LoadGame();
+            SetVisible(false);
         }
 
         private void OnWidgetEvent_Widget_Button_Setting(WidgetEventData eventData)

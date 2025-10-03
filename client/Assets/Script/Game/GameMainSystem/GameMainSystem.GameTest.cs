@@ -55,7 +55,7 @@ namespace GameMainModule
             //測試攻擊
             List<AttackCombination> attackCombinationList = new List<AttackCombination>();
             List<AttackBehavior> mainAttackBehaviorList = new List<AttackBehavior>();
-            if (attackBehaviorAssetSetting.TryGetGroupData(1, out var groupData))
+            if (attackBehaviorAssetSetting.TryGetGroupData(100, out var groupData))
             {
                 for (int i = 0; i < groupData.DataList.Count; i++)
                 {
@@ -64,7 +64,7 @@ namespace GameMainModule
                 }
             }
             List<AttackBehavior> subAttackBehaviorList = new List<AttackBehavior>();
-            if (attackBehaviorAssetSetting.TryGetGroupData(1, out var groupDataSub))
+            if (attackBehaviorAssetSetting.TryGetGroupData(100, out var groupDataSub))
             {
                 for (int i = 0; i < groupData.DataList.Count; i++)
                 {
@@ -72,7 +72,7 @@ namespace GameMainModule
                     subAttackBehaviorList.Add(new AttackBehavior(unitMovementSetting, data));
                 }
             }
-            attackCombinationList.Add(new AttackCombination(1, mainAttackBehaviorList, subAttackBehaviorList));
+            attackCombinationList.Add(new AttackCombination(100, mainAttackBehaviorList, subAttackBehaviorList));
             _characterController.SetCombinationList(attackCombinationList);
             _characterController.SetNowCombination(0);
 
@@ -83,6 +83,8 @@ namespace GameMainModule
             var testNpcCharacterGameUnit = testNpcCharacterGo.GetComponent<GameUnit>();
             testNpcCharacterGameUnit.transform.position = new Vector3(5, 0, 0);
             _unitManager.AddUnit(_unitManager.AllocUnitId(), testNpcCharacterGameUnit);
+
+            UISystem.OpenUIWindow("Window_Game", null);
         }
     }
 }
