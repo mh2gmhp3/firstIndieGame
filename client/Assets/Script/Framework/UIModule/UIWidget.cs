@@ -31,6 +31,11 @@ namespace UIModule
         /// </summary>
         private WidgetEvent _widgetEvent = null;
 
+        public void Awake()
+        {
+            Init();
+        }
+
         /// <summary>
         /// 註冊Widget事件
         /// </summary>
