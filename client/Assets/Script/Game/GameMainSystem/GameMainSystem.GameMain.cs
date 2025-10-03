@@ -19,6 +19,7 @@ namespace GameMainModule
         public static void StartNewGame()
         {
             Log.LogInfo("開始新遊戲");
+            _instance.InitGameTest();
         }
 
         public static void ContinueGame()

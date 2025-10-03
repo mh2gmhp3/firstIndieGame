@@ -43,6 +43,7 @@ namespace UIModule.Game
         private void OnWidgetEvent_Widget_Button_StartNew(WidgetEventData eventData)
         {
             GameMainSystem.StartNewGame();
+            SetVisible(false);
         }
 
         private void OnWidgetEvent_Widget_Button_Continue(WidgetEventData eventData)
