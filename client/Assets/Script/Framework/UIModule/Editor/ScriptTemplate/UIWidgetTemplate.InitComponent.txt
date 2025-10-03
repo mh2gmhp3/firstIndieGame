@@ -5,7 +5,7 @@
         //#REF#
         //#REF#
 
-        protected override void InitComponentRefreence()
+        protected override void InitComponentReference()
         {
             //#INIT_REF#
             //#INIT_REF#
