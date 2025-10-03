@@ -13,23 +13,69 @@ MonoBehaviour:
   m_Name: PrototypeCharacter
   m_EditorClassIdentifier: 
   GroupDataList:
-  - Group: 1
+  - Group: 100
     DataList:
-    - Id: 1
+    - Id: 101
       CollisionAreaType: 1
       CollisionAreaStartTime: 0.1
       CollisionAreaDuration: 0.2
       AnimationClipOverrideNameAndStateName: Attack_01
       AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
       LockNextTime: 0
-    - Id: 2
+    - Id: 102
       CollisionAreaType: 1
       CollisionAreaStartTime: 0.1
       CollisionAreaDuration: 0.2
       AnimationClipOverrideNameAndStateName: Attack_02
       AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
       LockNextTime: 0
-    - Id: 3
+    - Id: 103
+      CollisionAreaType: 1
+      CollisionAreaStartTime: 0.1
+      CollisionAreaDuration: 0.2
+      AnimationClipOverrideNameAndStateName: Attack_03
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      LockNextTime: 0
+  - Group: 200
+    DataList:
+    - Id: 201
+      CollisionAreaType: 1
+      CollisionAreaStartTime: 0.1
+      CollisionAreaDuration: 0.2
+      AnimationClipOverrideNameAndStateName: Attack_01
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      LockNextTime: 0
+    - Id: 202
+      CollisionAreaType: 1
+      CollisionAreaStartTime: 0.1
+      CollisionAreaDuration: 0.2
+      AnimationClipOverrideNameAndStateName: Attack_02
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      LockNextTime: 0
+    - Id: 203
+      CollisionAreaType: 1
+      CollisionAreaStartTime: 0.1
+      CollisionAreaDuration: 0.2
+      AnimationClipOverrideNameAndStateName: Attack_03
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      LockNextTime: 0
+  - Group: 300
+    DataList:
+    - Id: 301
+      CollisionAreaType: 1
+      CollisionAreaStartTime: 0.1
+      CollisionAreaDuration: 0.2
+      AnimationClipOverrideNameAndStateName: Attack_01
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      LockNextTime: 0
+    - Id: 302
+      CollisionAreaType: 1
+      CollisionAreaStartTime: 0.1
+      CollisionAreaDuration: 0.2
+      AnimationClipOverrideNameAndStateName: Attack_02
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      LockNextTime: 0
+    - Id: 303
       CollisionAreaType: 1
       CollisionAreaStartTime: 0.1
       CollisionAreaDuration: 0.2
