@@ -141,6 +141,15 @@ namespace CollisionModule
             DoSetup(setupData);
         }
 
+        public void Recycle()
+        {
+            _id = 0;
+            _setupData = null;
+            _startTime = Time.time;
+            _endTime = Time.time;
+            DoRecycle();
+        }
+
         protected virtual void DoSetup(ICollisionAreaSetupData setupData) { }
 
         public virtual void DoCreate() { }

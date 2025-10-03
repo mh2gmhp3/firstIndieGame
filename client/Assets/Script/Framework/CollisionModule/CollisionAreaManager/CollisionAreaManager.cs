@@ -499,7 +499,7 @@ namespace CollisionModule
                 _areaTypeToAreaPoolDic.Add(areaType, pool);
             }
 
-            collisionArea.DoRecycle();
+            collisionArea.Recycle();
             pool.Enqueue(collisionArea);
         }
 
