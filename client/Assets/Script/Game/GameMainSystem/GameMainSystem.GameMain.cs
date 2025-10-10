@@ -28,6 +28,12 @@ namespace GameMainModule
             {
                 attackBehaviorDataRepo.AddData(attackBehaviorDataSettingList[i].Id);
             }
+            var itemRowList = FormSystem.Table.ItemTable.GetDataList();
+            for (int i = 0; i < itemRowList.Count; i++)
+            {
+                var itemDataRepo = DataManager.GetDataRepository<ItemDataRepository>();
+                itemDataRepo.AddItem(itemRowList[i].Id, 99999);
+            }
             DataManager.Save(1);
             _instance.InitGameTest();
         }
