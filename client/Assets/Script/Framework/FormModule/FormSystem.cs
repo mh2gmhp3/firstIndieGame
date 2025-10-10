@@ -11,7 +11,7 @@ namespace FormModule
 {
     public interface ITableRow
     {
-        int Id { get; set; }
+        int Id { get; }
     }
 
     public interface ITable
