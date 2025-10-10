@@ -121,7 +121,7 @@ namespace UIModule
         {
             if (data == null)
             {
-                Log.LogError("UIData.RemoveNotifyReceiver Error : data is null");
+                // 因為允許不註冊資料 這邊不需要跳警告
                 return;
             }
 
