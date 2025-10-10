@@ -68,6 +68,11 @@ namespace UIModule
             DoSetData();
         }
 
+        public void ClearData()
+        {
+            ClearUIData();
+        }
+
         /// <summary>
         /// 設定顯示
         /// </summary>
