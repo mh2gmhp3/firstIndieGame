@@ -28,7 +28,7 @@ namespace UIModule.Game
         {
             UISystem.OpenUIWindow(
                 "Window_AttackBehaviorEdit",
-                new UIAttackBehaviorDataContainer(GameMainSystem.GetAttackBhaviorDataList()));
+                new UIAttackBehaviorDataContainer(GameMainSystem.GetAttackBehaviorDataList()));
         }
 
         //#EVENT#

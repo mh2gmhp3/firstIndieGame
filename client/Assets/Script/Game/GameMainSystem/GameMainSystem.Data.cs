@@ -19,7 +19,7 @@ namespace GameMainModule
 
         #region AttackBehavior
 
-        public static List<AttackBehaviorData> GetAttackBhaviorDataList()
+        public static List<AttackBehaviorData> GetAttackBehaviorDataList()
         {
             var repo = DataManager.GetDataRepository<AttackBehaviorDataRepository>();
             if (repo == null)
