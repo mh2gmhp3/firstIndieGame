@@ -71,6 +71,10 @@ namespace UIModule
         /// <param name="uiData"></param>
         protected void SetUIData(IUIData uiData)
         {
+            // 如果之前有註冊要清掉
+            if (_uiData != null)
+                IUIData.RemoveNotifyReceiver(_uiData, this);
+
             _uiData = uiData;
             IUIData.AddNotifyReceiver(_uiData, this);
         }
@@ -94,7 +98,7 @@ namespace UIModule
         /// </summary>
         protected abstract void InitComponentReference();
         /// <summary>
-        /// 初始化Compnent事件
+        /// 初始化Component事件
         /// </summary>
         protected abstract void InitComponentEvent();
 
