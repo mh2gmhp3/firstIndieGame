@@ -48,3 +48,11 @@ MonoBehaviour:
     FormatString: private void OnWidgetEvent_#VAR_NAME#(int index, WidgetEventData
       eventData)
     FormatFile: {fileID: 0}
+  - Name: UIModule.SimpleScrollerController.Register
+    Type: 0
+    FormatString: '#VAR_NAME#.RegisterScrollerWidgetEvent(OnScrollerWidgetEvent_#VAR_NAME#);'
+    FormatFile: {fileID: 0}
+  - Name: UIModule.SimpleScrollerController.Method
+    Type: 0
+    FormatString: private void OnScrollerWidgetEvent_#VAR_NAME#(WidgetEventData eventData)
+    FormatFile: {fileID: 0}
