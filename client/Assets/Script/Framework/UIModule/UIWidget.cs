@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace UIModule
+﻿namespace UIModule
 {
     /// <summary>
     /// Widget事件資料
@@ -17,6 +13,10 @@ namespace UIModule
         /// 事件物件(自行轉型)
         /// </summary>
         public object Object;
+        /// <summary>
+        /// UI資料
+        /// </summary>
+        public IUIData UIData;
     }
 
     public delegate void WidgetEvent(WidgetEventData eventData);
@@ -43,6 +43,23 @@ namespace UIModule
         public void RegisterWidgetEvent(WidgetEvent widgetEvent)
         {
             _widgetEvent += widgetEvent;
+        }
+
+        /// <summary>
+        /// 反註冊Widget事件
+        /// </summary>
+        /// <param name="widgetEvent"></param>
+        public void UnRegisterWidgetEvent(WidgetEvent widgetEvent)
+        {
+            _widgetEvent -= widgetEvent;
+        }
+
+        /// <summary>
+        /// 清空Widget事件
+        /// </summary>
+        public void ClearWidgetEvent()
+        {
+            _widgetEvent = null;
         }
 
         /// <summary>
