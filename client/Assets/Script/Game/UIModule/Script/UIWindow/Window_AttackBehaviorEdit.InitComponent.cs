@@ -1,21 +1,21 @@
 ﻿using UnityEngine;
 using UIModule.Game;
+using UIModule;
+using Logging;
 namespace UIModule.Game
 {
     public partial class Window_AttackBehaviorEdit : UIWindow
     {
         //#REF#
-        private GameObject GameObject_AttackBehavior_Cell_Template;
-        private RectTransform RectTransform_Scroller_Content;
         private Widget_Button Widget_Button_Close;
+        private SimpleScrollerController SimpleScrollerController_AttackBehavior;
         //#REF#
 
         protected override void InitComponentReference()
         {
             //#INIT_REF#
-            GameObject_AttackBehavior_Cell_Template = _objectReferenceDb.GetObject<GameObject>("AttackBehavior_Cell_Template");
-            RectTransform_Scroller_Content = _objectReferenceDb.GetObject<RectTransform>("Scroller_Content");
             Widget_Button_Close = _objectReferenceDb.GetObject<Widget_Button>("Close");
+            SimpleScrollerController_AttackBehavior = _objectReferenceDb.GetObject<SimpleScrollerController>("AttackBehavior");
             //#INIT_REF#
         }
 
@@ -23,6 +23,7 @@ namespace UIModule.Game
         {
             //#INIT_EVENT#
             Widget_Button_Close.RegisterWidgetEvent(OnWidgetEvent_Widget_Button_Close);
+            SimpleScrollerController_AttackBehavior.RegisterScrollerWidgetEvent(OnScrollerWidgetEvent_SimpleScrollerController_AttackBehavior);
             //#INIT_EVENT#
         }
 
@@ -30,6 +31,14 @@ namespace UIModule.Game
         private void OnWidgetEvent_Widget_Button_Close(WidgetEventData eventData)
         {
             SetVisible(false);
+        }
+
+        private void OnScrollerWidgetEvent_SimpleScrollerController_AttackBehavior(WidgetEventData eventData)
+        {
+            if (eventData.UIData is UIAttackBehaviorData data)
+            {
+                //Log.LogInfo($"Click:{data.RawData.Id}");
+            }
         }
 
         //#EVENT#

@@ -16,7 +16,7 @@ namespace UIModule.Game
             }
         }
 
-        public class UIAttackBehaviorDataContainer : IUIData
+        public class UIAttackBehaviorDataContainer : IUIData, IScrollerControllerDataGetter
         {
             public List<UIAttackBehaviorData> AttackBehaviorDataList = new List<UIAttackBehaviorData>();
 
@@ -26,6 +26,26 @@ namespace UIModule.Game
                 {
                     AttackBehaviorDataList.Add(new UIAttackBehaviorData(repoDataList[i]));
                 }
+            }
+
+            int IScrollerControllerDataGetter.GetCellCount()
+            {
+                return AttackBehaviorDataList.Count;
+            }
+
+            string IScrollerControllerDataGetter.GetCellIdentity(int cellIndex)
+            {
+                return string.Empty;
+            }
+
+            IUIData IScrollerControllerDataGetter.GetUIData(int cellIndex, int widgetIndex)
+            {
+                if (cellIndex < 0 || cellIndex >= AttackBehaviorDataList.Count)
+                {
+                    return null;
+                }
+
+                return AttackBehaviorDataList[cellIndex];
             }
         }
 
@@ -58,23 +78,7 @@ namespace UIModule.Game
 
         private void SetScrollerData()
         {
-            //TODO 先直接清掉 應該要用Pool的方式處理Scroller
-            var childCount = RectTransform_Scroller_Content.childCount;
-            for (int i = childCount - 1; i >= 0; i--)
-            {
-                var child = RectTransform_Scroller_Content.GetChild(i);
-                if (child.gameObject == GameObject_AttackBehavior_Cell_Template)
-                    continue;
-                Destroy(RectTransform_Scroller_Content.GetChild(i).gameObject);
-            }
-
-            for (int i = 0; i < _dataContainer.AttackBehaviorDataList.Count; i++)
-            {
-                var newCell = Instantiate(GameObject_AttackBehavior_Cell_Template);
-                newCell.transform.SetParent(RectTransform_Scroller_Content);
-                var widget = newCell.GetComponent<Widget_AttackBehavior_Cell>();
-                widget.SetData(_dataContainer.AttackBehaviorDataList[i]);
-            }
+            SimpleScrollerController_AttackBehavior.SetDataGetter(_dataContainer);
         }
     }
 }
