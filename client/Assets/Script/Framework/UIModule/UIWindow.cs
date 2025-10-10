@@ -1,9 +1,6 @@
 ﻿using Extension;
 using Logging;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UIModule
 {
@@ -22,6 +19,7 @@ namespace UIModule
         {
             _canvas = gameObject.GetComponent<Canvas>();
             _canvas.overrideSorting = true;
+            _canvas.transform.localScale = Vector3.one;
 
             _rectTransform.SetStretch();
         }

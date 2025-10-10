@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8018172698465106874}
   - component: {fileID: 7089455329990781721}
-  - component: {fileID: 8662344736650683749}
+  - component: {fileID: 8037720276979109690}
   m_Layer: 5
   m_Name: UIWindowsTest
   m_TagString: Untagged
@@ -62,7 +62,7 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_TargetDisplay: 0
---- !u!114 &8662344736650683749
+--- !u!114 &8037720276979109690
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -71,17 +71,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 618326368360499993}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87290fa83f444af42ae1c9e0fe26dc56, type: 3}
+  m_Script: {fileID: 11500000, guid: 1304e01118a5cfa4b97586e96729d753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _objectReferenceDb:
     _objectReferenceList:
-    - Name: Button (Legacy)
+    - Name: Button_1
       TypeName: Button
       ObjectList:
       - {fileID: 6671588107212360418}
-      - {fileID: 6111280351221650932}
       - {fileID: 5272117446755426165}
+      - {fileID: 6111280351221650932}
 --- !u!1 &3535103208661952620
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,7 +161,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: '3
+
+'
 --- !u!1 &3776773052472023679
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,7 +177,7 @@ GameObject:
   - component: {fileID: 9000209151584560679}
   - component: {fileID: 6671588107212360418}
   m_Layer: 5
-  m_Name: Button (Legacy)
+  m_Name: Button_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -199,7 +201,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 404, y: -221}
+  m_AnchoredPosition: {x: 326.7, y: -139.2}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3721373567123767971
@@ -297,7 +299,7 @@ GameObject:
   - component: {fileID: 7384602574401176158}
   - component: {fileID: 5272117446755426165}
   m_Layer: 5
-  m_Name: Button (Legacy) (1)
+  m_Name: Button_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -321,7 +323,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 404, y: -221}
+  m_AnchoredPosition: {x: 326.7, y: -178.6}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4873347059031759841
@@ -485,7 +487,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 2
 --- !u!1 &7203878159347211180
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,7 +501,7 @@ GameObject:
   - component: {fileID: 4433420753655665308}
   - component: {fileID: 6111280351221650932}
   m_Layer: 5
-  m_Name: Button (Legacy) (2)
+  m_Name: Button_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -523,7 +525,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 404, y: -221}
+  m_AnchoredPosition: {x: 326.7, y: -221}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5928409756070217756
@@ -687,4 +689,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 1
