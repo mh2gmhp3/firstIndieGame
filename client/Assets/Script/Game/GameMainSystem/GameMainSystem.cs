@@ -32,6 +32,8 @@ namespace GameMainModule
             }
             else if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameTest)
             {
+                InitGameData();
+                CreateTestData(10);
                 InitGameTest();
             }
             else if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameScene)

@@ -21,20 +21,7 @@ namespace GameMainModule
         public static void StartNewGame()
         {
             Log.LogInfo("開始新遊戲");
-            DataManager.CreateNew(1);
-            var attackBehaviorDataRepo = DataManager.GetDataRepository<AttackBehaviorDataRepository>();
-            var attackBehaviorDataSettingList = FormSystem.Table.AttackBehaviorSettingTable.GetDataList();
-            for (int i = 0; i < attackBehaviorDataSettingList.Count; i++)
-            {
-                attackBehaviorDataRepo.AddData(attackBehaviorDataSettingList[i].Id);
-            }
-            var itemRowList = FormSystem.Table.ItemTable.GetDataList();
-            for (int i = 0; i < itemRowList.Count; i++)
-            {
-                var itemDataRepo = DataManager.GetDataRepository<ItemDataRepository>();
-                itemDataRepo.AddItem(itemRowList[i].Id, 99999);
-            }
-            DataManager.Save(1);
+            _instance.CreateTestData(1);
             _instance.InitGameTest();
         }
 

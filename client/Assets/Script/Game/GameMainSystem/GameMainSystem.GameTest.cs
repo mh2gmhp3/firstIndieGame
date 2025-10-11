@@ -11,6 +11,8 @@ using UnityEngine;
 using Utility;
 using UnitModule;
 using GameMainModule.Animation;
+using DataModule;
+using FormModule;
 
 namespace GameMainModule
 {
@@ -85,6 +87,14 @@ namespace GameMainModule
             _unitManager.AddUnit(_unitManager.AllocUnitId(), testNpcCharacterGameUnit);
 
             UISystem.OpenUIWindow("Window_Game", null);
+        }
+
+        private void CreateTestData(int id)
+        {
+            DataManager.CreateNew(id);
+            AddAllAttackBehavior();
+            AddAllItem();
+            DataManager.Save(id);
         }
     }
 }

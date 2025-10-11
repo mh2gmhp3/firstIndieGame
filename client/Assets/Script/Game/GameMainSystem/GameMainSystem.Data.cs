@@ -1,4 +1,6 @@
 ﻿using DataModule;
+using FormModule;
+using Logging;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +19,8 @@ namespace GameMainModule
             _dataManager.LoadGlobal();
         }
 
+        //TODO 對於各Repository的操作應該可以建立Manager來管理不同Repo之間的資料處理關係 只用Region隔開可能不好處理
+
         #region AttackBehavior
 
         public static List<AttackBehaviorData> GetAttackBehaviorDataList()
@@ -26,6 +30,127 @@ namespace GameMainModule
                 return null;
 
             return repo.GetAttackBehaviorDataList();
+        }
+
+        public static void AddAllAttackBehavior()
+        {
+            var attackBehaviorDataRepo = DataManager.GetDataRepository<AttackBehaviorDataRepository>();
+            var attackBehaviorDataSettingList = FormSystem.Table.AttackBehaviorSettingTable.GetDataList();
+            for (int i = 0; i < attackBehaviorDataSettingList.Count; i++)
+            {
+                attackBehaviorDataRepo.AddData(attackBehaviorDataSettingList[i].Id);
+            }
+        }
+
+        #endregion
+
+        #region Item
+
+        /// <summary>
+        /// 新增表上全部道具
+        /// </summary>
+        public static void AddAllItem()
+        {
+            var itemDataRepo = DataManager.GetDataRepository<ItemDataRepository>();
+            var itemRowList = FormSystem.Table.ItemTable.GetDataList();
+            for (int i = 0; i < itemRowList.Count; i++)
+            {
+                var count = 99999;
+                if (itemRowList[i].Type == (int)TableDefine.ItemType.Weapon)
+                    count = 5;
+                itemDataRepo.AddItem(itemRowList[i].Id, count, OnAddItemNotify);
+            }
+        }
+
+        /// <summary>
+        /// 新增指定道具
+        /// </summary>
+        /// <param name="settingId"></param>
+        /// <param name="count"></param>
+        public static void AddItem(int settingId, int count)
+        {
+            var itemDataRepo = DataManager.GetDataRepository<ItemDataRepository>();
+            itemDataRepo.AddItem(settingId, count, OnAddItemNotify);
+        }
+
+        /// <summary>
+        /// 移除指定道具唯一Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="count"></param>
+        public static void RemoveItem(int id, int count)
+        {
+            var itemDataRepo = DataManager.GetDataRepository<ItemDataRepository>();
+            itemDataRepo.RemoveItem(id, count, OnRemoveItemNotify);
+        }
+
+        private static void OnAddItemNotify(ItemData itemData, bool isNew)
+        {
+            if (itemData == null)
+                return;
+
+            if (!FormSystem.Table.ItemTable.TryGetData(itemData.SettingId, out var itemRow))
+            {
+                Log.LogError($"GameMainSystem OnAddItemNotify Error, ItemRow can not found, " +
+                    $"Id:{itemData.Id}, SettingId:{itemData.SettingId}");
+                return;
+            }
+
+            var itemType = (TableDefine.ItemType)itemRow.Type;
+            switch (itemType)
+            {
+                case TableDefine.ItemType.Weapon:
+                    if (isNew)
+                        AddWeapon(itemData.Id, itemData.SettingId);
+                    break;
+            }
+        }
+
+        private static void OnRemoveItemNotify(ItemData itemData, bool isRemove)
+        {
+            if (itemData == null)
+                return;
+
+            if (!FormSystem.Table.ItemTable.TryGetData(itemData.SettingId, out var itemRow))
+            {
+                Log.LogError($"GameMainSystem OnRemoveItemNotify Error, ItemRow can not found, " +
+                    $"Id:{itemData.Id}, SettingId:{itemData.SettingId}");
+                return;
+            }
+
+            var itemType = (TableDefine.ItemType)itemRow.Type;
+            switch (itemType)
+            {
+                case TableDefine.ItemType.Weapon:
+                    if (isRemove)
+                        RemoveWeapon(itemData.Id);
+                    break;
+            }
+        }
+
+        #endregion
+
+        #region Weapon
+
+        /// <summary>
+        /// 新增武器
+        /// </summary>
+        /// <param name="refItemId">道具參考唯一Id</param>
+        /// <param name="settingId">道具設定Id等於武器設定Id</param>
+        private static void AddWeapon(int refItemId, int settingId)
+        {
+            var weaponDataRepo = DataManager.GetDataRepository<WeaponDataRepository>();
+            weaponDataRepo.AddWeapon(refItemId, settingId);
+        }
+
+        /// <summary>
+        /// 移除武器
+        /// </summary>
+        /// <param name="refItemId">道具參考唯一Id</param>
+        private static void RemoveWeapon(int refItemId)
+        {
+            var weaponDataRepo = DataManager.GetDataRepository<WeaponDataRepository>();
+            weaponDataRepo.RemoveWeapon(refItemId);
         }
 
         #endregion
