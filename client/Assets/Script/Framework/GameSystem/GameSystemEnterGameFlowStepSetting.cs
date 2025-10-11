@@ -7,7 +7,6 @@ using System.IO;
 
 namespace GameSystem
 {
-#if UNITY_EDITOR
     /// <summary>
     /// 階段設定
     /// </summary>
@@ -22,6 +21,14 @@ namespace GameSystem
         /// 階段名稱
         /// </summary>
         public string Name;
+        /// <summary>
+        /// 於一般模式下啟用
+        /// </summary>
+        public bool EnableInNormalMode = true;
+        /// <summary>
+        /// 於測試模式時啟用
+        /// </summary>
+        public bool EnableInTestMode = true;
 
         public StepConfig(int id, string name)
         {
@@ -29,7 +36,6 @@ namespace GameSystem
             Name = name;
         }
     }
-#endif
 
     [CreateAssetMenu(fileName = "GameSystemEnterGameFlowStepSetting",  menuName = "GameSystem/GameSystemEnterGameFlowStepSetting")]
     public class GameSystemEnterGameFlowStepSetting : ScriptableObject
@@ -38,30 +44,7 @@ namespace GameSystem
         /// 檔案路徑 TODO 盡可能拆出去
         /// </summary>
         public static string RESOURCE_FRAMEWORK_PATH = "Framework/Setting/GameSystem/GameSystemEnterGameFlowStepSetting";
-        public static string RESOURCE_FRAMEWORK_TEST_MODE_PATH = "Framework/Setting/GameSystem/GameSystemEnterGameFlowStepSetting_TestMode";
 
-        public List<int> EnterGameFlowStep = new List<int>();
-
-#if UNITY_EDITOR
         public List<StepConfig> EnterGameFlowStepConfigs = new List<StepConfig>();
-
-        /// <summary>
-        /// 嘗試獲取階段設定Dic
-        /// </summary>
-        /// <param name="idToConfigDic"></param>
-        /// <returns>具有相同Id時回傳false</returns>
-        public bool TryGetStepConfigDic(out Dictionary<int, StepConfig> idToConfigDic)
-        {
-            idToConfigDic = new Dictionary<int, StepConfig>();
-            foreach (var stepConfig in EnterGameFlowStepConfigs)
-            {
-                if (idToConfigDic.ContainsKey(stepConfig.Id))
-                    return false;
-
-                idToConfigDic.Add(stepConfig.Id, stepConfig);
-            }
-            return true;
-        }
-#endif
     }
 }

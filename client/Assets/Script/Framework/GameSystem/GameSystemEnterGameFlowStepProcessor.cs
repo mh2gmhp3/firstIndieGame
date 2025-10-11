@@ -49,25 +49,28 @@ namespace GameSystem
                 _processEnterGameFlowStepGameSystemList = new List<IBaseGameSystem>();
                 _flowStepQueue = new Queue<int>();
 
-                if (testMode)
-                {
-                    _enterGameFlowStepSetting =
-                        AssetSystem.LoadAsset<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_FRAMEWORK_TEST_MODE_PATH);
-                }
-                else
-                {
-                    _enterGameFlowStepSetting =
-                        AssetSystem.LoadAsset<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_FRAMEWORK_PATH);
-                }
+                _enterGameFlowStepSetting =
+                    AssetSystem.LoadAsset<GameSystemEnterGameFlowStepSetting>(GameSystemEnterGameFlowStepSetting.RESOURCE_FRAMEWORK_PATH);
                 if (_enterGameFlowStepSetting == null)
                 {
                     Log.LogError("GameSystemEnterGameFlowStepProcessor construct error _enterGameFlowStepSetting is null");
                 }
                 else
                 {
-                    for (int i = 0; i < _enterGameFlowStepSetting.EnterGameFlowStep.Count; i++)
+                    for (int i = 0; i < _enterGameFlowStepSetting.EnterGameFlowStepConfigs.Count; i++)
                     {
-                        _flowStepQueue.Enqueue(_enterGameFlowStepSetting.EnterGameFlowStep[i]);
+                        var config = _enterGameFlowStepSetting.EnterGameFlowStepConfigs[i];
+                        if (testMode)
+                        {
+                            if (!config.EnableInTestMode)
+                                continue;
+                        }
+                        else
+                        {
+                            if (!config.EnableInNormalMode)
+                                continue;
+                        }
+                        _flowStepQueue.Enqueue(config.Id);
                     }
                 }
             }

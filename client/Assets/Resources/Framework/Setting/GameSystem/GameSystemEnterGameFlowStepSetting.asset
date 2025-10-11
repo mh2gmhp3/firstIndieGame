@@ -12,25 +12,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53af381aaa5164a45b9545fb97c726a5, type: 3}
   m_Name: GameSystemEnterGameFlowStepSetting
   m_EditorClassIdentifier: 
-  EnterGameFlowStep: 010000000200000003000000040000006500000066000000670000006800000069000000
   EnterGameFlowStepConfigs:
   - Id: 1
     Name: Init_BaseMainCamera
+    EnableInNormalMode: 1
+    EnableInTestMode: 1
   - Id: 2
     Name: Init_GUI_Root
+    EnableInNormalMode: 1
+    EnableInTestMode: 1
   - Id: 3
     Name: Init_FormTable
+    EnableInNormalMode: 1
+    EnableInTestMode: 1
   - Id: 4
     Name: Init_FormTableDone
+    EnableInNormalMode: 1
+    EnableInTestMode: 1
   - Id: 101
     Name: Init_GameCamera
+    EnableInNormalMode: 1
+    EnableInTestMode: 1
   - Id: 102
     Name: Init_GameController
+    EnableInNormalMode: 1
+    EnableInTestMode: 1
   - Id: 103
     Name: Init_GameScene
+    EnableInNormalMode: 1
+    EnableInTestMode: 1
   - Id: 104
     Name: Init_GameCollision
+    EnableInNormalMode: 1
+    EnableInTestMode: 1
   - Id: 105
     Name: Init_GameMain
+    EnableInNormalMode: 1
+    EnableInTestMode: 0
   - Id: 200
     Name: Init_GameTest
+    EnableInNormalMode: 0
+    EnableInTestMode: 1

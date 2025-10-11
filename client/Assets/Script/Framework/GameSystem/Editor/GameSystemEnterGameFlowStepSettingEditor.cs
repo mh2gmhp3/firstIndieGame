@@ -18,7 +18,6 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
         private GameSystemEnterGameFlowStepSetting _instance = null;
 
         private HashSet<string> _stepConfigName = new HashSet<string>();
-        private Dictionary<int, StepConfig> _idToStepCongifDic = new Dictionary<int, StepConfig>();
         private string _newStepConfigName = string.Empty;
 
         private void OnEnable()
@@ -39,8 +38,6 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
                 _instance,
                 "GameSystemEnterGameFlowStepSetting");
 
-            DrawStepGUI();
-            EditorGUILayout.Space(10);
             DrawStepConfigGUI();
 
             DrawSaveGUI();
@@ -64,8 +61,6 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
             {
                 _stepConfigName.Add(_instance.EnterGameFlowStepConfigs[i].Name);
             }
-
-            _instance.TryGetStepConfigDic(out _idToStepCongifDic);
         }
 
         private void AddNewStepConfig(string name)
@@ -104,49 +99,6 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
 
             id++;
             return true;
-        }
-
-        List<int> _removeStepList = new List<int>();
-        private void DrawStepGUI()
-        {
-            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
-            {
-                for (int i = 0; i < _instance.EnterGameFlowStep.Count; i++)
-                {
-                    var stepId = _instance.EnterGameFlowStep[i];
-                    EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
-                    {
-                        GUILayout.Label($"{stepId}", GUILayout.Width(50));
-                        if (_idToStepCongifDic.TryGetValue(stepId, out var stepConfig))
-                        {
-                            GUILayout.Label(stepConfig.Name);
-                        }
-                        GUILayout.FlexibleSpace();
-                        if (GUILayout.Button("+"))
-                        {
-                            _instance.EnterGameFlowStep.MoveToPrevious(i);
-                        }
-                        if (GUILayout.Button("-"))
-                        {
-                            _instance.EnterGameFlowStep.MoveToNext(i);
-                        }
-                        if (GUILayout.Button("X"))
-                        {
-                            _removeStepList.Add(stepId);
-                        }
-                    }
-                    EditorGUILayout.EndHorizontal();
-
-                }
-            }
-            EditorGUILayout.EndVertical();
-
-            foreach (var removeStep in _removeStepList)
-            {
-                _instance.EnterGameFlowStep.Remove(removeStep);
-            }
-            if (_removeStepList.Count > 0)
-                _removeStepList.Clear();
         }
 
         #region DrawStepConfigGUI
@@ -194,21 +146,21 @@ namespace Framework.Editor.GameSystem.EnterGameFlowStepSetting
                         var res = _instance.EnterGameFlowStepConfigs.Find(s => s.Id == id);
                         if (res == null)
                         {
-                            var index = _instance.EnterGameFlowStep.IndexOf(stepConfig.Id);
-                            if (index >= 0)
-                                _instance.EnterGameFlowStep[index] = id;
                             stepConfig.Id = id;
                             RefreshStepConfigSetting();
                         }
                     }
                     GUILayout.Label(stepConfig.Name);
                     GUILayout.FlexibleSpace();
-                    if (!_instance.EnterGameFlowStep.Contains(stepConfig.Id))
+                    stepConfig.EnableInNormalMode = EditorGUILayout.ToggleLeft("Normal", stepConfig.EnableInNormalMode, GUILayout.Width(100));
+                    stepConfig.EnableInTestMode = EditorGUILayout.ToggleLeft("Test", stepConfig.EnableInTestMode, GUILayout.Width(100));
+                    if (GUILayout.Button("+"))
                     {
-                        if (GUILayout.Button("添加至流程"))
-                        {
-                            _instance.EnterGameFlowStep.Add(stepConfig.Id);
-                        }
+                        _instance.EnterGameFlowStepConfigs.MoveToPrevious(i);
+                    }
+                    if (GUILayout.Button("-"))
+                    {
+                        _instance.EnterGameFlowStepConfigs.MoveToNext(i);
                     }
                     if (GUILayout.Button("X"))
                     {
