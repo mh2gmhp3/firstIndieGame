@@ -41,7 +41,7 @@ namespace DataModule
                 //整理Mapping
                 if (_idToDataDic.ContainsKey(data.Id))
                 {
-                    Log.LogError($"AttackBehaviorDataRepository Error, 有相同Id資料! Data:Id{data.Id} SettingId:{data.SettingId}");
+                    Log.LogError($"AttackBehaviorDataRepository OnLoad Error, 有相同Id資料! Data:Id{data.Id} SettingId:{data.SettingId}");
                 }
                 else
                 {

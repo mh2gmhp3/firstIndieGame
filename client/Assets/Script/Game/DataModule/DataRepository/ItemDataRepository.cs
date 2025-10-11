@@ -46,7 +46,7 @@ namespace DataModule
                 //整理Mapping
                 if (_idToDataDic.ContainsKey(data.Id))
                 {
-                    Log.LogError($"ItemDataRepository Error, 有相同Id資料! Data:Id{data.Id} SettingId:{data.SettingId}");
+                    Log.LogError($"ItemDataRepository OnLoad Error, 有相同Id資料! Data:Id{data.Id} SettingId:{data.SettingId}");
                 }
                 else
                 {
