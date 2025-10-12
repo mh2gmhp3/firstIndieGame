@@ -125,6 +125,7 @@ namespace GameMainModule
             if (result == null)
                 return;
 
+            _cacheGetItemData.Clear();
             var itemDataRepo = DataManager.GetDataRepository<ItemDataRepository>();
             itemDataRepo.GetAllItemList(_cacheGetItemData);
 
