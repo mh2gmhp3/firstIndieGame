@@ -69,7 +69,7 @@ namespace GameMainModule
             itemDataRepo.RemoveItem(id, count, OnRemoveItemNotify);
         }
 
-        private static void OnAddItemNotify(ItemData itemData, bool isNew)
+        private static void OnAddItemNotify(UIItemData itemData, bool isNew)
         {
             if (itemData == null)
                 return;
@@ -97,7 +97,7 @@ namespace GameMainModule
             }
         }
 
-        private static void OnRemoveItemNotify(ItemData itemData, bool isRemove)
+        private static void OnRemoveItemNotify(UIItemData itemData, bool isRemove)
         {
             if (itemData == null)
                 return;
@@ -116,6 +116,36 @@ namespace GameMainModule
                     if (isRemove)
                         RemoveWeapon(itemData.Id);
                     break;
+            }
+        }
+
+        private static List<UIItemData> _cacheGetItemData = new List<UIItemData>();
+        public static void GetItemDataList(List<UIItemData> result, TableDefine.ItemType type = TableDefine.ItemType.None)
+        {
+            if (result == null)
+                return;
+
+            var itemDataRepo = DataManager.GetDataRepository<ItemDataRepository>();
+            itemDataRepo.GetAllItemList(_cacheGetItemData);
+
+            // None回傳整筆
+            if (type == TableDefine.ItemType.None)
+            {
+                result.AddRange(_cacheGetItemData);
+                return;
+            }
+
+            var typeInt = (int)type;
+            for (int i = 0; i < _cacheGetItemData.Count; i++)
+            {
+                var itemData = _cacheGetItemData[i];
+                if (FormSystem.Table.ItemTable.TryGetData(itemData.SettingId, out var itemRow))
+                {
+                    if (itemRow.Type != typeInt)
+                        continue;
+
+                    result.Add(itemData);
+                }
             }
         }
 

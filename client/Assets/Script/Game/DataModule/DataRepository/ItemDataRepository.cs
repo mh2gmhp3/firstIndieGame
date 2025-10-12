@@ -1,11 +1,30 @@
 ﻿using FormModule;
 using Logging;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using UIModule;
 
 namespace DataModule
 {
+    /// <summary>
+    /// 玩家道具資料在UI顯示時使用
+    /// <para>如果有要單純顯示道具而不是玩家道具的需另外建立新類</para>
+    /// </summary>
+    public class UIItemData : IUIData
+    {
+        private readonly ItemData _rawData;
+
+        public int Id => _rawData.Id;
+        public int SettingId => _rawData.SettingId;
+
+        public int Count => _rawData.Count;
+
+        public UIItemData(ItemData rawData)
+        {
+            _rawData = rawData;
+        }
+    }
+
     public class ItemData
     {
         public int Id;
@@ -32,6 +51,10 @@ namespace DataModule
     {
         private Dictionary<int, ItemData> _idToDataDic = new Dictionary<int, ItemData>();
 
+        //Runtime UIData
+        private List<UIItemData> _uiDataList = new List<UIItemData>();
+        private Dictionary<int, UIItemData> _idToUIDataDic = new Dictionary<int, UIItemData>();
+
         private List<ItemData> _cacheGetItemList = new List<ItemData>();
 
         public ItemDataRepository(DataManager dataManager, int version) : base(dataManager, version)
@@ -51,6 +74,10 @@ namespace DataModule
                 else
                 {
                     _idToDataDic.Add(data.Id, data);
+
+                    var uiItemData = new UIItemData(data);
+                    _idToUIDataDic.Add(uiItemData.Id, uiItemData);
+                    _uiDataList.Add(uiItemData);
                 }
 
                 //更新下一個Id 避免重複
@@ -64,13 +91,21 @@ namespace DataModule
             return ++_data.NextId;
         }
 
+        public void GetAllItemList(List<UIItemData> result)
+        {
+            if (result == null)
+                return;
+
+            result.AddRange(_uiDataList);
+        }
+
         /// <summary>
         /// 新增道具
         /// </summary>
         /// <param name="settingId"></param>
         /// <param name="count"></param>
         /// <param name="notifyEvent">變動資料, 是否新增</param>
-        public void AddItem(int settingId, int count, Action<ItemData, bool> notifyEvent = null)
+        public void AddItem(int settingId, int count, Action<UIItemData, bool> notifyEvent = null)
         {
             if (!FormSystem.Table.ItemTable.TryGetData(settingId, out var itemRow))
             {
@@ -101,8 +136,11 @@ namespace DataModule
                     var oriItem = _cacheGetItemList[0];
                     var remainCount = itemRow.Stack - oriItem.Count;
                     oriItem.Count += Math.Min(remainCount, count);
-                    if (notifyEvent != null)
-                        notifyEvent.Invoke(oriItem, false);
+                    if (_idToUIDataDic.TryGetValue(oriItem.Id, out var uIItemData))
+                    {
+                        if (notifyEvent != null)
+                            notifyEvent.Invoke(uIItemData, false);
+                    }
                 }
                 else
                 {
@@ -160,7 +198,7 @@ namespace DataModule
         /// <param name="id"></param>
         /// <param name="count"></param>
         /// <param name="notifyEvent">變動資料, 是否移除</param>
-        public void RemoveItem(int id, int count, Action<ItemData, bool> notifyEvent = null)
+        public void RemoveItem(int id, int count, Action<UIItemData, bool> notifyEvent = null)
         {
             if (!_idToDataDic.TryGetValue(id, out var itemData))
             {
@@ -175,11 +213,21 @@ namespace DataModule
             bool needRemove = itemData.Count <= 0;
             if (needRemove)
             {
-                _idToDataDic.Remove(id);
+                //Data
                 _data.ItemDataList.Remove(itemData);
+                //MappingData
+                _idToDataDic.Remove(id);
             }
-            if (notifyEvent != null)
-                notifyEvent.Invoke(itemData, needRemove);
+
+            //Runtime
+            if (_idToUIDataDic.TryGetValue(id, out var uIItemData))
+            {
+                _uiDataList.Remove(uIItemData);
+                _idToUIDataDic.Remove(id);
+
+                if (notifyEvent != null)
+                    notifyEvent.Invoke(uIItemData, needRemove);
+            }
         }
 
         /// <summary>
@@ -188,7 +236,7 @@ namespace DataModule
         /// <param name="settingId"></param>
         /// <param name="count"></param>
         /// <param name="notifyEvent">新增通知事件</param>
-        private void AddNewItem(int settingId, int count, Action<ItemData, bool> notifyEvent = null)
+        private void AddNewItem(int settingId, int count, Action<UIItemData, bool> notifyEvent = null)
         {
             var nextId = GetNextId();
             if (_idToDataDic.ContainsKey(nextId))
@@ -197,11 +245,17 @@ namespace DataModule
                 return;
             }
 
-            var newItem = new ItemData(nextId, settingId, count);
-            _data.ItemDataList.Add(newItem);
-            _idToDataDic[nextId] = newItem;
+            var newItemData = new ItemData(nextId, settingId, count);
+            //Data
+            _data.ItemDataList.Add(newItemData);
+            //MappingData
+            _idToDataDic.Add(newItemData.Id, newItemData);
+            //Runtime
+            var newUIItemData = new UIItemData(newItemData);
+            _uiDataList.Add(newUIItemData);
+            _idToUIDataDic.Add(newItemData.Id, newUIItemData);
             if (notifyEvent != null)
-                notifyEvent.Invoke(newItem, true);
+                notifyEvent.Invoke(newUIItemData, true);
         }
 
         /// <summary>
