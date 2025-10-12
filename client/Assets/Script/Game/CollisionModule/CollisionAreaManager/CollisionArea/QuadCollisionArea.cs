@@ -91,7 +91,7 @@ namespace CollisionModule
 
         public override void DoDrawGizmos()
         {
-            Debug.DrawLine(_curPos, _curPos + _setupData.Direction * _distance, Color.blue);
+            Debug.DrawLine(_curPos, _curPos + _setupData.Direction * _distance, Color.red);
         }
     }
 }
