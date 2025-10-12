@@ -82,3 +82,92 @@ MonoBehaviour:
       AnimationClipOverrideNameAndStateName: Attack_03
       AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
       LockNextTime: 0
+  SettingList:
+  - Id: 101
+    CollisionAreaType: 1
+    CollisionAreaStartTime: 0.1
+    CollisionAreaDuration: 0.2
+    AnimationClipOverrideNameAndStateName: Attack_01
+    AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    LockNextTime: 0
+  - Id: 102
+    CollisionAreaType: 1
+    CollisionAreaStartTime: 0.1
+    CollisionAreaDuration: 0.2
+    AnimationClipOverrideNameAndStateName: Attack_02
+    AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    LockNextTime: 0
+  - Id: 103
+    CollisionAreaType: 1
+    CollisionAreaStartTime: 0.1
+    CollisionAreaDuration: 0.2
+    AnimationClipOverrideNameAndStateName: Attack_03
+    AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    LockNextTime: 0
+  - Id: 201
+    CollisionAreaType: 1
+    CollisionAreaStartTime: 0.1
+    CollisionAreaDuration: 0.2
+    AnimationClipOverrideNameAndStateName: Attack_01
+    AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    LockNextTime: 0
+  - Id: 202
+    CollisionAreaType: 1
+    CollisionAreaStartTime: 0.1
+    CollisionAreaDuration: 0.2
+    AnimationClipOverrideNameAndStateName: Attack_02
+    AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    LockNextTime: 0
+  - Id: 203
+    CollisionAreaType: 1
+    CollisionAreaStartTime: 0.1
+    CollisionAreaDuration: 0.2
+    AnimationClipOverrideNameAndStateName: Attack_03
+    AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    LockNextTime: 0
+  - Id: 301
+    CollisionAreaType: 1
+    CollisionAreaStartTime: 0.1
+    CollisionAreaDuration: 0.2
+    AnimationClipOverrideNameAndStateName: Attack_01
+    AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    LockNextTime: 0
+  - Id: 302
+    CollisionAreaType: 1
+    CollisionAreaStartTime: 0.1
+    CollisionAreaDuration: 0.2
+    AnimationClipOverrideNameAndStateName: Attack_02
+    AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    LockNextTime: 0
+  - Id: 303
+    CollisionAreaType: 1
+    CollisionAreaStartTime: 0.1
+    CollisionAreaDuration: 0.2
+    AnimationClipOverrideNameAndStateName: Attack_03
+    AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    LockNextTime: 0
+  AnimationOverrideGroupSettingList:
+  - GroupId: 100
+    OverrideSettingList:
+    - AnimationName: Attack_01
+      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    - AnimationName: Attack_02
+      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    - AnimationName: Attack_03
+      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+  - GroupId: 200
+    OverrideSettingList:
+    - AnimationName: Attack_01
+      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    - AnimationName: Attack_02
+      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    - AnimationName: Attack_03
+      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+  - GroupId: 300
+    OverrideSettingList:
+    - AnimationName: Attack_01
+      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    - AnimationName: Attack_02
+      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    - AnimationName: Attack_03
+      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
