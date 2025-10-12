@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using static CollisionModule.CollisionAreaDefine;
 
@@ -63,6 +65,7 @@ namespace GameMainModule.Attack
         public List<AttackBehaviorAnimationOverrideGroupSetting> AnimationOverrideGroupSettingList =
             new List<AttackBehaviorAnimationOverrideGroupSetting>();
 
+#if UNITY_EDITOR
         [MenuItem("Assets/UIModule/CopyList")]
         public static void CopyToList()
         {
@@ -91,6 +94,7 @@ namespace GameMainModule.Attack
                 AssetDatabase.SaveAssets();
             }
         }
+#endif
 
         public bool TryGetAnimationOverrideNameToClipDic(int groupId, out Dictionary<string, AnimationClip> result)
         {
