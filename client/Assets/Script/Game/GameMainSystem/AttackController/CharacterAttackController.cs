@@ -21,7 +21,6 @@ namespace GameMainModule.Attack
         private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
 
         private AnimatorController _animatorController;
-        private AttackBehaviorAssetSetting _attackBehaviorAssetSetting;
 
         public bool IsComboing => _nowCombination != null && _nowCombination.IsComboing;
         public bool IsProcessCombo => _nowCombination != null && _nowCombination.IsProcessingCombo;
@@ -65,7 +64,8 @@ namespace GameMainModule.Attack
                 _nowCombination.AddObserverList(_observerController.ObserverList);
 
                 //替換攻擊動畫
-                if (_attackBehaviorAssetSetting.TryGetGroupOverrideClip(_nowCombination.WeaponGroup, out var overrides))
+                if (GameMainSystem.AttackBehaviorAssetSetting.TryGetAnimationOverrideNameToClipDic(
+                    _nowCombination.WeaponGroup, out var overrides))
                 {
                     _animatorController.SetOverride(overrides);
                 }
@@ -163,10 +163,9 @@ namespace GameMainModule.Attack
 
         #region Animation Setting
 
-        public void InitAnimation(AnimatorController animatorController, AttackBehaviorAssetSetting attackBehaviorAssetSetting)
+        public void InitAnimation(AnimatorController animatorController)
         {
             _animatorController = animatorController;
-            _attackBehaviorAssetSetting = attackBehaviorAssetSetting;
         }
 
         #endregion

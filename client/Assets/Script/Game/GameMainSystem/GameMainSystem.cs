@@ -33,6 +33,7 @@ namespace GameMainModule
             else if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameTest)
             {
                 InitGameData();
+                InitAssetSetting();
                 CreateTestData(10);
                 InitGameTest();
             }
@@ -47,6 +48,7 @@ namespace GameMainModule
             else if (flowStep == (int)EnterGameFlowStepDefine.EnterGameFlowStep.Init_GameMain)
             {
                 InitGameData();
+                InitAssetSetting();
                 InitGameMain();
             }
         }

@@ -1,4 +1,6 @@
-﻿using static UIModule.Game.Window_AttackBehaviorEdit;
+﻿using FormModule;
+using GameMainModule;
+using static UIModule.Game.Window_AttackBehaviorEdit;
 
 namespace UIModule.Game
 {
@@ -13,7 +15,16 @@ namespace UIModule.Game
         protected override void OnUIDataNotify(IUIDataNotifyInfo notifyInfo)
         {
             var data = _uiData as UIAttackBehaviorData;
-            Text_Content.text = $"Id:{data.RawData.RefItemId}\nSettingId:{data.RawData.SettingId}";
+            if (FormSystem.Table.AttackBehaviorSettingTable.TryGetData(data.RawData.SettingId, out var row) &&
+                GameMainSystem.AttackBehaviorAssetSetting.TryGetSetting(row.AssetSettingId, out var assetSetting))
+            {
+                Text_Content.text =
+                    $"Id:{data.RawData.RefItemId}\n" +
+                    $"SettingId:{data.RawData.SettingId}\n" +
+                    $"AssetSettingId:{row.AssetSettingId}\n" +
+                    $"AreaType:{assetSetting.CollisionAreaType}";
+            }
+
         }
     }
 }

@@ -32,8 +32,7 @@ namespace GameMainModule
         public void InitController(
             UnitMovementSetting unityMovementSetting,
             MovementSetting movementSetting,
-            AnimatorTransitionSetting transitionSetting,
-            AttackBehaviorAssetSetting attackBehaviorAssetSetting)
+            AnimatorTransitionSetting transitionSetting)
         {
             _movementData = new MovementData(unityMovementSetting, movementSetting);
             _characterStateContext = new GameCharacterStateContext(
@@ -44,7 +43,7 @@ namespace GameMainModule
             //Animator
             _animatorController.Init(unityMovementSetting.Animator, transitionSetting);
 
-            _characterAttackController.InitAnimation(_animatorController, attackBehaviorAssetSetting);
+            _characterAttackController.InitAnimation(_animatorController);
 
             //State
             _characterStateMachine.AddState(CharacterState.Idle, new IdleState(_characterStateContext));

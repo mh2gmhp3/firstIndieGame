@@ -15,21 +15,21 @@ MonoBehaviour:
   GroupDataList:
   - Group: 100
     DataList:
-    - Id: 200101
+    - Id: 101
       CollisionAreaType: 1
       CollisionAreaStartTime: 0.1
       CollisionAreaDuration: 0.2
       AnimationClipOverrideNameAndStateName: Attack_01
       AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
       LockNextTime: 0
-    - Id: 200102
+    - Id: 102
       CollisionAreaType: 1
       CollisionAreaStartTime: 0.1
       CollisionAreaDuration: 0.2
       AnimationClipOverrideNameAndStateName: Attack_02
       AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
       LockNextTime: 0
-    - Id: 200103
+    - Id: 103
       CollisionAreaType: 1
       CollisionAreaStartTime: 0.1
       CollisionAreaDuration: 0.2
@@ -61,21 +61,21 @@ MonoBehaviour:
       LockNextTime: 0
   - Group: 300
     DataList:
-    - Id: 200301
+    - Id: 301
       CollisionAreaType: 1
       CollisionAreaStartTime: 0.1
       CollisionAreaDuration: 0.2
       AnimationClipOverrideNameAndStateName: Attack_01
       AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
       LockNextTime: 0
-    - Id: 200302
+    - Id: 302
       CollisionAreaType: 1
       CollisionAreaStartTime: 0.1
       CollisionAreaDuration: 0.2
       AnimationClipOverrideNameAndStateName: Attack_02
       AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
       LockNextTime: 0
-    - Id: 200303
+    - Id: 303
       CollisionAreaType: 1
       CollisionAreaStartTime: 0.1
       CollisionAreaDuration: 0.2

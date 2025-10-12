@@ -6,12 +6,14 @@ namespace FormModule.Game.Table
     {
         public int Id { get; }
         public int WeaponType { get; }
+        public int AssetSettingId { get; }
 
         [JsonConstructor]
-        public AttackBehaviorSettingRow(int id, int weaponType)
+        public AttackBehaviorSettingRow(int id, int weaponType, int assetSettingId)
         {
             Id = id;
             WeaponType = weaponType;
+            AssetSettingId = assetSettingId;
         }
     }
 

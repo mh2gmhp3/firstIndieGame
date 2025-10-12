@@ -40,8 +40,7 @@ namespace GameMainModule
             var unitMovementSetting = unitData.MovementSetting;
             //角色動畫控制
             var animatorTransitionSetting = AssetSystem.LoadAsset<AnimatorTransitionSetting>("Setting/AnimatorTransitionSetting/PrototypeCharacter");
-            var attackBehaviorAssetSetting = AssetSystem.LoadAsset<AttackBehaviorAssetSetting>("Setting/AttackBehaviorAssetSetting/PrototypeCharacter");
-            _characterController.InitController(unitMovementSetting, movementSetting, animatorTransitionSetting, attackBehaviorAssetSetting);
+            _characterController.InitController(unitMovementSetting, movementSetting, animatorTransitionSetting);
             //第三人稱相機註冊
             CameraSystem.CameraCommand(
                 new ThirdPersonModeCommandData
@@ -57,7 +56,7 @@ namespace GameMainModule
             //測試攻擊
             List<AttackCombination> attackCombinationList = new List<AttackCombination>();
             List<AttackBehavior> mainAttackBehaviorList = new List<AttackBehavior>();
-            if (attackBehaviorAssetSetting.TryGetGroupData(100, out var groupData))
+            if (_attackBehaviorAssetSetting.TryGetGroupData(100, out var groupData))
             {
                 for (int i = 0; i < groupData.DataList.Count; i++)
                 {
@@ -66,7 +65,7 @@ namespace GameMainModule
                 }
             }
             List<AttackBehavior> subAttackBehaviorList = new List<AttackBehavior>();
-            if (attackBehaviorAssetSetting.TryGetGroupData(100, out var groupDataSub))
+            if (_attackBehaviorAssetSetting.TryGetGroupData(100, out var groupDataSub))
             {
                 for (int i = 0; i < groupData.DataList.Count; i++)
                 {
