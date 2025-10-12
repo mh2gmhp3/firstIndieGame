@@ -8,19 +8,18 @@ namespace DataModule
 {
     public class AttackBehaviorData
     {
-        public int Id;
+        public int RefItemId;
         public int SettingId;
 
-        public AttackBehaviorData(int id, int settingId)
+        public AttackBehaviorData(int refItemId, int settingId)
         {
-            Id = id;
+            RefItemId = refItemId;
             SettingId = settingId;
         }
     }
 
     public class AttackBehaviorDataContainer
     {
-        public int _nextId;
         public List<AttackBehaviorData> AttackBehaviorDataList = new List<AttackBehaviorData>();
     }
 
@@ -39,38 +38,57 @@ namespace DataModule
             {
                 var data = _data.AttackBehaviorDataList[i];
                 //整理Mapping
-                if (_idToDataDic.ContainsKey(data.Id))
+                if (_idToDataDic.ContainsKey(data.RefItemId))
                 {
-                    Log.LogError($"AttackBehaviorDataRepository OnLoad Error, 有相同Id資料! Data:Id{data.Id} SettingId:{data.SettingId}");
+                    Log.LogError($"AttackBehaviorDataRepository OnLoad Error, 有相同Id資料! RefItemId:Id{data.RefItemId} SettingId:{data.SettingId}");
                 }
                 else
                 {
-                    _idToDataDic.Add(data.Id, data);
+                    _idToDataDic.Add(data.RefItemId, data);
                 }
-
-                //更新下一個Id 避免重複
-                if (data.Id > _data._nextId)
-                    _data._nextId = data.Id;
             }
         }
 
-        private int GetNextId()
+        /// <summary>
+        /// 新增攻擊行為
+        /// </summary>
+        /// <param name="refItemId"></param>
+        /// <param name="settingId"></param>
+        public void AddBehavior(int refItemId, int settingId)
         {
-            return ++_data._nextId;
-        }
-
-        public void AddData(int settingId)
-        {
-            if (!FormSystem.Table.AttackBehaviorSettingTable.TryGetData(settingId, out _))
+            if (_idToDataDic.ContainsKey(refItemId))
             {
-                Log.LogError($"AttackBehaviorDataRepository AddData Error, 找不到此設定資料 SettingId:{settingId}");
+                Log.LogError($"AttackBehaviorDataRepository AddBehavior Error, RefItemId already exist, " +
+                    $"RefItemId:{refItemId}, SettingId:{settingId}");
                 return;
             }
 
-            var nextId = GetNextId();
-            var data = new AttackBehaviorData(nextId, settingId);
+            if (!FormSystem.Table.AttackBehaviorSettingTable.TryGetData(settingId, out _))
+            {
+                Log.LogError($"AttackBehaviorDataRepository AddBehavior Error, 找不到此設定資料 SettingId:{settingId}");
+                return;
+            }
+
+            var data = new AttackBehaviorData(refItemId, settingId);
             _data.AttackBehaviorDataList.Add(data);
-            _idToDataDic.Add(nextId, data);
+            _idToDataDic.Add(refItemId, data);
+        }
+
+        /// <summary>
+        /// 移除攻擊行為
+        /// </summary>
+        /// <param name="refItemId"></param>
+        public void RemoveBehavior(int refItemId)
+        {
+            if (!_idToDataDic.TryGetValue(refItemId, out var data))
+            {
+                Log.LogError($"AttackBehaviorDataRepository RemoveBehavior Error, RefItemId not exist, " +
+                    $"RefItemId:{refItemId}");
+                return;
+            }
+
+            _idToDataDic.Remove(refItemId);
+            _data.AttackBehaviorDataList.Remove(data);
         }
 
         public List<AttackBehaviorData> GetAttackBehaviorDataList() { return _data.AttackBehaviorDataList; }

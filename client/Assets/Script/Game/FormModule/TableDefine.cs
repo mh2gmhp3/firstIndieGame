@@ -18,7 +18,11 @@
             /// <summary>
             /// 武器
             /// </summary>
-            Weapon = 2
+            Weapon = 2,
+            /// <summary>
+            /// 攻擊動作
+            /// </summary>
+            AttackBehavior = 3,
         }
     }
 }

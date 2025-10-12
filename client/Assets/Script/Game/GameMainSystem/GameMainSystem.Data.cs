@@ -21,29 +21,6 @@ namespace GameMainModule
 
         //TODO 對於各Repository的操作應該可以建立Manager來管理不同Repo之間的資料處理關係 只用Region隔開可能不好處理
 
-        #region AttackBehavior
-
-        public static List<AttackBehaviorData> GetAttackBehaviorDataList()
-        {
-            var repo = DataManager.GetDataRepository<AttackBehaviorDataRepository>();
-            if (repo == null)
-                return null;
-
-            return repo.GetAttackBehaviorDataList();
-        }
-
-        public static void AddAllAttackBehavior()
-        {
-            var attackBehaviorDataRepo = DataManager.GetDataRepository<AttackBehaviorDataRepository>();
-            var attackBehaviorDataSettingList = FormSystem.Table.AttackBehaviorSettingTable.GetDataList();
-            for (int i = 0; i < attackBehaviorDataSettingList.Count; i++)
-            {
-                attackBehaviorDataRepo.AddData(attackBehaviorDataSettingList[i].Id);
-            }
-        }
-
-        #endregion
-
         #region Item
 
         /// <summary>
@@ -56,8 +33,16 @@ namespace GameMainModule
             for (int i = 0; i < itemRowList.Count; i++)
             {
                 var count = 99999;
-                if (itemRowList[i].Type == (int)TableDefine.ItemType.Weapon)
-                    count = 5;
+                var itemType = (TableDefine.ItemType)itemRowList[i].Type;
+                switch (itemType)
+                {
+                    case TableDefine.ItemType.Weapon:
+                        count = 5;
+                        break;
+                    case TableDefine.ItemType.AttackBehavior:
+                        count = 5;
+                        break;
+                }
                 itemDataRepo.AddItem(itemRowList[i].Id, count, OnAddItemNotify);
             }
         }
@@ -97,12 +82,18 @@ namespace GameMainModule
             }
 
             var itemType = (TableDefine.ItemType)itemRow.Type;
-            switch (itemType)
+            if (isNew)
             {
-                case TableDefine.ItemType.Weapon:
-                    if (isNew)
+                switch (itemType)
+                {
+                    case TableDefine.ItemType.Weapon:
                         AddWeapon(itemData.Id, itemData.SettingId);
-                    break;
+                        break;
+                    case TableDefine.ItemType.AttackBehavior:
+                        AddBehavior(itemData.Id, itemData.SettingId);
+                        break;
+
+                }
             }
         }
 
@@ -151,6 +142,40 @@ namespace GameMainModule
         {
             var weaponDataRepo = DataManager.GetDataRepository<WeaponDataRepository>();
             weaponDataRepo.RemoveWeapon(refItemId);
+        }
+
+        #endregion
+
+        #region AttackBehavior
+
+        public static List<AttackBehaviorData> GetAttackBehaviorDataList()
+        {
+            var repo = DataManager.GetDataRepository<AttackBehaviorDataRepository>();
+            if (repo == null)
+                return null;
+
+            return repo.GetAttackBehaviorDataList();
+        }
+
+        /// <summary>
+        /// 新增攻擊行為
+        /// </summary>
+        /// <param name="refItemId">道具參考唯一Id</param>
+        /// <param name="settingId">道具設定Id等於攻擊動作設定Id</param>
+        private static void AddBehavior(int refItemId, int settingId)
+        {
+            var attackBehaviorDataRepo = DataManager.GetDataRepository<AttackBehaviorDataRepository>();
+            attackBehaviorDataRepo.AddBehavior(refItemId, settingId);
+        }
+
+        /// <summary>
+        /// 移除攻擊行為
+        /// </summary>
+        /// <param name="refItemId">道具參考唯一Id</param>
+        private static void RemoveBehavior(int refItemId)
+        {
+            var attackBehaviorDataRepo = DataManager.GetDataRepository<AttackBehaviorDataRepository>();
+            attackBehaviorDataRepo.RemoveBehavior(refItemId);
         }
 
         #endregion

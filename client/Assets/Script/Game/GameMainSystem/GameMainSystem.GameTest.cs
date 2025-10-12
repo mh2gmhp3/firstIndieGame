@@ -92,7 +92,6 @@ namespace GameMainModule
         private void CreateTestData(int id)
         {
             DataManager.CreateNew(id);
-            AddAllAttackBehavior();
             AddAllItem();
             DataManager.Save(id);
         }
