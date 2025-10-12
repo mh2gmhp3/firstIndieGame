@@ -95,6 +95,15 @@ namespace UIModule
             }
         }
 
+        public int GetScrollerCellWidgetCount(string identity)
+        {
+            var cell = GetTemplateCell(identity);
+            if (cell == null)
+                return 0;
+
+            return cell.WidgetCount;
+        }
+
         public void RegisterScrollerWidgetEvent(WidgetEvent widgetEvent)
         {
             _scrollerWidgetEvent = widgetEvent;
