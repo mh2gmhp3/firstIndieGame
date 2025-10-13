@@ -35,8 +35,7 @@ namespace UIModule.Game
                     {
                         Text_Content.text = $"Data not Found, " +
                             $"ItemId:{editData.RefItemId}, " +
-                            $"SettingId:{attackBehaviorData.SettingId}, " +
-                            $"AssetSettingId:{row.AssetSettingId}";
+                            $"SettingId:{attackBehaviorData.SettingId}";
                     }
                 }
             }
