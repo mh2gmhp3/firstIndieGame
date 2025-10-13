@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -36,14 +37,20 @@ namespace Framework.ComponentUtility
                 if (obj == null)
                     return;
 
-                if (ObjectList.Contains(obj))
+                if (ObjectList.Count == 0)
                     return;
 
-                if (ObjectList.Count == 0)
+                var oriCompTypeSet = new HashSet<string>(ObjectList[0].GetComponents<Component>().Select((c) => c.GetType().Name));
+                var targetCompTypeSet = new HashSet<string>(obj.GetComponents<Component>().Select((c) => c.GetType().Name));
+                var intersectSet = oriCompTypeSet.Intersect(targetCompTypeSet);
+                if (oriCompTypeSet.Except(intersectSet).Count() > 0)
                     return;
 
                 Object newObj = GetObjectByType(obj, ObjectList[0].GetType());
                 if (newObj == null)
+                    return;
+
+                if (ObjectList.Contains(newObj))
                     return;
 
                 ObjectList.Add(newObj);
@@ -93,9 +100,11 @@ namespace Framework.ComponentUtility
                 return;
 
             string name = obj.name;
-            int index = _objectReferenceList.FindIndex((x) => x.Name == name);
-            if (index >= 0)
-                return; //Same Name
+            if (DuplicateTypeAndName(typeof(GameObject), name))
+            {
+                Log.LogWarning("已具有GameObject定義並有相同名稱之參考");
+                return;
+            }
 
             var newGoRef = new ObjectReference();
             newGoRef.Name = name;
