@@ -18,6 +18,9 @@ namespace DataModule
         private readonly Dictionary<string, IDataRepository> _slotTypeNameToDataRepositoryDic =
             new Dictionary<string, IDataRepository>();
 
+        private int _curDataId = -1;
+        public int CurDataId => _curDataId;
+
         /// <summary>
         /// 初始化
         /// </summary>
@@ -100,6 +103,7 @@ namespace DataModule
                 var path = Path.Combine(dataFolderPath, typeName);
                 LoadJsonFormat(path, dataRepository);
             }
+            _curDataId = id;
             return true;
         }
 
@@ -140,6 +144,7 @@ namespace DataModule
             //直接重建
             InitSlotRepository();
             Save(id);
+            _curDataId = id;
         }
 
         /// <summary>

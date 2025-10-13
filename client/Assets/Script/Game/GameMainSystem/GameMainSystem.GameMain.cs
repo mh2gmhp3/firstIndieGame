@@ -52,5 +52,13 @@ namespace GameMainModule
         {
             Log.LogInfo("開啟遊戲資訊頁面");
         }
+
+        public static void SaveCurData()
+        {
+            if (DataManager.CurDataId != -1)
+            {
+                DataManager.Save(DataManager.CurDataId);
+            }
+        }
     }
 }
