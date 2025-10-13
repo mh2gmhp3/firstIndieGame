@@ -15,13 +15,15 @@ namespace UIModule
         public string WindowName;
         protected Canvas _canvas;
 
-        protected override void DoInit()
+        protected sealed override void DoInit()
         {
             _canvas = gameObject.GetComponent<Canvas>();
             _canvas.overrideSorting = true;
             _canvas.transform.localScale = Vector3.one;
 
             _rectTransform.SetStretch();
+
+            OnInit();
         }
 
         /// <summary>
@@ -86,5 +88,10 @@ namespace UIModule
         /// 關閉時呼叫
         /// </summary>
         protected virtual void DoClose() { }
+
+        /// <summary>
+        /// 初始化時呼叫
+        /// </summary>
+        protected virtual void OnInit() { }
     }
 }
