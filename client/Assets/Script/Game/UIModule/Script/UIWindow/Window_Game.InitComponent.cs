@@ -1,6 +1,9 @@
-﻿using GameMainModule;
+﻿using DataModule;
+using GameMainModule;
+using System.Collections.Generic;
 using UIModule.Game;
 using static UIModule.Game.Window_AttackBehaviorEdit;
+using static UIModule.Game.Window_ItemSelect;
 namespace UIModule.Game
 {
     public partial class Window_Game : UIWindow
@@ -26,9 +29,18 @@ namespace UIModule.Game
         //#EVENT#
         private void OnWidgetEvent_Widget_Button_AttackBehavior(WidgetEventData eventData)
         {
-            UISystem.OpenUIWindow(
-                "Window_AttackBehaviorEdit",
-                new UIAttackBehaviorDataContainer(GameMainSystem.GetAttackBehaviorDataList()));
+            //UISystem.OpenUIWindow(
+            //    "Window_AttackBehaviorEdit",
+            //    new UIAttackBehaviorDataContainer(GameMainSystem.GetAttackBehaviorDataList()));
+
+            //var itemList = new List<UIItemData>();
+            //GameMainSystem.GetItemDataList(itemList, FormModule.TableDefine.ItemType.Weapon);
+            //UISystem.OpenUIWindow(
+            //    "Window_ItemSelect",
+            //    new UISelectItemDataContainer(itemList));
+
+
+            UISystem.OpenUIWindow("Window_CharacterMain", null);
         }
 
         //#EVENT#

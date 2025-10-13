@@ -11,6 +11,7 @@ namespace UIModule.Game
         private Widget_Button Widget_Button_Close;
         private Widget_Item Widget_Item_Select_Item;
         private GameObject GameObject_Item_Info_Root;
+        private Widget_Button Widget_Button_Confirm;
         //#REF#
 
         protected override void InitComponentReference()
@@ -20,6 +21,7 @@ namespace UIModule.Game
             Widget_Button_Close = _objectReferenceDb.GetObject<Widget_Button>("Close");
             Widget_Item_Select_Item = _objectReferenceDb.GetObject<Widget_Item>("Select_Item");
             GameObject_Item_Info_Root = _objectReferenceDb.GetObject<GameObject>("Item_Info_Root");
+            Widget_Button_Confirm = _objectReferenceDb.GetObject<Widget_Button>("Confirm");
             //#INIT_REF#
         }
 
@@ -29,6 +31,7 @@ namespace UIModule.Game
             SimpleScrollerController_ItemScroller.RegisterScrollerWidgetEvent(OnScrollerWidgetEvent_SimpleScrollerController_ItemScroller);
             Widget_Button_Close.RegisterWidgetEvent(OnWidgetEvent_Widget_Button_Close);
             Widget_Item_Select_Item.RegisterWidgetEvent(OnWidgetEvent_Widget_Item_Select_Item);
+            Widget_Button_Confirm.RegisterWidgetEvent(OnWidgetEvent_Widget_Button_Confirm);
             //#INIT_EVENT#
         }
 
@@ -37,8 +40,7 @@ namespace UIModule.Game
         {
             if (eventData.UIData is UIItemData itemData)
             {
-                GameObject_Item_Info_Root.SetActive(true);
-                Widget_Item_Select_Item.SetData(itemData);
+                SetSelectedData(itemData);
             }
         }
 
@@ -50,6 +52,21 @@ namespace UIModule.Game
         private void OnWidgetEvent_Widget_Item_Select_Item(WidgetEventData eventData)
         {
 
+        }
+
+        private void OnWidgetEvent_Widget_Button_Confirm(WidgetEventData eventData)
+        {
+            if (_selectedData == null)
+                return;
+
+            if (_container == null)
+                return;
+
+            if (_container.SelectedEvent == null)
+                return;
+
+            _container.SelectedEvent.Invoke(_selectedData);
+            SetVisible(false);
         }
 
         //#EVENT#

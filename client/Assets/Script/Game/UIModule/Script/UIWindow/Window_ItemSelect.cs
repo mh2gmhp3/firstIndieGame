@@ -1,5 +1,6 @@
 ﻿using DataModule;
 using Extension;
+using System;
 using System.Collections.Generic;
 
 namespace UIModule.Game
@@ -9,11 +10,13 @@ namespace UIModule.Game
         public class UISelectItemDataContainer : IUIData, IScrollerControllerDataGetter
         {
             public List<UIItemData> ItemDataList = new List<UIItemData>();
+            public Action<UIItemData> SelectedEvent;
             private int _cellWidgetCount;
 
-            public UISelectItemDataContainer(List<UIItemData> itemDataList)
+            public UISelectItemDataContainer(List<UIItemData> itemDataList, Action<UIItemData> selectedEvent = null)
             {
                 ItemDataList.AddRange(itemDataList);
+                SelectedEvent = selectedEvent;
             }
 
             public void SetScroller(SimpleScrollerController scroller)
@@ -40,23 +43,43 @@ namespace UIModule.Game
             }
         }
 
+        private UISelectItemDataContainer _container;
+        private UIItemData _selectedData = null;
+
         protected override void DoOpen(IUIData uiData)
         {
             if (uiData is UISelectItemDataContainer dataContainer)
             {
-                dataContainer.SetScroller(SimpleScrollerController_ItemScroller);
-                SimpleScrollerController_ItemScroller.SetDataGetter(dataContainer);
+                _container = dataContainer;;
+                _container.SetScroller(SimpleScrollerController_ItemScroller);
+                SimpleScrollerController_ItemScroller.SetDataGetter(_container);
+                SetSelectedData(null);
             }
         }
 
         protected override void DoClose()
         {
-
+            _container = null;
+            _selectedData = null;
         }
 
         protected override void DoNotify(IUIData data, IUIDataNotifyInfo notifyInfo)
         {
 
+        }
+
+        private void SetSelectedData(UIItemData itemData)
+        {
+            if (itemData == null)
+            {
+                _selectedData = null;
+                GameObject_Item_Info_Root.SetActive(false);
+                return;
+            }
+
+            _selectedData = itemData;
+            GameObject_Item_Info_Root.SetActive(true);
+            Widget_Item_Select_Item.SetData(_selectedData);
         }
     }
 }
