@@ -37,8 +37,7 @@ namespace UIModule.Game
             UISystem.OpenUIWindow("Window_ItemSelect", new UISelectItemDataContainer(itemList,
                 (selectedItem) =>
                 {
-                    //先直接刷新 正常要透過改資料後的通知來做刷新
-                    Widget_Item_Weapons[index].SetData(selectedItem);
+                    GameMainSystem.SetWeapon(index, selectedItem.Id);
                 }));
         }
 

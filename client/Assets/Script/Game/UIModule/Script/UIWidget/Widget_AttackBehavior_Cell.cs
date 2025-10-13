@@ -14,15 +14,43 @@ namespace UIModule.Game
 
         protected override void OnUIDataNotify(IUIDataNotifyInfo notifyInfo)
         {
-            var data = _uiData as UIAttackBehaviorData;
-            if (FormSystem.Table.AttackBehaviorSettingTable.TryGetData(data.RawData.SettingId, out var row) &&
-                GameMainSystem.AttackBehaviorAssetSetting.TryGetSetting(row.AssetSettingId, out var assetSetting))
+            if (_uiData is UIAttackBehaviorEditData editData)
             {
-                Text_Content.text =
-                    $"Id:{data.RawData.RefItemId}\n" +
-                    $"SettingId:{data.RawData.SettingId}\n" +
-                    $"AssetSettingId:{row.AssetSettingId}\n" +
-                    $"AreaType:{assetSetting.CollisionAreaType}";
+                if (editData.RefItemId == CommonDefine.EmptyWeaponId)
+                {
+                    Text_Content.text = "Empty";
+                }
+                else if (GameMainSystem.TryGetUIAttackBehaviorData(editData.RefItemId, out var attackBehaviorData))
+                {
+                    if (FormSystem.Table.AttackBehaviorSettingTable.TryGetData(attackBehaviorData.SettingId, out var row) &&
+                        GameMainSystem.AttackBehaviorAssetSetting.TryGetSetting(row.AssetSettingId, out var assetSetting))
+                    {
+                        Text_Content.text =
+                            $"Id:{attackBehaviorData.RefItemId}\n" +
+                            $"SettingId:{attackBehaviorData.SettingId}\n" +
+                            $"AssetSettingId:{row.AssetSettingId}\n" +
+                            $"AreaType:{assetSetting.CollisionAreaType}";
+                    }
+                    else
+                    {
+                        Text_Content.text = $"Data not Found, " +
+                            $"ItemId:{editData.RefItemId}, " +
+                            $"SettingId:{attackBehaviorData.SettingId}, " +
+                            $"AssetSettingId:{row.AssetSettingId}";
+                    }
+                }
+            }
+            else if (_uiData is UIAttackBehaviorData data)
+            {
+                if (FormSystem.Table.AttackBehaviorSettingTable.TryGetData(data.RawData.SettingId, out var row) &&
+                    GameMainSystem.AttackBehaviorAssetSetting.TryGetSetting(row.AssetSettingId, out var assetSetting))
+                {
+                    Text_Content.text =
+                        $"Id:{data.RawData.RefItemId}\n" +
+                        $"SettingId:{data.RawData.SettingId}\n" +
+                        $"AssetSettingId:{row.AssetSettingId}\n" +
+                        $"AreaType:{assetSetting.CollisionAreaType}";
+                }
             }
 
         }

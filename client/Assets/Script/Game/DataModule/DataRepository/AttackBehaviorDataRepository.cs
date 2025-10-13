@@ -2,10 +2,32 @@
 using Logging;
 using System.Collections;
 using System.Collections.Generic;
+using UIModule;
 using UnityEngine;
 
 namespace DataModule
 {
+    #region Runtime UIData
+
+    public class UIAttackBehaviorData : IUIData
+    {
+        public int RefItemId;
+        public int SettingId;
+
+        public UIAttackBehaviorData(AttackBehaviorData data)
+        {
+            SyncData(data);
+        }
+
+        public void SyncData(AttackBehaviorData data)
+        {
+            RefItemId = data.RefItemId;
+            SettingId = data.SettingId;
+        }
+    }
+
+    #endregion
+
     public class AttackBehaviorData
     {
         public int RefItemId;
@@ -28,6 +50,10 @@ namespace DataModule
     {
         private Dictionary<int, AttackBehaviorData> _idToDataDic = new Dictionary<int, AttackBehaviorData>();
 
+        //Runtime UIData
+        private List<UIAttackBehaviorData> _uiDataList = new List<UIAttackBehaviorData>();
+        private Dictionary<int, UIAttackBehaviorData> _idToUIDataDic = new Dictionary<int, UIAttackBehaviorData>();
+
         public AttackBehaviorDataRepository(DataManager dataManager, int version) : base(dataManager, version)
         {
         }
@@ -45,6 +71,10 @@ namespace DataModule
                 else
                 {
                     _idToDataDic.Add(data.RefItemId, data);
+                    //Runtime
+                    var uiData = new UIAttackBehaviorData(data);
+                    _uiDataList.Add(uiData);
+                    _idToUIDataDic.Add(data.RefItemId, uiData);
                 }
             }
         }
@@ -72,6 +102,10 @@ namespace DataModule
             var data = new AttackBehaviorData(refItemId, settingId);
             _data.AttackBehaviorDataList.Add(data);
             _idToDataDic.Add(refItemId, data);
+            //Runtime
+            var uiData = new UIAttackBehaviorData(data);
+            _uiDataList.Add(uiData);
+            _idToUIDataDic.Add(uiData.RefItemId, uiData);
         }
 
         /// <summary>
@@ -89,8 +123,19 @@ namespace DataModule
 
             _idToDataDic.Remove(refItemId);
             _data.AttackBehaviorDataList.Remove(data);
+            //Runtime
+            if (_idToUIDataDic.TryGetValue(refItemId, out var uiData))
+            {
+                _uiDataList.Remove(uiData);
+                _idToUIDataDic.Remove(refItemId);
+            }
         }
 
-        public List<AttackBehaviorData> GetAttackBehaviorDataList() { return _data.AttackBehaviorDataList; }
+        public List<UIAttackBehaviorData> GetUIAttackBehaviorDataList() { return _uiDataList; }
+
+        public bool TryGetUIAttackBehaviorData(int behaviorRefItemId, out UIAttackBehaviorData result)
+        {
+            return _idToUIDataDic.TryGetValue(behaviorRefItemId, out result);
+        }
     }
 }

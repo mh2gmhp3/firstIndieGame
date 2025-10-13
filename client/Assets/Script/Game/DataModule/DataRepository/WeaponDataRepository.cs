@@ -4,15 +4,35 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 namespace DataModule
 {
-    public class WeaponData
+    #region Runtime UIData
+
+    public class UIWeaponData
     {
         public int RefItemId;
         public int SettingId;
 
-        public List<int> RefBehaviorId = new List<int>();
+        public UIWeaponData(WeaponData syncData)
+        {
+            SyncData(syncData);
+        }
+
+        public void SyncData(WeaponData syncData)
+        {
+            RefItemId = syncData.RefItemId;
+            SettingId = syncData.SettingId;
+        }
+    }
+
+    #endregion
+
+    public class WeaponData
+    {
+        public int RefItemId;
+        public int SettingId;
 
         public WeaponData(int itemId, int settingId)
         {
@@ -31,6 +51,10 @@ namespace DataModule
     {
         private Dictionary<int, WeaponData> _idToDataDic = new Dictionary<int, WeaponData>();
 
+        //Runtime UIData
+        private List<UIWeaponData> _uiDataList = new List<UIWeaponData>();
+        private Dictionary<int, UIWeaponData> _idToUIDataDic = new Dictionary<int, UIWeaponData>();
+
         public WeaponDataRepository(DataManager dataManager, int version) : base(dataManager, version)
         {
         }
@@ -48,6 +72,11 @@ namespace DataModule
                 else
                 {
                     _idToDataDic.Add(data.RefItemId, data);
+
+                    //Runtime
+                    var uiData = new UIWeaponData(data);
+                    _uiDataList.Add(uiData);
+                    _idToUIDataDic.Add(data.RefItemId, uiData);
                 }
             }
         }
@@ -71,6 +100,10 @@ namespace DataModule
             var newWeapon = new WeaponData(refItemId, settingId);
             _idToDataDic.Add(refItemId, newWeapon);
             _data.WeaponDataList.Add(newWeapon);
+            //Runtime
+            var uiData = new UIWeaponData(newWeapon);
+            _uiDataList.Add(uiData);
+            _idToUIDataDic.Add(uiData.RefItemId, uiData);
         }
 
         public void RemoveWeapon(int refItemId)
@@ -84,6 +117,17 @@ namespace DataModule
 
             _idToDataDic.Remove(refItemId);
             _data.WeaponDataList.Remove(weaponData);
+            //Runtime
+            if (_idToUIDataDic.TryGetValue(refItemId, out var uiData))
+            {
+                _uiDataList.Remove(uiData);
+                _idToUIDataDic.Remove(refItemId);
+            }
+        }
+
+        public bool TryGetUIWeaponData(int refItemId, out UIWeaponData result)
+        {
+            return _idToUIDataDic.TryGetValue(refItemId, out result);
         }
     }
 }

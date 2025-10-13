@@ -1,4 +1,5 @@
-﻿using Logging;
+﻿using DataModule;
+using Logging;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,8 +14,9 @@ namespace UIModule.Game
         }
 
         private Page _curPage = Page.State;
-
         private Dictionary<int, UIWidget> _pageToWidgetDic = new Dictionary<int, UIWidget>();
+
+        private UICharacterData _characterData;
 
         protected override void OnInit()
         {
@@ -24,7 +26,16 @@ namespace UIModule.Game
 
         protected override void DoOpen(IUIData uiData)
         {
-            SetPage(Page.State, true);
+            if (_uiData is UICharacterData characterData)
+            {
+                _characterData = characterData;
+                SetPage(Page.State, true);
+            }
+            else
+            {
+                Log.LogError("Window_CharacterMain DoOpen Error, dat can not handle");
+                SetVisible(false);
+            }
         }
 
         protected override void DoClose()
@@ -55,6 +66,7 @@ namespace UIModule.Game
             }
 
             pageWidget.SetVisible(true);
+            pageWidget.SetData(_characterData);
         }
     }
 }

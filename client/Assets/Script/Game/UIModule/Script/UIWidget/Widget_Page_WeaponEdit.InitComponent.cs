@@ -2,6 +2,9 @@
 using UIModule.Game;
 using UIModule;
 using UnityEngine;
+using DataModule;
+using GameMainModule;
+using static UIModule.Game.Window_ItemSelect;
 namespace UIModule.Game
 {
     public partial class Widget_Page_WeaponEdit : UIWidget
@@ -26,8 +29,8 @@ namespace UIModule.Game
             //#INIT_EVENT#
             for(int i = 0; i < Widget_Item_Weapons.Count; i++)
             {
-            	var index = i;
-            	Widget_Item_Weapons[index].RegisterWidgetEvent((evData) => {OnWidgetEvent_Widget_Item_Weapons(index, evData);});
+                var index = i;
+                Widget_Item_Weapons[index].RegisterWidgetEvent((evData) => {OnWidgetEvent_Widget_Item_Weapons(index, evData);});
             }
             SimpleScrollerController_AttackBehavior.RegisterScrollerWidgetEvent(OnScrollerWidgetEvent_SimpleScrollerController_AttackBehavior);
             //#INIT_EVENT#
@@ -36,14 +39,23 @@ namespace UIModule.Game
         //#EVENT#
         private void OnWidgetEvent_Widget_Item_Weapons(int index, WidgetEventData eventData)
         {
-        
+            SetCurEditWeaponIndex(index);
         }
-        
+
         private void OnScrollerWidgetEvent_SimpleScrollerController_AttackBehavior(WidgetEventData eventData)
         {
-        
+            if (eventData.UIData is UIAttackBehaviorEditData editData)
+            {
+                var itemList = new List<UIItemData>();
+                GameMainSystem.GetItemDataList(itemList, FormModule.TableDefine.ItemType.AttackBehavior);
+                UISystem.OpenUIWindow("Window_ItemSelect", new UISelectItemDataContainer(itemList,
+                    (selectedItem) =>
+                    {
+                        GameMainSystem.SetWeaponBehavior(editData.RefWeaponItemId, editData.Index, selectedItem.Id);
+                    }));
+            }
         }
-        
+
         //#EVENT#
     }
 }

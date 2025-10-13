@@ -29,6 +29,7 @@ namespace UIModule.Game
         {
             if (_uiData is ButtonData buttonData)
             {
+                Log.LogInfo(notifyInfo.Identify);
                 Text_Content.text = buttonData.Content;
             }
         }

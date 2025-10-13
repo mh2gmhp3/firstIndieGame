@@ -12,16 +12,21 @@ namespace DataModule
     /// </summary>
     public class UIItemData : IUIData
     {
-        private readonly ItemData _rawData;
+        public int Id;
+        public int SettingId;
 
-        public int Id => _rawData.Id;
-        public int SettingId => _rawData.SettingId;
-
-        public int Count => _rawData.Count;
+        public int Count;
 
         public UIItemData(ItemData rawData)
         {
-            _rawData = rawData;
+            SyncData(rawData);
+        }
+
+        public void SyncData(ItemData rawData)
+        {
+            Id = rawData.Id;
+            SettingId = rawData.SettingId;
+            Count = rawData.Count;
         }
     }
 
@@ -99,6 +104,11 @@ namespace DataModule
             result.AddRange(_uiDataList);
         }
 
+        public bool TryGetItemData(int id, out UIItemData itemData)
+        {
+            return _idToUIDataDic.TryGetValue(id, out itemData);
+        }
+
         /// <summary>
         /// 新增道具
         /// </summary>
@@ -138,6 +148,8 @@ namespace DataModule
                     oriItem.Count += Math.Min(remainCount, count);
                     if (_idToUIDataDic.TryGetValue(oriItem.Id, out var uIItemData))
                     {
+                        uIItemData.SyncData(oriItem);
+                        uIItemData.Notify(default);
                         if (notifyEvent != null)
                             notifyEvent.Invoke(uIItemData, false);
                     }
@@ -222,8 +234,16 @@ namespace DataModule
             //Runtime
             if (_idToUIDataDic.TryGetValue(id, out var uIItemData))
             {
-                _uiDataList.Remove(uIItemData);
-                _idToUIDataDic.Remove(id);
+                if (needRemove)
+                {
+                    _uiDataList.Remove(uIItemData);
+                    _idToUIDataDic.Remove(id);
+                }
+                else
+                {
+                    uIItemData.SyncData(itemData);
+                    uIItemData.Notify(default);
+                }
 
                 if (notifyEvent != null)
                     notifyEvent.Invoke(uIItemData, needRemove);
@@ -253,7 +273,7 @@ namespace DataModule
             //Runtime
             var newUIItemData = new UIItemData(newItemData);
             _uiDataList.Add(newUIItemData);
-            _idToUIDataDic.Add(newItemData.Id, newUIItemData);
+            _idToUIDataDic.Add(newUIItemData.Id, newUIItemData);
             if (notifyEvent != null)
                 notifyEvent.Invoke(newUIItemData, true);
         }

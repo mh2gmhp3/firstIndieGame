@@ -1,9 +1,7 @@
 ﻿using DataModule;
 using FormModule;
 using Logging;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace GameMainModule
 {
@@ -20,6 +18,28 @@ namespace GameMainModule
         }
 
         //TODO 對於各Repository的操作應該可以建立Manager來管理不同Repo之間的資料處理關係 只用Region隔開可能不好處理
+
+        #region Character
+
+        public static UICharacterData GetUICharacterData()
+        {
+            var characterDataRepo = DataManager.GetDataRepository<CharacterDataRepository>();
+            return characterDataRepo.GetUICharacterData();
+        }
+
+        public static void SetWeapon(int index, int weaponRefItemId)
+        {
+            var characterDataRepo = DataManager.GetDataRepository<CharacterDataRepository>();
+            characterDataRepo.SetWeapon(index, weaponRefItemId);
+        }
+
+        public static void SetWeaponBehavior(int weaponRefItemId, int index, int attackBehaviorRefItemId)
+        {
+            var characterDataRepo = DataManager.GetDataRepository<CharacterDataRepository>();
+            characterDataRepo.SetWeaponBehavior(weaponRefItemId, index, attackBehaviorRefItemId);
+        }
+
+        #endregion
 
         #region Item
 
@@ -150,6 +170,12 @@ namespace GameMainModule
             }
         }
 
+        public static bool TryGetItemData(int id, out UIItemData itemData)
+        {
+            var itemDataRepo = DataManager.GetDataRepository<ItemDataRepository>();
+            return itemDataRepo.TryGetItemData(id, out itemData);
+        }
+
         #endregion
 
         #region Weapon
@@ -175,17 +201,29 @@ namespace GameMainModule
             weaponDataRepo.RemoveWeapon(refItemId);
         }
 
+        public static bool TryGetUIWeaponData(int refItemId, out UIWeaponData result)
+        {
+            var weaponDataRepo = DataManager.GetDataRepository<WeaponDataRepository>();
+            return weaponDataRepo.TryGetUIWeaponData(refItemId, out result);
+        }
+
         #endregion
 
         #region AttackBehavior
 
-        public static List<AttackBehaviorData> GetAttackBehaviorDataList()
+        public static List<UIAttackBehaviorData> GetUIAttackBehaviorDataList()
         {
             var repo = DataManager.GetDataRepository<AttackBehaviorDataRepository>();
             if (repo == null)
                 return null;
 
-            return repo.GetAttackBehaviorDataList();
+            return repo.GetUIAttackBehaviorDataList();
+        }
+
+        public static bool TryGetUIAttackBehaviorData(int behaviorRefItemId, out UIAttackBehaviorData result)
+        {
+            var repo = DataManager.GetDataRepository<AttackBehaviorDataRepository>();
+            return repo.TryGetUIAttackBehaviorData(behaviorRefItemId, out result);
         }
 
         /// <summary>

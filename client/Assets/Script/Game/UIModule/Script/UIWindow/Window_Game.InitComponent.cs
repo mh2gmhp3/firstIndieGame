@@ -9,38 +9,36 @@ namespace UIModule.Game
     public partial class Window_Game : UIWindow
     {
         //#REF#
-        private Widget_Button Widget_Button_AttackBehavior;
+        private Widget_Button Widget_Button_CharacterMain;
+        private Widget_Button Widget_Button_Save_Test;
         //#REF#
 
         protected override void InitComponentReference()
         {
             //#INIT_REF#
-            Widget_Button_AttackBehavior = _objectReferenceDb.GetObject<Widget_Button>("AttackBehavior");
+            Widget_Button_CharacterMain = _objectReferenceDb.GetObject<Widget_Button>("CharacterMain");
+            Widget_Button_Save_Test = _objectReferenceDb.GetObject<Widget_Button>("Save_Test");
             //#INIT_REF#
         }
 
         protected override void InitComponentEvent()
         {
             //#INIT_EVENT#
-            Widget_Button_AttackBehavior.RegisterWidgetEvent(OnWidgetEvent_Widget_Button_AttackBehavior);
+            Widget_Button_CharacterMain.RegisterWidgetEvent(OnWidgetEvent_Widget_Button_CharacterMain);
+            Widget_Button_Save_Test.RegisterWidgetEvent(OnWidgetEvent_Widget_Button_Save_Test);
             //#INIT_EVENT#
         }
 
         //#EVENT#
-        private void OnWidgetEvent_Widget_Button_AttackBehavior(WidgetEventData eventData)
+
+        private void OnWidgetEvent_Widget_Button_CharacterMain(WidgetEventData eventData)
         {
-            //UISystem.OpenUIWindow(
-            //    "Window_AttackBehaviorEdit",
-            //    new UIAttackBehaviorDataContainer(GameMainSystem.GetAttackBehaviorDataList()));
+            UISystem.OpenUIWindow("Window_CharacterMain", GameMainSystem.GetUICharacterData());
+        }
 
-            //var itemList = new List<UIItemData>();
-            //GameMainSystem.GetItemDataList(itemList, FormModule.TableDefine.ItemType.Weapon);
-            //UISystem.OpenUIWindow(
-            //    "Window_ItemSelect",
-            //    new UISelectItemDataContainer(itemList));
-
-
-            UISystem.OpenUIWindow("Window_CharacterMain", null);
+        private void OnWidgetEvent_Widget_Button_Save_Test(WidgetEventData eventData)
+        {
+            GameMainSystem.SaveCurData();
         }
 
         //#EVENT#
