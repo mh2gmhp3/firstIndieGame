@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Extension
 {
@@ -82,6 +80,31 @@ namespace Extension
                 list.RemoveAt(index);
                 //加入最後
                 list.Add(temp);
+            }
+        }
+
+        /// <summary>
+        /// 確保List數量 只會增加不會減少
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="count"></param>
+        /// <param name="defaultValue"></param>
+        public static void EnsureCount<T>(this IList<T> list, int count, Func<T> defaultValue)
+        {
+            if (list == null)
+                return;
+
+            if (defaultValue == null)
+                return;
+
+            var diffCount = count - list.Count;
+            if (diffCount > 0)
+            {
+                for (int i = 0; i < diffCount; i++)
+                {
+                    list.Add(defaultValue.Invoke());
+                }
             }
         }
     }
