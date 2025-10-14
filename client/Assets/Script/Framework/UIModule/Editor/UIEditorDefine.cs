@@ -10,7 +10,7 @@ namespace UIModule
         public static string UI_SCRIPT_TAMPLATE_FILE_MAIN_PATH = "Assets/Script/Framework/UIModule/Editor/ScriptTemplate";
         public static string UI_SCRIPT_TAMPLATE_FILE_NAME_FORMAT = "{0}Template";
         public static string UI_SCRIPT_INIT_COMPONENT_FILE_NAME = "InitComponent";
-        public static string UI_SCRIPT_FOLDER_PATH = "Assets/Script/Game/UIModule/Script";
+        public static string UI_SCRIPT_FOLDER_PATH = "Assets/Script/Game/UIModule";
 
         /// <summary>
         /// 獲取UI腳本資料夾路徑
