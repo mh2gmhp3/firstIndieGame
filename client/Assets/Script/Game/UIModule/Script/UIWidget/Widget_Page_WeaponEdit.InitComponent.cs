@@ -48,7 +48,7 @@ namespace UIModule.Game
             {
                 var itemList = new List<UIItemData>();
                 GameMainSystem.GetItemDataList(itemList, FormModule.TableDefine.ItemType.AttackBehavior);
-                UISystem.OpenUIWindow("Window_ItemSelect", new UISelectItemDataContainer(itemList,
+                UISystem.OpenUIWindow(WindowId.Window_ItemSelect, new UISelectItemDataContainer(itemList,
                     (selectedItem) =>
                     {
                         GameMainSystem.SetWeaponBehavior(editData.RefWeaponItemId, editData.Index, selectedItem.Id);

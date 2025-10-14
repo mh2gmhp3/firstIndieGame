@@ -85,7 +85,7 @@ namespace GameMainModule
             testNpcCharacterGameUnit.transform.position = new Vector3(5, 0, 0);
             _unitManager.AddUnit(_unitManager.AllocUnitId(), testNpcCharacterGameUnit);
 
-            UISystem.OpenUIWindow("Window_Game", null);
+            UISystem.OpenUIWindow(WindowId.Window_Game, null);
         }
 
         private void CreateTestData(int id)

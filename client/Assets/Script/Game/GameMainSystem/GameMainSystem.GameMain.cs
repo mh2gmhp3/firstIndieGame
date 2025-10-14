@@ -15,7 +15,7 @@ namespace GameMainModule
         /// </summary>
         public void InitGameMain()
         {
-            UISystem.OpenUIWindow("Window_Main", null);
+            UISystem.OpenUIWindow(WindowId.Window_Main, null);
         }
 
         public static void StartNewGame()

@@ -34,7 +34,7 @@ namespace UIModule.Game
         {
             var itemList = new List<UIItemData>();
             GameMainSystem.GetItemDataList(itemList, FormModule.TableDefine.ItemType.Weapon);
-            UISystem.OpenUIWindow("Window_ItemSelect", new UISelectItemDataContainer(itemList,
+            UISystem.OpenUIWindow(WindowId.Window_ItemSelect, new UISelectItemDataContainer(itemList,
                 (selectedItem) =>
                 {
                     GameMainSystem.SetWeapon(index, selectedItem.Id);
