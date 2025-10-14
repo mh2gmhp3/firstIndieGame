@@ -100,13 +100,13 @@ namespace InputModule
                         _keyCodeToTriggerCommandListDic.Add(keyCode, keyCodeTriggerCommand);
                     }
 
-                    var commadList = keyCodeTriggerCommand.
+                    var commandList = keyCodeTriggerCommand.
                         GetCommandListByType(keyCodeTriggerSetting.Type);
 
-                    if (commadList.Contains(inputCommand.Command))
+                    if (commandList.Contains(inputCommand.Command))
                         continue;
 
-                    commadList.Add(inputCommand.Command);
+                    commandList.Add(inputCommand.Command);
                 }
             }
 
@@ -126,19 +126,19 @@ namespace InputModule
 
         public void RegisterInputReceiver(IInputReceiver inputReceiver)
         {
-            if (inputReceiver is T type)
+            if (inputReceiver is T typeInputReceiver)
             {
-                if (_inputReceiverList.Contains(type))
+                if (_inputReceiverList.Contains(typeInputReceiver))
                     return;
-                _inputReceiverList.Add(type);
+                _inputReceiverList.Add(typeInputReceiver);
             }
         }
 
         public void UnRegisterInputReceiver(IInputReceiver inputReceiver)
         {
-            if (inputReceiver is T type)
+            if (inputReceiver is T typeInputReceiver)
             {
-                _inputReceiverList.Remove(type);
+                _inputReceiverList.Remove(typeInputReceiver);
             }
         }
 
