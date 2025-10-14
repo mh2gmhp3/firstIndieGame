@@ -4,6 +4,7 @@ using Logging;
 using System.Collections;
 using System.Collections.Generic;
 using UIModule;
+using UIModule.Game;
 using UnityEngine;
 
 namespace GameMainModule
@@ -15,6 +16,7 @@ namespace GameMainModule
         /// </summary>
         public void InitGameMain()
         {
+            SetCurGameState(GameState.UI);
             UISystem.OpenUIWindow(WindowId.Window_Main, null);
         }
 
@@ -51,6 +53,18 @@ namespace GameMainModule
         public static void Info()
         {
             Log.LogInfo("開啟遊戲資訊頁面");
+        }
+
+        public static void OpenCharacterMain()
+        {
+            UISystem.OpenUIWindow(WindowId.Window_CharacterMain, GetUICharacterData());
+            SetCurGameState(GameState.UI);
+        }
+
+        public static void CloseCharacterMain()
+        {
+            UISystem.CloseUIWindow(WindowId.Window_CharacterMain);
+            SetCurGameState(GameState.Normal);
         }
 
         public static void SaveCurData()

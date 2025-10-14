@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using GameMainModule;
+using System.Collections.Generic;
 using UIModule.Game;
 using UnityEngine;
 namespace UIModule.Game
@@ -28,8 +29,8 @@ namespace UIModule.Game
             Widget_Button_Close.RegisterWidgetEvent(OnWidgetEvent_Widget_Button_Close);
             for(int i = 0; i < Widget_Button_Page_State.Count; i++)
             {
-            	var index = i;
-            	Widget_Button_Page_State[index].RegisterWidgetEvent((evData) => {OnWidgetEvent_Widget_Button_Page_State(index, evData);});
+                var index = i;
+                Widget_Button_Page_State[index].RegisterWidgetEvent((evData) => {OnWidgetEvent_Widget_Button_Page_State(index, evData);});
             }
             Widget_Page_State_Obj.RegisterWidgetEvent(OnWidgetEvent_Widget_Page_State_Obj);
             Widget_Page_WeaponEdit_Obj.RegisterWidgetEvent(OnWidgetEvent_Widget_Page_WeaponEdit_Obj);
@@ -39,7 +40,7 @@ namespace UIModule.Game
         //#EVENT#
         private void OnWidgetEvent_Widget_Button_Close(WidgetEventData eventData)
         {
-            SetVisible(false);
+            GameMainSystem.CloseCharacterMain();
         }
 
         private void OnWidgetEvent_Widget_Button_Page_State(int index, WidgetEventData eventData)

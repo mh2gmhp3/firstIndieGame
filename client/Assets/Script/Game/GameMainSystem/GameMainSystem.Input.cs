@@ -11,23 +11,44 @@ namespace GameMainModule
     public partial class GameMainSystem
     {
         private const string INPUT_SETTING = "Setting/InputSetting";
-        public GameInputReceiver _inputReceiver = null;
+        private GameInputReceiver _normalInputReceiver = null;
+        private GameInputReceiver _uiInputReceiver = null;
+        private List<GameInputReceiver> _inputReceiverList = new List<GameInputReceiver>();
+
 
         private void InitInput()
         {
             var inputSetting = AssetSystem.LoadAsset<InputSetting>(INPUT_SETTING);
-            _inputReceiver =
+            InitNormalInput();
+            InitUIInput();
+            InputSystem.SetInputProcessor(new GameInputProcessor());
+            //InputSystem.SetInputProcessor(new AllInpuPrcocessor());
+            InputSystem.SetInputSetting(inputSetting);
+        }
+
+
+        private void UnRegisterAllInputReceiver()
+        {
+            for (int i = 0; i < _inputReceiverList.Count; i++)
+            {
+                InputSystem.UnRegisterInputReceiver(_inputReceiverList[i]);
+            }
+        }
+
+
+        #region NoramlInput
+
+        private void InitNormalInput()
+        {
+            _normalInputReceiver =
                 new GameInputReceiver(
                     OnKeyDown,
                     OnKeyUp,
                     OnKeyHold);
-            InputSystem.SetInputProcessor(new GameInputProcessor());
-            //InputSystem.SetInputProcessor(new AllInpuPrcocessor());
-            InputSystem.SetInputSetting(inputSetting);
-            InputSystem.RegisterInputReceiver(_inputReceiver);
+            _inputReceiverList.Add(_normalInputReceiver);
 
             //滑鼠
-            _inputReceiver.RegisterAxisValueChangedEvent(
+            _normalInputReceiver.RegisterAxisValueChangedEvent(
                 new List<string>
                 {
                     "Mouse X",
@@ -35,7 +56,7 @@ namespace GameMainModule
                 },
                 OnScreenAxisChanged);
             //右搖桿
-            _inputReceiver.RegisterAxisValueChangedEvent(
+            _normalInputReceiver.RegisterAxisValueChangedEvent(
                 new List<string>
                 {
                     "Right Stick Horizontal",
@@ -43,13 +64,19 @@ namespace GameMainModule
                 },
                 OnScreenAxisChanged);
             //左搖桿或鍵盤WASD方向
-            _inputReceiver.RegisterAxisValueChangedEvent(
+            _normalInputReceiver.RegisterAxisValueChangedEvent(
                 new List<string>
                 {
                     "Horizontal",
                     "Vertical"
                 },
                 OnMovementAxisChanged);
+        }
+
+        private void ChangeToNormalInput()
+        {
+            UnRegisterAllInputReceiver();
+            InputSystem.RegisterInputReceiver(_normalInputReceiver);
         }
 
         private void OnKeyDown(KeyCode keyCode, string command)
@@ -94,5 +121,26 @@ namespace GameMainModule
         {
             _characterController.SetMoveAxis(new Vector3(values[0], 0, values[1]));
         }
+
+        #endregion
+
+        #region UIInput
+
+        private void InitUIInput()
+        {
+            _uiInputReceiver = new GameInputReceiver(
+                null,
+                null,
+                null);
+            _inputReceiverList.Add(_uiInputReceiver);
+        }
+
+        private void ChangeToUIInput()
+        {
+            UnRegisterAllInputReceiver();
+            InputSystem.RegisterInputReceiver(_uiInputReceiver);
+        }
+
+        #endregion
     }
 }

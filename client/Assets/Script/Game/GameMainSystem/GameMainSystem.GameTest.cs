@@ -20,6 +20,7 @@ namespace GameMainModule
     {
         private void InitGameTest()
         {
+            SetCurGameState(GameState.Normal);
             InitTestPlayerCharacterUnit();
             SceneSystem.SwitchStage(new SwitchStageData("world_map_test"));
         }

@@ -33,7 +33,7 @@ namespace UIModule.Game
 
         private void OnWidgetEvent_Widget_Button_CharacterMain(WidgetEventData eventData)
         {
-            UISystem.OpenUIWindow(WindowId.Window_CharacterMain, GameMainSystem.GetUICharacterData());
+            GameMainSystem.OpenCharacterMain();
         }
 
         private void OnWidgetEvent_Widget_Button_Save_Test(WidgetEventData eventData)

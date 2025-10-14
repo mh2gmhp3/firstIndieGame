@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Logging;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +14,28 @@ namespace GameMainModule
             Normal,
         }
 
-        private GameState _gameState = GameState.None;
+        private GameState _curGameState = GameState.Normal;
+
+        public static void SetCurGameState(GameState gameState)
+        {
+            _instance.DoSetCurGameState(gameState);
+        }
+
+        private void DoSetCurGameState(GameState gameState)
+        {
+            _curGameState = gameState;
+            switch (gameState)
+            {
+                case GameState.UI:
+                    ChangeToUIInput();
+                    break;
+                case GameState.Normal:
+                    ChangeToNormalInput();
+                    break;
+                default:
+                    Log.LogWarning($"GameMainSystem DoSetCurGameState Warning, GameState {gameState} is invalid");
+                    break;
+            }
+        }
     }
 }
