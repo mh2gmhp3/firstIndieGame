@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace InputModule
 {
-    public class AllInpuPrcocessor : BaseInputProcessor<IInputReceiver>
+    public class AllInputProcesser : BaseInputProcessor<IInputReceiver>
     {
         public override void SetInputSetting(InputSetting inputSetting)
         {
