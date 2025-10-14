@@ -1,4 +1,5 @@
-﻿using GameMainModule.Animation;
+﻿using DataModule;
+using GameMainModule.Animation;
 using GameMainModule.Attack;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,8 @@ namespace GameMainModule
 
         private GameCharacterStateContext _characterStateContext;
 
+        public CharacterAttackController AttackController => _characterAttackController;
+
         public GameThreeDimensionalCharacterController()
         {
 
@@ -43,7 +46,8 @@ namespace GameMainModule
             //Animator
             _animatorController.Init(unityMovementSetting.Animator, transitionSetting);
 
-            _characterAttackController.InitAnimation(_animatorController);
+            //AttackController
+            _characterAttackController.Init(unityMovementSetting, _animatorController);
 
             //State
             _characterStateMachine.AddState(CharacterState.Idle, new IdleState(_characterStateContext));
@@ -178,16 +182,6 @@ namespace GameMainModule
         public void SubAttack()
         {
             _characterAttackController.TriggerSubAttack();
-        }
-
-        public void SetCombinationList(List<AttackCombination> combinationList)
-        {
-            _characterAttackController.SetCombinationList(combinationList);
-        }
-
-        public void SetNowCombination(int index)
-        {
-            _characterAttackController.SetNowCombination(index);
         }
 
         #endregion

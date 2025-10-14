@@ -1,14 +1,20 @@
 ﻿using Extension;
 using GameMainModule.Animation;
+using Logging;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using UnitModule.Movement;
 using UnityEngine;
 using Utility;
 
 namespace GameMainModule.Attack
 {
+    public interface IAttackCombinationSetupData
+    {
+        public int GroupId { get; }
+        public List<int> AttackBehaviorList { get; }
+    }
+
     [Serializable]
     public class CharacterAttackController
     {
@@ -16,56 +22,77 @@ namespace GameMainModule.Attack
         private List<AttackCombination> _combinationList =
             new List<AttackCombination>();
 
-        private AttackCombination _nowCombination;
+        private AttackCombination _curCombination;
 
         private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
 
+        private UnitMovementSetting _unitMovementSetting;
         private AnimatorController _animatorController;
 
-        public bool IsComboing => _nowCombination != null && _nowCombination.IsComboing;
-        public bool IsProcessCombo => _nowCombination != null && _nowCombination.IsProcessingCombo;
-        public bool IsMaxCombo => _nowCombination != null && _nowCombination.IsMaxCombo;
+        private int _curCombinationIndex = -1;
+        private int _combinationMaxCount = 0;
 
-        /// <summary>
-        /// TODO 用來測試設定攻擊組合 實際在遊戲內應該會由另外一筆玩家編輯資料設定 而不是在運作的類別
-        /// </summary>
-        /// <param name="combinationList"></param>
-        public bool SetCombinationList(List<AttackCombination> combinationList)
+        public bool IsComboing => _curCombination != null && _curCombination.IsComboing;
+        public bool IsProcessCombo => _curCombination != null && _curCombination.IsProcessingCombo;
+        public bool IsMaxCombo => _curCombination != null && _curCombination.IsMaxCombo;
+
+        public void Init(UnitMovementSetting unitMovementSetting, AnimatorController animatorController)
+        {
+            _unitMovementSetting = unitMovementSetting;
+            _animatorController = animatorController;
+        }
+
+        #region Comnination
+
+        public void SetCombinationMaxCount(int count)
+        {
+            _combinationMaxCount = count;
+            _combinationList.EnsureCount(_combinationMaxCount, () => { return new AttackCombination(_unitMovementSetting); }, true);
+        }
+
+        public bool SetCombination(int index, AttackCombinationRuntimeSetupData setupData)
         {
             if (IsComboing)
                 return false;
 
-            if (combinationList == null)
+            if (index < 0 || index >= _combinationList.Count)
                 return false;
 
-            _combinationList.Clear();
-            _combinationList.AddRange(combinationList);
+            Log.LogInfo($"CharacterAttackController SetCombination Index:{index}");
+            _combinationList[index].Update(setupData);
+
+            // 相同 直接重設刷新
+            if (index == _curCombinationIndex)
+                SetCurCombination(index);
+
             return true;
         }
 
-        public bool SetNowCombination(int index)
+        public bool SetCurCombination(int index)
         {
             if (IsComboing)
                 return false;
 
-            if (!_combinationList.TryGet(index, out var combinariotn))
+            if (!_combinationList.TryGet(index, out var combination))
                 return false;
 
-            if (_nowCombination != null)
+            _curCombinationIndex = index;
+
+            if (_curCombination != null)
             {
-                _nowCombination.ClearObserverList();
-                _nowCombination.Reset();
+                _curCombination.ClearObserverList();
+                _curCombination.Reset();
             }
 
-            _nowCombination = combinariotn;
+            _curCombination = combination;
 
-            if (_nowCombination != null)
+            if (_curCombination != null)
             {
-                _nowCombination.AddObserverList(_observerController.ObserverList);
+                _curCombination.AddObserverList(_observerController.ObserverList);
 
                 //替換攻擊動畫
                 if (GameMainSystem.AttackBehaviorAssetSetting.TryGetAnimationOverrideNameToClipDic(
-                    _nowCombination.WeaponGroup, out var overrides))
+                    _curCombination.WeaponGroup, out var overrides))
                 {
                     _animatorController.SetOverride(overrides);
                 }
@@ -73,6 +100,8 @@ namespace GameMainModule.Attack
 
             return true;
         }
+
+        #endregion
 
         #region IAttackCombinationObserver
 
@@ -97,10 +126,10 @@ namespace GameMainModule.Attack
 
         public void DoUpdate(bool keepComboOnEnd)
         {
-            if (_nowCombination == null)
+            if (_curCombination == null)
                 return;
 
-            _nowCombination.DoUpdate(keepComboOnEnd);
+            _curCombination.DoUpdate(keepComboOnEnd);
         }
 
         #endregion
@@ -109,34 +138,34 @@ namespace GameMainModule.Attack
 
         public void TriggerMainAttack()
         {
-            if (_nowCombination == null)
+            if (_curCombination == null)
                 return;
 
-            _nowCombination.TriggerMainAttack();
+            _curCombination.TriggerMainAttack();
         }
 
         public void TriggerSubAttack()
         {
-            if (_nowCombination == null)
+            if (_curCombination == null)
                 return;
 
-            _nowCombination.TriggerSubAttack();
+            _curCombination.TriggerSubAttack();
         }
 
         public bool HaveTrigger()
         {
-            if (_nowCombination == null)
+            if (_curCombination == null)
                 return false;
 
-            return _nowCombination.HaveTrigger();
+            return _curCombination.HaveTrigger();
         }
 
         public void ResetTrigger()
         {
-            if (_nowCombination == null)
+            if (_curCombination == null)
                 return;
 
-            _nowCombination.ResetTrigger();
+            _curCombination.ResetTrigger();
         }
 
         #endregion
@@ -145,27 +174,18 @@ namespace GameMainModule.Attack
 
         public void Reset()
         {
-            if (_nowCombination == null)
+            if (_curCombination == null)
                 return;
 
-            _nowCombination.Reset();
+            _curCombination.Reset();
         }
 
         public void ResetCombo()
         {
-            if (_nowCombination == null)
+            if (_curCombination == null)
                 return;
 
-            _nowCombination.ResetCombo();
-        }
-
-        #endregion
-
-        #region Animation Setting
-
-        public void InitAnimation(AnimatorController animatorController)
-        {
-            _animatorController = animatorController;
+            _curCombination.ResetCombo();
         }
 
         #endregion

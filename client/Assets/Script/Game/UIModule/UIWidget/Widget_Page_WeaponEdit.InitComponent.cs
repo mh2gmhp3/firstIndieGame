@@ -5,6 +5,7 @@ using UnityEngine;
 using DataModule;
 using GameMainModule;
 using static UIModule.Game.Window_ItemSelect;
+using FormModule;
 namespace UIModule.Game
 {
     public partial class Widget_Page_WeaponEdit : UIWidget
@@ -47,11 +48,22 @@ namespace UIModule.Game
             if (eventData.UIData is UIAttackBehaviorEditData editData)
             {
                 var itemList = new List<UIItemData>();
-                GameMainSystem.GetItemDataList(itemList, FormModule.TableDefine.ItemType.AttackBehavior);
+                GameMainSystem.GetItemDataList(itemList, FormModule.TableDefine.ItemType.AttackBehavior,
+                    (data, row) =>
+                    {
+                        if (!FormSystem.Table.AttackBehaviorSettingTable.TryGetData(data.SettingId, out var behaviorRow))
+                            return false;
+
+                        //不用看到自己
+                        if (editData.RefItemId != CommonDefine.EmptyAttackBehaviorId && editData.RefItemId == data.Id)
+                            return false;
+                        //不是屬於武器類型的看不到
+                        return behaviorRow.WeaponType == editData.CurEditWeaponType;
+                    });
                 UISystem.OpenUIWindow(WindowId.Window_ItemSelect, new UISelectItemDataContainer(itemList,
                     (selectedItem) =>
                     {
-                        GameMainSystem.SetWeaponBehavior(editData.RefWeaponItemId, editData.Index, selectedItem.Id);
+                        GameMainSystem.SetWeaponBehavior(editData.CurEditWeaponRefItemId, editData.Index, selectedItem.Id);
                     }));
             }
         }

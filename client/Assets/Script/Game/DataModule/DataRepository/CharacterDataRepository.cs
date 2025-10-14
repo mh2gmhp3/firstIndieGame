@@ -1,9 +1,7 @@
 ﻿using Extension;
 using GameMainModule;
-using System.Collections;
 using System.Collections.Generic;
 using UIModule;
-using UnityEngine;
 
 namespace DataModule
 {
@@ -64,6 +62,25 @@ namespace DataModule
         {
             WeaponBehaviorSetupDic.Remove(weaponRefItemId);
         }
+
+        public void GetWeaponBehaviorListByEquip(List<UIWeaponBehaviorSetup> result)
+        {
+            if (result == null)
+                return;
+            result.Clear();
+            for (int i = 0; i < WeaponRefItemIdList.Count; i++)
+            {
+                var weaponRefItemId = WeaponRefItemIdList[i];
+                if (WeaponBehaviorSetupDic.TryGetValue(weaponRefItemId, out var behaviorSetup))
+                {
+                    result.Add(behaviorSetup);
+                }
+                else
+                {
+                    result.Add(new UIWeaponBehaviorSetup() { WeaponRefItemId = CommonDefine.EmptyWeaponId });
+                }
+            }
+        }
     }
 
     #endregion
@@ -123,11 +140,11 @@ namespace DataModule
         /// </summary>
         /// <param name="index"></param>
         /// <param name="weaponRefItemId"></param>
-        public void SetWeapon(int index, int weaponRefItemId)
+        public bool SetWeapon(int index, int weaponRefItemId)
         {
             EnsureWeaponList();
             if (index < 0 || index >= _data.WeaponRefItemIdList.Count)
-                return;
+                return false;
 
             if (weaponRefItemId == CommonDefine.EmptyWeaponId)
             {
@@ -142,7 +159,7 @@ namespace DataModule
                 {
                     //相同位置 不替換
                     if (oriIndex == index)
-                        return;
+                        return false;
 
                     //將目標索引的交換過去
                     var targetRefItemId = _data.WeaponRefItemIdList[index];
@@ -153,12 +170,13 @@ namespace DataModule
             }
             _uiCharacterData.SyncWeaponData(_data);
             _uiCharacterData.Notify(default);
+            return true;
         }
 
-        public void SetWeaponBehavior(int weaponRefItemId, int index, int attackBehaviorRefItemId)
+        public bool SetWeaponBehavior(int weaponRefItemId, int index, int attackBehaviorRefItemId)
         {
             if (index < 0)
-                return;
+                return false;
 
             if (!TryGetWeaponToBehaviorData(weaponRefItemId, out var data))
             {
@@ -170,6 +188,7 @@ namespace DataModule
             data.AttackBehaviorRefItemIdList[index] = attackBehaviorRefItemId;
             _uiCharacterData.SyncWeaponToBehaviorData(data);
             _uiCharacterData.Notify(default);
+            return true;
         }
 
         private bool TryGetWeaponToBehaviorData(int weaponRefItemId, out WeaponBehaviorSetup result)

@@ -1,18 +1,14 @@
 ﻿using AssetModule;
 using CameraModule;
-using GameMainModule.Attack;
-using CollisionModule;
-using UnitModule.Movement;
+using DataModule;
+using GameMainModule.Animation;
 using SceneModule;
-using System.Collections;
-using System.Collections.Generic;
 using UIModule;
+using UIModule.Game;
+using UnitModule;
+using UnitModule.Movement;
 using UnityEngine;
 using Utility;
-using UnitModule;
-using GameMainModule.Animation;
-using DataModule;
-using FormModule;
 
 namespace GameMainModule
 {
@@ -55,28 +51,9 @@ namespace GameMainModule
                 });
 
             //測試攻擊
-            List<AttackCombination> attackCombinationList = new List<AttackCombination>();
-            List<AttackBehavior> mainAttackBehaviorList = new List<AttackBehavior>();
-            if (_attackBehaviorAssetSetting.TryGetGroupData(100, out var groupData))
-            {
-                for (int i = 0; i < groupData.DataList.Count; i++)
-                {
-                    var data = groupData.DataList[i];
-                    mainAttackBehaviorList.Add(new AttackBehavior(unitMovementSetting, data));
-                }
-            }
-            List<AttackBehavior> subAttackBehaviorList = new List<AttackBehavior>();
-            if (_attackBehaviorAssetSetting.TryGetGroupData(100, out var groupDataSub))
-            {
-                for (int i = 0; i < groupData.DataList.Count; i++)
-                {
-                    var data = groupData.DataList[i];
-                    subAttackBehaviorList.Add(new AttackBehavior(unitMovementSetting, data));
-                }
-            }
-            attackCombinationList.Add(new AttackCombination(100, mainAttackBehaviorList, subAttackBehaviorList));
-            _characterController.SetCombinationList(attackCombinationList);
-            _characterController.SetNowCombination(0);
+            SetCombinationMaxCount(CommonDefine.WeaponCount); // 先用Define 之後有變動數值在調整
+            SetWeaponAttackBehaviorToController(GetWeaponBehaviorListByEquip());
+            SetCurCombination(0);
 
             //測試註冊Collider
             _unitManager.AddUnit(_unitManager.AllocUnitId(), testCharacterGameUnit);

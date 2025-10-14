@@ -8,13 +8,15 @@ namespace UIModule.Game
     {
         public int Index;
         public int RefItemId;
-        public int RefWeaponItemId;
+        public int CurEditWeaponType;
+        public int CurEditWeaponRefItemId;
 
-        public UIAttackBehaviorEditData(int index, int refItemId, int refWeaponItemId)
+        public UIAttackBehaviorEditData(int index, int refItemId, int curEditWeaponType,  int refWeaponItemId)
         {
             Index = index;
             RefItemId = refItemId;
-            RefWeaponItemId = refWeaponItemId;
+            CurEditWeaponType = curEditWeaponType;
+            CurEditWeaponRefItemId = refWeaponItemId;
         }
     }
 }

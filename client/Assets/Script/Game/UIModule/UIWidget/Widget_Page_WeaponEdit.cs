@@ -140,7 +140,7 @@ namespace UIModule.Game
                 haveSetup ? setupData.AttackBehaviorRefItemIdList.Count : 0);
             for (int i = 0; i < createBehaviorCount; i++)
             {
-                var editData = new UIAttackBehaviorEditData(i, CommonDefine.EmptyAttackBehaviorId, weaponRefItemId);
+                var editData = new UIAttackBehaviorEditData(i, CommonDefine.EmptyAttackBehaviorId, weaponRow.Type, weaponRefItemId);
                 if (haveSetup)
                 {
                     if (setupData.AttackBehaviorRefItemIdList.TryGet(i, out var behaviorRefItemId))

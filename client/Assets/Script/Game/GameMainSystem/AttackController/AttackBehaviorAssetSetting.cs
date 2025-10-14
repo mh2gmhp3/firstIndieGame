@@ -24,22 +24,11 @@ namespace GameMainModule.Attack
 
         #region Animation
 
-        /// <summary>
-        /// 要複寫的動畫名稱 在設定上 動畫名稱與狀態名稱會設定一樣 所以共用
-        /// </summary>
-        public string AnimationClipOverrideNameAndStateName = string.Empty;
-        public AnimationClip AnimationClip = null;
+        public string AnimationStateName = string.Empty;
 
         public float LockNextTime = 0;
 
         #endregion
-    }
-
-    [Serializable]
-    public class AttackBehaviorAssetSettingGroupData
-    {
-        public int Group;
-        public List<AttackBehaviorAssetSettingData> DataList = new List<AttackBehaviorAssetSettingData>();
     }
 
     [Serializable]
@@ -54,47 +43,29 @@ namespace GameMainModule.Attack
     {
         public int GroupId;
         public List<AttackBehaviorAnimationOverrideSetting> OverrideSettingList = new List<AttackBehaviorAnimationOverrideSetting>();
+
+        public float GetBehaviorBaseTime(string animationStateName)
+        {
+            for (int i = 0; i < OverrideSettingList.Count; i ++)
+            {
+                var setting = OverrideSettingList[i];
+                if (setting.AnimationName == animationStateName && setting.AnimationOverrideClip != null)
+                {
+                    return setting.AnimationOverrideClip.length;
+                }
+            }
+
+            return 0f; ;
+        }
     }
 
     [CreateAssetMenu(fileName = "AttackBehaviorAssetSetting", menuName = "GameMainModule/Attack/AttackBehaviorAssetSetting")]
     public class AttackBehaviorAssetSetting : ScriptableObject
     {
-        public List<AttackBehaviorAssetSettingGroupData> GroupDataList = new List<AttackBehaviorAssetSettingGroupData>();
         public List<AttackBehaviorAssetSettingData> SettingList =
             new List<AttackBehaviorAssetSettingData>();
         public List<AttackBehaviorAnimationOverrideGroupSetting> AnimationOverrideGroupSettingList =
             new List<AttackBehaviorAnimationOverrideGroupSetting>();
-
-#if UNITY_EDITOR
-        [MenuItem("Assets/UIModule/CopyList")]
-        public static void CopyToList()
-        {
-            if (Selection.activeObject is AttackBehaviorAssetSetting asset)
-            {
-                asset.SettingList.Clear();
-                asset.AnimationOverrideGroupSettingList.Clear();
-                for (int i = 0; i < asset.GroupDataList.Count; i++)
-                {
-                    var overrideData = new AttackBehaviorAnimationOverrideGroupSetting();
-                    overrideData.GroupId = asset.GroupDataList[i].Group;
-                    for (int j = 0; j < asset.GroupDataList[i].DataList.Count; j++)
-                    {
-                        var data = asset.GroupDataList[i].DataList[j];
-                        asset.SettingList.Add(data);
-                        overrideData.OverrideSettingList.Add(new AttackBehaviorAnimationOverrideSetting()
-                        {
-                            AnimationName = data.AnimationClipOverrideNameAndStateName,
-                            AnimationOverrideClip = data.AnimationClip
-                        });
-                    }
-                    asset.AnimationOverrideGroupSettingList.Add(overrideData);
-                }
-
-                EditorUtility.SetDirty(asset);
-                AssetDatabase.SaveAssets();
-            }
-        }
-#endif
 
         public bool TryGetAnimationOverrideNameToClipDic(int groupId, out Dictionary<string, AnimationClip> result)
         {
@@ -112,6 +83,7 @@ namespace GameMainModule.Attack
             return true;
         }
 
+        /*
         public bool TryGetGroupData(int group, out AttackBehaviorAssetSettingGroupData result)
         {
             result = null;
@@ -128,6 +100,7 @@ namespace GameMainModule.Attack
 
             return false;
         }
+        */
 
         public bool TryGetAnimationOverrideGroupSetting(int groupId, out AttackBehaviorAnimationOverrideGroupSetting result)
         {
@@ -157,6 +130,16 @@ namespace GameMainModule.Attack
 
             result = null;
             return false;
+        }
+
+        public float GetBehaviorBaseTime(int groupId, string animationStateName)
+        {
+            if (!TryGetAnimationOverrideGroupSetting(groupId, out var groupData))
+            {
+                return 0f;
+            }
+
+            return groupData.GetBehaviorBaseTime(animationStateName);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace UIModule.Game
 
             public int GetCellCount()
             {
-                return ItemDataList.Count / _cellWidgetCount;
+                return (int)Math.Ceiling(ItemDataList.Count / (float)_cellWidgetCount);
             }
 
             public string GetCellIdentity(int cellIndex)

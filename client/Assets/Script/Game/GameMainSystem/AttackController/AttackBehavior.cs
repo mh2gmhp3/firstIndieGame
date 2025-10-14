@@ -58,19 +58,19 @@ namespace GameMainModule.Attack
         /// TODO 要加入玩家資料相關內容
         /// </summary>
         /// <param name="setting"></param>
-        public AttackBehavior(UnitMovementSetting unitMovementSetting, AttackBehaviorAssetSettingData setting)
+        public AttackBehavior(UnitMovementSetting unitMovementSetting, AttackBehaviorAssetSettingData setting, float baseBehaviorTime)
         {
-            _name = setting.AnimationClipOverrideNameAndStateName;
+            _name = setting.AnimationStateName;
             _unitMovementSetting = unitMovementSetting;
             _setting = setting;
+            _behaviorTime = baseBehaviorTime;
         }
 
         public void OnStart()
         {
             Reset();
 
-            //每次開始要跟玩家資料和設定重新計算總時間
-            _behaviorTime = _setting.AnimationClip.length;
+            //每次開始要跟玩家資料和設定重新計算總時間 TODO 先評估是否要影響到動作速度
             _lockNextBehaviorTime = _setting.LockNextTime;
         }
 

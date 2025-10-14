@@ -1,6 +1,8 @@
 ﻿using DataModule;
 using FormModule;
+using FormModule.Game.Table;
 using Logging;
+using System;
 using System.Collections.Generic;
 
 namespace GameMainModule
@@ -30,13 +32,41 @@ namespace GameMainModule
         public static void SetWeapon(int index, int weaponRefItemId)
         {
             var characterDataRepo = DataManager.GetDataRepository<CharacterDataRepository>();
-            characterDataRepo.SetWeapon(index, weaponRefItemId);
+            if (!characterDataRepo.SetWeapon(index, weaponRefItemId))
+                return;
+
+            //NotifyController
+            //完整刷新
+            Log.LogInfo($"GameMainSystem SetWeapon Index:{index} WeaponRefItemId:{weaponRefItemId}");
+            SetWeaponAttackBehaviorToController(GetWeaponBehaviorListByEquip());
         }
 
         public static void SetWeaponBehavior(int weaponRefItemId, int index, int attackBehaviorRefItemId)
         {
             var characterDataRepo = DataManager.GetDataRepository<CharacterDataRepository>();
-            characterDataRepo.SetWeaponBehavior(weaponRefItemId, index, attackBehaviorRefItemId);
+            if (!characterDataRepo.SetWeaponBehavior(weaponRefItemId, index, attackBehaviorRefItemId))
+                return;
+            Log.LogInfo($"GameMainSystem SetWeaponBehavior WeaponRefItemId:{weaponRefItemId} Index:{index} AttackBehaviorRefItemId:{attackBehaviorRefItemId}");
+
+            //NotifyController
+            var characterData = characterDataRepo.GetUICharacterData();
+            var curEquipWeaponIndex = characterData.WeaponRefItemIdList.IndexOf(weaponRefItemId);
+            if (curEquipWeaponIndex < 0)
+            {
+                //not current equip
+                return;
+            }
+            if (!characterData.WeaponBehaviorSetupDic.TryGetValue(weaponRefItemId, out var setup))
+                return;
+            SetWeaponAttackBehaviorToController(curEquipWeaponIndex, setup);
+        }
+
+        private static List<UIWeaponBehaviorSetup> _cacheWeaponBehaviorSetups = new List<UIWeaponBehaviorSetup>();
+        public static List<UIWeaponBehaviorSetup> GetWeaponBehaviorListByEquip()
+        {
+            var characterDataRepo = DataManager.GetDataRepository<CharacterDataRepository>();
+            characterDataRepo.GetUICharacterData().GetWeaponBehaviorListByEquip(_cacheWeaponBehaviorSetups);
+            return _cacheWeaponBehaviorSetups;
         }
 
         #endregion
@@ -140,7 +170,10 @@ namespace GameMainModule
         }
 
         private static List<UIItemData> _cacheGetItemData = new List<UIItemData>();
-        public static void GetItemDataList(List<UIItemData> result, TableDefine.ItemType type = TableDefine.ItemType.None)
+        public static void GetItemDataList(
+            List<UIItemData> result,
+            TableDefine.ItemType type = TableDefine.ItemType.None,
+            Func<UIItemData, ItemRow, bool> filter = null)
         {
             if (result == null)
                 return;
@@ -157,12 +190,16 @@ namespace GameMainModule
             }
 
             var typeInt = (int)type;
+            var needFilter = filter != null;
             for (int i = 0; i < _cacheGetItemData.Count; i++)
             {
                 var itemData = _cacheGetItemData[i];
                 if (FormSystem.Table.ItemTable.TryGetData(itemData.SettingId, out var itemRow))
                 {
                     if (itemRow.Type != typeInt)
+                        continue;
+
+                    if (needFilter && !filter.Invoke(itemData, itemRow))
                         continue;
 
                     result.Add(itemData);

@@ -1,8 +1,10 @@
 ﻿using Extension;
+using FormModule;
 using Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnitModule.Movement;
 using UnityEngine;
 using Utility;
 
@@ -28,6 +30,8 @@ namespace GameMainModule.Attack
         private AttackBehavior _nowAttackBehavior = null;
         private AttackBehavior _nextAttackBehavior = null;
 
+        private UnitMovementSetting _unitMovementSetting = null;
+
         /// <summary>
         /// 控制Combo開始與結束通知
         /// </summary>
@@ -35,7 +39,7 @@ namespace GameMainModule.Attack
         private int _currentComboIndex = -1;
 
         private bool _mainTrigger = false;
-        private bool _subTriggger = false;
+        private bool _subTrigger = false;
 
         private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
 
@@ -52,7 +56,7 @@ namespace GameMainModule.Attack
                 {
                     return _currentComboIndex >= _mainAttackBehaviorList.Count;
                 }
-                else if (_subTriggger)
+                else if (_subTrigger)
                 {
                     return _currentComboIndex >= _subAttackBehaviorList.Count;
                 }
@@ -60,16 +64,39 @@ namespace GameMainModule.Attack
             }
         }
 
-        public AttackCombination()
+        public AttackCombination(UnitMovementSetting unitMovementSetting)
         {
-
+            _unitMovementSetting = unitMovementSetting;
         }
 
-        public AttackCombination(int weaponGroup, List<AttackBehavior> mainAttackBehaviorList, List<AttackBehavior> subAttackBehaviorList)
+        public void Update(AttackCombinationRuntimeSetupData setupData)
         {
-            _weaponGroup = weaponGroup;
-            _mainAttackBehaviorList = mainAttackBehaviorList;
-            _subAttackBehaviorList = subAttackBehaviorList;
+            _weaponGroup = setupData.Group;
+            _mainAttackBehaviorList.Clear();
+            //sub先不使用
+            _subAttackBehaviorList.Clear();
+            for (int i = 0; i < setupData.BehaviorRuntimeSetupDataList.Count; i++)
+            {
+                var settingId = setupData.BehaviorRuntimeSetupDataList[i].SettingId;
+                if (!FormSystem.Table.AttackBehaviorSettingTable.TryGetData(settingId, out var behaviorRow))
+                {
+                    Log.LogError($"AttackCombination Update Error, behaviorRow not found, Id:{settingId}");
+                    continue;
+                }
+
+                if (!GameMainSystem.AttackBehaviorAssetSetting.TryGetSetting(behaviorRow.AssetSettingId, out var assetSetting))
+                {
+                    Log.LogError($"AttackCombination Update Error, behaviorAssetSetting not found, Id:{behaviorRow.AssetSettingId}");
+                    continue;
+                }
+
+                var baseTime = GameMainSystem.AttackBehaviorAssetSetting.GetBehaviorBaseTime(
+                    behaviorRow.WeaponType,
+                    assetSetting.AnimationStateName);
+                _mainAttackBehaviorList.Add(new AttackBehavior(_unitMovementSetting, assetSetting, baseTime));
+            }
+
+            Log.LogInfo($"AttackCombination Update Weapon:{_weaponGroup} Behavior:{_mainAttackBehaviorList}");
         }
 
         #region IAttackCombinationObserver
@@ -209,18 +236,18 @@ namespace GameMainModule.Attack
 
         public void TriggerSubAttack()
         {
-            _subTriggger = true;
+            _subTrigger = true;
         }
 
         public bool HaveTrigger()
         {
-            return _mainTrigger || _subTriggger;
+            return _mainTrigger || _subTrigger;
         }
 
         public void ResetTrigger()
         {
             _mainTrigger = false;
-            _subTriggger = false;
+            _subTrigger = false;
         }
 
         private void ProcessTrigger()
@@ -230,7 +257,7 @@ namespace GameMainModule.Attack
                 TriggerAttack(_mainAttackBehaviorList);
                 ResetTrigger();
             }
-            else if (_subTriggger)
+            else if (_subTrigger)
             {
                 TriggerAttack(_subAttackBehaviorList);
                 ResetTrigger();
