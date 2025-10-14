@@ -84,18 +84,21 @@ namespace Extension
         }
 
         /// <summary>
-        /// 確保List數量 只會增加不會減少
+        /// 確保List數量 要移除超過的數量需啟用removeExceed
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <param name="count"></param>
         /// <param name="defaultValue"></param>
-        public static void EnsureCount<T>(this IList<T> list, int count, Func<T> defaultValue)
+        public static void EnsureCount<T>(this IList<T> list, int count, Func<T> defaultValue, bool removeExceed = false)
         {
             if (list == null)
                 return;
 
             if (defaultValue == null)
+                return;
+
+            if (count < 0)
                 return;
 
             var diffCount = count - list.Count;
@@ -104,6 +107,14 @@ namespace Extension
                 for (int i = 0; i < diffCount; i++)
                 {
                     list.Add(defaultValue.Invoke());
+                }
+            }
+            else if (diffCount < 0 && removeExceed)
+            {
+                diffCount = Math.Abs(diffCount);
+                for (int i = 0; i < diffCount; i++)
+                {
+                    list.RemoveAt(list.Count - 1);
                 }
             }
         }
