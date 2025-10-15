@@ -7,19 +7,19 @@ using UnityEngine;
 
 namespace DataModule
 {
-    #region Runtime UIData
+    #region Runtime
 
-    public class UIAttackBehaviorData : IUIData
+    public class AttackBehaviorData : IUIData
     {
         public int RefItemId;
         public int SettingId;
 
-        public UIAttackBehaviorData(AttackBehaviorData data)
+        public AttackBehaviorData(AttackBehaviorRepoData data)
         {
             SyncData(data);
         }
 
-        public void SyncData(AttackBehaviorData data)
+        public void SyncData(AttackBehaviorRepoData data)
         {
             RefItemId = data.RefItemId;
             SettingId = data.SettingId;
@@ -28,31 +28,31 @@ namespace DataModule
 
     #endregion
 
-    public class AttackBehaviorData
+    public class AttackBehaviorRepoData
     {
         public int RefItemId;
         public int SettingId;
 
-        public AttackBehaviorData(int refItemId, int settingId)
+        public AttackBehaviorRepoData(int refItemId, int settingId)
         {
             RefItemId = refItemId;
             SettingId = settingId;
         }
     }
 
-    public class AttackBehaviorDataContainer
+    public class AttackBehaviorRepoDataContainer
     {
-        public List<AttackBehaviorData> AttackBehaviorDataList = new List<AttackBehaviorData>();
+        public List<AttackBehaviorRepoData> AttackBehaviorDataList = new List<AttackBehaviorRepoData>();
     }
 
     [DataRepository(1)]
-    public class AttackBehaviorDataRepository : DataRepository<AttackBehaviorDataContainer>
+    public class AttackBehaviorDataRepository : DataRepository<AttackBehaviorRepoDataContainer>
     {
-        private Dictionary<int, AttackBehaviorData> _idToDataDic = new Dictionary<int, AttackBehaviorData>();
+        private Dictionary<int, AttackBehaviorRepoData> _idToRepoDataDic = new Dictionary<int, AttackBehaviorRepoData>();
 
-        //Runtime UIData
-        private List<UIAttackBehaviorData> _uiDataList = new List<UIAttackBehaviorData>();
-        private Dictionary<int, UIAttackBehaviorData> _idToUIDataDic = new Dictionary<int, UIAttackBehaviorData>();
+        //Runtime
+        private List<AttackBehaviorData> _runtimeDataList = new List<AttackBehaviorData>();
+        private Dictionary<int, AttackBehaviorData> _idToRuntimeDataDic = new Dictionary<int, AttackBehaviorData>();
 
         public AttackBehaviorDataRepository(DataManager dataManager, int version) : base(dataManager, version)
         {
@@ -64,17 +64,17 @@ namespace DataModule
             {
                 var data = _data.AttackBehaviorDataList[i];
                 //整理Mapping
-                if (_idToDataDic.ContainsKey(data.RefItemId))
+                if (_idToRepoDataDic.ContainsKey(data.RefItemId))
                 {
                     Log.LogError($"AttackBehaviorDataRepository OnLoad Error, 有相同Id資料! RefItemId:Id{data.RefItemId} SettingId:{data.SettingId}");
                 }
                 else
                 {
-                    _idToDataDic.Add(data.RefItemId, data);
+                    _idToRepoDataDic.Add(data.RefItemId, data);
                     //Runtime
-                    var uiData = new UIAttackBehaviorData(data);
-                    _uiDataList.Add(uiData);
-                    _idToUIDataDic.Add(data.RefItemId, uiData);
+                    var runtimeData = new AttackBehaviorData(data);
+                    _runtimeDataList.Add(runtimeData);
+                    _idToRuntimeDataDic.Add(data.RefItemId, runtimeData);
                 }
             }
         }
@@ -86,7 +86,7 @@ namespace DataModule
         /// <param name="settingId"></param>
         public void AddBehavior(int refItemId, int settingId)
         {
-            if (_idToDataDic.ContainsKey(refItemId))
+            if (_idToRepoDataDic.ContainsKey(refItemId))
             {
                 Log.LogError($"AttackBehaviorDataRepository AddBehavior Error, RefItemId already exist, " +
                     $"RefItemId:{refItemId}, SettingId:{settingId}");
@@ -99,13 +99,13 @@ namespace DataModule
                 return;
             }
 
-            var data = new AttackBehaviorData(refItemId, settingId);
+            var data = new AttackBehaviorRepoData(refItemId, settingId);
             _data.AttackBehaviorDataList.Add(data);
-            _idToDataDic.Add(refItemId, data);
+            _idToRepoDataDic.Add(refItemId, data);
             //Runtime
-            var uiData = new UIAttackBehaviorData(data);
-            _uiDataList.Add(uiData);
-            _idToUIDataDic.Add(uiData.RefItemId, uiData);
+            var runtimeData = new AttackBehaviorData(data);
+            _runtimeDataList.Add(runtimeData);
+            _idToRuntimeDataDic.Add(runtimeData.RefItemId, runtimeData);
         }
 
         /// <summary>
@@ -114,28 +114,28 @@ namespace DataModule
         /// <param name="refItemId"></param>
         public void RemoveBehavior(int refItemId)
         {
-            if (!_idToDataDic.TryGetValue(refItemId, out var data))
+            if (!_idToRepoDataDic.TryGetValue(refItemId, out var data))
             {
                 Log.LogError($"AttackBehaviorDataRepository RemoveBehavior Error, RefItemId not exist, " +
                     $"RefItemId:{refItemId}");
                 return;
             }
 
-            _idToDataDic.Remove(refItemId);
+            _idToRepoDataDic.Remove(refItemId);
             _data.AttackBehaviorDataList.Remove(data);
             //Runtime
-            if (_idToUIDataDic.TryGetValue(refItemId, out var uiData))
+            if (_idToRuntimeDataDic.TryGetValue(refItemId, out var runtimeData))
             {
-                _uiDataList.Remove(uiData);
-                _idToUIDataDic.Remove(refItemId);
+                _runtimeDataList.Remove(runtimeData);
+                _idToRuntimeDataDic.Remove(refItemId);
             }
         }
 
-        public List<UIAttackBehaviorData> GetUIAttackBehaviorDataList() { return _uiDataList; }
+        public List<AttackBehaviorData> GetAttackBehaviorDataList() { return _runtimeDataList; }
 
-        public bool TryGetUIAttackBehaviorData(int behaviorRefItemId, out UIAttackBehaviorData result)
+        public bool TryGetAttackBehaviorData(int behaviorRefItemId, out AttackBehaviorData result)
         {
-            return _idToUIDataDic.TryGetValue(behaviorRefItemId, out result);
+            return _idToRuntimeDataDic.TryGetValue(behaviorRefItemId, out result);
         }
     }
 }

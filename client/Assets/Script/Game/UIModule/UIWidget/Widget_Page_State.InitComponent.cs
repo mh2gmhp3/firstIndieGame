@@ -32,7 +32,7 @@ namespace UIModule.Game
         //#EVENT#
         private void OnWidgetEvent_Widget_Item_Weapons(int index, WidgetEventData eventData)
         {
-            var itemList = new List<UIItemData>();
+            var itemList = new List<ItemData>();
             GameMainSystem.GetItemDataList(itemList, FormModule.TableDefine.ItemType.Weapon);
             UISystem.OpenUIWindow(WindowId.Window_ItemSelect, new UISelectItemDataContainer(itemList,
                 (selectedItem) =>

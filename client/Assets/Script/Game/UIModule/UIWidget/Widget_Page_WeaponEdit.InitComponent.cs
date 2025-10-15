@@ -47,7 +47,7 @@ namespace UIModule.Game
         {
             if (eventData.UIData is UIAttackBehaviorEditData editData)
             {
-                var itemList = new List<UIItemData>();
+                var itemList = new List<ItemData>();
                 GameMainSystem.GetItemDataList(itemList, FormModule.TableDefine.ItemType.AttackBehavior,
                     (data, row) =>
                     {

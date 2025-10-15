@@ -25,10 +25,10 @@ namespace GameMainModule.Attack
         public int Group;
         public List<AttackBehaviorRuntimeSetupData> BehaviorRuntimeSetupDataList;
 
-        public AttackCombinationRuntimeSetupData(UIWeaponBehaviorSetup data)
+        public AttackCombinationRuntimeSetupData(WeaponBehaviorSetupData data)
         {
             Group = 0;
-            if (GameMainSystem.TryGetUIWeaponData(data.WeaponRefItemId, out var weaponData) &&
+            if (GameMainSystem.TryGetWeaponData(data.WeaponRefItemId, out var weaponData) &&
                 FormSystem.Table.WeaponTable.TryGetData(weaponData.SettingId, out var weaponRow))
             {
                 Group = weaponRow.Type;
@@ -41,7 +41,7 @@ namespace GameMainModule.Attack
                 if (behaviorRefItemId == CommonDefine.EmptyAttackBehaviorId)
                     continue;
 
-                if (!GameMainSystem.TryGetUIAttackBehaviorData(behaviorRefItemId, out var behaviorData))
+                if (!GameMainSystem.TryGetAttackBehaviorData(behaviorRefItemId, out var behaviorData))
                 {
                     Log.LogError($"AttackCombinationRuntimeSetupData UIWeaponBehaviorSetup Error, " +
                         $"behaviorData not found ignore behavior, " +

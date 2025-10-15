@@ -16,7 +16,7 @@ namespace UIModule.Game
         private Page _curPage = Page.State;
         private Dictionary<int, UIWidget> _pageToWidgetDic = new Dictionary<int, UIWidget>();
 
-        private UICharacterData _characterData;
+        private CharacterData _characterData;
 
         protected override void OnInit()
         {
@@ -26,7 +26,7 @@ namespace UIModule.Game
 
         protected override void DoOpen(IUIData uiData)
         {
-            if (_uiData is UICharacterData characterData)
+            if (_uiData is CharacterData characterData)
             {
                 _characterData = characterData;
                 SetPage(Page.State, true);

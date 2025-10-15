@@ -57,7 +57,7 @@ namespace GameMainModule
 
         public static void OpenCharacterMain()
         {
-            UISystem.OpenUIWindow(WindowId.Window_CharacterMain, GetUICharacterData());
+            UISystem.OpenUIWindow(WindowId.Window_CharacterMain, GetCharacterData());
             SetCurGameState(GameState.UI);
         }
 

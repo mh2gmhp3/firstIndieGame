@@ -7,12 +7,12 @@ namespace DataModule
 {
     #region Runtime UIData
 
-    public class UIWeaponBehaviorSetup : IUIData
+    public class WeaponBehaviorSetupData : IUIData
     {
         public int WeaponRefItemId;
         public readonly List<int> AttackBehaviorRefItemIdList = new List<int>();
 
-        public void SyncData(WeaponBehaviorSetup syncData)
+        public void SyncData(WeaponBehaviorSetupRepoData syncData)
         {
             WeaponRefItemId = syncData.WeaponRefItemId;
             AttackBehaviorRefItemIdList.Clear();
@@ -20,25 +20,25 @@ namespace DataModule
         }
     }
 
-    public class UICharacterData : IUIData
+    public class CharacterData : IUIData
     {
         public readonly List<int> WeaponRefItemIdList = new List<int>();
-        public readonly Dictionary<int, UIWeaponBehaviorSetup> WeaponBehaviorSetupDic =
-            new Dictionary<int, UIWeaponBehaviorSetup>();
+        public readonly Dictionary<int, WeaponBehaviorSetupData> WeaponBehaviorSetupDic =
+            new Dictionary<int, WeaponBehaviorSetupData>();
 
-        public void SyncData(CharacterData syncData)
+        public void SyncData(CharacterRepoData syncData)
         {
             SyncWeaponData(syncData);
             SyncFullWeaponToBehaviorData(syncData);
         }
 
-        public void SyncWeaponData(CharacterData syncData)
+        public void SyncWeaponData(CharacterRepoData syncData)
         {
             WeaponRefItemIdList.Clear();
             WeaponRefItemIdList.AddRange(syncData.WeaponRefItemIdList);
         }
 
-        public void SyncFullWeaponToBehaviorData(CharacterData syncData)
+        public void SyncFullWeaponToBehaviorData(CharacterRepoData syncData)
         {
             WeaponBehaviorSetupDic.Clear();
             for (int i = 0; i < syncData.WeaponToBehaviorRelationList.Count; i++)
@@ -47,11 +47,11 @@ namespace DataModule
             }
         }
 
-        public void SyncWeaponToBehaviorData(WeaponBehaviorSetup syncData)
+        public void SyncWeaponToBehaviorData(WeaponBehaviorSetupRepoData syncData)
         {
             if (!WeaponBehaviorSetupDic.TryGetValue(syncData.WeaponRefItemId, out var data))
             {
-                data = new UIWeaponBehaviorSetup();
+                data = new WeaponBehaviorSetupData();
                 WeaponBehaviorSetupDic.Add(syncData.WeaponRefItemId, data);
             }
 
@@ -63,7 +63,7 @@ namespace DataModule
             WeaponBehaviorSetupDic.Remove(weaponRefItemId);
         }
 
-        public void GetWeaponBehaviorListByEquip(List<UIWeaponBehaviorSetup> result)
+        public void GetWeaponBehaviorListByEquip(List<WeaponBehaviorSetupData> result)
         {
             if (result == null)
                 return;
@@ -77,7 +77,7 @@ namespace DataModule
                 }
                 else
                 {
-                    result.Add(new UIWeaponBehaviorSetup() { WeaponRefItemId = CommonDefine.EmptyWeaponId });
+                    result.Add(new WeaponBehaviorSetupData() { WeaponRefItemId = CommonDefine.EmptyWeaponId });
                 }
             }
         }
@@ -85,43 +85,43 @@ namespace DataModule
 
     #endregion
 
-    public class WeaponBehaviorSetup
+    public class WeaponBehaviorSetupRepoData
     {
         public int WeaponRefItemId;
         public List<int> AttackBehaviorRefItemIdList = new List<int>();
 
-        public WeaponBehaviorSetup(int weaponRefItemId)
+        public WeaponBehaviorSetupRepoData(int weaponRefItemId)
         {
             WeaponRefItemId = weaponRefItemId;
         }
     }
 
-    public class CharacterData
+    public class CharacterRepoData
     {
         public List<int> WeaponRefItemIdList = new List<int>();
-        public List<WeaponBehaviorSetup> WeaponToBehaviorRelationList = new List<WeaponBehaviorSetup>();
+        public List<WeaponBehaviorSetupRepoData> WeaponToBehaviorRelationList = new List<WeaponBehaviorSetupRepoData>();
     }
 
     [DataRepository(1)]
-    public class CharacterDataRepository : DataRepository<CharacterData>
+    public class CharacterDataRepository : DataRepository<CharacterRepoData>
     {
-        private UICharacterData _uiCharacterData = new UICharacterData();
+        private CharacterData _runtimeData = new CharacterData();
 
         public CharacterDataRepository(DataManager dataManager, int version) : base(dataManager, version)
         {
             EnsureWeaponList();
-            _uiCharacterData.SyncData(_data);
+            _runtimeData.SyncData(_data);
         }
 
         protected override void OnLoad(int currentVersion, int loadedVersion)
         {
             EnsureWeaponList();
-            _uiCharacterData.SyncData(_data);
+            _runtimeData.SyncData(_data);
         }
 
-        public UICharacterData GetUICharacterData()
+        public CharacterData GetCharacterData()
         {
-            return _uiCharacterData;
+            return _runtimeData;
         }
 
         private void EnsureWeaponList()
@@ -168,8 +168,8 @@ namespace DataModule
 
                 _data.WeaponRefItemIdList[index] = weaponRefItemId;
             }
-            _uiCharacterData.SyncWeaponData(_data);
-            _uiCharacterData.Notify(default);
+            _runtimeData.SyncWeaponData(_data);
+            _runtimeData.Notify(default);
             return true;
         }
 
@@ -180,18 +180,18 @@ namespace DataModule
 
             if (!TryGetWeaponToBehaviorData(weaponRefItemId, out var data))
             {
-                data = new WeaponBehaviorSetup(weaponRefItemId);
+                data = new WeaponBehaviorSetupRepoData(weaponRefItemId);
                 _data.WeaponToBehaviorRelationList.Add(data);
             }
 
             EnsureWeaponBehaviorList(data.AttackBehaviorRefItemIdList, index + 1);
             data.AttackBehaviorRefItemIdList[index] = attackBehaviorRefItemId;
-            _uiCharacterData.SyncWeaponToBehaviorData(data);
-            _uiCharacterData.Notify(default);
+            _runtimeData.SyncWeaponToBehaviorData(data);
+            _runtimeData.Notify(default);
             return true;
         }
 
-        private bool TryGetWeaponToBehaviorData(int weaponRefItemId, out WeaponBehaviorSetup result)
+        private bool TryGetWeaponToBehaviorData(int weaponRefItemId, out WeaponBehaviorSetupRepoData result)
         {
             for (int i = 0; i < _data.WeaponToBehaviorRelationList.Count; i++)
             {

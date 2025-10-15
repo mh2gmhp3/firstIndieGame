@@ -23,10 +23,10 @@ namespace GameMainModule
 
         #region Character
 
-        public static UICharacterData GetUICharacterData()
+        public static CharacterData GetCharacterData()
         {
             var characterDataRepo = DataManager.GetDataRepository<CharacterDataRepository>();
-            return characterDataRepo.GetUICharacterData();
+            return characterDataRepo.GetCharacterData();
         }
 
         public static void SetWeapon(int index, int weaponRefItemId)
@@ -49,7 +49,7 @@ namespace GameMainModule
             Log.LogInfo($"GameMainSystem SetWeaponBehavior WeaponRefItemId:{weaponRefItemId} Index:{index} AttackBehaviorRefItemId:{attackBehaviorRefItemId}");
 
             //NotifyController
-            var characterData = characterDataRepo.GetUICharacterData();
+            var characterData = characterDataRepo.GetCharacterData();
             var curEquipWeaponIndex = characterData.WeaponRefItemIdList.IndexOf(weaponRefItemId);
             if (curEquipWeaponIndex < 0)
             {
@@ -61,11 +61,11 @@ namespace GameMainModule
             SetWeaponAttackBehaviorToController(curEquipWeaponIndex, setup);
         }
 
-        private static List<UIWeaponBehaviorSetup> _cacheWeaponBehaviorSetups = new List<UIWeaponBehaviorSetup>();
-        public static List<UIWeaponBehaviorSetup> GetWeaponBehaviorListByEquip()
+        private static List<WeaponBehaviorSetupData> _cacheWeaponBehaviorSetups = new List<WeaponBehaviorSetupData>();
+        public static List<WeaponBehaviorSetupData> GetWeaponBehaviorListByEquip()
         {
             var characterDataRepo = DataManager.GetDataRepository<CharacterDataRepository>();
-            characterDataRepo.GetUICharacterData().GetWeaponBehaviorListByEquip(_cacheWeaponBehaviorSetups);
+            characterDataRepo.GetCharacterData().GetWeaponBehaviorListByEquip(_cacheWeaponBehaviorSetups);
             return _cacheWeaponBehaviorSetups;
         }
 
@@ -119,7 +119,7 @@ namespace GameMainModule
             itemDataRepo.RemoveItem(id, count, OnRemoveItemNotify);
         }
 
-        private static void OnAddItemNotify(UIItemData itemData, bool isNew)
+        private static void OnAddItemNotify(ItemData itemData, bool isNew)
         {
             if (itemData == null)
                 return;
@@ -147,7 +147,7 @@ namespace GameMainModule
             }
         }
 
-        private static void OnRemoveItemNotify(UIItemData itemData, bool isRemove)
+        private static void OnRemoveItemNotify(ItemData itemData, bool isRemove)
         {
             if (itemData == null)
                 return;
@@ -169,11 +169,11 @@ namespace GameMainModule
             }
         }
 
-        private static List<UIItemData> _cacheGetItemData = new List<UIItemData>();
+        private static List<ItemData> _cacheGetItemData = new List<ItemData>();
         public static void GetItemDataList(
-            List<UIItemData> result,
+            List<ItemData> result,
             TableDefine.ItemType type = TableDefine.ItemType.None,
-            Func<UIItemData, ItemRow, bool> filter = null)
+            Func<ItemData, ItemRow, bool> filter = null)
         {
             if (result == null)
                 return;
@@ -207,7 +207,7 @@ namespace GameMainModule
             }
         }
 
-        public static bool TryGetItemData(int id, out UIItemData itemData)
+        public static bool TryGetItemData(int id, out ItemData itemData)
         {
             var itemDataRepo = DataManager.GetDataRepository<ItemDataRepository>();
             return itemDataRepo.TryGetItemData(id, out itemData);
@@ -238,29 +238,29 @@ namespace GameMainModule
             weaponDataRepo.RemoveWeapon(refItemId);
         }
 
-        public static bool TryGetUIWeaponData(int refItemId, out UIWeaponData result)
+        public static bool TryGetWeaponData(int refItemId, out WeaponData result)
         {
             var weaponDataRepo = DataManager.GetDataRepository<WeaponDataRepository>();
-            return weaponDataRepo.TryGetUIWeaponData(refItemId, out result);
+            return weaponDataRepo.TryGetWeaponData(refItemId, out result);
         }
 
         #endregion
 
         #region AttackBehavior
 
-        public static List<UIAttackBehaviorData> GetUIAttackBehaviorDataList()
+        public static List<AttackBehaviorData> GetAttackBehaviorDataList()
         {
             var repo = DataManager.GetDataRepository<AttackBehaviorDataRepository>();
             if (repo == null)
                 return null;
 
-            return repo.GetUIAttackBehaviorDataList();
+            return repo.GetAttackBehaviorDataList();
         }
 
-        public static bool TryGetUIAttackBehaviorData(int behaviorRefItemId, out UIAttackBehaviorData result)
+        public static bool TryGetAttackBehaviorData(int behaviorRefItemId, out AttackBehaviorData result)
         {
             var repo = DataManager.GetDataRepository<AttackBehaviorDataRepository>();
-            return repo.TryGetUIAttackBehaviorData(behaviorRefItemId, out result);
+            return repo.TryGetAttackBehaviorData(behaviorRefItemId, out result);
         }
 
         /// <summary>

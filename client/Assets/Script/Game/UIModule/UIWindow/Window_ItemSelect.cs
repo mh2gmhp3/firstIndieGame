@@ -9,11 +9,11 @@ namespace UIModule.Game
     {
         public class UISelectItemDataContainer : IUIData, IScrollerControllerDataGetter
         {
-            public List<UIItemData> ItemDataList = new List<UIItemData>();
-            public Action<UIItemData> SelectedEvent;
+            public List<ItemData> ItemDataList = new List<ItemData>();
+            public Action<ItemData> SelectedEvent;
             private int _cellWidgetCount;
 
-            public UISelectItemDataContainer(List<UIItemData> itemDataList, Action<UIItemData> selectedEvent = null)
+            public UISelectItemDataContainer(List<ItemData> itemDataList, Action<ItemData> selectedEvent = null)
             {
                 ItemDataList.AddRange(itemDataList);
                 SelectedEvent = selectedEvent;
@@ -44,7 +44,7 @@ namespace UIModule.Game
         }
 
         private UISelectItemDataContainer _container;
-        private UIItemData _selectedData = null;
+        private ItemData _selectedData = null;
 
         protected override void DoOpen(IUIData uiData)
         {
@@ -68,7 +68,7 @@ namespace UIModule.Game
 
         }
 
-        private void SetSelectedData(UIItemData itemData)
+        private void SetSelectedData(ItemData itemData)
         {
             if (itemData == null)
             {

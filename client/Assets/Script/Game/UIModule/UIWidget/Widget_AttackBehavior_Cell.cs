@@ -20,7 +20,7 @@ namespace UIModule.Game
                 {
                     Text_Content.text = "Empty";
                 }
-                else if (GameMainSystem.TryGetUIAttackBehaviorData(editData.RefItemId, out var attackBehaviorData))
+                else if (GameMainSystem.TryGetAttackBehaviorData(editData.RefItemId, out var attackBehaviorData))
                 {
                     if (FormSystem.Table.AttackBehaviorSettingTable.TryGetData(attackBehaviorData.SettingId, out var row) &&
                         GameMainSystem.AttackBehaviorAssetSetting.TryGetSetting(row.AssetSettingId, out var assetSetting))

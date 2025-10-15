@@ -8,9 +8,9 @@ namespace UIModule.Game
     {
         public class UIAttackBehaviorData : IUIData
         {
-            public AttackBehaviorData RawData;
+            public AttackBehaviorRepoData RawData;
 
-            public UIAttackBehaviorData(AttackBehaviorData rawData)
+            public UIAttackBehaviorData(AttackBehaviorRepoData rawData)
             {
                 RawData = rawData;
             }
@@ -20,7 +20,7 @@ namespace UIModule.Game
         {
             public List<UIAttackBehaviorData> AttackBehaviorDataList = new List<UIAttackBehaviorData>();
 
-            public UIAttackBehaviorDataContainer(List<AttackBehaviorData> repoDataList)
+            public UIAttackBehaviorDataContainer(List<AttackBehaviorRepoData> repoDataList)
             {
                 for (int i = 0; i < repoDataList.Count; i++)
                 {

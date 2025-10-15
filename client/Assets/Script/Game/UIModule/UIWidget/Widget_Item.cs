@@ -22,7 +22,7 @@ namespace UIModule.Game
                 SetVisible(false);
             }
 
-            if (_uiData is UIItemData itemData)
+            if (_uiData is ItemData itemData)
             {
                 SetVisible(true);
                 SetView(itemData);
@@ -37,7 +37,7 @@ namespace UIModule.Game
             }
         }
 
-        private void SetView(UIItemData itemData)
+        private void SetView(ItemData itemData)
         {
             Text_Content.text = $"{itemData.Id}_{itemData.SettingId}_{itemData.Count}";
         }

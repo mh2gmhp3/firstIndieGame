@@ -38,7 +38,7 @@ namespace UIModule.Game
         //#EVENT#
         private void OnScrollerWidgetEvent_SimpleScrollerController_ItemScroller(WidgetEventData eventData)
         {
-            if (eventData.UIData is UIItemData itemData)
+            if (eventData.UIData is ItemData itemData)
             {
                 SetSelectedData(itemData);
             }

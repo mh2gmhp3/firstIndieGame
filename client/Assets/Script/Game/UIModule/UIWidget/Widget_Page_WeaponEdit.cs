@@ -37,7 +37,7 @@ namespace UIModule.Game
         }
 
         private EmptyData _emptyData = new EmptyData();
-        private UICharacterData _characterData;
+        private CharacterData _characterData;
         private int _curEditWeaponIndex = -1;
 
         private UIAttackBehaviorEditDataContainer _editDataContainer = new UIAttackBehaviorEditDataContainer();
@@ -50,7 +50,7 @@ namespace UIModule.Game
 
         protected override void OnUIDataNotify(IUIDataNotifyInfo notifyInfo)
         {
-            if (_uiData is UICharacterData characterData)
+            if (_uiData is CharacterData characterData)
             {
                 _characterData = characterData;
                 SetWeapon(characterData.WeaponRefItemIdList);
@@ -116,7 +116,7 @@ namespace UIModule.Game
                 return;
             }
 
-            if (!GameMainSystem.TryGetUIWeaponData(weaponRefItemId, out var weaponData))
+            if (!GameMainSystem.TryGetWeaponData(weaponRefItemId, out var weaponData))
             {
                 GameObject_AttackBehavior_Root.SetActive(false);
                 Log.LogError($"Widget_Page_WeaponEdit SetCurEditWeaponIndex Error, weaponData not exist, WeaponRefItemId:{weaponRefItemId}");

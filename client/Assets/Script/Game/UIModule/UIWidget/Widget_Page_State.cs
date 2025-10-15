@@ -16,7 +16,7 @@ namespace UIModule.Game
 
         protected override void OnUIDataNotify(IUIDataNotifyInfo notifyInfo)
         {
-            if (_uiData is UICharacterData characterData)
+            if (_uiData is CharacterData characterData)
             {
                 SetWeapon(characterData.WeaponRefItemIdList);
             }

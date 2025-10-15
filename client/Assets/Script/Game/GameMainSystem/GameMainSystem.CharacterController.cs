@@ -34,7 +34,7 @@ namespace GameMainModule
             _instance._characterAttackController.SetCurCombination(index);
         }
 
-        public static void SetWeaponAttackBehaviorToController(List<UIWeaponBehaviorSetup> weaponBehaviorSetupList)
+        public static void SetWeaponAttackBehaviorToController(List<WeaponBehaviorSetupData> weaponBehaviorSetupList)
         {
             if (weaponBehaviorSetupList == null)
                 return;
@@ -45,7 +45,7 @@ namespace GameMainModule
             }
         }
 
-        public static void SetWeaponAttackBehaviorToController(int index, UIWeaponBehaviorSetup weaponBehaviorSetup)
+        public static void SetWeaponAttackBehaviorToController(int index, WeaponBehaviorSetupData weaponBehaviorSetup)
         {
             _instance._characterAttackController.SetCombination(index, new AttackCombinationRuntimeSetupData(weaponBehaviorSetup));
         }

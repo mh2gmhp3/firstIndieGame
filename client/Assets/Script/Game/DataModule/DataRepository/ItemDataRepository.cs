@@ -10,19 +10,19 @@ namespace DataModule
     /// 玩家道具資料在UI顯示時使用
     /// <para>如果有要單純顯示道具而不是玩家道具的需另外建立新類</para>
     /// </summary>
-    public class UIItemData : IUIData
+    public class ItemData : IUIData
     {
         public int Id;
         public int SettingId;
 
         public int Count;
 
-        public UIItemData(ItemData rawData)
+        public ItemData(ItemRepoData rawData)
         {
             SyncData(rawData);
         }
 
-        public void SyncData(ItemData rawData)
+        public void SyncData(ItemRepoData rawData)
         {
             Id = rawData.Id;
             SettingId = rawData.SettingId;
@@ -30,14 +30,14 @@ namespace DataModule
         }
     }
 
-    public class ItemData
+    public class ItemRepoData
     {
         public int Id;
         public int SettingId;
 
         public int Count;
 
-        public ItemData(int id, int settingId, int count)
+        public ItemRepoData(int id, int settingId, int count)
         {
             Id = id;
             SettingId = settingId;
@@ -45,22 +45,22 @@ namespace DataModule
         }
     }
 
-    public class ItemDataContainer
+    public class ItemRepoDataContainer
     {
         public int NextId;
-        public List<ItemData> ItemDataList = new List<ItemData>();
+        public List<ItemRepoData> ItemDataList = new List<ItemRepoData>();
     }
 
     [DataRepository(1)]
-    public class ItemDataRepository : DataRepository<ItemDataContainer>
+    public class ItemDataRepository : DataRepository<ItemRepoDataContainer>
     {
-        private Dictionary<int, ItemData> _idToDataDic = new Dictionary<int, ItemData>();
+        private Dictionary<int, ItemRepoData> _idToDataDic = new Dictionary<int, ItemRepoData>();
 
-        //Runtime UIData
-        private List<UIItemData> _uiDataList = new List<UIItemData>();
-        private Dictionary<int, UIItemData> _idToUIDataDic = new Dictionary<int, UIItemData>();
+        //Runtime
+        private List<ItemData> _runtimeDataList = new List<ItemData>();
+        private Dictionary<int, ItemData> _idToRuntimeDataDic = new Dictionary<int, ItemData>();
 
-        private List<ItemData> _cacheGetItemList = new List<ItemData>();
+        private List<ItemRepoData> _cacheGetItemList = new List<ItemRepoData>();
 
         public ItemDataRepository(DataManager dataManager, int version) : base(dataManager, version)
         {
@@ -80,9 +80,9 @@ namespace DataModule
                 {
                     _idToDataDic.Add(data.Id, data);
 
-                    var uiItemData = new UIItemData(data);
-                    _idToUIDataDic.Add(uiItemData.Id, uiItemData);
-                    _uiDataList.Add(uiItemData);
+                    var runtimeItemData = new ItemData(data);
+                    _idToRuntimeDataDic.Add(runtimeItemData.Id, runtimeItemData);
+                    _runtimeDataList.Add(runtimeItemData);
                 }
 
                 //更新下一個Id 避免重複
@@ -96,17 +96,17 @@ namespace DataModule
             return ++_data.NextId;
         }
 
-        public void GetAllItemList(List<UIItemData> result)
+        public void GetAllItemList(List<ItemData> result)
         {
             if (result == null)
                 return;
 
-            result.AddRange(_uiDataList);
+            result.AddRange(_runtimeDataList);
         }
 
-        public bool TryGetItemData(int id, out UIItemData itemData)
+        public bool TryGetItemData(int id, out ItemData itemData)
         {
-            return _idToUIDataDic.TryGetValue(id, out itemData);
+            return _idToRuntimeDataDic.TryGetValue(id, out itemData);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace DataModule
         /// <param name="settingId"></param>
         /// <param name="count"></param>
         /// <param name="notifyEvent">變動資料, 是否新增</param>
-        public void AddItem(int settingId, int count, Action<UIItemData, bool> notifyEvent = null)
+        public void AddItem(int settingId, int count, Action<ItemData, bool> notifyEvent = null)
         {
             if (!FormSystem.Table.ItemTable.TryGetData(settingId, out var itemRow))
             {
@@ -146,12 +146,12 @@ namespace DataModule
                     var oriItem = _cacheGetItemList[0];
                     var remainCount = itemRow.Stack - oriItem.Count;
                     oriItem.Count += Math.Min(remainCount, count);
-                    if (_idToUIDataDic.TryGetValue(oriItem.Id, out var uIItemData))
+                    if (_idToRuntimeDataDic.TryGetValue(oriItem.Id, out var runtimeItemData))
                     {
-                        uIItemData.SyncData(oriItem);
-                        uIItemData.Notify(default);
+                        runtimeItemData.SyncData(oriItem);
+                        runtimeItemData.Notify(default);
                         if (notifyEvent != null)
-                            notifyEvent.Invoke(uIItemData, false);
+                            notifyEvent.Invoke(runtimeItemData, false);
                     }
                 }
                 else
@@ -210,7 +210,7 @@ namespace DataModule
         /// <param name="id"></param>
         /// <param name="count"></param>
         /// <param name="notifyEvent">變動資料, 是否移除</param>
-        public void RemoveItem(int id, int count, Action<UIItemData, bool> notifyEvent = null)
+        public void RemoveItem(int id, int count, Action<ItemData, bool> notifyEvent = null)
         {
             if (!_idToDataDic.TryGetValue(id, out var itemData))
             {
@@ -232,21 +232,21 @@ namespace DataModule
             }
 
             //Runtime
-            if (_idToUIDataDic.TryGetValue(id, out var uIItemData))
+            if (_idToRuntimeDataDic.TryGetValue(id, out var runtimeItemData))
             {
                 if (needRemove)
                 {
-                    _uiDataList.Remove(uIItemData);
-                    _idToUIDataDic.Remove(id);
+                    _runtimeDataList.Remove(runtimeItemData);
+                    _idToRuntimeDataDic.Remove(id);
                 }
                 else
                 {
-                    uIItemData.SyncData(itemData);
-                    uIItemData.Notify(default);
+                    runtimeItemData.SyncData(itemData);
+                    runtimeItemData.Notify(default);
                 }
 
                 if (notifyEvent != null)
-                    notifyEvent.Invoke(uIItemData, needRemove);
+                    notifyEvent.Invoke(runtimeItemData, needRemove);
             }
         }
 
@@ -256,7 +256,7 @@ namespace DataModule
         /// <param name="settingId"></param>
         /// <param name="count"></param>
         /// <param name="notifyEvent">新增通知事件</param>
-        private void AddNewItem(int settingId, int count, Action<UIItemData, bool> notifyEvent = null)
+        private void AddNewItem(int settingId, int count, Action<ItemData, bool> notifyEvent = null)
         {
             var nextId = GetNextId();
             if (_idToDataDic.ContainsKey(nextId))
@@ -265,17 +265,17 @@ namespace DataModule
                 return;
             }
 
-            var newItemData = new ItemData(nextId, settingId, count);
+            var newItemData = new ItemRepoData(nextId, settingId, count);
             //Data
             _data.ItemDataList.Add(newItemData);
             //MappingData
             _idToDataDic.Add(newItemData.Id, newItemData);
             //Runtime
-            var newUIItemData = new UIItemData(newItemData);
-            _uiDataList.Add(newUIItemData);
-            _idToUIDataDic.Add(newUIItemData.Id, newUIItemData);
+            var runtimeItemData = new ItemData(newItemData);
+            _runtimeDataList.Add(runtimeItemData);
+            _idToRuntimeDataDic.Add(runtimeItemData.Id, runtimeItemData);
             if (notifyEvent != null)
-                notifyEvent.Invoke(newUIItemData, true);
+                notifyEvent.Invoke(runtimeItemData, true);
         }
 
         /// <summary>
@@ -283,7 +283,7 @@ namespace DataModule
         /// </summary>
         /// <param name="settingId"></param>
         /// <param name="result"></param>
-        private void GetItemListBySettingId(int settingId, List<ItemData> result)
+        private void GetItemListBySettingId(int settingId, List<ItemRepoData> result)
         {
             if (result == null)
                 return;
