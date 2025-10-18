@@ -21,7 +21,7 @@ namespace GameMainModule
         private MovementData _movementData;
         [SerializeField]
         private CharacterAttackController _characterAttackController = new CharacterAttackController();
-        private AnimatorController _animatorController = new AnimatorController();
+        private CharacterPlayableClipController _playableClipController = new CharacterPlayableClipController();
 
         private GameCharacterStateContext _characterStateContext;
 
@@ -35,19 +35,19 @@ namespace GameMainModule
         public void InitController(
             UnitMovementSetting unityMovementSetting,
             MovementSetting movementSetting,
-            AnimatorTransitionSetting transitionSetting)
+            CharacterAnimationSetting characterAnimationSetting)
         {
             _movementData = new MovementData(unityMovementSetting, movementSetting);
             _characterStateContext = new GameCharacterStateContext(
                 _movementData,
                 _characterAttackController,
-                _animatorController);
+                _playableClipController);
 
             //Animator
-            _animatorController.Init(unityMovementSetting.Animator, transitionSetting);
+            _playableClipController.Init("Character Playable", unityMovementSetting.Animator, characterAnimationSetting);
 
             //AttackController
-            _characterAttackController.Init(unityMovementSetting, _animatorController);
+            _characterAttackController.Init(unityMovementSetting, _playableClipController);
 
             //State
             _characterStateMachine.AddState(CharacterState.Idle, new IdleState(_characterStateContext));
@@ -123,6 +123,7 @@ namespace GameMainModule
         public void DoUpdate()
         {
             _characterStateMachine.Update();
+            _playableClipController.Update();
         }
 
         public void DoFixedUpdate()

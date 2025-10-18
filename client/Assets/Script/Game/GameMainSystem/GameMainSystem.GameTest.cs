@@ -36,8 +36,9 @@ namespace GameMainModule
             var movementSetting = AssetSystem.LoadAsset<MovementSetting>("Setting/MovementSetting");
             var unitMovementSetting = unitData.MovementSetting;
             //角色動畫控制
-            var animatorTransitionSetting = AssetSystem.LoadAsset<AnimatorTransitionSetting>("Setting/AnimatorTransitionSetting/PrototypeCharacter");
-            _characterController.InitController(unitMovementSetting, movementSetting, animatorTransitionSetting);
+            var characterAnimationSetting = AssetSystem.LoadAsset<CharacterAnimationSetting>("Setting/CharacterAnimationSetting/PrototypeCharacter");
+            //var animatorTransitionSetting = AssetSystem.LoadAsset<AnimatorTransitionSetting>("Setting/AnimatorTransitionSetting/PrototypeCharacter");
+            _characterController.InitController(unitMovementSetting, movementSetting, characterAnimationSetting);
             //第三人稱相機註冊
             CameraSystem.CameraCommand(
                 new ThirdPersonModeCommandData

@@ -27,7 +27,7 @@ namespace GameMainModule.Attack
         private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
 
         private UnitMovementSetting _unitMovementSetting;
-        private AnimatorController _animatorController;
+        private CharacterPlayableClipController _playableClipController;
 
         private int _curCombinationIndex = -1;
         private int _combinationMaxCount = 0;
@@ -36,10 +36,10 @@ namespace GameMainModule.Attack
         public bool IsProcessCombo => _curCombination != null && _curCombination.IsProcessingCombo;
         public bool IsMaxCombo => _curCombination != null && _curCombination.IsMaxCombo;
 
-        public void Init(UnitMovementSetting unitMovementSetting, AnimatorController animatorController)
+        public void Init(UnitMovementSetting unitMovementSetting, CharacterPlayableClipController playableClipController)
         {
             _unitMovementSetting = unitMovementSetting;
-            _animatorController = animatorController;
+            _playableClipController = playableClipController;
         }
 
         #region Comnination
@@ -91,10 +91,10 @@ namespace GameMainModule.Attack
                 _curCombination.AddObserverList(_observerController.ObserverList);
 
                 //替換攻擊動畫
-                if (GameMainSystem.AttackBehaviorAssetSetting.TryGetAnimationOverrideNameToClipDic(
-                    _curCombination.WeaponGroup, out var overrides))
+                if (GameMainSystem.AttackBehaviorAssetSetting.TryGetAnimationNameToClipDic(
+                    _curCombination.WeaponGroup, out var attackNameToClip))
                 {
-                    _animatorController.SetOverride(overrides);
+                    _playableClipController.SetAttackClip(attackNameToClip);
                 }
             }
 

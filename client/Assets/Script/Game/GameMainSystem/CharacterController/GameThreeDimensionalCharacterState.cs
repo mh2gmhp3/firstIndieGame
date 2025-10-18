@@ -26,16 +26,16 @@ namespace GameMainModule
     {
         public MovementData MovementData;
         public CharacterAttackController AttackController;
-        public AnimatorController AnimatorController;
+        public CharacterPlayableClipController PlayableClipController;
 
         public GameCharacterStateContext(
             MovementData movementData,
             CharacterAttackController attackController,
-            AnimatorController animatorController)
+            CharacterPlayableClipController playableClipController)
         {
             MovementData = movementData;
             AttackController = attackController;
-            AnimatorController = animatorController;
+            PlayableClipController = playableClipController;
         }
 
         public void ResetTrigger()
@@ -50,14 +50,14 @@ namespace GameMainModule
         protected GameCharacterStateContext _context;
         protected MovementData _movementData;
         protected CharacterAttackController _attackController;
-        protected AnimatorController _animatorController;
+        protected CharacterPlayableClipController _playableClipController;
 
         protected GameCharacterState(GameCharacterStateContext context)
         {
             _context = context;
             _movementData = context.MovementData;
             _attackController = context.AttackController;
-            _animatorController = context.AnimatorController;
+            _playableClipController = context.PlayableClipController;
         }
 
         public sealed override void DoUpdate()
@@ -87,7 +87,7 @@ namespace GameMainModule
 
         public override void DoEnter(CharacterState previousState)
         {
-            _animatorController.CrossFade("Idle");
+            _playableClipController.Idle();
         }
 
         public override void OnFixedUpdate()
@@ -104,7 +104,7 @@ namespace GameMainModule
 
         public override void DoEnter(CharacterState previousState)
         {
-            _animatorController.CrossFade("Walk");
+            _playableClipController.Walk(0);
         }
 
         public override void OnFixedUpdate()
@@ -122,7 +122,7 @@ namespace GameMainModule
 
         public override void DoEnter(CharacterState previousState)
         {
-            _animatorController.CrossFade("Run");
+            _playableClipController.Run(0);
         }
 
         public override void OnFixedUpdate()
@@ -146,7 +146,7 @@ namespace GameMainModule
         public override void DoEnter(CharacterState previousState)
         {
             _movementData.JumpData.StartJump();
-            _animatorController.CrossFade("Jump_s");
+            _playableClipController.Jump();
         }
 
         public override void OnUpdate()
@@ -154,7 +154,7 @@ namespace GameMainModule
             if (_movementData.JumpData.JumpTrigger && _movementData.JumpData.CanJump())
             {
                 _movementData.JumpData.StartJump();
-                _animatorController.CrossFade("Jump_s");
+                _playableClipController.Jump();
             }
         }
 
@@ -174,7 +174,7 @@ namespace GameMainModule
         public override void DoEnter(CharacterState previousState)
         {
             _movementData.FallData.StartFall();
-            _animatorController.CrossFade("Fall_d");
+            _playableClipController.Fall();
         }
 
         public override void OnFixedUpdate()
@@ -200,7 +200,7 @@ namespace GameMainModule
             _movementData.JumpData.ResetJump();
             _movementData.LandData.StartLand();
             _attackController.ResetCombo();
-            _animatorController.CrossFade("Fall_e");
+            _playableClipController.Landing();
         }
 
         public override void OnFixedUpdate()
@@ -245,7 +245,7 @@ namespace GameMainModule
 
         public void OnStartAttackBehavior(string behaviorName)
         {
-            _animatorController.CrossFade(behaviorName);
+            _playableClipController.Attack(behaviorName);
         }
 
         public void OnStartComboing()

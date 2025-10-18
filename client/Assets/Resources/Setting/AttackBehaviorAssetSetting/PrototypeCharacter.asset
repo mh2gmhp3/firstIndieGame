@@ -67,28 +67,28 @@ MonoBehaviour:
     CollisionAreaDuration: 0.2
     AnimationStateName: Attack_03
     LockNextTime: 0
-  AnimationOverrideGroupSettingList:
+  AnimationGroupSettingList:
   - GroupId: 100
-    OverrideSettingList:
+    SettingList:
     - AnimationName: Attack_01
-      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
     - AnimationName: Attack_02
-      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
     - AnimationName: Attack_03
-      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
   - GroupId: 200
-    OverrideSettingList:
+    SettingList:
     - AnimationName: Attack_01
-      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
     - AnimationName: Attack_02
-      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
     - AnimationName: Attack_03
-      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
   - GroupId: 300
-    OverrideSettingList:
+    SettingList:
     - AnimationName: Attack_01
-      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
     - AnimationName: Attack_02
-      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
     - AnimationName: Attack_03
-      AnimationOverrideClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
