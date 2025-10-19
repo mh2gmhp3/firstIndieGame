@@ -12,14 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c65af87b099fecc40a4a8407b6ef977f, type: 3}
   m_Name: PrototypeCharacter
   m_EditorClassIdentifier: 
-  Idle: {fileID: 7400000, guid: ed21677978c2e4b4990c5b078fe023b9, type: 2}
-  Walk: {fileID: 7400000, guid: 35cd9fc997ff2084b82155325eb42098, type: 2}
-  Walk_Left: {fileID: 7400000, guid: 35cd9fc997ff2084b82155325eb42098, type: 2}
-  Walk_Right: {fileID: 7400000, guid: 35cd9fc997ff2084b82155325eb42098, type: 2}
-  Run: {fileID: 7400000, guid: b1e6546b56b2ac94f91d6baac4e36b3c, type: 2}
-  Run_Left: {fileID: 7400000, guid: b1e6546b56b2ac94f91d6baac4e36b3c, type: 2}
-  Run_Right: {fileID: 7400000, guid: b1e6546b56b2ac94f91d6baac4e36b3c, type: 2}
-  Jump_Start: {fileID: 7400000, guid: 2b5149b113d5d23499c1bb66c424524c, type: 2}
-  Jump_Continue: {fileID: 7400000, guid: 72c5cd9980d86454a8bfdfb7a6720140, type: 2}
-  Fall_Continue: {fileID: 7400000, guid: ae1fa14b01f7d764285d8fcbb21a5271, type: 2}
-  Fall_Landing: {fileID: 7400000, guid: 684adfc66307622458f87f7e08ef3044, type: 2}
+  Idle:
+    Clip: {fileID: 7400000, guid: ed21677978c2e4b4990c5b078fe023b9, type: 2}
+    FadeDuration: 0.2
+  Walk:
+    Clip: {fileID: 7400000, guid: 35cd9fc997ff2084b82155325eb42098, type: 2}
+    FadeDuration: 0.2
+  Walk_Left:
+    Clip: {fileID: 7400000, guid: 35cd9fc997ff2084b82155325eb42098, type: 2}
+    FadeDuration: 0.2
+  Walk_Right:
+    Clip: {fileID: 7400000, guid: 35cd9fc997ff2084b82155325eb42098, type: 2}
+    FadeDuration: 0.2
+  Run:
+    Clip: {fileID: 7400000, guid: b1e6546b56b2ac94f91d6baac4e36b3c, type: 2}
+    FadeDuration: 0.2
+  Run_Left:
+    Clip: {fileID: 7400000, guid: b1e6546b56b2ac94f91d6baac4e36b3c, type: 2}
+    FadeDuration: 0.2
+  Run_Right:
+    Clip: {fileID: 7400000, guid: b1e6546b56b2ac94f91d6baac4e36b3c, type: 2}
+    FadeDuration: 0.2
+  Jump_Start:
+    Clip: {fileID: 7400000, guid: 2b5149b113d5d23499c1bb66c424524c, type: 2}
+    FadeDuration: 0.2
+  Jump_Continue:
+    Clip: {fileID: 7400000, guid: 72c5cd9980d86454a8bfdfb7a6720140, type: 2}
+    FadeDuration: 0.2
+  Fall_Continue:
+    Clip: {fileID: 7400000, guid: ae1fa14b01f7d764285d8fcbb21a5271, type: 2}
+    FadeDuration: 0.2
+  Fall_Landing:
+    Clip: {fileID: 7400000, guid: 684adfc66307622458f87f7e08ef3044, type: 2}
+    FadeDuration: 0.2

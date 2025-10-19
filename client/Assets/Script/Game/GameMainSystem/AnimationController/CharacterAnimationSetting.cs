@@ -1,26 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 namespace GameMainModule.Animation
 {
+    [Serializable]
+    public class CharacterAnimationClipSetting
+    {
+        public AnimationClip Clip;
+        public float FadeDuration;
+    }
+
     [CreateAssetMenu(fileName = "CharacterAnimationSetting", menuName = "GameMainModule/Animation/CharacterAnimationSetting")]
     public class CharacterAnimationSetting : ScriptableObject
     {
-        public AnimationClip Idle;
+        public CharacterAnimationClipSetting Idle;
 
-        public AnimationClip Walk;
-        public AnimationClip Walk_Left;
-        public AnimationClip Walk_Right;
+        public CharacterAnimationClipSetting Walk;
+        public CharacterAnimationClipSetting Walk_Left;
+        public CharacterAnimationClipSetting Walk_Right;
 
-        public AnimationClip Run;
-        public AnimationClip Run_Left;
-        public AnimationClip Run_Right;
+        public CharacterAnimationClipSetting Run;
+        public CharacterAnimationClipSetting Run_Left;
+        public CharacterAnimationClipSetting Run_Right;
 
-        public AnimationClip Jump_Start;
-        public AnimationClip Jump_Continue;
+        public CharacterAnimationClipSetting Jump_Start;
+        public CharacterAnimationClipSetting Jump_Continue;
 
-        public AnimationClip Fall_Continue;
-        public AnimationClip Fall_Landing;
+        public CharacterAnimationClipSetting Fall_Continue;
+        public CharacterAnimationClipSetting Fall_Landing;
     }
 }
