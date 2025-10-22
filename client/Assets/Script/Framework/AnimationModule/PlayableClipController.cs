@@ -26,11 +26,11 @@ namespace AnimationModule
         private List<PlayableFadeTo> _fadeToList = new List<PlayableFadeTo>();
         private List<int> _processedFadeToIndexList = new List<int>();
 
-        public void Init(string name, Animator animator)
+        public void Init(string name, Animator animator, DirectorUpdateMode updateMode = DirectorUpdateMode.GameTime)
         {
             _graph = PlayableGraph.Create(name);
             _output = AnimationPlayableOutput.Create(_graph, "AnimationOutput", animator);
-            _graph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
+            _graph.SetTimeUpdateMode(updateMode);
             _graph.Play();
         }
 
@@ -65,6 +65,11 @@ namespace AnimationModule
             {
                 _fadeToList.RemoveAt(_processedFadeToIndexList[i]);
             }
+        }
+
+        public void Evaluate(float deltaTime = 0f)
+        {
+            _graph.Evaluate(deltaTime);
         }
 
         public void AddMixer(int mixerId, int inputCount = 0, int connectId = 0, int connectInputIndex = 0)
