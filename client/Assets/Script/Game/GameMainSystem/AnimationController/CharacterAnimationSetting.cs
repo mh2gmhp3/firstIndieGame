@@ -7,6 +7,7 @@ namespace GameMainModule.Animation
     public class CharacterAnimationClipSetting
     {
         public AnimationClip Clip;
+        //不區分To跟Out避免設定時間 有Out小於To導致有一瞬間變成預設的狀態
         public float FadeDuration;
     }
 
