@@ -134,15 +134,15 @@ namespace GameMainModule.Animation
 
         public void Idle()
         {
-            ChangeToNormalImmediate();
-            ClearNormalInputImmediate();
+            ChangeToNormal();
+            ClearNormalInput();
             _controller.SetMixerWeight(Normal_MixerId, Idle_InputIndex, 1, _setting.Idle.FadeDuration);
         }
 
         public void Walk(float direction)
         {
-            ChangeToNormalImmediate();
-            ClearNormalInputImmediate();
+            ChangeToNormal();
+            ClearNormalInput();
             //Mixer
             _controller.SetMixerWeight(Normal_MixerId, Walk_MixerInputIndex, 1, _setting.Walk.FadeDuration);
             //Clip 先直走
@@ -151,8 +151,8 @@ namespace GameMainModule.Animation
 
         public void Run(float direction)
         {
-            ChangeToNormalImmediate();
-            ClearNormalInputImmediate();
+            ChangeToNormal();
+            ClearNormalInput();
             //Mixer
             _controller.SetMixerWeight(Normal_MixerId, Run_MixerInputIndex, 1, _setting.Run.FadeDuration);
             //Clip 先直走
@@ -161,22 +161,22 @@ namespace GameMainModule.Animation
 
         public void Jump()
         {
-            ChangeToNormalImmediate();
-            ClearNormalInputImmediate();
+            ChangeToNormal();
+            ClearNormalInput();
             _controller.SetMixerWeight(Normal_MixerId, Jump_Continue_InputIndex, 1, _setting.Jump_Continue.FadeDuration);
         }
 
         public void Fall()
         {
-            ChangeToNormalImmediate();
-            ClearNormalInputImmediate();
+            ChangeToNormal();
+            ClearNormalInput();
             _controller.SetMixerWeight(Normal_MixerId, Fall_Continue_InputIndex, 1, _setting.Fall_Continue.FadeDuration);
         }
 
         public void Landing()
         {
-            ChangeToNormalImmediate();
-            ClearNormalInputImmediate();
+            ChangeToNormal();
+            ClearNormalInput();
             _controller.Play(Normal_MixerId, Fall_Landing_InputIndex);
         }
 
@@ -184,23 +184,23 @@ namespace GameMainModule.Animation
         {
             if (!_attackNameToInputIndex.TryGetValue(attackName, out var index))
                 return;
-            ChangeToAttackImmediate();
+            ChangeToAttack();
             _controller.Play(Attack_MixerId, index, speed);
         }
 
-        private void ChangeToNormalImmediate()
+        private void ChangeToNormal()
         {
-            _controller.SetMixerWeight(Output_MixerId, Normal_InputIndex, 1);
-            _controller.SetMixerWeight(Output_MixerId, Attack_InputIndex, 0);
+            _controller.SetMixerWeight(Output_MixerId, Normal_InputIndex, 1, _setting.NormalAndAttackMixDuration);
+            _controller.SetMixerWeight(Output_MixerId, Attack_InputIndex, 0, _setting.NormalAndAttackMixDuration);
         }
 
-        private void ChangeToAttackImmediate()
+        private void ChangeToAttack()
         {
-            _controller.SetMixerWeight(Output_MixerId, Normal_InputIndex, 0);
-            _controller.SetMixerWeight(Output_MixerId, Attack_InputIndex, 1);
+            _controller.SetMixerWeight(Output_MixerId, Normal_InputIndex, 0, _setting.NormalAndAttackMixDuration);
+            _controller.SetMixerWeight(Output_MixerId, Attack_InputIndex, 1, _setting.NormalAndAttackMixDuration);
         }
 
-        private void ClearNormalInputImmediate()
+        private void ClearNormalInput()
         {
             _controller.SetMixerWeight(Normal_MixerId, Idle_InputIndex, 0, _setting.Idle.FadeDuration);
             _controller.SetMixerWeight(Normal_MixerId, Walk_MixerInputIndex, 0, _setting.Walk.FadeDuration);

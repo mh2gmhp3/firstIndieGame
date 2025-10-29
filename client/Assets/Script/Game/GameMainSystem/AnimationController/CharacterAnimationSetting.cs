@@ -29,5 +29,7 @@ namespace GameMainModule.Animation
 
         public CharacterAnimationClipSetting Fall_Continue;
         public CharacterAnimationClipSetting Fall_Landing;
+
+        public float NormalAndAttackMixDuration = 0.2f;
     }
 }

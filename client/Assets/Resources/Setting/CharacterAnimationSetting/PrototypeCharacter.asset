@@ -45,3 +45,4 @@ MonoBehaviour:
   Fall_Landing:
     Clip: {fileID: 7400000, guid: c4d7ca9fd524ae846a429aaa9acbe03c, type: 2}
     FadeDuration: 0.2
+  NormalAndAttackMixDuration: 0.2
