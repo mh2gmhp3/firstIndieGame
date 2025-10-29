@@ -13,35 +13,35 @@ MonoBehaviour:
   m_Name: PrototypeCharacter
   m_EditorClassIdentifier: 
   Idle:
-    Clip: {fileID: 7400000, guid: ed21677978c2e4b4990c5b078fe023b9, type: 2}
+    Clip: {fileID: 7400000, guid: 8548e329ffbb31b40b2658d951204d2c, type: 2}
     FadeDuration: 0.2
   Walk:
-    Clip: {fileID: 7400000, guid: 35cd9fc997ff2084b82155325eb42098, type: 2}
+    Clip: {fileID: 7400000, guid: 39cfbde2fdf867642b473a9ea2c8e734, type: 2}
     FadeDuration: 0.2
   Walk_Left:
-    Clip: {fileID: 7400000, guid: 35cd9fc997ff2084b82155325eb42098, type: 2}
+    Clip: {fileID: 7400000, guid: 7f691944e92294047a7dd335180cfa08, type: 2}
     FadeDuration: 0.2
   Walk_Right:
-    Clip: {fileID: 7400000, guid: 35cd9fc997ff2084b82155325eb42098, type: 2}
+    Clip: {fileID: 7400000, guid: 89d2cb42eebcddd4b858e88b3dc141a0, type: 2}
     FadeDuration: 0.2
   Run:
-    Clip: {fileID: 7400000, guid: b1e6546b56b2ac94f91d6baac4e36b3c, type: 2}
+    Clip: {fileID: 7400000, guid: aeb8005afcc1329458e68242ac0a3dc9, type: 2}
     FadeDuration: 0.2
   Run_Left:
-    Clip: {fileID: 7400000, guid: b1e6546b56b2ac94f91d6baac4e36b3c, type: 2}
+    Clip: {fileID: 7400000, guid: e7cc1b699a897b64190f7f378398f641, type: 2}
     FadeDuration: 0.2
   Run_Right:
-    Clip: {fileID: 7400000, guid: b1e6546b56b2ac94f91d6baac4e36b3c, type: 2}
+    Clip: {fileID: 7400000, guid: d5c27b50d8e88f644a88a5d9ec0a5a0f, type: 2}
     FadeDuration: 0.2
   Jump_Start:
-    Clip: {fileID: 7400000, guid: 2b5149b113d5d23499c1bb66c424524c, type: 2}
+    Clip: {fileID: 7400000, guid: 961483bddd8ba5b4e8a50974170e2c28, type: 2}
     FadeDuration: 0.2
   Jump_Continue:
-    Clip: {fileID: 7400000, guid: 72c5cd9980d86454a8bfdfb7a6720140, type: 2}
+    Clip: {fileID: 7400000, guid: 8c7808b1e26b1e542bacb68bce5939c7, type: 2}
     FadeDuration: 0.2
   Fall_Continue:
-    Clip: {fileID: 7400000, guid: ae1fa14b01f7d764285d8fcbb21a5271, type: 2}
+    Clip: {fileID: 7400000, guid: eed024c3c03eba648a5951c153bb1831, type: 2}
     FadeDuration: 0.2
   Fall_Landing:
-    Clip: {fileID: 7400000, guid: 684adfc66307622458f87f7e08ef3044, type: 2}
+    Clip: {fileID: 7400000, guid: c4d7ca9fd524ae846a429aaa9acbe03c, type: 2}
     FadeDuration: 0.2

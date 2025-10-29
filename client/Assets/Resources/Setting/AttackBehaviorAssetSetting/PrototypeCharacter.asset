@@ -71,11 +71,17 @@ MonoBehaviour:
   - GroupId: 100
     SettingList:
     - AnimationName: Attack_01
-      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      AnimationClip: {fileID: 7400000, guid: b5af8f487ce43c148b7073f43c7759d5, type: 2}
     - AnimationName: Attack_02
-      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      AnimationClip: {fileID: 7400000, guid: 412ca1babf3875c49b8597fe8bf7cd34, type: 2}
     - AnimationName: Attack_03
-      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+      AnimationClip: {fileID: 7400000, guid: 7ceae6c85dc6c6340b5abdbff55bde73, type: 2}
+    - AnimationName: Attack_04
+      AnimationClip: {fileID: 7400000, guid: afa704d906125c74a94a3ea90bd752cc, type: 2}
+    - AnimationName: Attack_05
+      AnimationClip: {fileID: 7400000, guid: a8d7f538ff0e7e2409771a6f9548945c, type: 2}
+    - AnimationName: Attack_06
+      AnimationClip: {fileID: 7400000, guid: b991a65ddfa842149923696be5e1cbdb, type: 2}
   - GroupId: 200
     SettingList:
     - AnimationName: Attack_01
