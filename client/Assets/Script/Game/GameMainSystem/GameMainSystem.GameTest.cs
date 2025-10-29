@@ -45,7 +45,7 @@ namespace GameMainModule
                 {
                     TargetTrans = unitData.CameraLookupCenterTransform,
                     FocusTargetOffset = new Vector3(0, 0.5f, 0),
-                    Distance = 10,
+                    Distance = 5,
                     CameraRotateSensitivity = 100,
                     ScreenAxisValue = Vector2.zero,
                     CameraSpeed = 50,
