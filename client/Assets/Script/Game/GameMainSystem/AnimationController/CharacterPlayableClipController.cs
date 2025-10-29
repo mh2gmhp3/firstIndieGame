@@ -51,6 +51,9 @@ namespace GameMainModule.Animation
 
         private CharacterAnimationSetting _setting;
 
+        private float _evaluateTime = 0;
+        private float _evaluateUpdateInterval = 0.1f;
+
         public CharacterPlayableClipController()
         {
             _controller = new PlayableClipController();
@@ -60,7 +63,7 @@ namespace GameMainModule.Animation
         {
             _setting = setting;
 
-            _controller.Init(name, animator);
+            _controller.Init(name, animator, UnityEngine.Playables.DirectorUpdateMode.Manual);
             //Output
             _controller.AddMixer(Output_MixerId);
 
@@ -106,6 +109,12 @@ namespace GameMainModule.Animation
         public void Update()
         {
             _controller.Update();
+            _evaluateTime += Time.deltaTime;
+            if (_evaluateTime >= _evaluateUpdateInterval)
+            {
+                _controller.Evaluate(_evaluateTime);
+                _evaluateTime = 0;
+            }
         }
 
         public void SetAttackClip(Dictionary<string, AnimationClip> attackClipDic)
