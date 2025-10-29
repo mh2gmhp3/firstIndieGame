@@ -26,12 +26,15 @@ namespace AnimationModule
         private List<PlayableFadeTo> _fadeToList = new List<PlayableFadeTo>();
         private List<int> _processedFadeToIndexList = new List<int>();
 
+        private bool _inited = false;
+
         public void Init(string name, Animator animator, DirectorUpdateMode updateMode = DirectorUpdateMode.GameTime)
         {
             _graph = PlayableGraph.Create(name);
             _output = AnimationPlayableOutput.Create(_graph, "AnimationOutput", animator);
             _graph.SetTimeUpdateMode(updateMode);
             _graph.Play();
+            _inited = true;
         }
 
         public void Update()
@@ -69,6 +72,9 @@ namespace AnimationModule
 
         public void Evaluate(float deltaTime = 0f)
         {
+            if (!_inited)
+                return;
+
             _graph.Evaluate(deltaTime);
         }
 
