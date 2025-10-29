@@ -27,7 +27,7 @@ namespace GameMainModule
         private void InitTestPlayerCharacterUnit()
         {
             //讀取Prefab
-            var testCharacterAssets = AssetSystem.LoadAsset<GameObject>("Prototype/TestObject/Character_02/Character_Root");
+            var testCharacterAssets = AssetSystem.LoadAsset<GameObject>("Prototype/TestObject/Character_06/Character_Root");
             var testCharacterGo = ObjectUtility.InstantiateWithoutClone(testCharacterAssets);
             var testCharacterGameUnit = testCharacterGo.GetComponent<GameUnit>();
             var unitData = testCharacterGameUnit.UnitData;
