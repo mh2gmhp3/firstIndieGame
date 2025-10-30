@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PrototypeCharacter
   m_EditorClassIdentifier: 
   Idle:
-    Clip: {fileID: 7400000, guid: 8548e329ffbb31b40b2658d951204d2c, type: 2}
+    Clip: {fileID: 7400000, guid: 4e67eb9346bb29c4eabc6bbde79b1cac, type: 2}
     FadeDuration: 0.2
   Walk:
     Clip: {fileID: 7400000, guid: 3618861fb4e2af349bdb6b41ce52151f, type: 2}
@@ -25,13 +25,13 @@ MonoBehaviour:
     Clip: {fileID: 7400000, guid: f713d5d1b78a4b94088a69243148fdaa, type: 2}
     FadeDuration: 0.2
   Trot:
-    Clip: {fileID: 7400000, guid: 39cfbde2fdf867642b473a9ea2c8e734, type: 2}
+    Clip: {fileID: 7400000, guid: 81a552ca311101b45a977374613550f3, type: 2}
     FadeDuration: 0.2
   Trot_Left:
-    Clip: {fileID: 7400000, guid: 7f691944e92294047a7dd335180cfa08, type: 2}
+    Clip: {fileID: 7400000, guid: 9499e16ceba5f56418abff2b3e638441, type: 2}
     FadeDuration: 0.2
   Trot_Right:
-    Clip: {fileID: 7400000, guid: 89d2cb42eebcddd4b858e88b3dc141a0, type: 2}
+    Clip: {fileID: 7400000, guid: dda74484f0d92b042aea4f139c70bae1, type: 2}
     FadeDuration: 0.2
   Run:
     Clip: {fileID: 7400000, guid: aeb8005afcc1329458e68242ac0a3dc9, type: 2}
