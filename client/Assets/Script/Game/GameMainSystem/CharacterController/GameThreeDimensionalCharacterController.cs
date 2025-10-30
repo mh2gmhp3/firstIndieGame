@@ -134,7 +134,8 @@ namespace GameMainModule
                 CharacterState.Walk,
                 CharacterState.Run,
                 CharacterState.Jump,
-                CharacterState.Fall
+                CharacterState.Fall,
+                CharacterState.Dash
             };
             _characterStateMachine.AddTransition(toAttackState, CharacterState.Attack,
                 () => { return _characterAttackController.HaveTrigger(); });
