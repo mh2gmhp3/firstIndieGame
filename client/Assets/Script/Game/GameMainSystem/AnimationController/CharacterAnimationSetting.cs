@@ -20,6 +20,10 @@ namespace GameMainModule.Animation
         public CharacterAnimationClipSetting Walk_Left;
         public CharacterAnimationClipSetting Walk_Right;
 
+        public CharacterAnimationClipSetting Trot;
+        public CharacterAnimationClipSetting Trot_Left;
+        public CharacterAnimationClipSetting Trot_Right;
+
         public CharacterAnimationClipSetting Run;
         public CharacterAnimationClipSetting Run_Left;
         public CharacterAnimationClipSetting Run_Right;
@@ -27,8 +31,10 @@ namespace GameMainModule.Animation
         public CharacterAnimationClipSetting Jump_Start;
         public CharacterAnimationClipSetting Jump_Continue;
 
-        public CharacterAnimationClipSetting Fall_Continue;
-        public CharacterAnimationClipSetting Fall_Landing;
+        public CharacterAnimationClipSetting Falling;
+        public CharacterAnimationClipSetting Landing;
+
+        public CharacterAnimationClipSetting Dash;
 
         public float NormalAndAttackMixDuration = 0.2f;
     }

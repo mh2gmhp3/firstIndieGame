@@ -23,17 +23,25 @@ namespace GameMainModule.Animation
         public const int Walk_Left_InputIndex = 1;
         public const int Walk_Right_InputIndex = 2;
 
-        public const int Run_MixerId = 5;
-        public const int Run_MixerInputIndex = 2;
+        public const int Trot_MixerId = 5;
+        public const int Trot_MixerInputIndex = 2;
+        public const int Trot_InputIndex = 0;
+        public const int Trot_Left_InputIndex = 1;
+        public const int Trot_Right_InputIndex = 2;
+
+        public const int Run_MixerId = 6;
+        public const int Run_MixerInputIndex = 3;
         public const int Run_InputIndex = 0;
         public const int Run_Left_InputIndex = 1;
         public const int Run_Right_InputIndex = 2;
 
-        public const int Jump_Start_InputIndex = 3;
-        public const int Jump_Continue_InputIndex = 4;
+        public const int Jump_Start_InputIndex = 4;
+        public const int Jump_Continue_InputIndex = 5;
 
-        public const int Fall_Continue_InputIndex = 5;
-        public const int Fall_Landing_InputIndex = 6;
+        public const int Falling_InputIndex = 6;
+        public const int Landing_InputIndex = 7;
+
+        public const int Dash_InputIndex = 8;
 
         #endregion
 
@@ -88,6 +96,14 @@ namespace GameMainModule.Animation
             _controller.AddMixerClip(Walk_MixerId, Walk_InputIndex, _setting.Walk.Clip);
             _controller.AddMixerClip(Walk_MixerId, Walk_Left_InputIndex, _setting.Walk_Left.Clip);
             _controller.AddMixerClip(Walk_MixerId, Walk_Right_InputIndex, _setting.Walk_Right.Clip);
+            //Trot Mixer
+            _controller.AddMixer(
+                Trot_MixerId,
+                connectId: Normal_MixerId,
+                connectInputIndex: Trot_MixerInputIndex);
+            _controller.AddMixerClip(Trot_MixerId, Trot_InputIndex, _setting.Trot.Clip);
+            _controller.AddMixerClip(Trot_MixerId, Trot_Left_InputIndex, _setting.Trot_Left.Clip);
+            _controller.AddMixerClip(Trot_MixerId, Trot_Right_InputIndex, _setting.Trot_Right.Clip);
             //Run Mixer
             _controller.AddMixer(
                 Run_MixerId,
@@ -100,10 +116,12 @@ namespace GameMainModule.Animation
             _controller.AddMixerClip(Normal_MixerId, Jump_Start_InputIndex, _setting.Jump_Start.Clip);
             //Jump Continue
             _controller.AddMixerClip(Normal_MixerId, Jump_Continue_InputIndex, _setting.Jump_Continue.Clip);
-            //Fall Continue
-            _controller.AddMixerClip(Normal_MixerId, Fall_Continue_InputIndex, _setting.Fall_Continue.Clip);
-            //Fall Landing
-            _controller.AddMixerClip(Normal_MixerId, Fall_Landing_InputIndex, _setting.Fall_Landing.Clip);
+            //Falling
+            _controller.AddMixerClip(Normal_MixerId, Falling_InputIndex, _setting.Falling.Clip);
+            //Landing
+            _controller.AddMixerClip(Normal_MixerId, Landing_InputIndex, _setting.Landing.Clip);
+            //Dash
+            _controller.AddMixerClip(Normal_MixerId, Dash_InputIndex, _setting.Dash.Clip);
         }
 
         public void Update()
@@ -149,6 +167,16 @@ namespace GameMainModule.Animation
             _controller.SetMixerWeight(Walk_MixerId, Walk_InputIndex, 1);
         }
 
+        public void Trot(float direction)
+        {
+            ChangeToNormal();
+            ClearNormalInput();
+            //Mixer
+            _controller.SetMixerWeight(Normal_MixerId, Trot_MixerInputIndex, 1, _setting.Trot.FadeDuration);
+            //Clip 先直走
+            _controller.SetMixerWeight(Trot_MixerId, Trot_InputIndex, 1);
+        }
+
         public void Run(float direction)
         {
             ChangeToNormal();
@@ -170,14 +198,21 @@ namespace GameMainModule.Animation
         {
             ChangeToNormal();
             ClearNormalInput();
-            _controller.SetMixerWeight(Normal_MixerId, Fall_Continue_InputIndex, 1, _setting.Fall_Continue.FadeDuration);
+            _controller.SetMixerWeight(Normal_MixerId, Falling_InputIndex, 1, _setting.Falling.FadeDuration);
         }
 
         public void Landing()
         {
             ChangeToNormal();
             ClearNormalInput();
-            _controller.Play(Normal_MixerId, Fall_Landing_InputIndex);
+            _controller.Play(Normal_MixerId, Landing_InputIndex);
+        }
+
+        public void Dash()
+        {
+            ChangeToNormal();
+            ClearNormalInput();
+            _controller.Play(Normal_MixerId, Dash_InputIndex);
         }
 
         public void Attack(string attackName, float speed = 1f)
@@ -204,11 +239,13 @@ namespace GameMainModule.Animation
         {
             _controller.SetMixerWeight(Normal_MixerId, Idle_InputIndex, 0, _setting.Idle.FadeDuration);
             _controller.SetMixerWeight(Normal_MixerId, Walk_MixerInputIndex, 0, _setting.Walk.FadeDuration);
+            _controller.SetMixerWeight(Normal_MixerId, Trot_MixerInputIndex, 0, _setting.Trot.FadeDuration);
             _controller.SetMixerWeight(Normal_MixerId, Run_MixerInputIndex, 0, _setting.Run.FadeDuration);
             _controller.SetMixerWeight(Normal_MixerId, Jump_Start_InputIndex, 0, _setting.Jump_Start.FadeDuration);
             _controller.SetMixerWeight(Normal_MixerId, Jump_Continue_InputIndex, 0, _setting.Jump_Continue.FadeDuration);
-            _controller.SetMixerWeight(Normal_MixerId, Fall_Continue_InputIndex, 0, _setting.Fall_Continue.FadeDuration);
-            _controller.SetMixerWeight(Normal_MixerId, Fall_Landing_InputIndex, 0, _setting.Fall_Landing.FadeDuration);
+            _controller.SetMixerWeight(Normal_MixerId, Falling_InputIndex, 0, _setting.Falling.FadeDuration);
+            _controller.SetMixerWeight(Normal_MixerId, Landing_InputIndex, 0, _setting.Landing.FadeDuration);
+            _controller.SetMixerWeight(Normal_MixerId, Dash_InputIndex, 0, _setting.Landing.FadeDuration);
         }
     }
 }

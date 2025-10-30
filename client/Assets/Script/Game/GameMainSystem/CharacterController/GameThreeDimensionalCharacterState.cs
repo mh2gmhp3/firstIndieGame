@@ -87,30 +87,67 @@ namespace GameMainModule
 
         public override void DoEnter(CharacterState previousState)
         {
+            //先處理部分因為沒有進Land導致沒有重置問題
+            _movementData.JumpData.ResetJump();
+
             _playableClipController.Idle();
+            _movementData.SpeedRate = MovementData.SlowSpeedRate;
         }
 
         public override void OnFixedUpdate()
         {
             ThreeDimensionalMovementUtility.FixGroundPoint(_movementData);
+            ThreeDimensionalMovementUtility.RotateCharacterAvatarWithSlope(_movementData);
         }
     }
 
     public class WalkState : GameCharacterState
     {
+        private bool _isTrot = false;
+
         public WalkState(GameCharacterStateContext context) : base(context)
         {
         }
 
         public override void DoEnter(CharacterState previousState)
         {
-            _playableClipController.Walk(0);
+            _isTrot = IsTrot(_movementData.MoveAxis);
+            OnIsTrotChanged(_isTrot);
+        }
+
+        public override void OnUpdate()
+        {
+            var curIsTrot = IsTrot(_movementData.MoveAxis);
+            if (curIsTrot != _isTrot)
+            {
+                _isTrot = curIsTrot;
+                OnIsTrotChanged(_isTrot);
+            }
         }
 
         public override void OnFixedUpdate()
         {
             ThreeDimensionalMovementUtility.FixGroundPoint(_movementData);
             ThreeDimensionalMovementUtility.Movement(_movementData);
+        }
+
+        private bool IsTrot(Vector3 moveAxis)
+        {
+            return moveAxis.sqrMagnitude > 0.5f;
+        }
+
+        private void OnIsTrotChanged(bool isTrot)
+        {
+            if (isTrot)
+            {
+                _movementData.SpeedRate = MovementData.MidSpeedRate;
+                _playableClipController.Trot(0);
+            }
+            else
+            {
+                _movementData.SpeedRate = MovementData.SlowSpeedRate;
+                _playableClipController.Walk(0);
+            }
         }
     }
 
@@ -123,6 +160,7 @@ namespace GameMainModule
         public override void DoEnter(CharacterState previousState)
         {
             _playableClipController.Run(0);
+            _movementData.SpeedRate = MovementData.FastSpeedRate;
         }
 
         public override void OnFixedUpdate()
@@ -160,7 +198,7 @@ namespace GameMainModule
 
         public override void OnFixedUpdate()
         {
-            _movementData.JumpData.JumpEnd = !ThreeDimensionalMovementUtility.Jump(_movementData);
+            _movementData.JumpData.JumpEnd = !ThreeDimensionalMovementUtility.Jumping(_movementData);
             ThreeDimensionalMovementUtility.Movement(_movementData);
         }
     }
@@ -206,6 +244,34 @@ namespace GameMainModule
         public override void OnFixedUpdate()
         {
             ThreeDimensionalMovementUtility.FixGroundPoint(_movementData);
+            ThreeDimensionalMovementUtility.RotateCharacterAvatarWithSlope(_movementData);
+        }
+    }
+
+    public class DashState : GameCharacterState
+    {
+        public DashState(GameCharacterStateContext context) : base(context)
+        {
+        }
+
+        public override void DoEnter(CharacterState previousState)
+        {
+            _movementData.DashData.StartDash();
+            _playableClipController.Dash();
+            ThreeDimensionalMovementUtility.ResetRigibody(_movementData);
+            _movementData.DisableResetVelocity = true;
+            ThreeDimensionalMovementUtility.Dash(_movementData);
+        }
+
+        public override void DoExit(CharacterState nextState)
+        {
+            _movementData.DisableResetVelocity = false;
+        }
+
+        public override void OnFixedUpdate()
+        {
+            ThreeDimensionalMovementUtility.FixGroundPoint(_movementData);
+            ThreeDimensionalMovementUtility.RotateCharacterAvatarWithSlope(_movementData);
         }
     }
 

@@ -1,6 +1,8 @@
 ﻿using Extension;
 using System;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
+using static UnitModule.Movement.ThreeDimensionalMovementUtility;
 
 namespace UnitModule.Movement
 {
@@ -76,15 +78,43 @@ namespace UnitModule.Movement
             }
         }
 
+        public class DashData
+        {
+            public float DashStartTime;
+
+            public bool DashTrigger = false;
+
+            public void StartDash()
+            {
+                DashStartTime = Time.time;
+            }
+
+            public float DashElapsedTime()
+            {
+                return Time.time - DashStartTime;
+            }
+        }
+
         [Serializable]
         public class MovementData
         {
+            #region Const
+
+            public const float SlowSpeedRate = 0.3f;
+            public const float MidSpeedRate = 0.5f;
+            public const float FastSpeedRate = 1.0f;
+
+            #endregion
+
             public UnitMovementSetting UnitMovementSetting;
             public MovementSetting MovementSetting;
 
             public JumpData JumpData;
             public FallData FallData;
             public LandData LandData;
+            public DashData DashData;
+
+            public bool DisableResetVelocity = false;
 
             #region Dynamic Value 可能外部變動的值
 
@@ -98,6 +128,11 @@ namespace UnitModule.Movement
             public Quaternion MoveQuaternion = Quaternion.identity;
 
             public float Speed = 10f;
+
+            /// <summary>
+            /// 速度倍率 會經由部分狀態變動 Walk Run
+            /// </summary>
+            public float SpeedRate = 1.0f;
 
             public bool RunTriggered = false;
 
@@ -125,6 +160,35 @@ namespace UnitModule.Movement
                 return MoveAxis.sqrMagnitude > 0;
             }
 
+            public Vector3 GetForward(bool withSlope)
+            {
+                Vector3 forward = (MoveQuaternion * MoveAxis).normalized;
+                if (withSlope)
+                    return GetOnSlopeVector(forward);
+
+                return forward;
+            }
+
+            /// <summary>
+            /// 使用方向獲取與斜波的向量 如果站在斜坡上 沒有將直接回傳原向量
+            /// </summary>
+            /// <param name="vector"></param>
+            /// <returns></returns>
+            public Vector3 GetOnSlopeVector(Vector3 vector)
+            {
+                if (IsSlope)
+                    return Vector3.ProjectOnPlane(vector, SlopeHit.normal).normalized;
+                return vector;
+            }
+
+            public Vector3 GetDashForward()
+            {
+                if (HaveMoveInput())
+                    return GetForward(true);
+                else
+                    return GetOnSlopeVector(UnitMovementSetting.RotateTransform.forward);    // 沒輸入拿當前面向方向
+            }
+
             public MovementData(UnitMovementSetting unitMovementSetting, MovementSetting movementSetting)
             {
                 UnitMovementSetting = unitMovementSetting;
@@ -132,28 +196,32 @@ namespace UnitModule.Movement
                 JumpData = new JumpData();
                 FallData = new FallData();
                 LandData = new LandData();
+                DashData = new DashData();
             }
 
             public void ResetTrigger()
             {
                 JumpData.JumpTrigger = false;
                 RunTriggered = false;
+                DashData.DashTrigger = false;
             }
         }
 
-        public static bool IsGround(Vector3 startPoint, float distance, out RaycastHit hit)
+        public static bool IsGround(Vector3 startPoint, float radius, float distance, out RaycastHit hit)
         {
-            return Physics.Raycast(
+            return Physics.SphereCast(
                 startPoint,
+                radius,
                 Vector3.down,
                 out hit,
                 distance);
         }
 
-        public static bool IsSlope(Vector3 startPoint, float distance, float angle, out RaycastHit hit)
+        public static bool IsSlope(Vector3 startPoint, float radius, float distance, float angle, out RaycastHit hit)
         {
-            if (!Physics.Raycast(
+            if (!Physics.SphereCast(
                 startPoint,
+                radius,
                 Vector3.down,
                 out hit,
                 distance))
@@ -176,10 +244,12 @@ namespace UnitModule.Movement
 
             movementData.IsGround = IsGround(
                 groundRaycastStartPoint,
+                unitMovementSetting.GroundRaycastRadius,
                 unitMovementSetting.GroundRaycastDistance,
                 out movementData.GroundHit);
             movementData.IsSlope = IsSlope(
                 groundRaycastStartPoint,
+                unitMovementSetting.SlopeRaycastRadius,
                 unitMovementSetting.SlopeRaycastDistance,
                 movementSetting.SlopeAngle,
                 out movementData.SlopeHit);
@@ -187,7 +257,7 @@ namespace UnitModule.Movement
 
         public static void ResetRigibody(MovementData movementData)
         {
-            if (movementData == null || !movementData.IsValid())
+            if (movementData == null || !movementData.IsValid() || movementData.DisableResetVelocity)
                 return;
 
             movementData.UnitMovementSetting.Rigidbody.velocity = Vector3.zero;
@@ -198,29 +268,38 @@ namespace UnitModule.Movement
             if (movementData == null || !movementData.IsValid())
                 return;
 
-            var movementSetting = movementData.MovementSetting;
-            var unityMovementSetting = movementData.UnitMovementSetting;
-            var rigidbody = unityMovementSetting.Rigidbody;
-            var rotateTrans = unityMovementSetting.RotateTransform;
-
-            Vector3 moveForward = movementData.MoveQuaternion * movementData.MoveAxis;
-            Vector3 lookForward = moveForward;
-            if (movementData.IsSlope)
-            {
-                moveForward = Vector3.ProjectOnPlane(moveForward, movementData.SlopeHit.normal).normalized;
-            }
-
-            var movement = moveForward * movementData.Speed;
+            var unitMovementSetting = movementData.UnitMovementSetting;
+            var rigidbody = unitMovementSetting.Rigidbody;
+            var movement = movementData.GetForward(true) * movementData.Speed * movementData.SpeedRate;
             rigidbody.velocity += movement;
 
-            //Rotate
+            RotateToForward(movementData, movementData.GetForward(false));
+            RotateCharacterAvatarWithSlope(movementData);
+        }
+
+        public static void RotateToForward(MovementData movementData, Vector3 lookForward, bool immediate = false)
+        {
+            if (movementData == null || !movementData.IsValid())
+                return;
+
+            var movementSetting = movementData.MovementSetting;
+            var unitMovementSetting = movementData.UnitMovementSetting;
+            var rotateTrans = unitMovementSetting.RotateTransform;
+
+            if (immediate)
+            {
+                var rotation = Quaternion.LookRotation(lookForward);
+                rotateTrans.rotation = rotation;
+                return;
+            }
+
             if (movementData.MoveAxis.sqrMagnitude > 0)
             {
                 var rotation = Quaternion.LookRotation(lookForward);
                 var angle = Quaternion.Angle(rotation, rotateTrans.rotation);
                 if (angle != 0)
                 {
-                    rotateTrans.rotation = Quaternion.Lerp(
+                    rotateTrans.rotation = Quaternion.Slerp(
                         rotateTrans.rotation,
                         rotation,
                         movementSetting.RotateDurationTimePreAngle * Time.deltaTime);
@@ -232,16 +311,52 @@ namespace UnitModule.Movement
             }
         }
 
-        public static bool Jump(MovementData movementData)
+        public static void RotateCharacterAvatarWithSlope(MovementData movementData)
+        {
+            if (movementData == null || !movementData.IsValid())
+                return;
+
+            var unitMovementSetting = movementData.UnitMovementSetting;
+            var rotateTrans = unitMovementSetting.RotateTransform;
+            var avatarTrans = unitMovementSetting.AvatarTransform;
+
+            if (movementData.IsSlope)
+            {
+
+                Vector3 projectedForward = Vector3.ProjectOnPlane(rotateTrans.forward, movementData.SlopeHit.normal).normalized;
+                Quaternion targetRotation = Quaternion.LookRotation(projectedForward, movementData.SlopeHit.normal);
+                avatarTrans.rotation = Quaternion.Slerp(avatarTrans.rotation, targetRotation, 10 * Time.deltaTime);
+            }
+            else
+            {
+                //清空
+                avatarTrans.localRotation = Quaternion.identity;
+            }
+        }
+
+        public static bool Jumping(MovementData movementData)
         {
             if (movementData == null || !movementData.IsValid())
                 return false;
 
             var movementSetting = movementData.MovementSetting;
-            var jumpElapedTime = movementData.JumpData.JumpElapsedTime();
-            var jumpVelocity = movementSetting.JumpVelocityCurve.Evaluate(jumpElapedTime);
+            var jumpElapsedTime = movementData.JumpData.JumpElapsedTime();
+            var jumpVelocity = movementSetting.JumpVelocityCurve.Evaluate(jumpElapsedTime);
             movementData.UnitMovementSetting.Rigidbody.velocity += Vector3.up * jumpVelocity;
-            return jumpElapedTime < movementSetting.JumpVelocityCurve.LastKey().time;
+            return jumpElapsedTime < movementSetting.JumpVelocityCurve.LastKey().time;
+        }
+
+        public static void Dash(MovementData movementData)
+        {
+            if (movementData == null || !movementData.IsValid())
+                return;
+
+            var unitMovementSetting = movementData.UnitMovementSetting;
+            var rigidbody = unitMovementSetting.Rigidbody;
+            var forward = movementData.GetDashForward();
+            RotateToForward(movementData, forward, true);
+            //TODO use setting or character attribute?
+            rigidbody.AddForce(forward * 20f, ForceMode.VelocityChange);
         }
 
         public static void FixGroundPoint(MovementData movementData)

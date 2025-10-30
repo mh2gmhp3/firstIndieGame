@@ -94,6 +94,10 @@ namespace GameMainModule
             {
                 _characterController.SubAttack();
             }
+            else if (command == "dash")
+            {
+                _characterController.Dash();
+            }
         }
 
         private void OnKeyUp(KeyCode keyCode, string command)

@@ -16,12 +16,21 @@ MonoBehaviour:
     Clip: {fileID: 7400000, guid: 8548e329ffbb31b40b2658d951204d2c, type: 2}
     FadeDuration: 0.2
   Walk:
-    Clip: {fileID: 7400000, guid: 39cfbde2fdf867642b473a9ea2c8e734, type: 2}
+    Clip: {fileID: 7400000, guid: 3618861fb4e2af349bdb6b41ce52151f, type: 2}
     FadeDuration: 0.2
   Walk_Left:
-    Clip: {fileID: 7400000, guid: 7f691944e92294047a7dd335180cfa08, type: 2}
+    Clip: {fileID: 7400000, guid: 8a13caf476fb3ee42924ba6ae88e33ee, type: 2}
     FadeDuration: 0.2
   Walk_Right:
+    Clip: {fileID: 7400000, guid: f713d5d1b78a4b94088a69243148fdaa, type: 2}
+    FadeDuration: 0.2
+  Trot:
+    Clip: {fileID: 7400000, guid: 39cfbde2fdf867642b473a9ea2c8e734, type: 2}
+    FadeDuration: 0.2
+  Trot_Left:
+    Clip: {fileID: 7400000, guid: 7f691944e92294047a7dd335180cfa08, type: 2}
+    FadeDuration: 0.2
+  Trot_Right:
     Clip: {fileID: 7400000, guid: 89d2cb42eebcddd4b858e88b3dc141a0, type: 2}
     FadeDuration: 0.2
   Run:
@@ -39,10 +48,13 @@ MonoBehaviour:
   Jump_Continue:
     Clip: {fileID: 7400000, guid: 8c7808b1e26b1e542bacb68bce5939c7, type: 2}
     FadeDuration: 0.2
-  Fall_Continue:
+  Falling:
     Clip: {fileID: 7400000, guid: eed024c3c03eba648a5951c153bb1831, type: 2}
     FadeDuration: 0.2
-  Fall_Landing:
+  Landing:
     Clip: {fileID: 7400000, guid: c4d7ca9fd524ae846a429aaa9acbe03c, type: 2}
+    FadeDuration: 0.2
+  Dash:
+    Clip: {fileID: 7400000, guid: 81a7decbef983cc4cbdd187a1fa9e1cd, type: 2}
     FadeDuration: 0.2
   NormalAndAttackMixDuration: 0.2

@@ -56,6 +56,7 @@ namespace GameMainModule
             _characterStateMachine.AddState(CharacterState.Jump, new JumpState(_characterStateContext));
             _characterStateMachine.AddState(CharacterState.Fall, new FallState(_characterStateContext));
             _characterStateMachine.AddState(CharacterState.Land, new LandState(_characterStateContext));
+            _characterStateMachine.AddState(CharacterState.Dash, new DashState(_characterStateContext));
             _characterStateMachine.AddState(CharacterState.Attack, new AttackState(_characterStateContext));
             _characterStateMachine.SetState(CharacterState.Idle, true);
 
@@ -102,21 +103,40 @@ namespace GameMainModule
             _characterStateMachine.AddTransition(CharacterState.Land, CharacterState.Idle,
                 () => { return _movementData.LandData.LandElapsedTime() >= _movementData.MovementSetting.LandStiffTime; });
 
+            //Dash
+            _characterStateMachine.AddTransition(CharacterState.Dash, CharacterState.Idle,
+                () => { return _movementData.DashData.DashElapsedTime() >= 0.3f && _movementData.IsGround; });
+            _characterStateMachine.AddTransition(CharacterState.Dash, CharacterState.Fall,
+                () => { return _movementData.DashData.DashElapsedTime() >= 0.3f && !_movementData.IsGround; });
+            //To Dash
+            var toDashState = new CharacterState[]
+            {
+                CharacterState.Idle,
+                CharacterState.Walk,
+                CharacterState.Run,
+                CharacterState.Jump,
+                CharacterState.Fall,
+                CharacterState.Land,
+                CharacterState.Attack,
+            };
+            _characterStateMachine.AddTransition(toDashState, CharacterState.Dash,
+                () => { return _movementData.DashData.DashTrigger; });
+
             //Attack
             _characterStateMachine.AddTransition(CharacterState.Attack, CharacterState.Idle,
                 () => { return !_characterAttackController.IsProcessCombo && _movementData.IsGround; });
             _characterStateMachine.AddTransition(CharacterState.Attack, CharacterState.Fall,
                 () => { return !_characterAttackController.IsProcessCombo && !_movementData.IsGround; });
             //To Attack
-            _characterStateMachine.AddTransition(CharacterState.Idle, CharacterState.Attack,
-                () => { return _characterAttackController.HaveTrigger(); });
-            _characterStateMachine.AddTransition(CharacterState.Walk, CharacterState.Attack,
-                () => { return _characterAttackController.HaveTrigger(); });
-            _characterStateMachine.AddTransition(CharacterState.Run, CharacterState.Attack,
-                () => { return _characterAttackController.HaveTrigger(); });
-            _characterStateMachine.AddTransition(CharacterState.Jump, CharacterState.Attack,
-                () => { return _characterAttackController.HaveTrigger(); });
-            _characterStateMachine.AddTransition(CharacterState.Fall, CharacterState.Attack,
+            var toAttackState = new CharacterState[]
+            {
+                CharacterState.Idle,
+                CharacterState.Walk,
+                CharacterState.Run,
+                CharacterState.Jump,
+                CharacterState.Fall
+            };
+            _characterStateMachine.AddTransition(toAttackState, CharacterState.Attack,
                 () => { return _characterAttackController.HaveTrigger(); });
         }
 
@@ -169,6 +189,11 @@ namespace GameMainModule
         public void Run()
         {
             _movementData.RunTriggered = true;
+        }
+
+        public void Dash()
+        {
+            _movementData.DashData.DashTrigger = true;
         }
 
         #endregion

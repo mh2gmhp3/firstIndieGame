@@ -21,6 +21,11 @@ namespace UnitModule.Movement
         public Transform RotateTransform;
 
         /// <summary>
+        /// 單位人物Transform
+        /// </summary>
+        public Transform AvatarTransform;
+
+        /// <summary>
         /// Animator
         /// </summary>
         public Animator Animator;
@@ -40,16 +45,28 @@ namespace UnitModule.Movement
         [Header("地面射線")]
         public float GroundRaycastDistance;
         /// <summary>
+        /// 地面射線半徑
+        /// </summary>
+        [Header("地面射線半徑")]
+        public float GroundRaycastRadius;
+        /// <summary>
         /// 斜坡射線長度
         /// </summary>
         [Header("斜坡射線")]
         public float SlopeRaycastDistance;
+        /// <summary>
+        /// 斜坡射線半徑
+        /// </summary>
+        [Header("斜坡射線半徑")]
+        public float SlopeRaycastRadius;
 
         public bool IsValid()
         {
             if (RootTransform == null)
                 return false;
             if (RotateTransform == null)
+                return false;
+            if (AvatarTransform == null)
                 return false;
             if (Animator == null)
                 return false;

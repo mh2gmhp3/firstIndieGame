@@ -37,6 +37,12 @@ MonoBehaviour:
       Type: 2
     - KeyCode: 335
       Type: 2
+  - Command: dash
+    AssignKeyCodeTriggerSettingList:
+    - KeyCode: 306
+      Type: 0
+    - KeyCode: 331
+      Type: 0
   InputAxisList:
   - Axis: Horizontal
   - Axis: Vertical

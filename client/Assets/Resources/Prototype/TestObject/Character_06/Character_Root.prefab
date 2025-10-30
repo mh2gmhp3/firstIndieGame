@@ -113,11 +113,14 @@ MonoBehaviour:
     MovementSetting:
       RootTransform: {fileID: 6166285353174709427}
       RotateTransform: {fileID: 480879241845847908}
+      AvatarTransform: {fileID: 2943582190654050978}
       Animator: {fileID: 7599474366101097877}
       Rigidbody: {fileID: 2768328668435838517}
       GroundRaycastStartPositionWithRootTransform: {x: 0, y: 0.5, z: 0}
       GroundRaycastDistance: 1
+      GroundRaycastRadius: 0.3
       SlopeRaycastDistance: 1
+      SlopeRaycastRadius: 0.3
     CameraLookupCenterTransform: {fileID: 1839521253433316207}
     UnitColliderList:
     - Id: 0
