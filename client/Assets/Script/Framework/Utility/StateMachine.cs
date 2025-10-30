@@ -62,6 +62,14 @@ namespace Utility
             _transitionList.Add(new Transition<TStateId>(from, to, condition));
         }
 
+        public void AddTransition(TStateId[] froms, TStateId to, Func<bool> condition)
+        {
+            for (int i = 0; i < froms.Length; i++)
+            {
+                AddTransition(froms[i], to, condition);
+            }
+        }
+
         public bool SetState(TStateId stateId, bool force = false)
         {
             if (stateId.Equals(_currentStateId) && !force)
