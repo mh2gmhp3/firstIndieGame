@@ -1,8 +1,6 @@
 ﻿using Extension;
 using System;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
-using static UnitModule.Movement.ThreeDimensionalMovementUtility;
 
 namespace UnitModule.Movement
 {
@@ -144,6 +142,16 @@ namespace UnitModule.Movement
             public bool IsSlope;
             public RaycastHit SlopeHit;
 
+            public MovementData(UnitMovementSetting unitMovementSetting, MovementSetting movementSetting)
+            {
+                UnitMovementSetting = unitMovementSetting;
+                MovementSetting = movementSetting;
+                JumpData = new JumpData();
+                FallData = new FallData();
+                LandData = new LandData();
+                DashData = new DashData();
+            }
+
             public bool IsValid()
             {
                 if (MovementSetting == null)
@@ -187,16 +195,6 @@ namespace UnitModule.Movement
                     return GetForward(true);
                 else
                     return GetOnSlopeVector(UnitMovementSetting.RotateTransform.forward);    // 沒輸入拿當前面向方向
-            }
-
-            public MovementData(UnitMovementSetting unitMovementSetting, MovementSetting movementSetting)
-            {
-                UnitMovementSetting = unitMovementSetting;
-                MovementSetting = movementSetting;
-                JumpData = new JumpData();
-                FallData = new FallData();
-                LandData = new LandData();
-                DashData = new DashData();
             }
 
             public void ResetTrigger()
