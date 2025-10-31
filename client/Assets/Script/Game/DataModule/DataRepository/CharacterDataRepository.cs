@@ -77,7 +77,7 @@ namespace DataModule
                 }
                 else
                 {
-                    result.Add(new WeaponBehaviorSetupData() { WeaponRefItemId = CommonDefine.EmptyWeaponId });
+                    result.Add(new WeaponBehaviorSetupData() { WeaponRefItemId = weaponRefItemId });
                 }
             }
         }
