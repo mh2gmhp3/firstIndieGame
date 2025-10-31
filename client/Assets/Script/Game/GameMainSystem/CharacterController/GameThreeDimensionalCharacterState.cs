@@ -300,6 +300,12 @@ namespace GameMainModule
             {
                 _attackController.ResetCombo();
             }
+            _attackController.SetWeaponActive(true);
+        }
+
+        public override void DoExit(CharacterState nextState)
+        {
+            _attackController.SetWeaponActive(false);
         }
 
         public override void OnUpdate()

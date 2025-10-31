@@ -23,6 +23,7 @@ namespace GameMainModule.Attack
     public class AttackCombination
     {
         private int _weaponGroup = 0;
+        private int _weaponSettingId = 0;
 
         private List<AttackBehavior> _mainAttackBehaviorList = new List<AttackBehavior>();
         private List<AttackBehavior> _subAttackBehaviorList = new List<AttackBehavior>();
@@ -44,6 +45,7 @@ namespace GameMainModule.Attack
         private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
 
         public int WeaponGroup => _weaponGroup;
+        public int WeaponSettingId => _weaponSettingId;
 
         public bool IsComboing => _nowAttackBehavior != null || _nextAttackBehavior != null;
         public bool IsProcessingCombo => _isProcessingCombo;
@@ -72,6 +74,7 @@ namespace GameMainModule.Attack
         public void Update(AttackCombinationRuntimeSetupData setupData)
         {
             _weaponGroup = setupData.Group;
+            _weaponSettingId = setupData.WeaponSettingId;
             _mainAttackBehaviorList.Clear();
             //sub先不使用
             _subAttackBehaviorList.Clear();

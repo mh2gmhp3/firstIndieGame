@@ -23,15 +23,18 @@ namespace GameMainModule.Attack
     public struct AttackCombinationRuntimeSetupData
     {
         public int Group;
+        public int WeaponSettingId;
         public List<AttackBehaviorRuntimeSetupData> BehaviorRuntimeSetupDataList;
 
         public AttackCombinationRuntimeSetupData(WeaponBehaviorSetupData data)
         {
             Group = 0;
+            WeaponSettingId = 0;
             if (GameMainSystem.TryGetWeaponData(data.WeaponRefItemId, out var weaponData) &&
                 FormSystem.Table.WeaponTable.TryGetData(weaponData.SettingId, out var weaponRow))
             {
                 Group = weaponRow.Type;
+                WeaponSettingId = weaponData.SettingId;
             }
 
             BehaviorRuntimeSetupDataList = new List<AttackBehaviorRuntimeSetupData>();

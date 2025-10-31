@@ -3,6 +3,7 @@ using GameMainModule.Animation;
 using GameMainModule.Attack;
 using System;
 using System.Collections.Generic;
+using UnitModule;
 using UnitModule.Movement;
 using UnityEngine;
 using Utility;
@@ -35,7 +36,8 @@ namespace GameMainModule
         public void InitController(
             UnitMovementSetting unityMovementSetting,
             MovementSetting movementSetting,
-            CharacterAnimationSetting characterAnimationSetting)
+            CharacterAnimationSetting characterAnimationSetting,
+            WeaponTransformSetting weaponTransformSetting)
         {
             _movementData = new MovementData(unityMovementSetting, movementSetting);
             _characterStateContext = new GameCharacterStateContext(
@@ -47,7 +49,7 @@ namespace GameMainModule
             _playableClipController.Init("Character Playable", unityMovementSetting.Animator, characterAnimationSetting);
 
             //AttackController
-            _characterAttackController.Init(unityMovementSetting, _playableClipController);
+            _characterAttackController.Init(unityMovementSetting, _playableClipController, weaponTransformSetting);
 
             //State
             _characterStateMachine.AddState(CharacterState.Idle, new IdleState(_characterStateContext));

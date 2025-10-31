@@ -29,7 +29,7 @@ namespace GameMainModule
             //讀取Prefab
             var testCharacterAssets = AssetSystem.LoadAsset<GameObject>("Prototype/TestObject/Character_06/Character_Root");
             var testCharacterGo = ObjectUtility.InstantiateWithoutClone(testCharacterAssets);
-            var testCharacterGameUnit = testCharacterGo.GetComponent<GameUnit>();
+            var testCharacterGameUnit = testCharacterGo.GetComponent<GameCharacterUnit>();
             var unitData = testCharacterGameUnit.UnitData;
             //玩家角色控制
             //角色移動設定
@@ -37,8 +37,14 @@ namespace GameMainModule
             var unitMovementSetting = unitData.MovementSetting;
             //角色動畫控制
             var characterAnimationSetting = AssetSystem.LoadAsset<CharacterAnimationSetting>("Setting/CharacterAnimationSetting/PrototypeCharacter");
-            //var animatorTransitionSetting = AssetSystem.LoadAsset<AnimatorTransitionSetting>("Setting/AnimatorTransitionSetting/PrototypeCharacter");
-            _characterController.InitController(unitMovementSetting, movementSetting, characterAnimationSetting);
+            //武器位置參考
+            var weaponTransformSetting = testCharacterGameUnit.WeaponTransform;
+            //初始化角色控制器
+            _characterController.InitController(
+                unitMovementSetting,
+                movementSetting,
+                characterAnimationSetting,
+                weaponTransformSetting);
             //第三人稱相機註冊
             CameraSystem.CameraCommand(
                 new ThirdPersonModeCommandData
@@ -50,8 +56,7 @@ namespace GameMainModule
                     ScreenAxisValue = Vector2.zero,
                     CameraSpeed = 50,
                 });
-
-            //測試攻擊
+            //初始化攻擊行為
             SetCombinationMaxCount(CommonDefine.WeaponCount); // 先用Define 之後有變動數值在調整
             SetWeaponAttackBehaviorToController(GetWeaponBehaviorListByEquip());
             SetCurCombination(0);

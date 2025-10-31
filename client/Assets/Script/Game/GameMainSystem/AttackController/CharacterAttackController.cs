@@ -1,8 +1,11 @@
-﻿using Extension;
+﻿using AssetModule;
+using Extension;
+using FormModule;
 using GameMainModule.Animation;
 using Logging;
 using System;
 using System.Collections.Generic;
+using UnitModule;
 using UnitModule.Movement;
 using UnityEngine;
 using Utility;
@@ -28,6 +31,10 @@ namespace GameMainModule.Attack
 
         private UnitMovementSetting _unitMovementSetting;
         private CharacterPlayableClipController _playableClipController;
+        private WeaponTransformSetting _weaponTransformSetting;
+
+        private GameObject _curWeaponObj;
+        private bool _isWeaponActive;
 
         private int _curCombinationIndex = -1;
         private int _combinationMaxCount = 0;
@@ -36,10 +43,14 @@ namespace GameMainModule.Attack
         public bool IsProcessCombo => _curCombination != null && _curCombination.IsProcessingCombo;
         public bool IsMaxCombo => _curCombination != null && _curCombination.IsMaxCombo;
 
-        public void Init(UnitMovementSetting unitMovementSetting, CharacterPlayableClipController playableClipController)
+        public void Init(
+            UnitMovementSetting unitMovementSetting,
+            CharacterPlayableClipController playableClipController,
+            WeaponTransformSetting weaponTransformSetting)
         {
             _unitMovementSetting = unitMovementSetting;
             _playableClipController = playableClipController;
+            _weaponTransformSetting = weaponTransformSetting;
         }
 
         #region Comnination
@@ -91,14 +102,79 @@ namespace GameMainModule.Attack
                 _curCombination.AddObserverList(_observerController.ObserverList);
 
                 //替換攻擊動畫
-                if (GameMainSystem.AttackBehaviorAssetSetting.TryGetAnimationNameToClipDic(
-                    _curCombination.WeaponGroup, out var attackNameToClip))
-                {
-                    _playableClipController.SetAttackClip(attackNameToClip);
-                }
+                SetWeaponAnimation(_curCombination.WeaponGroup);
+                //替換武器模型
+                SetWeaponModel(_curCombination.WeaponSettingId);
             }
 
             return true;
+        }
+
+        private void SetWeaponAnimation(int weaponGroup)
+        {
+            if (!GameMainSystem.AttackBehaviorAssetSetting.TryGetAnimationNameToClipDic(
+                weaponGroup, out var attackNameToClip))
+            {
+                return;
+            }
+
+            _playableClipController.SetAttackClip(attackNameToClip);
+        }
+
+        private void SetWeaponModel(int weaponSettingId)
+        {
+            if (_curWeaponObj != null)
+            {
+                //先直接移除 應該可以暫存起來
+                UnityEngine.Object.Destroy(_curWeaponObj);
+            }
+
+            if (!FormSystem.Table.WeaponTable.TryGetData(weaponSettingId, out var weaponRow))
+            {
+                return;
+            }
+
+            var weaponAssets = AssetSystem.LoadAsset<GameObject>(AssetPathUtility.GetWeaponModelPath(weaponRow.ModelName));
+            if (weaponAssets == null)
+                return;
+
+            var weaponGo = UnityEngine.Object.Instantiate(weaponAssets);
+            _curWeaponObj = weaponGo;
+            SetWeaponActive(_isWeaponActive);
+        }
+
+        public void SetWeaponActive(bool active)
+        {
+            _isWeaponActive = active;
+            if (_curWeaponObj == null)
+                return;
+
+            if (!FormSystem.Table.WeaponTable.TryGetData(_curCombination.WeaponSettingId, out var weaponRow))
+            {
+                return;
+            }
+
+            Transform weaponParent = null;
+            if (_isWeaponActive)
+            {
+                if (weaponRow.UseHand == 0)
+                    weaponParent = _weaponTransformSetting.Left_HandTransform;
+                else if (weaponRow.UseHand == 1)
+                    weaponParent = _weaponTransformSetting.Right_HandTransform;
+            }
+            else
+            {
+                if (!_weaponTransformSetting.StorageTransformList.TryGet(weaponRow.StorageIndex, out var storageTrans))
+                    return;
+
+                weaponParent = storageTrans;
+            }
+
+            if (weaponParent == null)
+                return;
+
+            _curWeaponObj.transform.SetParent(weaponParent, false);
+            _curWeaponObj.transform.Reset();
         }
 
         #endregion

@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UnitModule
 {
     /// <summary>
-    /// 角色單位
+    /// 遊戲單位
     /// </summary>
     public class GameUnit : MonoBehaviour
     {
