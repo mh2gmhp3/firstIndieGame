@@ -217,9 +217,9 @@ namespace UnitModule.Movement
 
         public static bool IsSlope(Vector3 startPoint, float radius, float distance, float angle, out RaycastHit hit)
         {
-            if (!Physics.SphereCast(
+            //要再評估看看是否要用Sphere Sphere站在部分物件邊緣會有異常判斷
+            if (!Physics.Raycast(
                 startPoint,
-                radius,
                 Vector3.down,
                 out hit,
                 distance))
