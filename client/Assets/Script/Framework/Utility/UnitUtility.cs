@@ -1,6 +1,7 @@
 ﻿using CollisionModule;
 using UnitModule;
 using Logging;
+using System.Collections.Generic;
 
 namespace Utility
 {
@@ -11,20 +12,20 @@ namespace Utility
         /// <para>註冊用資料:<see cref="CollisionAreaManager.RegisterColliderData"/></para>
         /// <para>註冊使用方法:<see cref="CollisionAreaManager.RegisterCollider(CollisionAreaManager.RegisterColliderData)"/></para>
         /// </summary>
-        /// <param name="unitData"></param>
+        /// <param name="unitColliderList"></param>
         /// <returns></returns>
-        public static CollisionAreaManager.RegisterColliderData GetColliderData(this UnitData unitData)
+        public static CollisionAreaManager.RegisterColliderData GetColliderData(this List<UnitCollider> unitColliderList)
         {
             var result = new CollisionAreaManager.RegisterColliderData();
-            if (unitData == null)
+            if (unitColliderList == null)
             {
-                Log.LogError("UnitUtility.RegisterColliderData Error: unitData is null");
+                Log.LogError("UnitUtility.RegisterColliderData Error: unitColliderList is null");
                 return result;
             }
 
-            for (int i = 0; i < unitData.UnitColliderList.Count; i++)
+            for (int i = 0; i < unitColliderList.Count; i++)
             {
-                var unitCollider = unitData.UnitColliderList[i];
+                var unitCollider = unitColliderList[i];
                 if (result.IdToRegisterColliderDic.ContainsKey(unitCollider.Id))
                 {
                     Log.LogWarning($"UnitUtility.RegisterColliderData Error: duplicate id:{unitCollider.Id}");

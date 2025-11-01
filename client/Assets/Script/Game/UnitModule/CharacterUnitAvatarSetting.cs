@@ -13,10 +13,7 @@ namespace UnitModule
         public List<Transform> StorageTransformList;
     }
 
-    /// <summary>
-    /// 遊戲角色單位
-    /// </summary>
-    public class GameCharacterUnit : GameUnit
+    public class CharacterUnitAvatarSetting : UnitAvatarSetting
     {
         [SerializeField]
         private WeaponTransformSetting _weaponTransform;

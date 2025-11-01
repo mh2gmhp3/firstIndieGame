@@ -1,64 +1,59 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnitModule.Movement
 {
-    /// <summary>
-    /// 單位移動使用資料設定
-    /// </summary>
-    [Serializable]
     public class UnitMovementSetting
     {
+        private Unit _unit;
+        public UnitMovementSetting(Unit unit)
+        {
+            _unit = unit;
+        }
+
         /// <summary>
         /// 移動用的Transform Root
         /// </summary>
-        public Transform RootTransform;
+        public Transform RootTransform => _unit.UnitSetting.RootTransform;
         /// <summary>
         /// 旋轉用的Transform
         /// </summary>
-        public Transform RotateTransform;
+        public Transform RotateTransform => _unit.UnitSetting.RotateTransform;
 
         /// <summary>
         /// 單位人物Transform
         /// </summary>
-        public Transform AvatarTransform;
+        public Transform AvatarTransform => _unit.UnitAvatarSetting.AvatarTransform;
 
         /// <summary>
         /// Animator
         /// </summary>
-        public Animator Animator;
+        public Animator Animator => _unit.UnitAvatarSetting.Animator;
         /// <summary>
         /// Rigidbody
         /// </summary>
-        public Rigidbody Rigidbody;
+        public Rigidbody Rigidbody => _unit.UnitSetting.Rigidbody;
 
         /// <summary>
         /// 地面射線 以RootTransform為基準
         /// </summary>
-        [Header("地面射線 以RootTransform為基準")]
-        public Vector3 GroundRaycastStartPositionWithRootTransform;
+        public Vector3 GroundRaycastStartPositionWithRootTransform => _unit.UnitAvatarSetting.GroundRaycastStartPositionWithRootTransform;
         /// <summary>
         /// 地面射線長度
         /// </summary>
-        [Header("地面射線")]
-        public float GroundRaycastDistance;
+        public float GroundRaycastDistance => _unit.UnitAvatarSetting.GroundRaycastDistance;
         /// <summary>
         /// 地面射線半徑
         /// </summary>
-        [Header("地面射線半徑")]
-        public float GroundRaycastRadius;
+        public float GroundRaycastRadius => _unit.UnitAvatarSetting.GroundRaycastRadius;
         /// <summary>
         /// 斜坡射線長度
         /// </summary>
-        [Header("斜坡射線")]
-        public float SlopeRaycastDistance;
+        public float SlopeRaycastDistance => _unit.UnitAvatarSetting.SlopeRaycastDistance;
         /// <summary>
         /// 斜坡射線半徑
         /// </summary>
-        [Header("斜坡射線半徑")]
-        public float SlopeRaycastRadius;
+        public float SlopeRaycastRadius => _unit.UnitAvatarSetting.SlopeRaycastRadius;
 
         public bool IsValid()
         {
