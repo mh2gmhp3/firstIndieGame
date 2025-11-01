@@ -38,10 +38,17 @@ namespace GameMainModule
 
         public static void LoadGame()
         {
-            Log.LogInfo("讀取遊戲存檔");
-            if (!_instance._dataManager.Exist(1))
-                return;
-            _instance._dataManager.Load(1);
+            //Log.LogInfo("讀取遊戲存檔");
+            Log.LogInfo("讀取遊戲存檔 2");
+            if (_instance._dataManager.Exist(2))
+            {
+                _instance._dataManager.Load(2);
+            }
+            else
+            {
+                _instance._dataManager.CreateNew(2);
+            }
+
             _instance.InitGameTest();
         }
 
