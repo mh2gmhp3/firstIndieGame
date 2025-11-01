@@ -117,7 +117,7 @@ namespace GameMainModule.Attack
                     return new TestCollisionAreaSetupData(1);
                 case CollisionAreaDefine.AreaType.Quad:
                     return new QuadCollisionAreaSetupData(
-                        unitMovementSetting.RootTransform.position + new Vector3(0f, 2.5f, 0f),
+                        unitMovementSetting.RootTransform.position + new Vector3(0f, 0.5f, 0f),
                         unitMovementSetting.RotateTransform.forward,
                         attackBehaviorAssetSettingData.CollisionAreaDuration,
                         5f,
