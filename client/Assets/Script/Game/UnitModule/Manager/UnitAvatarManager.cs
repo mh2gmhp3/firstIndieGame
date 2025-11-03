@@ -66,7 +66,7 @@ namespace UnitModule
                 return false;
             }
 
-            if (!TryGetPoolIns(avatarName, out avatarInstance))
+            if (!TryGetInsFromPool(avatarName, out avatarInstance))
             {
                 Log.LogError($"UnitAvatarManager.RegisterAvatar Error, 無法獲取AvatarInstance Id:{id} AvatarName:{avatarName}");
                 return false;
@@ -96,7 +96,7 @@ namespace UnitModule
 
         #region Pool
 
-        private bool TryGetPoolIns(string avatarName, out UnitAvatarInstance avatarInstance)
+        private bool TryGetInsFromPool(string avatarName, out UnitAvatarInstance avatarInstance)
         {
             avatarInstance = default;
             if (_nameToAvatarInsPool.TryGetValue(avatarName, out var pool) && pool.Count > 0)
@@ -111,7 +111,7 @@ namespace UnitModule
                 var avatarAsset = AssetSystem.LoadAsset<GameObject>(avatarPath);
                 if (avatarAsset == null)
                 {
-                    Log.LogError($"UnitAvatarManager.TryGetFromPool 找不到AvatarAsset Path:{avatarPath}");
+                    Log.LogError($"UnitAvatarManager.TryGetInsFromPool 找不到AvatarAsset Path:{avatarPath}");
                     return false;
                 }
                 var avatarObject = ObjectUtility.InstantiateWithoutClone(avatarAsset);
@@ -119,14 +119,14 @@ namespace UnitModule
                 if (avatarSetting == null)
                 {
                     Object.Destroy(avatarObject);
-                    Log.LogError($"UnitAvatarManager.TryGetFromPool Avatar上不存在UnitAvatarRootSetting的Component Path:{avatarPath}");
+                    Log.LogError($"UnitAvatarManager.TryGetInsFromPool Avatar上不存在UnitAvatarRootSetting的Component Path:{avatarPath}");
                     return false;
                 }
 
                 var unitRootSetting = ObjectUtility.InstantiateWithoutClone(_unitRootTemplate, _unitRootTrans);
                 if (unitRootSetting == null)
                 {
-                    Log.LogError($"UnitAvatarManager.TryGetFromPool UnitRootSetting 生成失敗");
+                    Log.LogError($"UnitAvatarManager.TryGetInsFromPool UnitRootSetting 生成失敗");
                     return false;
                 }
 
