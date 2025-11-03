@@ -74,6 +74,8 @@ namespace GameMainModule
                 _unitManager.RemoveUnit(unit.Id);
                 return false;
             }
+            _unitColliderManager.RegisterCollider(unit.Id, avatarInstance.UnitAvatarSetting.UnitColliderList, out _);
+
             return true;
         }
 
