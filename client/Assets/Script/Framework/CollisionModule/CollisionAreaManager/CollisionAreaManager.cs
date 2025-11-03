@@ -1,4 +1,5 @@
-﻿using Logging;
+﻿using GameSystem;
+using Logging;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace CollisionModule
     /// 碰撞區塊管理者
     /// <para>可註冊Collider來與其他的單位碰撞</para>
     /// </summary>
-    public class CollisionAreaManager : ICollisionAreaManager
+    public class CollisionAreaManager : ICollisionAreaManager, IUpdateTarget
     {
         /// <summary>
         /// 要註冊的Collider資料
@@ -148,20 +149,24 @@ namespace CollisionModule
 
         #endregion
 
-        #region Pubilc Unity Method  Update DrawGizmos
+        #region IUpdateTarget
 
-        /// <summary>
-        /// Update時需要自行呼叫 不呼叫CollisionArea將不會更新
-        /// </summary>
-        public void DoUpdate()
+        void IUpdateTarget.DoUpdate()
         {
             ProcessCollisionArea();
         }
 
-        /// <summary>
-        /// 需要繪製GUI時呼叫
-        /// </summary>
-        public void DoOnGUI()
+        void IUpdateTarget.DoFixedUpdate()
+        {
+
+        }
+
+        void IUpdateTarget.DoLateUpdate()
+        {
+
+        }
+
+        void IUpdateTarget.DoOnGUI()
         {
             for (int i = 0; i < _runningCollisionAreaList.Count; i++)
             {
@@ -169,10 +174,7 @@ namespace CollisionModule
             }
         }
 
-        /// <summary>
-        /// 需要繪製Gizmos時呼叫
-        /// </summary>
-        public void DoDrawGizmos()
+        void IUpdateTarget.DoDrawGizmos()
         {
             for (int i = 0; i < _runningCollisionAreaList.Count; i++)
             {

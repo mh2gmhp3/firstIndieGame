@@ -15,6 +15,7 @@ namespace GameMainModule
     [GameSystem(GameSystemPriority.GAME_MAIN_SYSTEM)]
     public partial class GameMainSystem : BaseGameSystem<GameMainSystem>
     {
+        private List<IUpdateTarget> _updateTargetList = new List<IUpdateTarget>();
 
         protected override void DoEnterGameFlowEnterStep(int flowStep)
         {
@@ -62,29 +63,55 @@ namespace GameMainModule
 
         protected override void DoUpdate()
         {
-            _characterController.DoUpdate();
-            _collisionAreaManager.DoUpdate();
-
-            if (TestMode)
+            for (int i = 0; i < _updateTargetList.Count; i++)
             {
-                RepeatCreateTestCollisionArea();
+                _updateTargetList[i].DoUpdate();
             }
         }
 
         protected override void DoFixedUpdate()
         {
-            _characterController.DoFixedUpdate();
+            for (int i = 0; i < _updateTargetList.Count; i++)
+            {
+                _updateTargetList[i].DoFixedUpdate();
+            }
+        }
+
+        protected override void DoLateUpdate()
+        {
+            for (int i = 0; i < _updateTargetList.Count; i++)
+            {
+                _updateTargetList[i].DoLateUpdate();
+            }
         }
 
         private void OnGUI()
         {
-            _characterController.DoOnGUI();
-            _collisionAreaManager.DoOnGUI();
+            for (int i = 0; i < _updateTargetList.Count; i++)
+            {
+                _updateTargetList[i].DoOnGUI();
+            }
         }
 
         private void OnDrawGizmos()
         {
-            _collisionAreaManager.DoDrawGizmos();
+            for (int i = 0; i < _updateTargetList.Count; i++)
+            {
+                _updateTargetList[i].DoDrawGizmos();
+            }
+        }
+
+        private void RegisterUpdateTarget(IUpdateTarget updateTarget)
+        {
+            if (updateTarget == null)
+                return;
+
+            _updateTargetList.Add(updateTarget);
+        }
+
+        private void UnRegisterUpdateTarget(IUpdateTarget updateTarget)
+        {
+            _updateTargetList.Remove(updateTarget);
         }
     }
 }

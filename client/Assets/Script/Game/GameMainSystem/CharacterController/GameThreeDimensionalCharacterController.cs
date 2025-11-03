@@ -1,6 +1,7 @@
 ﻿using DataModule;
 using GameMainModule.Animation;
 using GameMainModule.Attack;
+using GameSystem;
 using System;
 using System.Collections.Generic;
 using UnitModule;
@@ -12,7 +13,7 @@ using static UnitModule.Movement.ThreeDimensionalMovementUtility;
 namespace GameMainModule
 {
     [Serializable]
-    public class GameThreeDimensionalCharacterController
+    public class GameThreeDimensionalCharacterController : IUpdateTarget
     {
         [SerializeField]
         private StateMachine<CharacterState, GameCharacterState> _characterStateMachine =
@@ -143,18 +144,28 @@ namespace GameMainModule
                 () => { return _characterAttackController.HaveTrigger(); });
         }
 
-        public void DoUpdate()
+        void IUpdateTarget.DoUpdate()
         {
             _characterStateMachine.Update();
             _playableClipController.Update();
         }
 
-        public void DoFixedUpdate()
+        void IUpdateTarget.DoFixedUpdate()
         {
             _characterStateMachine.FixedUpdate();
         }
 
-        public void DoOnGUI()
+        void IUpdateTarget.DoLateUpdate()
+        {
+
+        }
+
+        void IUpdateTarget.DoOnGUI()
+        {
+
+        }
+
+        void IUpdateTarget.DoDrawGizmos()
         {
 
         }

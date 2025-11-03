@@ -38,6 +38,7 @@ namespace GameMainModule
             //武器位置參考
             var weaponTransformSetting = characterUnit.WeaponTransformSetting;
             //初始化角色控制器
+            RegisterUpdateTarget(_characterController);
             _characterController.InitController(
                 unitMovementSetting,
                 movementSetting,
