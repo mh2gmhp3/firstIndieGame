@@ -8,11 +8,10 @@ namespace GameMainModule
     {
         private const string UnitRootPath = "Prototype/TestObject/UnitRoot";
         private const string AvatarPath = "Prototype/TestObject/Avatar";
+
         private UnitManager _unitManager = new UnitManager();
         private UnitAvatarManager _unitAvatarManager = new UnitAvatarManager();
-        private UnitColliderManager _unitColliderManger = new UnitColliderManager();
-
-        public UnitManager UnitManager => _unitManager;
+        private UnitColliderManager _unitColliderManager = new UnitColliderManager();
 
         public void InitUnit()
         {
@@ -38,7 +37,7 @@ namespace GameMainModule
                 return false;
             }
             unit.SetAvatarInsInfo(avatarInstance);
-            _unitColliderManger.RegisterCollider(unit.Id, avatarInstance.UnitAvatarSetting.UnitColliderList, out _);
+            _unitColliderManager.RegisterCollider(unit.Id, avatarInstance.UnitAvatarSetting.UnitColliderList, out _);
 
             return true;
         }
