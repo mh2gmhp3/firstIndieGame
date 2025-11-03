@@ -29,7 +29,7 @@ namespace GameMainModule.Attack
 
         private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
 
-        private UnitMovementSetting _unitMovementSetting;
+        private IUnitMovementSetting _unitMovementSetting;
         private CharacterPlayableClipController _playableClipController;
         private WeaponTransformSetting _weaponTransformSetting;
 
@@ -44,7 +44,7 @@ namespace GameMainModule.Attack
         public bool IsMaxCombo => _curCombination != null && _curCombination.IsMaxCombo;
 
         public void Init(
-            UnitMovementSetting unitMovementSetting,
+            IUnitMovementSetting unitMovementSetting,
             CharacterPlayableClipController playableClipController,
             WeaponTransformSetting weaponTransformSetting)
         {

@@ -7,15 +7,63 @@ namespace GameMainModule
     public partial class GameMainSystem
     {
         private const string UnitRootPath = "Prototype/TestObject/UnitRoot";
+        private const string AvatarPath = "Prototype/TestObject/Avatar";
         private UnitManager _unitManager = new UnitManager();
+        private UnitAvatarManager _unitAvatarManager = new UnitAvatarManager();
+        private UnitColliderManager _unitColliderManger = new UnitColliderManager();
 
         public UnitManager UnitManager => _unitManager;
 
-        public void InitUnitManager()
+        public void InitUnit()
         {
             var unitRootAssets = AssetSystem.LoadAsset<GameObject>(UnitRootPath);
             var unitRoot = unitRootAssets.GetComponent<UnitSetting>();
-            _unitManager.Init(unitRoot, _transform);
+            _unitAvatarManager.Init(unitRoot, _transform, AvatarPath);
         }
+
+        #region Character
+
+        public static bool AddCharacterUnit(string avatarName, out CharacterUnit unit)
+        {
+            return _instance.InternalAddCharacterUnit(avatarName, out unit);
+        }
+
+        private bool InternalAddCharacterUnit(string avatarName, out CharacterUnit unit)
+        {
+            unit = _unitManager.AddUnit<CharacterUnit>();
+            //Character 會永遠顯示 直接註冊所有要使用的資料
+            if (_unitAvatarManager.RegisterAvatar(unit.Id, avatarName, out var avatarInstance))
+            {
+                _unitManager.RemoveUnit(unit.Id);
+                return false;
+            }
+            unit.SetAvatarInsInfo(avatarInstance);
+            _unitColliderManger.RegisterCollider(unit.Id, avatarInstance.UnitAvatarSetting.UnitColliderList, out _);
+
+            return true;
+        }
+
+        #endregion
+
+        #region Npc
+
+        public static bool AddNpcUnit(string avatarName, out NpcUnit unit)
+        {
+            return _instance.InternalAddNpcUnit(avatarName, out unit);
+        }
+
+        private bool InternalAddNpcUnit(string avatarName, out NpcUnit unit)
+        {
+            unit = _unitManager.AddUnit<NpcUnit>();
+            //等系統完全建立起來後在處理後分開
+            if (_unitAvatarManager.RegisterAvatar(unit.Id, avatarName, out var avatarInstance))
+            {
+                _unitManager.RemoveUnit(unit.Id);
+                return false;
+            }
+            return true;
+        }
+
+        #endregion
     }
 }

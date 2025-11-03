@@ -1,79 +1,84 @@
 ﻿using System;
 using UnityEngine;
+using static UnitModule.UnitAvatarManager;
 
 namespace UnitModule.Movement
 {
-    public class UnitMovementSetting
+    public interface IUnitMovementSetting
     {
-        private Unit _unit;
-        public UnitMovementSetting(Unit unit)
-        {
-            _unit = unit;
-        }
-
         /// <summary>
         /// 移動用的Transform Root
         /// </summary>
-        public Transform RootTransform => _unit.UnitSetting.RootTransform;
+        public Transform RootTransform { get; }
         /// <summary>
         /// 旋轉用的Transform
         /// </summary>
-        public Transform RotateTransform => _unit.UnitSetting.RotateTransform;
+        public Transform RotateTransform { get; }
 
         /// <summary>
         /// 單位人物Transform
         /// </summary>
-        public Transform AvatarTransform => _unit.UnitAvatarSetting.AvatarTransform;
+        public Transform AvatarTransform { get; }
 
         /// <summary>
         /// Animator
         /// </summary>
-        public Animator Animator => _unit.UnitAvatarSetting.Animator;
+        public Animator Animator { get; }
         /// <summary>
         /// Rigidbody
         /// </summary>
-        public Rigidbody Rigidbody => _unit.UnitSetting.Rigidbody;
+        public Rigidbody Rigidbody { get; }
 
         /// <summary>
         /// 地面射線 以RootTransform為基準
         /// </summary>
-        public Vector3 GroundRaycastStartPositionWithRootTransform => _unit.UnitAvatarSetting.GroundRaycastStartPositionWithRootTransform;
+        public Vector3 GroundRaycastStartPositionWithRootTransform { get; }
         /// <summary>
         /// 地面射線長度
         /// </summary>
-        public float GroundRaycastDistance => _unit.UnitAvatarSetting.GroundRaycastDistance;
+        public float GroundRaycastDistance { get; }
         /// <summary>
         /// 地面射線半徑
         /// </summary>
-        public float GroundRaycastRadius => _unit.UnitAvatarSetting.GroundRaycastRadius;
+        public float GroundRaycastRadius { get; }
         /// <summary>
         /// 斜坡射線長度
         /// </summary>
-        public float SlopeRaycastDistance => _unit.UnitAvatarSetting.SlopeRaycastDistance;
+        public float SlopeRaycastDistance { get; }
         /// <summary>
         /// 斜坡射線半徑
         /// </summary>
-        public float SlopeRaycastRadius => _unit.UnitAvatarSetting.SlopeRaycastRadius;
+        public float SlopeRaycastRadius { get; }
+    }
 
-        public bool IsValid()
+    public static class IUnitMovementSettingExtension
+    {
+        public static bool IsValid(this IUnitMovementSetting unitMovementSetting)
         {
-            if (RootTransform == null)
+            if (unitMovementSetting == null)
                 return false;
-            if (RotateTransform == null)
+
+            if (unitMovementSetting.RootTransform == null)
                 return false;
-            if (AvatarTransform == null)
+            if (unitMovementSetting.RotateTransform == null)
                 return false;
-            if (Animator == null)
+            if (unitMovementSetting.AvatarTransform == null)
                 return false;
-            if (Rigidbody == null)
+            if (unitMovementSetting.Animator == null)
+                return false;
+            if (unitMovementSetting.Rigidbody == null)
                 return false;
 
             return true;
         }
 
-        public Vector3 GetGroundRaycastWorldPoint()
+        public static Vector3 GetGroundRaycastWorldPoint(this IUnitMovementSetting unitMovementSetting)
         {
-            return RootTransform.position + GroundRaycastStartPositionWithRootTransform;
+            if (unitMovementSetting == null)
+                return Vector3.zero;
+
+            return unitMovementSetting.RootTransform.position +
+                unitMovementSetting.GroundRaycastStartPositionWithRootTransform;
         }
     }
 }

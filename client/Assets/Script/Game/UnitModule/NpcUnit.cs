@@ -1,22 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace UnitModule
+﻿namespace UnitModule
 {
     public class NpcUnit : Unit
     {
-        protected override void DoSetup()
+        public override int UnitType => (int)UnitDefine.UnitType.Npc;
+
+        protected override void DoInit()
         {
-            UnitSetting.Rigidbody.isKinematic = true;
+
         }
 
         protected override void DoReset()
-        {
-
-        }
-
-        protected override void DoClear()
         {
 
         }

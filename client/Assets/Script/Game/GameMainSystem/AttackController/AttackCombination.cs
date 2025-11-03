@@ -31,7 +31,7 @@ namespace GameMainModule.Attack
         private AttackBehavior _nowAttackBehavior = null;
         private AttackBehavior _nextAttackBehavior = null;
 
-        private UnitMovementSetting _unitMovementSetting = null;
+        private IUnitMovementSetting _unitMovementSetting = null;
 
         /// <summary>
         /// 控制Combo開始與結束通知
@@ -66,7 +66,7 @@ namespace GameMainModule.Attack
             }
         }
 
-        public AttackCombination(UnitMovementSetting unitMovementSetting)
+        public AttackCombination(IUnitMovementSetting unitMovementSetting)
         {
             _unitMovementSetting = unitMovementSetting;
         }

@@ -26,8 +26,8 @@ namespace GameMainModule
         /// </summary>
         private void InitTestPlayerCharacterUnit()
         {
-            var prototypeCharacterPath = "Prototype/TestObject/Character_06/Character_06";
-            if (!UnitManager.AddUnit<CharacterUnit>(prototypeCharacterPath, out var characterUnit))
+            var prototypeCharacterAvatarName = "Character_06";
+            if (!AddCharacterUnit(prototypeCharacterAvatarName, out var characterUnit))
                 return;
             //玩家角色控制
             //角色移動設定
@@ -47,7 +47,7 @@ namespace GameMainModule
             CameraSystem.CameraCommand(
                 new ThirdPersonModeCommandData
                 {
-                    TargetTrans = characterUnit.UnitSetting.RootTransform,
+                    TargetTrans = unitMovementSetting.RootTransform,
                     FocusTargetOffset = new Vector3(0, 2.0f, 0),
                     Distance = 5,
                     CameraRotateSensitivity = 100,
@@ -59,8 +59,9 @@ namespace GameMainModule
             SetWeaponAttackBehaviorToController(GetWeaponBehaviorListByEquip());
             SetCurCombination(0);
 
-            _unitManager.AddUnit<NpcUnit>(prototypeCharacterPath, out var npcUnit);
-            npcUnit.UnitSetting.RootTransform.position = new Vector3(5, 0, 0);
+            AddNpcUnit(prototypeCharacterAvatarName, out var npcUnit);
+            if (_unitAvatarManager.TryGetAvatarIns(npcUnit.Id, out var npcAvatarIns))
+                npcAvatarIns.UnitSetting.RootTransform.position = new Vector3(5.0f, 0, 0);
 
             UISystem.OpenUIWindow(WindowId.Window_Game, null);
         }

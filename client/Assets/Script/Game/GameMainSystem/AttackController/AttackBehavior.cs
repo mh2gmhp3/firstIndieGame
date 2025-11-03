@@ -30,7 +30,7 @@ namespace GameMainModule.Attack
         [SerializeField]
         private float _elapsedTime = 0;
 
-        private UnitMovementSetting _unitMovementSetting;
+        private IUnitMovementSetting _unitMovementSetting;
         private AttackBehaviorAssetSettingData _setting;
         private FakeCharacterTriggerInfo _fakeCharacterTriggerInfo = new FakeCharacterTriggerInfo();
 
@@ -58,7 +58,7 @@ namespace GameMainModule.Attack
         /// TODO 要加入玩家資料相關內容
         /// </summary>
         /// <param name="setting"></param>
-        public AttackBehavior(UnitMovementSetting unitMovementSetting, AttackBehaviorAssetSettingData setting, float baseBehaviorTime)
+        public AttackBehavior(IUnitMovementSetting unitMovementSetting, AttackBehaviorAssetSettingData setting, float baseBehaviorTime)
         {
             _name = setting.AnimationStateName;
             _unitMovementSetting = unitMovementSetting;
@@ -107,7 +107,7 @@ namespace GameMainModule.Attack
         }
 
         private static ICollisionAreaSetupData GetCollisionAreaSetupData(
-            UnitMovementSetting unitMovementSetting,
+            IUnitMovementSetting unitMovementSetting,
             AttackBehaviorAssetSettingData attackBehaviorAssetSettingData,
             ICollisionAreaTriggerInfo triggerInfo)
         {

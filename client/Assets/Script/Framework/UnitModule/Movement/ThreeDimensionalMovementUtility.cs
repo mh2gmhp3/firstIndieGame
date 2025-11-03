@@ -104,7 +104,7 @@ namespace UnitModule.Movement
 
             #endregion
 
-            public UnitMovementSetting UnitMovementSetting;
+            public IUnitMovementSetting UnitMovementSetting;
             public MovementSetting MovementSetting;
 
             public JumpData JumpData;
@@ -142,7 +142,7 @@ namespace UnitModule.Movement
             public bool IsSlope;
             public RaycastHit SlopeHit;
 
-            public MovementData(UnitMovementSetting unitMovementSetting, MovementSetting movementSetting)
+            public MovementData(IUnitMovementSetting unitMovementSetting, MovementSetting movementSetting)
             {
                 UnitMovementSetting = unitMovementSetting;
                 MovementSetting = movementSetting;

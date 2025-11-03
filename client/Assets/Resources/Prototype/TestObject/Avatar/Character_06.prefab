@@ -105,10 +105,10 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 36a42a6615e38d24183ac77c8b65b47e, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 1
-  m_Height: 2.6
+  m_Radius: 0.5
+  m_Height: 1.3
   m_Direction: 1
-  m_Center: {x: 0, y: 1.6, z: 0}
+  m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!1001 &8283058608191076761
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -119,6 +119,18 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: e0d4212b8604cb641951dc1603a11161, type: 3}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e0d4212b8604cb641951dc1603a11161, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e0d4212b8604cb641951dc1603a11161, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e0d4212b8604cb641951dc1603a11161, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e0d4212b8604cb641951dc1603a11161, type: 3}
       propertyPath: m_LocalPosition.x

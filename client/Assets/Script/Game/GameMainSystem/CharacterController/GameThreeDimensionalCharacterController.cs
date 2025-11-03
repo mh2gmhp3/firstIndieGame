@@ -34,7 +34,7 @@ namespace GameMainModule
         }
 
         public void InitController(
-            UnitMovementSetting unityMovementSetting,
+            IUnitMovementSetting unityMovementSetting,
             MovementSetting movementSetting,
             CharacterAnimationSetting characterAnimationSetting,
             WeaponTransformSetting weaponTransformSetting)
