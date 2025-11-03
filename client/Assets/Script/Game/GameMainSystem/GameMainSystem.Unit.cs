@@ -32,7 +32,7 @@ namespace GameMainModule
         {
             unit = _unitManager.AddUnit<CharacterUnit>();
             //Character 會永遠顯示 直接註冊所有要使用的資料
-            if (_unitAvatarManager.RegisterAvatar(unit.Id, avatarName, out var avatarInstance))
+            if (!_unitAvatarManager.RegisterAvatar(unit.Id, avatarName, out var avatarInstance))
             {
                 _unitManager.RemoveUnit(unit.Id);
                 return false;
@@ -55,8 +55,8 @@ namespace GameMainModule
         private bool InternalAddNpcUnit(string avatarName, out NpcUnit unit)
         {
             unit = _unitManager.AddUnit<NpcUnit>();
-            //等系統完全建立起來後在處理後分開
-            if (_unitAvatarManager.RegisterAvatar(unit.Id, avatarName, out var avatarInstance))
+            //等系統完全建立起來後在處理分離行為
+            if (!_unitAvatarManager.RegisterAvatar(unit.Id, avatarName, out var avatarInstance))
             {
                 _unitManager.RemoveUnit(unit.Id);
                 return false;

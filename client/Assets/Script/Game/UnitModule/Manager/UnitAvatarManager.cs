@@ -76,7 +76,7 @@ namespace UnitModule
             avatarInstance.UnitSetting.RootTransform.name = $"{avatarName}_{id}";
 #endif
             _idToUsingAvatarInsDic.Add(id, avatarInstance);
-            return false;
+            return true;
         }
 
         /// <summary>
