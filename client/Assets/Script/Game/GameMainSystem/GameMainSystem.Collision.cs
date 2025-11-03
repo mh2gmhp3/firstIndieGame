@@ -41,7 +41,7 @@ namespace GameMainModule
 
         public void InitCollision()
         {
-            _collisionAreaManager.SetCollisionAreaTriggerReceiver(new GameCollisionAreaTriggerReceiver(this));
+            _collisionAreaManager.SetCollisionAreaTriggerReceiver(new GameCollisionAreaTriggerReceiver());
         }
     }
 }

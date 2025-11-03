@@ -20,6 +20,20 @@ namespace GameMainModule
             _unitAvatarManager.Init(unitRoot, _transform, AvatarPath);
         }
 
+        #region UnitCollider
+
+        public static bool TryGetUnitIdByColliderGroupId(int groupId, out int unitId)
+        {
+            return _instance.InternalTryGetUnitIdByColliderGroupId(groupId, out unitId);
+        }
+
+        public bool InternalTryGetUnitIdByColliderGroupId(int groupId, out int unitId)
+        {
+            return _unitColliderManager.TryGetUnitIdByColliderGroupId(groupId, out unitId);
+        }
+
+        #endregion
+
         #region Character
 
         public static bool AddCharacterUnit(string avatarName, out CharacterUnit unit)

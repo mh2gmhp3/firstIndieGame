@@ -7,16 +7,14 @@ namespace CollisionModule
 {
     public class GameCollisionAreaTriggerReceiver : ICollisionAreaTriggerReceiver
     {
-        private GameMainSystem _gameMainSystem;
-
-        public GameCollisionAreaTriggerReceiver(GameMainSystem gameMainSystem)
+        public GameCollisionAreaTriggerReceiver()
         {
-            _gameMainSystem = gameMainSystem;
+
         }
 
         public void OnTrigger(int groupId, int colliderId, RaycastHit hit, ICollisionAreaTriggerInfo triggerInfo)
         {
-            if (!_gameMainSystem.UnitManager.TryGetUnitIdByColliderGroupId(groupId, out var unitId))
+            if (!GameMainSystem.TryGetUnitIdByColliderGroupId(groupId, out var unitId))
                 return;
 
             if (triggerInfo is FakeCharacterTriggerInfo fakeTriggerInfo)
