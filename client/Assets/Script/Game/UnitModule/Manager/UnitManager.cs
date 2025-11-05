@@ -24,16 +24,6 @@ namespace UnitModule
             return ++_nextUnitId;
         }
 
-        public bool TryGetUnitIdByColliderGroupId(int colliderGroupId, out int unitId)
-        {
-            unitId = 0;
-            //if (!_colliderGroupIdToUnitDic.TryGetValue(colliderGroupId, out var unit))
-            //    return false;
-
-            //unitId = unit.Id;
-            return true;
-        }
-
         public T AddUnit<T>() where T : Unit, new()
         {
             var unit = GetFromPool<T>();
@@ -53,6 +43,16 @@ namespace UnitModule
             ResetUnit(unit);
             RemoveUsingUnit(unit);
             ReturnToPool(unit);
+        }
+
+        public bool TryGetUnit<T>(int id, out T result) where T : Unit
+        {
+            result = null;
+            if (!_idToUsingUnitDic.TryGetValue(id, out var unit))
+                return false;
+
+            result = unit as T;
+            return result != null;
         }
 
         private void SetupUnit(Unit unit)

@@ -3,6 +3,7 @@ using CameraModule;
 using DataModule;
 using GameMainModule.Animation;
 using SceneModule;
+using System.Collections.Generic;
 using UIModule;
 using UIModule.Game;
 using UnitModule;
@@ -31,19 +32,15 @@ namespace GameMainModule
                 return;
             //玩家角色控制
             //角色移動設定
-            var movementSetting = AssetSystem.LoadAsset<MovementSetting>("Setting/MovementSetting");
             var unitMovementSetting = characterUnit.UnitMovementSetting;
             //角色動畫控制
             var characterAnimationSetting = AssetSystem.LoadAsset<CharacterAnimationSetting>("Setting/CharacterAnimationSetting/PrototypeCharacter");
-            //武器位置參考
-            var weaponTransformSetting = characterUnit.WeaponTransformSetting;
             //初始化角色控制器
             RegisterUpdateTarget(_characterController);
             _characterController.InitController(
-                unitMovementSetting,
-                movementSetting,
-                characterAnimationSetting,
-                weaponTransformSetting);
+                characterUnit,
+                _movementSetting,
+                characterAnimationSetting);
             //第三人稱相機註冊
             CameraSystem.CameraCommand(
                 new ThirdPersonModeCommandData
@@ -63,6 +60,20 @@ namespace GameMainModule
             AddNpcUnit(prototypeCharacterAvatarName, out var npcUnit);
             if (_unitAvatarManager.TryGetAvatarIns(npcUnit.Id, out var npcAvatarIns))
                 npcAvatarIns.UnitSetting.RootTransform.position = new Vector3(5.0f, 0, 0);
+
+            //Test Enemy
+            AddEnemySpawnPoint(
+                new Vector3(5, 0, 0),
+                5,
+                new List<TestEnemySpawnData>()
+                {
+                    new TestEnemySpawnData()
+                    {
+                        SettingId = 0,
+                        Hp = 60,
+                        ModelName = prototypeCharacterAvatarName
+                    }
+                });
 
             UISystem.OpenUIWindow(WindowId.Window_Game, null);
         }

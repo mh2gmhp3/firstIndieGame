@@ -1,5 +1,4 @@
-﻿using Extension;
-using UnitModule.Movement;
+﻿using UnityEngine;
 
 namespace UnitModule
 {
@@ -7,6 +6,7 @@ namespace UnitModule
     {
         private int _id;
         public abstract int UnitType { get; }
+        public abstract Vector3 Position { get; }
 
         public int Id => _id;
 

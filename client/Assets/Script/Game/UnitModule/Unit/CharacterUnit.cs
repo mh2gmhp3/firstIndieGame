@@ -1,5 +1,6 @@
 ﻿using Logging;
 using UnitModule.Movement;
+using UnityEngine;
 using static UnitModule.UnitAvatarManager;
 
 namespace UnitModule
@@ -7,12 +8,16 @@ namespace UnitModule
     public class CharacterUnit : Unit
     {
         public override int UnitType => (int)UnitDefine.UnitType.Character;
+        public override Vector3 Position
+        {
+            get => UnitMovementSetting.RootTransform.position;
+        }
 
         private GameUnitMovementSetting _unitMovementSetting;
-        private CharacterUnitAvatarSetting _characterUnitAvatarSetting;
+        private CharacterUnitAvatarSetting _unitAvatarSetting;
 
         public GameUnitMovementSetting UnitMovementSetting => _unitMovementSetting;
-        public WeaponTransformSetting WeaponTransformSetting => _characterUnitAvatarSetting.WeaponTransform;
+        public WeaponTransformSetting WeaponTransformSetting => _unitAvatarSetting.WeaponTransform;
 
         public void SetAvatarInsInfo(UnitAvatarInstance avatarInstance)
         {
@@ -28,7 +33,7 @@ namespace UnitModule
             }
 
             _unitMovementSetting = new GameUnitMovementSetting(avatarInstance);
-            _characterUnitAvatarSetting = characterUnitAvatarSetting;
+            _unitAvatarSetting = characterUnitAvatarSetting;
         }
 
         protected override void DoInit()
@@ -39,7 +44,7 @@ namespace UnitModule
         protected override void DoReset()
         {
             _unitMovementSetting = null;
-            _characterUnitAvatarSetting = null;
+            _unitAvatarSetting = null;
         }
     }
 }

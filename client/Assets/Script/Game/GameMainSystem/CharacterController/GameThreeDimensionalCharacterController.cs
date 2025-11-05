@@ -1,14 +1,11 @@
-﻿using DataModule;
-using GameMainModule.Animation;
+﻿using GameMainModule.Animation;
 using GameMainModule.Attack;
 using GameSystem;
 using System;
-using System.Collections.Generic;
 using UnitModule;
 using UnitModule.Movement;
 using UnityEngine;
 using Utility;
-using static UnitModule.Movement.ThreeDimensionalMovementUtility;
 
 namespace GameMainModule
 {
@@ -27,6 +24,8 @@ namespace GameMainModule
 
         private GameCharacterStateContext _characterStateContext;
 
+        public CharacterUnit Unit { get; private set; }
+
         public CharacterAttackController AttackController => _characterAttackController;
 
         public GameThreeDimensionalCharacterController()
@@ -35,22 +34,22 @@ namespace GameMainModule
         }
 
         public void InitController(
-            IUnitMovementSetting unityMovementSetting,
+            CharacterUnit characterUnit,
             MovementSetting movementSetting,
-            CharacterAnimationSetting characterAnimationSetting,
-            WeaponTransformSetting weaponTransformSetting)
+            CharacterAnimationSetting characterAnimationSetting)
         {
-            _movementData = new MovementData(unityMovementSetting, movementSetting);
+            Unit = characterUnit;
+            _movementData = new MovementData(characterUnit.UnitMovementSetting, movementSetting);
             _characterStateContext = new GameCharacterStateContext(
                 _movementData,
                 _characterAttackController,
                 _playableClipController);
 
             //Animator
-            _playableClipController.Init("Character Playable", unityMovementSetting.Animator, characterAnimationSetting);
+            _playableClipController.Init("Character Playable", characterUnit.UnitMovementSetting.Animator, characterAnimationSetting);
 
             //AttackController
-            _characterAttackController.Init(unityMovementSetting, _playableClipController, weaponTransformSetting);
+            _characterAttackController.Init(characterUnit.UnitMovementSetting, _playableClipController, characterUnit.WeaponTransformSetting);
 
             //State
             _characterStateMachine.AddState(CharacterState.Idle, new IdleState(_characterStateContext));
@@ -66,7 +65,7 @@ namespace GameMainModule
             //State Transition
             //Idle
             _characterStateMachine.AddTransition(CharacterState.Idle, CharacterState.Walk,
-                () => { return _movementData.IsGround && _movementData.HaveMoveInput(); });
+                () => { return _movementData.IsGround && _movementData.HaveMoveOperate(); });
             _characterStateMachine.AddTransition(CharacterState.Idle, CharacterState.Fall,
                 () => { return !_movementData.IsGround; });
             _characterStateMachine.AddTransition(CharacterState.Idle, CharacterState.Jump,
@@ -74,7 +73,7 @@ namespace GameMainModule
 
             //Walk
             _characterStateMachine.AddTransition(CharacterState.Walk, CharacterState.Idle,
-                () => { return _movementData.IsGround && !_movementData.HaveMoveInput(); });
+                () => { return _movementData.IsGround && !_movementData.HaveMoveOperate(); });
             _characterStateMachine.AddTransition(CharacterState.Walk, CharacterState.Fall,
                 () => { return !_movementData.IsGround; });
             _characterStateMachine.AddTransition(CharacterState.Walk, CharacterState.Jump,
@@ -84,7 +83,7 @@ namespace GameMainModule
 
             //Run
             _characterStateMachine.AddTransition(CharacterState.Run, CharacterState.Idle,
-                () => { return _movementData.IsGround && !_movementData.HaveMoveInput(); });
+                () => { return _movementData.IsGround && !_movementData.HaveMoveOperate(); });
             _characterStateMachine.AddTransition(CharacterState.Run, CharacterState.Fall,
                 () => { return !_movementData.IsGround; });
             _characterStateMachine.AddTransition(CharacterState.Run, CharacterState.Jump,

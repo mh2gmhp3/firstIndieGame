@@ -19,7 +19,8 @@ namespace CollisionModule
 
             if (triggerInfo is FakeCharacterTriggerInfo fakeTriggerInfo)
             {
-                Log.LogInfo($"Hit Unit Id:{unitId}, Damage:{fakeTriggerInfo.Attack}");
+                GameMainSystem.TestCauseDamage(unitId, fakeTriggerInfo.Attack);
+                //Log.LogInfo($"Hit Unit Id:{unitId}, Damage:{fakeTriggerInfo.Attack}");
             }
         }
     }

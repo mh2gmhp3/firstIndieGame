@@ -35,7 +35,7 @@ namespace GameMainModule
             {
                 InitGameData();
                 InitAssetSetting();
-                InitUnit();
+                InitUnitManager();
                 CreateTestData(10);
                 InitGameTest();
             }
@@ -51,7 +51,7 @@ namespace GameMainModule
             {
                 InitGameData();
                 InitAssetSetting();
-                InitUnit();
+                InitUnitManager();
                 InitGameMain();
             }
         }

@@ -1,4 +1,5 @@
 ﻿using AssetModule;
+using System.Collections.Generic;
 using UnitModule;
 using UnityEngine;
 
@@ -13,11 +14,21 @@ namespace GameMainModule
         private UnitAvatarManager _unitAvatarManager = new UnitAvatarManager();
         private UnitColliderManager _unitColliderManager = new UnitColliderManager();
 
-        public void InitUnit()
+        private EnemyManager _enemyManager;
+
+        public UnitManager UnitManager => _unitManager;
+        public UnitAvatarManager UnitAvatarManager => _unitAvatarManager;
+        public UnitColliderManager UnitColliderManager => _unitColliderManager;
+
+        public EnemyManager EnemyManager => _enemyManager;
+
+        public void InitUnitManager()
         {
             var unitRootAssets = AssetSystem.LoadAsset<GameObject>(UnitRootPath);
             var unitRoot = unitRootAssets.GetComponent<UnitSetting>();
             _unitAvatarManager.Init(unitRoot, _transform, AvatarPath);
+            _enemyManager = new EnemyManager(this);
+            RegisterUpdateTarget(_enemyManager);
         }
 
         #region UnitCollider
@@ -56,6 +67,11 @@ namespace GameMainModule
             return true;
         }
 
+        public static Vector3 GetCharacterPosition()
+        {
+            return _instance._characterController.Unit.Position;
+        }
+
         #endregion
 
         #region Npc
@@ -77,6 +93,30 @@ namespace GameMainModule
             _unitColliderManager.RegisterCollider(unit.Id, avatarInstance.UnitAvatarSetting.UnitColliderList, out _);
 
             return true;
+        }
+
+        #endregion
+
+        #region Enemy
+
+        public static void AddEnemySpawnPoint(Vector3 position, float radius, List<TestEnemySpawnData> spawnDataList)
+        {
+            _instance.InternalAddEnemySpawnPoint(position, radius, spawnDataList);
+        }
+
+        private void InternalAddEnemySpawnPoint(Vector3 position, float radius, List<TestEnemySpawnData> spawnDataList)
+        {
+            _enemyManager.AddSpawnPoint(position, radius, spawnDataList);
+        }
+
+        public static void TestCauseDamage(int id, int damage)
+        {
+            _instance.InternalTestCauseDamage(id, damage);
+        }
+
+        private void InternalTestCauseDamage(int id, int damage)
+        {
+            _enemyManager.TestCauseDamage(id, damage);
         }
 
         #endregion
