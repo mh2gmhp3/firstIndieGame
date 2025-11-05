@@ -1,209 +1,76 @@
 ﻿using Extension;
-using System;
 using UnityEngine;
 
 namespace UnitModule.Movement
 {
     public static class ThreeDimensionalMovementUtility
     {
-        [Serializable]
-        public class FallData
+        public interface IMovementData
         {
-            public float FallStartTime;
+            public IUnitMovementSetting UnitMovementSetting { get; }
+            public MovementSetting MovementSetting { get; }
 
-            public void StartFall()
-            {
-                FallStartTime = Time.time;
-            }
+            public bool DisableResetVelocity { get; set; }
 
-            public float FallElapsedTime()
-            {
-                return Time.time - FallStartTime;
-            }
+            public bool IsGround { get; set; }
+            public RaycastHit GroundHit { get; set; }
+
+            public bool IsSlope { get; set; }
+            public RaycastHit SlopeHit { get; set; }
+
+            public bool HaveMoveOperate();
+
+            public Vector3 GetForwardNormal();
+
+            public float GetSpeed();
+
+            public float GetJumpElapsedTime();
+            public float GetFallElapsedTime();
         }
 
-        [Serializable]
-        public class JumpData
+        #region IMovementData Exention
+
+        public static bool IsValid(this IMovementData movementData)
         {
-            public int JumpMaxCount = 2;
+            if (movementData.MovementSetting == null)
+                return false;
 
-            public int JumpCount = 0;
+            if (movementData.UnitMovementSetting == null)
+                return false;
 
-            public float JumpStartTime;
-            public bool JumpEnd = false;
-
-            public bool JumpTrigger = false;
-
-            public void StartJump()
-            {
-                JumpCount++;
-                JumpStartTime = Time.time;
-                JumpEnd = false;
-                JumpTrigger = false;
-            }
-
-            public float JumpElapsedTime()
-            {
-                return Time.time - JumpStartTime;
-            }
-
-            public bool CanJump()
-            {
-                return JumpCount < JumpMaxCount;
-            }
-
-            public void ResetJump()
-            {
-                JumpCount = 0;
-                JumpEnd = false;
-                JumpTrigger = false;
-            }
+            return movementData.UnitMovementSetting.IsValid();
         }
 
-        [Serializable]
-        public class LandData
+        public static Vector3 GetForward(this IMovementData movementData, bool withSlope)
         {
-            public float LandStartTime;
+            Vector3 forward = movementData.GetForwardNormal();
+            if (withSlope)
+                return movementData.GetOnSlopeNormal(forward);
 
-            public void StartLand()
-            {
-                LandStartTime = Time.time;
-            }
-
-            public float LandElapsedTime()
-            {
-                return Time.time - LandStartTime;
-            }
+            return forward;
         }
 
-        public class DashData
+        /// <summary>
+        /// 使用方向獲取與斜波的向量 如果站在斜坡上 沒有將直接回傳原向量
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        public static Vector3 GetOnSlopeNormal(this IMovementData movementData, Vector3 vector)
         {
-            public float DashStartTime;
-
-            public bool DashTrigger = false;
-
-            public void StartDash()
-            {
-                DashStartTime = Time.time;
-            }
-
-            public float DashElapsedTime()
-            {
-                return Time.time - DashStartTime;
-            }
+            if (movementData.IsSlope)
+                return Vector3.ProjectOnPlane(vector, movementData.SlopeHit.normal).normalized;
+            return vector;
         }
 
-        [Serializable]
-        public class MovementData
+        public static Vector3 GetDashForward(this IMovementData movementData)
         {
-            #region Const
-
-            public const float SlowSpeedRate = 0.3f;
-            public const float MidSpeedRate = 0.5f;
-            public const float FastSpeedRate = 1.0f;
-
-            #endregion
-
-            public IUnitMovementSetting UnitMovementSetting;
-            public MovementSetting MovementSetting;
-
-            public JumpData JumpData;
-            public FallData FallData;
-            public LandData LandData;
-            public DashData DashData;
-
-            public bool DisableResetVelocity = false;
-
-            #region Dynamic Value 可能外部變動的值
-
-            /// <summary>
-            /// 移動輸入軸
-            /// </summary>
-            public Vector3 MoveAxis = Vector3.zero;
-            /// <summary>
-            /// 移動選轉方向
-            /// </summary>
-            public Quaternion MoveQuaternion = Quaternion.identity;
-
-            public float Speed = 10f;
-
-            /// <summary>
-            /// 速度倍率 會經由部分狀態變動 Walk Run
-            /// </summary>
-            public float SpeedRate = 1.0f;
-
-            public bool RunTriggered = false;
-
-            #endregion
-
-            public bool IsGround;
-            public RaycastHit GroundHit;
-
-            public bool IsSlope;
-            public RaycastHit SlopeHit;
-
-            public MovementData(IUnitMovementSetting unitMovementSetting, MovementSetting movementSetting)
-            {
-                UnitMovementSetting = unitMovementSetting;
-                MovementSetting = movementSetting;
-                JumpData = new JumpData();
-                FallData = new FallData();
-                LandData = new LandData();
-                DashData = new DashData();
-            }
-
-            public bool IsValid()
-            {
-                if (MovementSetting == null)
-                    return false;
-
-                if (UnitMovementSetting == null)
-                    return false;
-
-                return UnitMovementSetting.IsValid();
-            }
-
-            public bool HaveMoveInput()
-            {
-                return MoveAxis.sqrMagnitude > 0;
-            }
-
-            public Vector3 GetForward(bool withSlope)
-            {
-                Vector3 forward = (MoveQuaternion * MoveAxis).normalized;
-                if (withSlope)
-                    return GetOnSlopeVector(forward);
-
-                return forward;
-            }
-
-            /// <summary>
-            /// 使用方向獲取與斜波的向量 如果站在斜坡上 沒有將直接回傳原向量
-            /// </summary>
-            /// <param name="vector"></param>
-            /// <returns></returns>
-            public Vector3 GetOnSlopeVector(Vector3 vector)
-            {
-                if (IsSlope)
-                    return Vector3.ProjectOnPlane(vector, SlopeHit.normal).normalized;
-                return vector;
-            }
-
-            public Vector3 GetDashForward()
-            {
-                if (HaveMoveInput())
-                    return GetForward(true);
-                else
-                    return GetOnSlopeVector(UnitMovementSetting.RotateTransform.forward);    // 沒輸入拿當前面向方向
-            }
-
-            public void ResetTrigger()
-            {
-                JumpData.JumpTrigger = false;
-                RunTriggered = false;
-                DashData.DashTrigger = false;
-            }
+            if (movementData.HaveMoveOperate())
+                return movementData.GetForward(true);
+            else
+                return movementData.GetOnSlopeNormal(movementData.UnitMovementSetting.RotateTransform.forward);    // 沒輸入拿當前面向方向
         }
+
+        #endregion
 
         public static bool IsGround(Vector3 startPoint, float radius, float distance, out RaycastHit hit)
         {
@@ -231,7 +98,7 @@ namespace UnitModule.Movement
             return curAngle != 0 && curAngle < angle;
         }
 
-        public static void UpdateState(MovementData movementData)
+        public static void UpdateState(IMovementData movementData)
         {
             if (movementData == null || movementData.UnitMovementSetting == null)
                 return;
@@ -244,16 +111,18 @@ namespace UnitModule.Movement
                 groundRaycastStartPoint,
                 unitMovementSetting.GroundRaycastRadius,
                 unitMovementSetting.GroundRaycastDistance,
-                out movementData.GroundHit);
+                out var groundHit);
+            movementData.GroundHit = groundHit;
             movementData.IsSlope = IsSlope(
                 groundRaycastStartPoint,
                 unitMovementSetting.SlopeRaycastRadius,
                 unitMovementSetting.SlopeRaycastDistance,
                 movementSetting.SlopeAngle,
-                out movementData.SlopeHit);
+                out var slopeHit);
+            movementData.SlopeHit = slopeHit;
         }
 
-        public static void ResetRigibody(MovementData movementData)
+        public static void ResetRigibody(IMovementData movementData)
         {
             if (movementData == null || !movementData.IsValid() || movementData.DisableResetVelocity)
                 return;
@@ -261,21 +130,21 @@ namespace UnitModule.Movement
             movementData.UnitMovementSetting.Rigidbody.velocity = Vector3.zero;
         }
 
-        public static void Movement(MovementData movementData)
+        public static void Movement(IMovementData movementData)
         {
             if (movementData == null || !movementData.IsValid())
                 return;
 
             var unitMovementSetting = movementData.UnitMovementSetting;
             var rigidbody = unitMovementSetting.Rigidbody;
-            var movement = movementData.GetForward(true) * movementData.Speed * movementData.SpeedRate;
+            var movement = movementData.GetForward(true) * movementData.GetSpeed();
             rigidbody.velocity += movement;
 
             RotateToForward(movementData, movementData.GetForward(false));
             RotateCharacterAvatarWithSlope(movementData);
         }
 
-        public static void RotateToForward(MovementData movementData, Vector3 lookForward, bool immediate = false)
+        public static void RotateToForward(IMovementData movementData, Vector3 lookForward, bool immediate = false)
         {
             if (movementData == null || !movementData.IsValid())
                 return;
@@ -291,7 +160,7 @@ namespace UnitModule.Movement
                 return;
             }
 
-            if (movementData.MoveAxis.sqrMagnitude > 0)
+            if (movementData.HaveMoveOperate())
             {
                 var rotation = Quaternion.LookRotation(lookForward);
                 var angle = Quaternion.Angle(rotation, rotateTrans.rotation);
@@ -309,7 +178,7 @@ namespace UnitModule.Movement
             }
         }
 
-        public static void RotateCharacterAvatarWithSlope(MovementData movementData)
+        public static void RotateCharacterAvatarWithSlope(IMovementData movementData)
         {
             if (movementData == null || !movementData.IsValid())
                 return;
@@ -332,19 +201,19 @@ namespace UnitModule.Movement
             }
         }
 
-        public static bool Jumping(MovementData movementData)
+        public static bool Jumping(IMovementData movementData)
         {
             if (movementData == null || !movementData.IsValid())
                 return false;
 
             var movementSetting = movementData.MovementSetting;
-            var jumpElapsedTime = movementData.JumpData.JumpElapsedTime();
+            var jumpElapsedTime = movementData.GetJumpElapsedTime();
             var jumpVelocity = movementSetting.JumpVelocityCurve.Evaluate(jumpElapsedTime);
             movementData.UnitMovementSetting.Rigidbody.velocity += Vector3.up * jumpVelocity;
             return jumpElapsedTime < movementSetting.JumpVelocityCurve.LastKey().time;
         }
 
-        public static void Dash(MovementData movementData)
+        public static void Dash(IMovementData movementData)
         {
             if (movementData == null || !movementData.IsValid())
                 return;
@@ -357,7 +226,7 @@ namespace UnitModule.Movement
             rigidbody.AddForce(forward * 20f, ForceMode.VelocityChange);
         }
 
-        public static void FixGroundPoint(MovementData movementData)
+        public static void FixGroundPoint(IMovementData movementData)
         {
             if (movementData == null || !movementData.IsValid())
                 return;
@@ -371,13 +240,14 @@ namespace UnitModule.Movement
             unitMovementSetting.Rigidbody.velocity += new Vector3(0, fixGroundY * movementSetting.FixGroundVelocity, 0);
         }
 
-        public static void GravityFall(MovementData movementData)
+        public static void GravityFall(IMovementData movementData)
         {
             if (movementData == null || !movementData.IsValid())
                 return;
 
             var movementSetting = movementData.MovementSetting;
-            var fallGravity = movementSetting.FallGravityCurve.Evaluate(movementData.FallData.FallElapsedTime());
+            var fallElapsedTime = movementData.GetFallElapsedTime();
+            var fallGravity = movementSetting.FallGravityCurve.Evaluate(fallElapsedTime);
             var gravity = Vector3.down * fallGravity;
             movementData.UnitMovementSetting.Rigidbody.velocity += gravity;
         }
