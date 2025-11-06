@@ -75,6 +75,7 @@ namespace UnitModule
 #if UNITY_EDITOR
             avatarInstance.UnitSetting.RootTransform.name = $"{avatarName}_{id}";
 #endif
+            avatarInstance.UnitSetting.Rigidbody.isKinematic = false;
             _idToUsingAvatarInsDic.Add(id, avatarInstance);
             return true;
         }
@@ -88,6 +89,8 @@ namespace UnitModule
             if (!_idToUsingAvatarInsDic.TryGetValue(id, out var avatarInstance))
                 return;
 
+            avatarInstance.UnitSetting.Rigidbody.velocity = Vector3.zero;
+            avatarInstance.UnitSetting.Rigidbody.isKinematic = true;
             ReturnPool(avatarInstance);
             _idToUsingAvatarInsDic.Remove(id);
         }
