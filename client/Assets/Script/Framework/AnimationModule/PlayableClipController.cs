@@ -37,8 +37,22 @@ namespace AnimationModule
             _inited = true;
         }
 
+        public void Clear()
+        {
+            if (_graph.IsValid())
+            {
+                _graph.Destroy();
+            }
+            _idToAnimationMixerPlayable.Clear();
+            _fadeToList.Clear();
+            _processedFadeToIndexList.Clear();
+            _inited = false;
+        }
+
         public void Update()
         {
+            if (!_inited)
+                return;
             _processedFadeToIndexList.Clear();
             for (int i = 0; i < _fadeToList.Count; i++)
             {
