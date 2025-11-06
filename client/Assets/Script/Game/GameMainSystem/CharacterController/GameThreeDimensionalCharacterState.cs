@@ -1,7 +1,5 @@
 ﻿using GameMainModule.Animation;
 using GameMainModule.Attack;
-using System.Collections;
-using System.Collections.Generic;
 using UnitModule.Movement;
 using UnityEngine;
 using Utility;
@@ -123,6 +121,7 @@ namespace GameMainModule
                 _isTrot = curIsTrot;
                 OnIsTrotChanged(_isTrot);
             }
+            UpdateDirection(curIsTrot);
         }
 
         public override void OnFixedUpdate()
@@ -138,15 +137,29 @@ namespace GameMainModule
 
         private void OnIsTrotChanged(bool isTrot)
         {
+            var direction = _movementData.GetForwardAndRotateTransDirection();
             if (isTrot)
             {
                 _movementData.SpeedRate = MovementData.MidSpeedRate;
-                _playableClipController.Trot(0);
+                _playableClipController.Trot(direction);
             }
             else
             {
                 _movementData.SpeedRate = MovementData.SlowSpeedRate;
-                _playableClipController.Walk(0);
+                _playableClipController.Walk(direction);
+            }
+        }
+
+        private void UpdateDirection(bool isTrot)
+        {
+            var direction = _movementData.GetForwardAndRotateTransDirection();
+            if (isTrot)
+            {
+                _playableClipController.TrotDirection(direction);
+            }
+            else
+            {
+                _playableClipController.WalkDirection(direction);
             }
         }
     }
@@ -159,8 +172,13 @@ namespace GameMainModule
 
         public override void DoEnter(CharacterState previousState)
         {
-            _playableClipController.Run(0);
+            _playableClipController.Run(_movementData.GetForwardAndRotateTransDirection());
             _movementData.SpeedRate = MovementData.FastSpeedRate;
+        }
+
+        public override void OnUpdate()
+        {
+            _playableClipController.RunDirection(_movementData.GetForwardAndRotateTransDirection());
         }
 
         public override void OnFixedUpdate()

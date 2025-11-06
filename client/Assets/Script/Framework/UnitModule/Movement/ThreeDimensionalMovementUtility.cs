@@ -69,6 +69,10 @@ namespace UnitModule.Movement
             else
                 return movementData.GetOnSlopeNormal(movementData.UnitMovementSetting.RotateTransform.forward);    // 沒輸入拿當前面向方向
         }
+        public static float GetForwardAndRotateTransDirection(this IMovementData movementData)
+        {
+            return Vector3.Cross(movementData.UnitMovementSetting.RotateTransform.forward, movementData.GetForwardNormal()).y;
+        }
 
         #endregion
 

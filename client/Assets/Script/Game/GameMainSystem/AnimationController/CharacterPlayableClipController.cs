@@ -1,4 +1,5 @@
 ﻿using AnimationModule;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -124,6 +125,13 @@ namespace GameMainModule.Animation
             _controller.AddMixerClip(Normal_MixerId, Dash_InputIndex, _setting.Dash.Clip);
         }
 
+        public void Clear()
+        {
+            _controller.Clear();
+            _setting = null;
+            _attackNameToInputIndex.Clear();
+        }
+
         public void Update()
         {
             _controller.Update();
@@ -163,8 +171,30 @@ namespace GameMainModule.Animation
             ClearNormalInput();
             //Mixer
             _controller.SetMixerWeight(Normal_MixerId, Walk_MixerInputIndex, 1, _setting.Walk.FadeDuration);
-            //Clip 先直走
-            _controller.SetMixerWeight(Walk_MixerId, Walk_InputIndex, 1);
+            WalkDirection(direction);
+        }
+
+        public void WalkDirection(float direction)
+        {
+            var absDir = Math.Abs(direction);
+            if (direction > 0)
+            {
+                _controller.SetMixerWeight(Walk_MixerId, Walk_InputIndex, 1 - absDir);
+                _controller.SetMixerWeight(Walk_MixerId, Walk_Left_InputIndex, 0);
+                _controller.SetMixerWeight(Walk_MixerId, Walk_Right_InputIndex, absDir);
+            }
+            else if (direction < 0)
+            {
+                _controller.SetMixerWeight(Walk_MixerId, Walk_InputIndex, 1 - absDir);
+                _controller.SetMixerWeight(Walk_MixerId, Walk_Left_InputIndex, absDir);
+                _controller.SetMixerWeight(Walk_MixerId, Walk_Right_InputIndex, 0);
+            }
+            else
+            {
+                _controller.SetMixerWeight(Walk_MixerId, Walk_InputIndex, 1);
+                _controller.SetMixerWeight(Walk_MixerId, Walk_Left_InputIndex, 0);
+                _controller.SetMixerWeight(Walk_MixerId, Walk_Right_InputIndex, 0);
+            }
         }
 
         public void Trot(float direction)
@@ -173,8 +203,30 @@ namespace GameMainModule.Animation
             ClearNormalInput();
             //Mixer
             _controller.SetMixerWeight(Normal_MixerId, Trot_MixerInputIndex, 1, _setting.Trot.FadeDuration);
-            //Clip 先直走
-            _controller.SetMixerWeight(Trot_MixerId, Trot_InputIndex, 1);
+            TrotDirection(direction);
+        }
+
+        public void TrotDirection(float direction)
+        {
+            var absDir = Math.Abs(direction);
+            if (direction > 0)
+            {
+                _controller.SetMixerWeight(Trot_MixerId, Trot_InputIndex, 1 - absDir);
+                _controller.SetMixerWeight(Trot_MixerId, Trot_Left_InputIndex, 0);
+                _controller.SetMixerWeight(Trot_MixerId, Trot_Right_InputIndex, absDir);
+            }
+            else if (direction < 0)
+            {
+                _controller.SetMixerWeight(Trot_MixerId, Trot_InputIndex, 1 - absDir);
+                _controller.SetMixerWeight(Trot_MixerId, Trot_Left_InputIndex, absDir);
+                _controller.SetMixerWeight(Trot_MixerId, Trot_Right_InputIndex, 0);
+            }
+            else
+            {
+                _controller.SetMixerWeight(Trot_MixerId, Trot_InputIndex, 1);
+                _controller.SetMixerWeight(Trot_MixerId, Trot_Left_InputIndex, 0);
+                _controller.SetMixerWeight(Trot_MixerId, Trot_Right_InputIndex, 0);
+            }
         }
 
         public void Run(float direction)
@@ -183,8 +235,30 @@ namespace GameMainModule.Animation
             ClearNormalInput();
             //Mixer
             _controller.SetMixerWeight(Normal_MixerId, Run_MixerInputIndex, 1, _setting.Run.FadeDuration);
-            //Clip 先直走
-            _controller.SetMixerWeight(Run_MixerId, Run_InputIndex, 1);
+            RunDirection(direction);
+        }
+
+        public void RunDirection(float direction)
+        {
+            var absDir = Math.Abs(direction);
+            if (direction > 0)
+            {
+                _controller.SetMixerWeight(Run_MixerId, Run_InputIndex, 1 - absDir);
+                _controller.SetMixerWeight(Run_MixerId, Run_Left_InputIndex, 0);
+                _controller.SetMixerWeight(Run_MixerId, Run_Right_InputIndex, absDir);
+            }
+            else if (direction < 0)
+            {
+                _controller.SetMixerWeight(Run_MixerId, Run_InputIndex, 1 - absDir);
+                _controller.SetMixerWeight(Run_MixerId, Run_Left_InputIndex, absDir);
+                _controller.SetMixerWeight(Run_MixerId, Run_Right_InputIndex, 0);
+            }
+            else
+            {
+                _controller.SetMixerWeight(Run_MixerId, Run_InputIndex, 1);
+                _controller.SetMixerWeight(Run_MixerId, Run_Left_InputIndex, 0);
+                _controller.SetMixerWeight(Run_MixerId, Run_Right_InputIndex, 0);
+            }
         }
 
         public void Jump()
