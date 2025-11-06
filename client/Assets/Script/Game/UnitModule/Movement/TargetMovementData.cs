@@ -39,11 +39,16 @@ namespace UnitModule.Movement
             MovementSetting = null;
         }
 
-        public Vector3 GetForwardNormal(bool isMovement)
+        public Vector3 GetMovementForwardNormal()
         {
             var vector = TargetPosition - UnitMovementSetting.RootTransform.position;
             vector = new Vector3(vector.x, 0f, vector.z); //不考慮高度
             return vector.normalized;
+        }
+
+        public Vector3 GetRotateForwardNormal()
+        {
+            return GetMovementForwardNormal();
         }
 
         public float GetSpeed()
@@ -63,7 +68,7 @@ namespace UnitModule.Movement
 
         public bool HaveMoveOperate()
         {
-            return GetForwardNormal(false).sqrMagnitude > 0;
+            return GetMovementForwardNormal().sqrMagnitude > 0;
         }
     }
 }

@@ -168,26 +168,23 @@ namespace UnitModule.Movement
             return MoveAxis.sqrMagnitude > 0;
         }
 
-        public Vector3 GetForwardNormal(bool isMovement)
+        public Vector3 GetMovementForwardNormal()
         {
-            if (isMovement)
+            return (MoveQuaternion * MoveAxis).normalized;
+        }
+        public Vector3 GetRotateForwardNormal()
+        {
+            if (IsLockLookAtUnit)
             {
-                return (MoveQuaternion * MoveAxis).normalized;
-            }
-            else
-            {
-                if (IsLockLookAtUnit)
+                if (GameMainSystem.TryGetUnit(LookAtUnitId, out var unit))
                 {
-                    if (GameMainSystem.TryGetUnit(LookAtUnitId, out var unit))
-                    {
-                        var direction = unit.Position - UnitMovementSetting.RootTransform.position;
-                        return new Vector3(direction.x, 0f, direction.z).normalized;
-                    }
+                    var direction = unit.Position - UnitMovementSetting.RootTransform.position;
+                    return new Vector3(direction.x, 0f, direction.z).normalized;
                 }
-                if (IsLockLookAtCamera)
-                    return (MoveQuaternion * Vector3.forward).normalized;
-                return (MoveQuaternion * MoveAxis).normalized;
             }
+            if (IsLockLookAtCamera)
+                return (MoveQuaternion * Vector3.forward).normalized;
+            return (MoveQuaternion * MoveAxis).normalized;
         }
 
         public float GetSpeed()
