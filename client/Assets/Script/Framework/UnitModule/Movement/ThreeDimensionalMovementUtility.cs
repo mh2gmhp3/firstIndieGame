@@ -74,6 +74,39 @@ namespace UnitModule.Movement
             return Vector3.Cross(movementData.UnitMovementSetting.RotateTransform.forward, movementData.GetForwardNormal()).y;
         }
 
+        public static void DrawDebugGizmos(this IMovementData movementData)
+        {
+            //Ground
+            var rayStarPoint = movementData.UnitMovementSetting.GetGroundRaycastWorldPoint();
+            var rayEndPoint = rayStarPoint +
+                Vector3.down * movementData.UnitMovementSetting.GroundRaycastDistance;
+            var groundRadius = movementData.UnitMovementSetting.GroundRaycastRadius;
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(rayStarPoint, movementData.UnitMovementSetting.GroundRaycastRadius);
+            Gizmos.DrawLine(rayStarPoint + new Vector3(groundRadius, 0, 0), rayEndPoint + new Vector3(groundRadius, 0, 0));
+            Gizmos.DrawLine(rayStarPoint + new Vector3(-groundRadius, 0, 0), rayEndPoint + new Vector3(-groundRadius, 0, 0));
+            Gizmos.DrawLine(rayStarPoint + new Vector3(0, 0, groundRadius), rayEndPoint + new Vector3(0, 0, groundRadius));
+            Gizmos.DrawLine(rayStarPoint + new Vector3(0, 0, -groundRadius), rayEndPoint + new Vector3(0, 0, -groundRadius));
+            Gizmos.DrawWireSphere(rayEndPoint, movementData.UnitMovementSetting.GroundRaycastRadius);
+            if (movementData.IsGround)
+            {
+                var rayHitPoint = movementData.GroundHit.point;
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(rayStarPoint, rayHitPoint);
+            }
+            if (movementData.IsSlope)
+            {
+                var rayHitPoint = movementData.SlopeHit.point;
+                Gizmos.color = Color.blue;
+                Gizmos.DrawLine(rayStarPoint, rayHitPoint);
+                Gizmos.DrawLine(rayHitPoint, rayHitPoint + movementData.SlopeHit.normal * 2f);
+                Vector3 projectedForward = Vector3.ProjectOnPlane(
+                    movementData.UnitMovementSetting.RotateTransform.forward,
+                    movementData.SlopeHit.normal).normalized;
+                Gizmos.DrawLine(rayHitPoint, rayHitPoint + projectedForward * 2f);
+            }
+        }
+
         #endregion
 
         public static bool IsGround(Vector3 startPoint, float radius, float distance, out RaycastHit hit)

@@ -6,6 +6,7 @@ using UnitModule;
 using UnitModule.Movement;
 using UnityEngine;
 using Utility;
+using static UnitModule.Movement.ThreeDimensionalMovementUtility;
 
 namespace GameMainModule
 {
@@ -166,7 +167,7 @@ namespace GameMainModule
 
         void IUpdateTarget.DoDrawGizmos()
         {
-
+            _movementData.DrawDebugGizmos();
         }
 
         #region Movement

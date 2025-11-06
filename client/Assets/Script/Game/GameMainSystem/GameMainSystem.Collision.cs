@@ -60,7 +60,9 @@ namespace GameMainModule
 
         public void InitCollision()
         {
-            _collisionAreaManager.SetCollisionAreaTriggerReceiver(new GameCollisionAreaTriggerReceiver());
+            var triggerReceiver = new GameCollisionAreaTriggerReceiver();
+            RegisterUpdateTarget(triggerReceiver);
+            _collisionAreaManager.SetCollisionAreaTriggerReceiver(triggerReceiver);
             RegisterUpdateTarget(_collisionAreaManager);
             if (TestMode)
             {
