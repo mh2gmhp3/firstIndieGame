@@ -12,9 +12,12 @@ namespace GameMainModule
     [Serializable]
     public class GameThreeDimensionalCharacterController : IUpdateTarget
     {
+        public CharacterUnit Unit { get; private set; }
+
         [SerializeField]
         private StateMachine<CharacterState, GameCharacterState> _characterStateMachine =
             new StateMachine<CharacterState, GameCharacterState>();
+        private GameCharacterStateContext _characterStateContext;
 
         [SerializeField]
         private MovementData _movementData;
@@ -22,9 +25,6 @@ namespace GameMainModule
         private CharacterAttackController _characterAttackController = new CharacterAttackController();
         private CharacterPlayableClipController _playableClipController = new CharacterPlayableClipController();
 
-        private GameCharacterStateContext _characterStateContext;
-
-        public CharacterUnit Unit { get; private set; }
 
         public CharacterAttackController AttackController => _characterAttackController;
 

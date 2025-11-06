@@ -3,7 +3,6 @@ using GameSystem;
 using UnitModule.Movement;
 using UnityEngine;
 using Utility;
-using static UnitModule.Movement.ThreeDimensionalMovementUtility;
 
 namespace UnitModule
 {
@@ -17,16 +16,17 @@ namespace UnitModule
         private StateMachine<EnemyState, GameThreeDimensionalEnemyState> _stateMachine =
             new StateMachine<EnemyState, GameThreeDimensionalEnemyState>();
         private GameEnemyStateContext _context = new GameEnemyStateContext();
+
         private TargetMovementData _movementData = new TargetMovementData();
 
         public GameThreeDimensionalEnemyController()
         {
             _context.MovementData = _movementData;
             _stateMachine.AddState(EnemyState.Idle, new IdleState(_context));
-            _stateMachine.AddState(EnemyState.Track, new TrackState(_context));
+            _stateMachine.AddState(EnemyState.Trace, new TraceState(_context));
 
-            _stateMachine.AddTransition(EnemyState.Idle, EnemyState.Track, () => _context.TrackTarget);
-            _stateMachine.AddTransition(EnemyState.Track, EnemyState.Idle, () => !_context.TrackTarget);
+            _stateMachine.AddTransition(EnemyState.Idle, EnemyState.Trace, () => _context.TraceTarget);
+            _stateMachine.AddTransition(EnemyState.Trace, EnemyState.Idle, () => !_context.TraceTarget);
         }
 
         public void Init(EnemyUnit unit)

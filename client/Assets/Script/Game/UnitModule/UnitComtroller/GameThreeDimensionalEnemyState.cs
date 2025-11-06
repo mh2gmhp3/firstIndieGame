@@ -14,14 +14,14 @@ namespace UnitModule
     public enum EnemyState
     {
         Idle,
-        Track,
+        Trace,
         Attack,
     }
 
     public class GameEnemyStateContext
     {
         public TargetMovementData MovementData;
-        public bool TrackTarget = false;
+        public bool TraceTarget = false;
         public float TrackDistance = 2f;
     }
 
@@ -65,7 +65,7 @@ namespace UnitModule
                 _context.TrackDistance * _context.TrackDistance)
             {
                 _movementData.TargetPosition =  targetPos;
-                _context.TrackTarget = true;
+                _context.TraceTarget = true;
             }
         }
 
@@ -76,9 +76,9 @@ namespace UnitModule
         }
     }
 
-    public class TrackState : GameThreeDimensionalEnemyState
+    public class TraceState : GameThreeDimensionalEnemyState
     {
-        public TrackState(GameEnemyStateContext context) : base(context)
+        public TraceState(GameEnemyStateContext context) : base(context)
         {
         }
 
@@ -92,7 +92,7 @@ namespace UnitModule
             }
             else
             {
-                _context.TrackTarget = false;
+                _context.TraceTarget = false;
             }
         }
 
