@@ -45,6 +45,20 @@ namespace GameMainModule
 
         #endregion
 
+        #region Unit
+
+        public static bool TryGetUnit(int id, out Unit unit)
+        {
+            return _instance.InternalTryGetUnit(id, out unit);
+        }
+
+        private bool InternalTryGetUnit(int id, out Unit unit)
+        {
+            return _unitManager.TryGetUnit(id, out unit);
+        }
+
+        #endregion
+
         #region Character
 
         public static bool AddCharacterUnit(string avatarName, out CharacterUnit unit)
@@ -117,6 +131,16 @@ namespace GameMainModule
         private void InternalTestCauseDamage(int id, int damage)
         {
             _enemyManager.TestCauseDamage(id, damage);
+        }
+
+        public static bool TryGetNearEnemyUnit(Vector3 position, float radius, out int id)
+        {
+            return _instance.InternalTryGetNearEnemyUnit(position, radius, out id);
+        }
+
+        private bool InternalTryGetNearEnemyUnit(Vector3 position, float radius, out int id)
+        {
+            return _enemyManager.TryGetNearUnit(position, radius, out id);
         }
 
         #endregion

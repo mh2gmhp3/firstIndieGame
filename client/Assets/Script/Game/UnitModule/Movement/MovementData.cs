@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameMainModule;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -144,6 +145,10 @@ namespace UnitModule.Movement
 
         public bool RunTriggered = false;
 
+        public bool IsLockLookAtCamera = false;
+        public bool IsLockLookAtUnit = false;
+        public int LookAtUnitId = 0;
+
         #endregion
 
         public MovementData(IUnitMovementSetting unitMovementSetting, MovementSetting movementSetting)
@@ -163,10 +168,28 @@ namespace UnitModule.Movement
             return MoveAxis.sqrMagnitude > 0;
         }
 
-        public Vector3 GetForwardNormal()
+        public Vector3 GetForwardNormal(bool isMovement)
         {
-            return (MoveQuaternion * MoveAxis).normalized;
+            if (isMovement)
+            {
+                return (MoveQuaternion * MoveAxis).normalized;
+            }
+            else
+            {
+                if (IsLockLookAtUnit)
+                {
+                    if (GameMainSystem.TryGetUnit(LookAtUnitId, out var unit))
+                    {
+                        var direction = unit.Position - UnitMovementSetting.RootTransform.position;
+                        return new Vector3(direction.x, 0f, direction.z).normalized;
+                    }
+                }
+                if (IsLockLookAtCamera)
+                    return (MoveQuaternion * Vector3.forward).normalized;
+                return (MoveQuaternion * MoveAxis).normalized;
+            }
         }
+
         public float GetSpeed()
         {
             return Speed * SpeedRate;

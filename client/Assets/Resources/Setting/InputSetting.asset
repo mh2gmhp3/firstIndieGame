@@ -43,6 +43,18 @@ MonoBehaviour:
       Type: 0
     - KeyCode: 331
       Type: 0
+  - Command: lookatunit
+    AssignKeyCodeTriggerSettingList:
+    - KeyCode: 9
+      Type: 0
+    - KeyCode: 334
+      Type: 0
+  - Command: lookatcamera
+    AssignKeyCodeTriggerSettingList:
+    - KeyCode: 122
+      Type: 0
+    - KeyCode: 336
+      Type: 0
   InputAxisList:
   - Axis: Horizontal
   - Axis: Vertical

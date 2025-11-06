@@ -20,7 +20,7 @@ namespace UnitModule.Movement
 
             public bool HaveMoveOperate();
 
-            public Vector3 GetForwardNormal();
+            public Vector3 GetForwardNormal(bool isMovement);
 
             public float GetSpeed();
 
@@ -41,9 +41,9 @@ namespace UnitModule.Movement
             return movementData.UnitMovementSetting.IsValid();
         }
 
-        public static Vector3 GetForward(this IMovementData movementData, bool withSlope)
+        public static Vector3 GetForwardNormal(this IMovementData movementData, bool withSlope, bool isMovement)
         {
-            Vector3 forward = movementData.GetForwardNormal();
+            Vector3 forward = movementData.GetForwardNormal(isMovement);
             if (withSlope)
                 return movementData.GetOnSlopeNormal(forward);
 
@@ -65,13 +65,14 @@ namespace UnitModule.Movement
         public static Vector3 GetDashForward(this IMovementData movementData)
         {
             if (movementData.HaveMoveOperate())
-                return movementData.GetForward(true);
+                return movementData.GetForwardNormal(true, true);
             else
                 return movementData.GetOnSlopeNormal(movementData.UnitMovementSetting.RotateTransform.forward);    // 沒輸入拿當前面向方向
         }
+
         public static float GetForwardAndRotateTransDirection(this IMovementData movementData)
         {
-            return Vector3.Cross(movementData.UnitMovementSetting.RotateTransform.forward, movementData.GetForwardNormal()).y;
+            return Vector3.Cross(movementData.UnitMovementSetting.RotateTransform.forward, movementData.GetForwardNormal(true)).y;
         }
 
         public static void DrawDebugGizmos(this IMovementData movementData)
@@ -174,10 +175,10 @@ namespace UnitModule.Movement
 
             var unitMovementSetting = movementData.UnitMovementSetting;
             var rigidbody = unitMovementSetting.Rigidbody;
-            var movement = movementData.GetForward(true) * movementData.GetSpeed();
+            var movement = movementData.GetForwardNormal(true, true) * movementData.GetSpeed();
             rigidbody.velocity += movement;
 
-            RotateToForward(movementData, movementData.GetForward(false));
+            RotateToForward(movementData, movementData.GetForwardNormal(false, false));
             RotateCharacterAvatarWithSlope(movementData);
         }
 

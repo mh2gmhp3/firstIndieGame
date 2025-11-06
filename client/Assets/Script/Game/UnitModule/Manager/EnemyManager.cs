@@ -201,6 +201,29 @@ namespace UnitModule
             _deadEnemyIdList.Add(id);
         }
 
+        public bool TryGetNearUnit(Vector3 position, float radius, out int id)
+        {
+            //TODO 之後要考慮Chunk來做搜尋
+            id = 0;
+            var nearDistanceSqrt = float.MaxValue;
+            var maxDistanceSqrt = radius * radius;
+            for (int i = 0; i < _allUnitControllerList.Count; i++)
+            {
+                var unitController = _allUnitControllerList[i];
+                var unitPosition = unitController.Unit.Position;
+                var unitDistanceSqrt = (position - unitPosition).sqrMagnitude;
+                if (unitDistanceSqrt > maxDistanceSqrt)
+                    continue;
+                if (nearDistanceSqrt > unitDistanceSqrt)
+                {
+                    nearDistanceSqrt = unitDistanceSqrt;
+                    id = unitController.Unit.Id;
+                }
+            }
+
+            return id > 0;
+        }
+
         #region IUpdateTarget
 
         void IUpdateTarget.DoUpdate()

@@ -71,6 +71,12 @@ namespace GameMainModule
                     "Vertical"
                 },
                 OnMovementAxisChanged);
+            _normalInputReceiver.RegisterAxisValueChangedEvent(
+                new List<string>
+                {
+                    "Left Trigger",
+                },
+                OnLockCameraChanged);
         }
 
         private void ChangeToNormalInput()
@@ -98,6 +104,14 @@ namespace GameMainModule
             {
                 _characterController.Dash();
             }
+            else if (command == "lookatunit")
+            {
+                _characterController.TriggerLookAtUnit();
+            }
+            else if (command == "lookatcamera")
+            {
+                _characterController.TriggerLockCamera();
+            }
         }
 
         private void OnKeyUp(KeyCode keyCode, string command)
@@ -124,6 +138,17 @@ namespace GameMainModule
         private void OnMovementAxisChanged(List<float> values)
         {
             _characterController.SetMoveAxis(new Vector3(values[0], 0, values[1]));
+        }
+
+        //要試著讓Axis也可以透過Key的方式輸入
+        private float _cacheLeftTriggerValue = 0;
+        private void OnLockCameraChanged(List<float> values)
+        {
+            if (_cacheLeftTriggerValue != 1 && values[0] == 1)
+            {
+                _characterController.TriggerLockCamera();
+            }
+            _cacheLeftTriggerValue = values[0];
         }
 
         #endregion
