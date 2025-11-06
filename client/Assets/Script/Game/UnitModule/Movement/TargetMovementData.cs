@@ -22,6 +22,8 @@ namespace UnitModule.Movement
 
         #endregion
 
+        public FallData FallData { get; set; } = new FallData();
+
         public Vector3 TargetPosition;
         public float Speed;
 
@@ -56,7 +58,7 @@ namespace UnitModule.Movement
 
         public float GetFallElapsedTime()
         {
-            return 0;
+            return FallData.FallElapsedTime(); ;
         }
 
         public bool HaveMoveOperate()

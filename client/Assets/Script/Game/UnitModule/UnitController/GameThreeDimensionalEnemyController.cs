@@ -1,4 +1,6 @@
-﻿using GameMainModule;
+﻿using AssetModule;
+using GameMainModule;
+using GameMainModule.Animation;
 using GameSystem;
 using UnitModule.Movement;
 using UnityEngine;
@@ -18,22 +20,42 @@ namespace UnitModule
         private GameEnemyStateContext _context = new GameEnemyStateContext();
 
         private TargetMovementData _movementData = new TargetMovementData();
+        private CharacterPlayableClipController _playableClipController = new CharacterPlayableClipController();
 
-        public GameThreeDimensionalEnemyController()
+        private EnemyManager _manager;
+
+        public GameThreeDimensionalEnemyController(EnemyManager manager)
         {
+            _manager = manager;
+
+            _context.Manager = _manager;
             _context.MovementData = _movementData;
+            _context.PlayableClipController = _playableClipController;
             _stateMachine.AddState(EnemyState.Idle, new IdleState(_context));
             _stateMachine.AddState(EnemyState.Trace, new TraceState(_context));
+            _stateMachine.AddState(EnemyState.Fall, new FallState(_context));
 
             _stateMachine.AddTransition(EnemyState.Idle, EnemyState.Trace, () => _context.TraceTarget);
+            _stateMachine.AddTransition(EnemyState.Idle, EnemyState.Fall, () => !_movementData.IsGround);
+
             _stateMachine.AddTransition(EnemyState.Trace, EnemyState.Idle, () => !_context.TraceTarget);
+            _stateMachine.AddTransition(EnemyState.Trace, EnemyState.Fall, () => !_movementData.IsGround);
+
+            _stateMachine.AddTransition(EnemyState.Fall, EnemyState.Idle, () => _movementData.IsGround);
         }
 
         public void Init(EnemyUnit unit)
         {
             Unit = unit;
             if (Unit.HaveAvatar)
+            {
                 _movementData.Init(unit.UnitMovementSetting, GameMainSystem.MovementSetting);
+                _playableClipController.Init(
+                    "Enemy",
+                    unit.UnitMovementSetting.Animator,
+                    AssetSystem.LoadAsset<CharacterAnimationSetting>("Setting/CharacterAnimationSetting/PrototypeCharacter"));
+            }
+            _context.UnitId = Unit.Id;
             _movementData.Speed = 5f;
             _stateMachine.SetState(EnemyState.Idle, true);
         }
@@ -42,6 +64,7 @@ namespace UnitModule
         {
             Unit = null;
             _movementData.Clear();
+            _playableClipController.Clear();
         }
 
         #region IUpdateTarget
@@ -49,6 +72,7 @@ namespace UnitModule
         public void DoUpdate()
         {
             _stateMachine.Update();
+            _playableClipController.Update();
         }
 
         public void DoFixedUpdate()
@@ -68,7 +92,7 @@ namespace UnitModule
 
         public void DoDrawGizmos()
         {
-            //do nothing
+            _movementData.DrawDebugGizmos();
         }
 
         #endregion

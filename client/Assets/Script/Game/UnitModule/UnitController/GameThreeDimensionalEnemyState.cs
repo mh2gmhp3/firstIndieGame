@@ -1,13 +1,8 @@
 ﻿using AnimationModule;
 using GameMainModule;
 using GameMainModule.Animation;
-using GameMainModule.Attack;
-using System.Collections;
-using System.Collections.Generic;
 using UnitModule.Movement;
-using UnityEngine;
 using Utility;
-using static UnitModule.Movement.ThreeDimensionalMovementUtility;
 
 namespace UnitModule
 {
@@ -15,12 +10,16 @@ namespace UnitModule
     {
         Idle,
         Trace,
+        Fall,
         Attack,
     }
 
     public class GameEnemyStateContext
     {
+        public int UnitId;
+        public EnemyManager Manager;
         public TargetMovementData MovementData;
+        public CharacterPlayableClipController PlayableClipController;
         public bool TraceTarget = false;
         public float TrackDistance = 2f;
     }
@@ -28,12 +27,16 @@ namespace UnitModule
     public class GameThreeDimensionalEnemyState : State<EnemyState>
     {
         protected GameEnemyStateContext _context;
+        protected EnemyManager _manager;
         protected TargetMovementData _movementData;
+        protected CharacterPlayableClipController _playableClipController;
 
         protected GameThreeDimensionalEnemyState(GameEnemyStateContext context)
         {
             _context = context;
+            _manager = context.Manager;
             _movementData = context.MovementData;
+            _playableClipController = context.PlayableClipController;
         }
 
         public sealed override void DoUpdate()
@@ -56,6 +59,11 @@ namespace UnitModule
     {
         public IdleState(GameEnemyStateContext context) : base(context)
         {
+        }
+
+        public override void DoEnter(EnemyState previousState)
+        {
+            _playableClipController.Idle();
         }
 
         public override void OnUpdate()
@@ -82,6 +90,11 @@ namespace UnitModule
         {
         }
 
+        public override void DoEnter(EnemyState previousState)
+        {
+            _playableClipController.Trot(0);
+        }
+
         public override void OnUpdate()
         {
             var targetPos = GameMainSystem.GetCharacterPosition();
@@ -100,6 +113,30 @@ namespace UnitModule
         {
             ThreeDimensionalMovementUtility.FixGroundPoint(_movementData);
             ThreeDimensionalMovementUtility.Movement(_movementData);
+        }
+    }
+
+    public class FallState : GameThreeDimensionalEnemyState
+    {
+        public FallState(GameEnemyStateContext context) : base(context)
+        {
+        }
+
+        public override void DoEnter(EnemyState previousState)
+        {
+            _movementData.FallData.StartFall();
+            _playableClipController.Fall();
+        }
+
+        public override void OnFixedUpdate()
+        {
+            ThreeDimensionalMovementUtility.GravityFall(_movementData);
+            ThreeDimensionalMovementUtility.Movement(_movementData);
+
+            if (_movementData.GetFallElapsedTime() > 10)
+            {
+                _manager.AddDead(_context.UnitId);
+            }
         }
     }
 }

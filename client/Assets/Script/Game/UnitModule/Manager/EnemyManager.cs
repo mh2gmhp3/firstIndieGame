@@ -105,7 +105,7 @@ namespace UnitModule
 
                 spawner.CurEnemyIdList.Add(enemyUnit.Id);
                 _allEnemyIdList.Add(enemyUnit.Id);
-                var controller = new GameThreeDimensionalEnemyController();
+                var controller = new GameThreeDimensionalEnemyController(this);
                 controller.Init(enemyUnit);
                 _idToEnemyControllerUnitDic.Add(enemyUnit.Id, controller);
                 _allUnitControllerList.Add(controller);
@@ -123,7 +123,6 @@ namespace UnitModule
             }
             _mainSystem.UnitColliderManager.RegisterCollider(enemyUnit.Id, unitAvatarInstance.UnitAvatarSetting.UnitColliderList, out _);
             unitAvatarInstance.UnitSetting.RootTransform.position = position;
-            //unitAvatarInstance.UnitSetting.Rigidbody.isKinematic = true;
             enemyUnit.SetAvatarInsInfo(unitAvatarInstance);
             enemyUnit.Data.Init(spawnerId, spawnData);
             return true;
@@ -158,6 +157,14 @@ namespace UnitModule
             }
         }
 
+        private void DrawGizmosEnemyController()
+        {
+            for (int i = 0; i < _allUnitControllerList.Count; i++)
+            {
+                _allUnitControllerList[i].DoDrawGizmos();
+            }
+        }
+
         private void DeadCheck()
         {
             if (_deadEnemyIdList.Count == 0)
@@ -186,6 +193,14 @@ namespace UnitModule
             _deadEnemyIdList.Clear();
         }
 
+        public void AddDead(int id)
+        {
+            if (!_idToEnemyControllerUnitDic.ContainsKey(id))
+                return;
+
+            _deadEnemyIdList.Add(id);
+        }
+
         #region IUpdateTarget
 
         void IUpdateTarget.DoUpdate()
@@ -212,7 +227,7 @@ namespace UnitModule
 
         void IUpdateTarget.DoDrawGizmos()
         {
-
+            DrawGizmosEnemyController();
         }
 
         #endregion
