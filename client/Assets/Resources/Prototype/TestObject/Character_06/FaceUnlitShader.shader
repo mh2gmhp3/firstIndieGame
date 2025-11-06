@@ -1,11 +1,12 @@
 ﻿// This shader fills the mesh shape with a color predefined in the code.
-Shader "Protptype/BodyUnlit"
+Shader "Protptype/FaceUnlit"
 {
     // The properties block of the Unity shader. In this example this block is empty
     // because the output color is predefined in the fragment shader code.
     Properties
     {
-        _BaseMap("Base Map", 2D) = "white"
+        _BaseMap("Base Map", 2D) = "white" {}
+        _Color ("Tint", Color) = (1,1,1,1)
     }
 
     // The SubShader block containing the Shader code.
@@ -52,6 +53,7 @@ Shader "Protptype/BodyUnlit"
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
+                half4 _Color;
             CBUFFER_END
 
             // The vertex shader definition with properties defined in the Varyings
@@ -72,6 +74,7 @@ Shader "Protptype/BodyUnlit"
             half4 frag(Varyings IN) : SV_Target
             {
                 half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv);
+                color *= _Color;
                 return color;
             }
             ENDHLSL
