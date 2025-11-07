@@ -24,6 +24,7 @@ namespace UnitModule.Movement
             public Vector3 GetRotateForwardNormal();
 
             public float GetSpeed();
+            public float GetDashForce();
 
             public float GetJumpElapsedTime();
             public float GetFallElapsedTime();
@@ -261,8 +262,7 @@ namespace UnitModule.Movement
             var rigidbody = unitMovementSetting.Rigidbody;
             var forward = movementData.GetDashForward();
             RotateToForward(movementData, forward, true);
-            //TODO use setting or character attribute?
-            rigidbody.AddForce(forward * 20f, ForceMode.VelocityChange);
+            rigidbody.AddForce(forward * movementData.GetDashForce(), ForceMode.VelocityChange);
         }
 
         public static void FixGroundPoint(IMovementData movementData)

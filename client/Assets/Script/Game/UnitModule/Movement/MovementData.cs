@@ -201,6 +201,11 @@ namespace UnitModule.Movement
             return Speed * SpeedRate;
         }
 
+        public float GetDashForce()
+        {
+            return 20f;
+        }
+
         public float GetJumpElapsedTime()
         {
             return JumpData.JumpElapsedTime();

@@ -56,6 +56,11 @@ namespace UnitModule.Movement
             return Speed;
         }
 
+        public float GetDashForce()
+        {
+            return 0;
+        }
+
         public float GetJumpElapsedTime()
         {
             return 0;
