@@ -6,6 +6,25 @@ using static CameraModule.BaseCameraBehavior;
 
 namespace CameraModule
 {
+    #region UpdateThirdPersonSettingData
+
+    public class UpdateThirdPersonSettingData : ICameraCommand
+    {
+        public int CommandId { get; set; }
+
+        public Vector3 FocusTargetOffset;
+        public float Distance;
+        public float CameraRotateSensitivity;
+        public float CameraSpeed;
+
+        public UpdateThirdPersonSettingData()
+        {
+            CommandId = (int)CameraCommandDefine.BaseCommand.UpdateThirdPersonSetting;
+        }
+    }
+
+    #endregion
+
     #region IUpdateThirdPersonScreenAxisData
 
     public interface IUpdateThirdPersonScreenAxisData : ICameraCommand
@@ -38,6 +57,10 @@ namespace CameraModule
         /// </summary>
         public Transform TargetTrans { get; set; }
         /// <summary>
+        /// 螢幕XY軸操作值
+        /// </summary>
+        public Vector2 ScreenAxisValue { get; set; }
+        /// <summary>
         /// 攝影機關注對象時使用的調整值
         /// </summary>
         public Vector3 FocusTargetOffset { get; set; }
@@ -50,11 +73,6 @@ namespace CameraModule
         /// </summary>
         public float CameraRotateSensitivity { get; set; }
         /// <summary>
-        /// 螢幕XY軸操作值
-        /// </summary>
-        public Vector2 ScreenAxisValue { get; set; }
-
-        /// <summary>
         /// 攝影機旋轉移動速度
         /// </summary>
         public float CameraSpeed { get; set; }
@@ -64,15 +82,27 @@ namespace CameraModule
     {
         public int CommandId { get; set; }
         public Transform TargetTrans { get; set; }
+        public Vector2 ScreenAxisValue { get; set; }
         public Vector3 FocusTargetOffset { get; set; }
         public float Distance { get; set; }
         public float CameraRotateSensitivity { get; set; }
-        public Vector2 ScreenAxisValue { get; set; }
         public float CameraSpeed { get; set; }
 
         public ThirdPersonModeCommandData()
         {
             CommandId = (int)CameraCommandDefine.BaseCommand.SetThirdPersonMode;
+        }
+
+        public ThirdPersonModeCommandData(Transform targetTrans, Vector2 screenAxisValue, UpdateThirdPersonSettingData settingData)
+        {
+            CommandId = (int)CameraCommandDefine.BaseCommand.SetThirdPersonMode;
+
+            TargetTrans = targetTrans;
+            ScreenAxisValue = screenAxisValue;
+            FocusTargetOffset = settingData.FocusTargetOffset;
+            Distance = settingData.Distance;
+            CameraRotateSensitivity = settingData.CameraRotateSensitivity;
+            CameraSpeed = settingData.CameraSpeed;
         }
     }
 
@@ -109,9 +139,10 @@ namespace CameraModule
             _focusTargetOffset = commandData.FocusTargetOffset;
 
             _distance = commandData.Distance;
+            _cameraRotateSensitivity = commandData.CameraRotateSensitivity;
             _screenInputAxis = commandData.ScreenAxisValue;
 
-            _cameraRotateSensitivity = commandData.CameraRotateSensitivity;
+            _camMoveSpeed = commandData.CameraSpeed;
 
             _active = true;
         }
@@ -119,6 +150,13 @@ namespace CameraModule
         public void UpdateScreenAxis(IUpdateThirdPersonScreenAxisData commandData)
         {
             _screenInputAxis = commandData.ScreenAxis;
+        }
+
+        public void UpdateSetting(UpdateThirdPersonSettingData commandData)
+        {
+            _focusTargetOffset = commandData.FocusTargetOffset;
+            _distance = commandData.Distance;
+            _cameraRotateSensitivity = commandData.CameraRotateSensitivity;
         }
 
         public void FixedUpdate()
@@ -140,7 +178,7 @@ namespace CameraModule
 
             var rotationEuler = Quaternion.Euler(_cameraRotateValue.y, _cameraRotateValue.x, 0);
             _lookAtPosition = _targetTrans.position +
-                Quaternion.Euler(_baseCameraBehavior.CameraTrans.forward) * _focusTargetOffset;
+                _baseCameraBehavior.CameraTrans.rotation * _focusTargetOffset;
 
             float maxDistance = _distance;
             if (Physics.Raycast(_lookAtPosition, (_baseCameraBehavior.CameraTrans.position - _lookAtPosition).normalized, out RaycastHit hitInfo))
@@ -156,7 +194,7 @@ namespace CameraModule
 
             _baseCameraBehavior.CameraTrans.rotation = rotationEuler;
             _baseCameraBehavior.CameraTrans.position =
-                Vector3.Lerp(
+                Vector3.MoveTowards(
                     _baseCameraBehavior.CameraTrans.position,
                     cameraPosition,
                     _camMoveSpeed * Time.deltaTime);

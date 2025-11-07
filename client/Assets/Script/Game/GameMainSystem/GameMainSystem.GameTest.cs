@@ -8,6 +8,7 @@ using UIModule;
 using UIModule.Game;
 using UnitModule;
 using UnitModule.Movement;
+using Unity.VisualScripting;
 using UnityEngine;
 using Utility;
 
@@ -43,15 +44,10 @@ namespace GameMainModule
                 characterAnimationSetting);
             //第三人稱相機註冊
             CameraSystem.CameraCommand(
-                new ThirdPersonModeCommandData
-                {
-                    TargetTrans = unitMovementSetting.RootTransform,
-                    FocusTargetOffset = new Vector3(0, 2.0f, 0),
-                    Distance = 5,
-                    CameraRotateSensitivity = 100,
-                    ScreenAxisValue = Vector2.zero,
-                    CameraSpeed = 50,
-                });
+                new ThirdPersonModeCommandData(
+                    unitMovementSetting.RootTransform,
+                    Vector2.zero,
+                    _normalThirdPersonSettingData));
             //初始化攻擊行為
             SetCombinationMaxCount(CommonDefine.WeaponCount); // 先用Define 之後有變動數值在調整
             SetWeaponAttackBehaviorToController(GetWeaponBehaviorListByEquip());

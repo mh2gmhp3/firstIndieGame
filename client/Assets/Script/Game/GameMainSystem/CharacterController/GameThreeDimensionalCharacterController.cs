@@ -233,23 +233,16 @@ namespace GameMainModule
             _movementData.IsLockLookAtUnit = !_movementData.IsLockLookAtUnit;
             if (_movementData.IsLockLookAtUnit)
             {
+                //要移到外部
                 if (!GameMainSystem.TryGetNearEnemyUnit(Unit.Position, 10f, out var id))
+                {
                     _movementData.IsLockLookAtUnit = false;
+                    GameMainSystem.ChangeToCameraSetting(GameThirdPersonCameraSetting.Normal);
+                }
                 else
+                {
                     _movementData.LookAtUnitId = id;
-            }
-            if (_movementData.IsLockLookAtUnit)
-            {
-                _movementData.IsLockLookAtCamera = false;
-            }
-        }
-
-        public void TriggerLockCamera()
-        {
-            _movementData.IsLockLookAtCamera = !_movementData.IsLockLookAtCamera;
-            if (_movementData.IsLockLookAtCamera)
-            {
-                _movementData.IsLockLookAtUnit = false;
+                }
             }
         }
 

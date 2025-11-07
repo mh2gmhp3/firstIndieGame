@@ -110,7 +110,7 @@ namespace GameMainModule
             }
             else if (command == "lookatcamera")
             {
-                _characterController.TriggerLockCamera();
+                TriggerChangeCameraSetting();
             }
         }
 
@@ -146,7 +146,7 @@ namespace GameMainModule
         {
             if (_cacheLeftTriggerValue != 1 && values[0] == 1)
             {
-                _characterController.TriggerLockCamera();
+                TriggerChangeCameraSetting();
             }
             _cacheLeftTriggerValue = values[0];
         }

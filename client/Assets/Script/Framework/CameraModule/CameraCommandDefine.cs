@@ -10,6 +10,7 @@ namespace CameraModule
         {
             SetThirdPersonMode = 1,
             UpdateThirdPersonScreenAxisValue = 2,
+            UpdateThirdPersonSetting = 3,
 
             LookAtPosition = 10,
             FollowTarget = 11,

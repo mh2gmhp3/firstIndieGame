@@ -49,6 +49,15 @@ namespace CameraModule
             _thirdPersonModeProcessor.UpdateScreenAxis(commandData);
         }
 
+        [CameraCommand((int)CameraCommandDefine.BaseCommand.UpdateThirdPersonSetting)]
+        private void UpdateThirdPersonSetting(ICameraCommand command)
+        {
+            if (!(command is UpdateThirdPersonSettingData commandData))
+                return;
+
+            _thirdPersonModeProcessor.UpdateSetting(commandData);
+        }
+
         #endregion
 
         #region FollowTarget

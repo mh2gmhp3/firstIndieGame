@@ -145,7 +145,6 @@ namespace UnitModule.Movement
 
         public bool RunTriggered = false;
 
-        public bool IsLockLookAtCamera = false;
         public bool IsLockLookAtUnit = false;
         public int LookAtUnitId = 0;
 
@@ -182,13 +181,23 @@ namespace UnitModule.Movement
                     return new Vector3(direction.x, 0f, direction.z).normalized;
                 }
             }
-            if (IsLockLookAtCamera)
+            //過肩時永遠面向前方
+            if (GameMainSystem.ThirdPersonCameraSetting == GameThirdPersonCameraSetting.OTP)
                 return (MoveQuaternion * Vector3.forward).normalized;
             return (MoveQuaternion * MoveAxis).normalized;
         }
 
         public float GetSpeed()
         {
+            //過肩時 如果往後要降速
+            if (GameMainSystem.ThirdPersonCameraSetting == GameThirdPersonCameraSetting.OTP)
+            {
+                if (Vector3.Dot(Vector3.forward, MoveAxis) < 0)
+                {
+                    return Speed * SpeedRate * MidSpeedRate;
+                }
+            }
+
             return Speed * SpeedRate;
         }
 
