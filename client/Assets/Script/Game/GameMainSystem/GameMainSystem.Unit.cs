@@ -123,12 +123,12 @@ namespace GameMainModule
             _enemyManager.AddSpawnPoint(position, radius, spawnDataList);
         }
 
-        public static void TestCauseDamage(int id, int damage)
+        public static void TestCauseToEnemyDamage(int id, int damage)
         {
-            _instance.InternalTestCauseDamage(id, damage);
+            _instance.InternalTestCauseToEnemyDamage(id, damage);
         }
 
-        private void InternalTestCauseDamage(int id, int damage)
+        private void InternalTestCauseToEnemyDamage(int id, int damage)
         {
             _enemyManager.TestCauseDamage(id, damage);
         }

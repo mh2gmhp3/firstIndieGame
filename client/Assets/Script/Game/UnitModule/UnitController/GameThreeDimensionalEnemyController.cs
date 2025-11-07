@@ -1,6 +1,7 @@
 ﻿using AssetModule;
 using GameMainModule;
 using GameMainModule.Animation;
+using GameMainModule.Attack;
 using GameSystem;
 using UnitModule.Movement;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace UnitModule
         private GameEnemyStateContext _context = new GameEnemyStateContext();
 
         private TargetMovementData _movementData = new TargetMovementData();
+        private EnemyAttackController _attackController = new EnemyAttackController();
         private CharacterPlayableClipController _playableClipController = new CharacterPlayableClipController();
 
         private EnemyManager _manager;
@@ -30,10 +32,13 @@ namespace UnitModule
 
             _context.Manager = _manager;
             _context.MovementData = _movementData;
+            _context.AttackController = _attackController;
             _context.PlayableClipController = _playableClipController;
+
             _stateMachine.AddState(EnemyState.Idle, new IdleState(_context));
             _stateMachine.AddState(EnemyState.Trace, new TraceState(_context));
             _stateMachine.AddState(EnemyState.Fall, new FallState(_context));
+            _stateMachine.AddState(EnemyState.Attack, new AttackState(_context));
 
             _stateMachine.AddTransition(EnemyState.Idle, EnemyState.Trace, () => _context.TraceTarget);
             _stateMachine.AddTransition(EnemyState.Idle, EnemyState.Fall, () => !_movementData.IsGround);
@@ -42,6 +47,10 @@ namespace UnitModule
             _stateMachine.AddTransition(EnemyState.Trace, EnemyState.Fall, () => !_movementData.IsGround);
 
             _stateMachine.AddTransition(EnemyState.Fall, EnemyState.Idle, () => _movementData.IsGround);
+
+            _stateMachine.AddTransition(EnemyState.Idle, EnemyState.Attack, () => _context.CloseTarget);
+            _stateMachine.AddTransition(EnemyState.Trace, EnemyState.Attack, () => _context.CloseTarget);
+            _stateMachine.AddTransition(EnemyState.Attack, EnemyState.Idle, () => _attackController.IsEnd);
         }
 
         public void Init(EnemyUnit unit)
@@ -54,6 +63,7 @@ namespace UnitModule
                     "Enemy",
                     unit.UnitMovementSetting.Animator,
                     AssetSystem.LoadAsset<CharacterAnimationSetting>("Setting/CharacterAnimationSetting/PrototypeCharacter"));
+                _attackController.Init(unit.AttackRefSetting, _playableClipController);
             }
             _context.UnitId = Unit.Id;
             _movementData.Speed = 5f;
@@ -64,6 +74,7 @@ namespace UnitModule
         {
             Unit = null;
             _movementData.Clear();
+            _attackController.Clear();
             _playableClipController.Clear();
         }
 

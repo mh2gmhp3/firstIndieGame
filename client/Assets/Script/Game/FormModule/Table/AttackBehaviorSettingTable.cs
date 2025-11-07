@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace FormModule.Game.Table
 {
@@ -22,7 +23,24 @@ namespace FormModule.Game.Table
     {
         protected override void DoInit()
         {
-            base.DoInit();
+
+        }
+
+        public void GetTypeRowList(int type, List<AttackBehaviorSettingRow> result)
+        {
+            if (result == null)
+                return;
+            result.Clear();
+
+            var rowList = GetDataList();
+            for (int i = 0; i < rowList.Count; i++)
+            {
+                var row = rowList[i];
+                if (row.WeaponType == type)
+                {
+                    result.Add(row);
+                }
+            }
         }
     }
 }

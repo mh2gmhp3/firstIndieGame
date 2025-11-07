@@ -13,6 +13,7 @@ namespace GameMainModule.Attack
     /// </summary>
     public class FakeCharacterTriggerInfo : ICollisionAreaTriggerInfo
     {
+        public bool ToCharacter = false;
         public int Attack = 20;
     }
 
@@ -30,7 +31,7 @@ namespace GameMainModule.Attack
         [SerializeField]
         private float _elapsedTime = 0;
 
-        private IUnitMovementSetting _unitMovementSetting;
+        private IAttackRefSetting _attackRefSetting;
         private AttackBehaviorAssetSettingData _setting;
         private FakeCharacterTriggerInfo _fakeCharacterTriggerInfo = new FakeCharacterTriggerInfo();
 
@@ -58,12 +59,13 @@ namespace GameMainModule.Attack
         /// TODO 要加入玩家資料相關內容
         /// </summary>
         /// <param name="setting"></param>
-        public AttackBehavior(IUnitMovementSetting unitMovementSetting, AttackBehaviorAssetSettingData setting, float baseBehaviorTime)
+        public AttackBehavior(IAttackRefSetting attackRefSetting, AttackBehaviorAssetSettingData setting, float baseBehaviorTime, bool toCharacter = false)
         {
             _name = setting.AnimationStateName;
-            _unitMovementSetting = unitMovementSetting;
+            _attackRefSetting = attackRefSetting;
             _setting = setting;
             _behaviorTime = baseBehaviorTime;
+            _fakeCharacterTriggerInfo.ToCharacter = toCharacter;
         }
 
         public void OnStart()
@@ -101,24 +103,29 @@ namespace GameMainModule.Attack
                 return;
 
             _collisionAreaId = CollisionAreaManager.CreateCollisionArea(GetCollisionAreaSetupData(
-                _unitMovementSetting,
+                _attackRefSetting,
                 _setting,
                 _fakeCharacterTriggerInfo));
         }
 
         private static ICollisionAreaSetupData GetCollisionAreaSetupData(
-            IUnitMovementSetting unitMovementSetting,
+            IAttackRefSetting attackRefSetting,
             AttackBehaviorAssetSettingData attackBehaviorAssetSettingData,
             ICollisionAreaTriggerInfo triggerInfo)
         {
             switch (attackBehaviorAssetSettingData.CollisionAreaType)
             {
                 case CollisionAreaDefine.AreaType.Test:
-                    return new TestCollisionAreaSetupData(1);
+                    return new TestCollisionAreaSetupData(1); ;
                 case CollisionAreaDefine.AreaType.Quad:
+                    if (!attackRefSetting.TryGetAttackCastPoint(
+                        attackBehaviorAssetSettingData.AttackRefId,
+                        out var worldPoint,
+                        out var direction))
+                        return new TestCollisionAreaSetupData(1); ;
                     return new QuadCollisionAreaSetupData(
-                        unitMovementSetting.RootTransform.position + new Vector3(0f, 0.5f, 0f),
-                        unitMovementSetting.RotateTransform.forward,
+                        worldPoint,
+                        direction,
                         attackBehaviorAssetSettingData.CollisionAreaDuration,
                         5f,
                         5f,

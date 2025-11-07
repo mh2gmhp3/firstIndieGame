@@ -1,4 +1,5 @@
-﻿using Logging;
+﻿using GameMainModule.Attack;
+using Logging;
 using UnitModule.Movement;
 using UnityEngine;
 using static UnitModule.UnitAvatarManager;
@@ -15,9 +16,11 @@ namespace UnitModule
 
         private GameUnitMovementSetting _unitMovementSetting;
         private CharacterUnitAvatarSetting _unitAvatarSetting;
+        private CharacterAttackRefSetting _attackRefSetting;
 
         public GameUnitMovementSetting UnitMovementSetting => _unitMovementSetting;
         public WeaponTransformSetting WeaponTransformSetting => _unitAvatarSetting.WeaponTransform;
+        public CharacterAttackRefSetting AttackRefSetting => _attackRefSetting;
 
         public void SetAvatarInsInfo(UnitAvatarInstance avatarInstance)
         {
@@ -34,6 +37,7 @@ namespace UnitModule
 
             _unitMovementSetting = new GameUnitMovementSetting(avatarInstance);
             _unitAvatarSetting = characterUnitAvatarSetting;
+            _attackRefSetting = new CharacterAttackRefSetting(_unitMovementSetting);
         }
 
         protected override void DoInit()

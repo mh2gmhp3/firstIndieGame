@@ -1,6 +1,7 @@
 ﻿using AnimationModule;
 using GameMainModule;
 using GameMainModule.Animation;
+using GameMainModule.Attack;
 using UnitModule.Movement;
 using Utility;
 
@@ -19,8 +20,10 @@ namespace UnitModule
         public int UnitId;
         public EnemyManager Manager;
         public TargetMovementData MovementData;
+        public EnemyAttackController AttackController;
         public CharacterPlayableClipController PlayableClipController;
         public bool TraceTarget = false;
+        public bool CloseTarget = false;
         public float TrackDistance = 2f;
     }
 
@@ -29,6 +32,7 @@ namespace UnitModule
         protected GameEnemyStateContext _context;
         protected EnemyManager _manager;
         protected TargetMovementData _movementData;
+        protected EnemyAttackController _attackController;
         protected CharacterPlayableClipController _playableClipController;
 
         protected GameThreeDimensionalEnemyState(GameEnemyStateContext context)
@@ -36,6 +40,7 @@ namespace UnitModule
             _context = context;
             _manager = context.Manager;
             _movementData = context.MovementData;
+            _attackController = context.AttackController;
             _playableClipController = context.PlayableClipController;
         }
 
@@ -74,6 +79,7 @@ namespace UnitModule
             {
                 _movementData.TargetPosition =  targetPos;
                 _context.TraceTarget = true;
+                _context.CloseTarget = false;
             }
         }
 
@@ -102,10 +108,12 @@ namespace UnitModule
                 _context.TrackDistance * _context.TrackDistance)
             {
                 _movementData.TargetPosition = targetPos;
+                _context.CloseTarget = false;
             }
             else
             {
                 _context.TraceTarget = false;
+                _context.CloseTarget = true;
             }
         }
 
@@ -137,6 +145,24 @@ namespace UnitModule
             {
                 _manager.AddDead(_context.UnitId);
             }
+        }
+    }
+
+    public class AttackState : GameThreeDimensionalEnemyState
+    {
+        public AttackState(GameEnemyStateContext context) : base(context)
+        {
+
+        }
+
+        public override void DoEnter(EnemyState previousState)
+        {
+            _attackController.RandomAttack();
+        }
+
+        public override void OnUpdate()
+        {
+            _attackController.DoUpdate();
         }
     }
 }

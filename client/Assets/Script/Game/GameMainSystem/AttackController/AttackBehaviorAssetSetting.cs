@@ -13,6 +13,7 @@ namespace GameMainModule.Attack
     public class AttackBehaviorAssetSettingData
     {
         public int Id;
+        public int AttackRefId;
 
         #region Collision
 

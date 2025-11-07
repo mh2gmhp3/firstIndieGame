@@ -31,7 +31,7 @@ namespace GameMainModule.Attack
         private AttackBehavior _nowAttackBehavior = null;
         private AttackBehavior _nextAttackBehavior = null;
 
-        private IUnitMovementSetting _unitMovementSetting = null;
+        private CharacterAttackRefSetting _attackRefSetting = null;
 
         /// <summary>
         /// 控制Combo開始與結束通知
@@ -66,9 +66,9 @@ namespace GameMainModule.Attack
             }
         }
 
-        public AttackCombination(IUnitMovementSetting unitMovementSetting)
+        public AttackCombination(CharacterAttackRefSetting attackRefSetting)
         {
-            _unitMovementSetting = unitMovementSetting;
+            _attackRefSetting = attackRefSetting;
         }
 
         public void Update(AttackCombinationRuntimeSetupData setupData)
@@ -96,7 +96,7 @@ namespace GameMainModule.Attack
                 var baseTime = GameMainSystem.AttackBehaviorAssetSetting.GetBehaviorBaseTime(
                     behaviorRow.WeaponType,
                     assetSetting.AnimationStateName);
-                _mainAttackBehaviorList.Add(new AttackBehavior(_unitMovementSetting, assetSetting, baseTime));
+                _mainAttackBehaviorList.Add(new AttackBehavior(_attackRefSetting, assetSetting, baseTime));
             }
 
             Log.LogInfo($"AttackCombination Update Weapon:{_weaponGroup} Behavior:{_mainAttackBehaviorList}");

@@ -1,4 +1,5 @@
-﻿using Logging;
+﻿using GameMainModule.Attack;
+using Logging;
 using System.Collections;
 using System.Collections.Generic;
 using UnitModule.Movement;
@@ -46,8 +47,10 @@ namespace UnitModule
 
         public bool HaveAvatar { get; private set; } = false;
         private GameUnitMovementSetting _unitMovementSetting;
+        private EnemyAttackRefSetting _attackRefSetting;
 
         public GameUnitMovementSetting UnitMovementSetting => _unitMovementSetting;
+        public EnemyAttackRefSetting AttackRefSetting => _attackRefSetting;
 
         public void SetAvatarInsInfo(UnitAvatarInstance avatarInstance)
         {
@@ -59,6 +62,7 @@ namespace UnitModule
 
             HaveAvatar = true;
             _unitMovementSetting = new GameUnitMovementSetting(avatarInstance);
+            _attackRefSetting = new EnemyAttackRefSetting(_unitMovementSetting);
         }
 
         protected override void DoInit()
@@ -71,6 +75,7 @@ namespace UnitModule
             Data.Clear();
             HaveAvatar = false;
             _unitMovementSetting = null;
+            _attackRefSetting = null;
         }
     }
 }

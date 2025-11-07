@@ -1,6 +1,7 @@
 ﻿using GameMainModule;
 using GameMainModule.Attack;
 using GameSystem;
+using Logging;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,7 +33,14 @@ namespace CollisionModule
 
             if (triggerInfo is FakeCharacterTriggerInfo fakeTriggerInfo)
             {
-                GameMainSystem.TestCauseDamage(unitId, fakeTriggerInfo.Attack);
+                if (fakeTriggerInfo.ToCharacter)
+                {
+                    Log.LogInfo($"ToCharacter Hit Unit Id:{unitId}, Damage:{fakeTriggerInfo.Attack}");
+                }
+                else
+                {
+                    GameMainSystem.TestCauseToEnemyDamage(unitId, fakeTriggerInfo.Attack);
+                }
                 _hits.Add(new HitHint() { Time = Time.time, Hit = hit });
                 //Log.LogInfo($"Hit Unit Id:{unitId}, Damage:{fakeTriggerInfo.Attack}");
             }

@@ -12,12 +12,6 @@ using Utility;
 
 namespace GameMainModule.Attack
 {
-    public interface IAttackCombinationSetupData
-    {
-        public int GroupId { get; }
-        public List<int> AttackBehaviorList { get; }
-    }
-
     [Serializable]
     public class CharacterAttackController
     {
@@ -29,7 +23,7 @@ namespace GameMainModule.Attack
 
         private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
 
-        private IUnitMovementSetting _unitMovementSetting;
+        private CharacterAttackRefSetting _attackRefSetting;
         private CharacterPlayableClipController _playableClipController;
         private WeaponTransformSetting _weaponTransformSetting;
 
@@ -44,11 +38,11 @@ namespace GameMainModule.Attack
         public bool IsMaxCombo => _curCombination != null && _curCombination.IsMaxCombo;
 
         public void Init(
-            IUnitMovementSetting unitMovementSetting,
+            CharacterAttackRefSetting attackRefSetting,
             CharacterPlayableClipController playableClipController,
             WeaponTransformSetting weaponTransformSetting)
         {
-            _unitMovementSetting = unitMovementSetting;
+            _attackRefSetting = attackRefSetting;
             _playableClipController = playableClipController;
             _weaponTransformSetting = weaponTransformSetting;
         }
@@ -58,7 +52,7 @@ namespace GameMainModule.Attack
         public void SetCombinationMaxCount(int count)
         {
             _combinationMaxCount = count;
-            _combinationList.EnsureCount(_combinationMaxCount, () => { return new AttackCombination(_unitMovementSetting); }, true);
+            _combinationList.EnsureCount(_combinationMaxCount, () => { return new AttackCombination(_attackRefSetting); }, true);
         }
 
         public bool SetCombination(int index, AttackCombinationRuntimeSetupData setupData)
