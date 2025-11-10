@@ -1,4 +1,5 @@
 ﻿using Extension;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -12,12 +13,14 @@ namespace Framework.Editor.Utility
         private string[] _pageNames = null;
         private int _curPageIndex = 0;
         private EditorPage _curPage = null;
+        private Action _guiRepaintEvent = null;
 
         private int _gridXCount = 3;
 
-        public EditorPageContainer(int gridXCount)
+        public EditorPageContainer(int gridXCount, Action guiRepaintEvent = null)
         {
             _gridXCount = gridXCount;
+            _guiRepaintEvent = guiRepaintEvent;
         }
 
         public void AddPage(EditorPage page)
@@ -92,6 +95,13 @@ namespace Framework.Editor.Utility
                 }
             }
         }
+
+        public void Repaint()
+        {
+            if (_guiRepaintEvent == null)
+                return;
+            _guiRepaintEvent.Invoke();
+        }
     }
 
     public abstract class EditorPage
@@ -110,6 +120,13 @@ namespace Framework.Editor.Utility
             if (_pageContainer == null)
                 return;
             _pageContainer.ChangeToPage(name);
+        }
+
+        protected void Repaint()
+        {
+            if (_pageContainer == null)
+                return;
+            _pageContainer.Repaint();
         }
 
         public virtual void OnEnable() { }

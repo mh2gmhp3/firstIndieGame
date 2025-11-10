@@ -33,7 +33,7 @@ namespace TerrainModule.Editor
     {
         private static TerrainEditorWindow _instance;
 
-        private EditorPageContainer _pageContainer = new EditorPageContainer(4);
+        private EditorPageContainer _pageContainer;
         private TerrainEditorData _editorData = new TerrainEditorData();
 
 
@@ -48,6 +48,7 @@ namespace TerrainModule.Editor
             Debug.Log("TerrainEditor Enable");
             EditorSceneManager.OpenScene(TerrainEditorDefine.EditorScenePath, OpenSceneMode.Single);
 
+            _pageContainer = new EditorPageContainer(4, Repaint);
             _pageContainer.AddPage(new CreateDataPage(_editorData));
             _pageContainer.AddPage(new LoadDataPage(_editorData));
             _pageContainer.AddPage(new EditDataPage(_editorData));
