@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
-using UnityEngine.ProBuilder;
 
 namespace TerrainModule.Editor
 {
@@ -113,32 +110,6 @@ namespace TerrainModule.Editor
             vertices.AddRange(addVertices);
             triangles.AddRange(addTriangles);
             uvs.AddRange(addUVs);
-        }
-
-        private void OnDrawGizmos()
-        {
-            if (_curEditData == null)
-                return;
-
-            var chunkSize = _curEditData.GetChunkSize();
-            var centerRedress = new Vector3(
-                chunkSize.x / 2f,
-                chunkSize.y / 2,
-                chunkSize.z / 2);
-            for (int yIndex = 0; yIndex < _curEditData.ChunkNum.y; yIndex++)
-            {
-                for (int zIndex = 0; zIndex < _curEditData.ChunkNum.z; zIndex++)
-                {
-                    for (int xIndex = 0; xIndex < _curEditData.ChunkNum.x; xIndex++)
-                    {
-                        var center = new Vector3(
-                                xIndex * chunkSize.x,
-                                yIndex * chunkSize.y,
-                                zIndex * chunkSize.z) + centerRedress;
-                        Gizmos.DrawWireCube(center, chunkSize);
-                    }
-                }
-            }
         }
     }
 }

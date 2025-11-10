@@ -29,6 +29,14 @@ namespace TerrainModule.Editor
             DrawGUI_CreateDataDescription();
         }
 
+        public override void OnSceneGUI()
+        {
+            TerrainEditorUtility.HandleDrawChunk(
+                _createDataDescription.BlockSize,
+                _createDataDescription.ChunkBlockNum,
+                _createDataDescription.ChunkNum);
+        }
+
         private void DrawGUI_CreateDataDescription()
         {
             _createDataDescription.Name = EditorGUILayout.TextField("名稱", _createDataDescription.Name);
@@ -58,7 +66,7 @@ namespace TerrainModule.Editor
                 EditorUtility.DisplayDialog(TerrainEditorDefine.Dialog_Title_Error, "名稱不能為空白", TerrainEditorDefine.Dialog_Ok_Confirm);
                 return;
             }
-            var existNames = TerrainEditorWindow.GetEditDataFolderNames();
+            var existNames = TerrainEditorUtility.GetEditDataFolderNames();
             for (int i = 0; i < existNames.Length; i++)
             {
                 if (_createDataDescription.Name == existNames[i])
@@ -73,11 +81,11 @@ namespace TerrainModule.Editor
             _createDataDescription.ChunkBlockNum = ClampValidValue(_createDataDescription.ChunkBlockNum);
             _createDataDescription.ChunkNum = ClampValidValue(_createDataDescription.ChunkNum);
 
-            var newEditData = new TerrainEditData();
+            var newEditData = new TerrainEditData(
+                _createDataDescription.BlockSize,
+                _createDataDescription.ChunkBlockNum,
+                _createDataDescription.ChunkNum);
             newEditData.name = _createDataDescription.Name;
-            newEditData.BlockSize = _createDataDescription.BlockSize;
-            newEditData.ChunkBlockNum = _createDataDescription.ChunkBlockNum;
-            newEditData.ChunkNum = _createDataDescription.ChunkNum;
             AssetDatabase.CreateAsset(newEditData, Path.Combine(TerrainEditorDefine.EditDataFolderPath, newEditData.name) + ".asset");
             AssetDatabase.Refresh();
             _editorData.LoadData(newEditData.name);

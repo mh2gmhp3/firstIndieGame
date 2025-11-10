@@ -8,13 +8,15 @@ namespace TerrainModule.Editor
     [Serializable]
     public class BlockEditData
     {
-
+        //In Chunk
+        public int Id;
     }
 
     [Serializable]
     public class ChunkEditData
     {
-
+        public int Id;
+        public List<BlockEditData> BlockEditDataList = new List<BlockEditData>();
     }
 
     /// <summary>
@@ -36,9 +38,13 @@ namespace TerrainModule.Editor
         /// </summary>
         public Vector3Int ChunkNum = Vector3Int.one;
 
-        public TerrainEditData()
-        {
+        public List<ChunkEditData> ChunkEditDataList = new List<ChunkEditData>();
 
+        public TerrainEditData(Vector3Int blockSize, Vector3Int chunkBlockNum, Vector3Int chunkNum)
+        {
+            BlockSize = blockSize;
+            ChunkBlockNum = chunkBlockNum;
+            ChunkNum = chunkNum;
         }
 
         public TerrainEditData(TerrainEditRuntimeData runtimeData)

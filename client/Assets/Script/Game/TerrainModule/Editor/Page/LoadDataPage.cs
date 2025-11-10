@@ -50,7 +50,7 @@ namespace TerrainModule.Editor
 
         private void RefreshEditDataList()
         {
-            _terrainEditDataNames = TerrainEditorWindow.GetEditDataFolderNames();
+            _terrainEditDataNames = TerrainEditorUtility.GetEditDataFolderNames();
         }
     }
 }
