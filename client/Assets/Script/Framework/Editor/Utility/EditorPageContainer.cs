@@ -59,6 +59,14 @@ namespace Framework.Editor.Utility
             }
         }
 
+        public void OnSceneGUI()
+        {
+            if (_curPage != null)
+            {
+                _curPage.OnSceneGUI();
+            }
+        }
+
         public void ChangeToPage(int index)
         {
             if (!_pageList.TryGet(index, out var changePage))
@@ -106,6 +114,7 @@ namespace Framework.Editor.Utility
 
         public virtual void OnEnable() { }
         public virtual void OnGUI() { }
+        public virtual void OnSceneGUI() { }
         public virtual void OnDisable() { }
     }
 }
