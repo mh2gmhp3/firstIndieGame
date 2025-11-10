@@ -1,5 +1,4 @@
 ﻿using Framework.Editor.Utility;
-using System;
 using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -66,6 +65,13 @@ namespace TerrainModule.Editor
                 _editorData.TerrainEditorMgrObj = mgr.gameObject;
                 _editorData.TerrainEditorMgr = mgr;
             }
+
+            SceneView.duringSceneGui += OnSceneGUI;
+        }
+
+        private void OnDisable()
+        {
+            SceneView.duringSceneGui -= OnSceneGUI;
         }
 
         private void OnGUI()
@@ -73,17 +79,9 @@ namespace TerrainModule.Editor
             _pageContainer.OnGUI();
         }
 
-        public static string[] GetEditDataFolderNames()
+        private void OnSceneGUI(SceneView sceneView)
         {
-            var editDataGUIDs = AssetDatabase.FindAssets("t:TerrainEditData", new string[] { TerrainEditorDefine.EditDataFolderPath });
-            var result = new string[editDataGUIDs.Length];
-            for (int i = 0; i < editDataGUIDs.Length; i++)
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath(editDataGUIDs[i]);
-                var name = Path.GetFileNameWithoutExtension(assetPath);
-                result[i] = name;
-            }
-            return result;
+            _pageContainer.OnSceneGUI();
         }
     }
 }

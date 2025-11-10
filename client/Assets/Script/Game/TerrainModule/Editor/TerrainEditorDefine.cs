@@ -24,8 +24,8 @@ namespace TerrainModule.Editor
         public static Dictionary<int, string> PageToName =
             new Dictionary<int, string>()
             {
-                { (int)TerrainEditorPageType.Create, "建立新檔"},
-                { (int)TerrainEditorPageType.Load, "讀取檔案"},
+                { (int)TerrainEditorPageType.Create, "建立"},
+                { (int)TerrainEditorPageType.Load, "讀取"},
                 { (int)TerrainEditorPageType.Edit, "編輯"}
             };
     }
