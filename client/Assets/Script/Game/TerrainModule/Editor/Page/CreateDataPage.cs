@@ -24,6 +24,11 @@ namespace TerrainModule.Editor
 
         public override string Name => TerrainEditorDefine.PageToName[(int)TerrainEditorPageType.Create];
 
+        public override void OnEnable()
+        {
+            _editorData.TerrainEditorMgrObj.SetActive(false);
+        }
+
         public override void OnGUI()
         {
             DrawGUI_CreateDataDescription();

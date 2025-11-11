@@ -18,6 +18,7 @@ namespace TerrainModule.Editor
 
         public override void OnEnable()
         {
+            _editorData.TerrainEditorMgrObj.SetActive(true);
             RefreshEditDataList();
         }
 

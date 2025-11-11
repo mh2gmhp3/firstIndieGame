@@ -20,6 +20,11 @@ namespace TerrainModule.Editor
 
         public override string Name => TerrainEditorDefine.PageToName[(int)TerrainEditorPageType.Edit];
 
+        public override void OnEnable()
+        {
+            _editorData.TerrainEditorMgrObj.SetActive(true);
+        }
+
         public override void OnGUI()
         {
             if (CurEditRuntimeData == null)
