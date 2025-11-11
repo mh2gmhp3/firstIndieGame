@@ -14,6 +14,7 @@ namespace TerrainModule.Editor
     {
         Success,
         PositionOutOfRange,
+        IdOutOfRange,
         ChunkNotCreated,
         BlockNotCreated,
     }
@@ -25,22 +26,24 @@ namespace TerrainModule.Editor
         ChunkNotCreated,
     }
 
-    public struct RaycastChunkResult
+    public struct RaycastBlockResult
     {
         public int ChunkId;
-        public List<int> BlockIdList;
+        public int BlockId;
 
-        public RaycastChunkResult(int id)
-        {
-            ChunkId = id;
-            BlockIdList = new List<int>();
-        }
+        public Vector3Int WorldBlockCoordinates;
+        public Vector3Int HitFaceNormal;
     }
 
     public class BlockEditRuntimeData
     {
         //In Chunk
         public int Id;
+
+        public BlockEditRuntimeData(int id)
+        {
+            Id = id;
+        }
 
         public BlockEditRuntimeData(BlockEditData editData)
         {
@@ -53,6 +56,11 @@ namespace TerrainModule.Editor
         public int Id;
 
         public Dictionary<int, BlockEditRuntimeData> IdToBlockEditData = new Dictionary<int, BlockEditRuntimeData>();
+
+        public ChunkEditRuntimeData(int id)
+        {
+            Id = id;
+        }
 
         public ChunkEditRuntimeData(ChunkEditData editData)
         {
@@ -119,18 +127,29 @@ namespace TerrainModule.Editor
 
         public bool TryGetId(Vector3 position, out int chunkId, out int blockInChunkId)
         {
+            var worldBlockCoord = GetWorldBlockCoord(position);
+            return TryGetId(worldBlockCoord, out chunkId, out blockInChunkId);
+        }
+
+        public bool TryGetId(Vector3Int worldBlockCoord, out int chunkId, out int blockInChunkId)
+        {
             chunkId = 0;
             blockInChunkId = 0;
-            if (!IsValid(position))
+            var chunkCoord = GetChunkCoordWithWorldBlockCoord(worldBlockCoord);
+            if (!IsValidChunkCoordinates(chunkCoord))
                 return false;
-            chunkId = GetChunkId(position);
-            var chunkPivotPos = GetChunkPivotPosition(position);
-            blockInChunkId = GetBlockInChunkId(position - chunkPivotPos);
+            var blockInChunkCoord = GetBlockInChunkCoordWithWorldBlockCoord(worldBlockCoord);
+            if (!IsValidBlockInChunkCoordinates(blockInChunkCoord))
+                return false;
+
+            chunkId = GetChunkIdWithCoord(chunkCoord);
+            blockInChunkId = GetBlocInChunkIdWithCoord(blockInChunkCoord);
             return true;
         }
 
         #region Chunk
 
+        #region GetData
         public bool TryGetChunk(Vector3 position, out ChunkEditRuntimeData chunkData, out GetChunkReason reason)
         {
             reason = GetChunkReason.Success;
@@ -149,7 +168,13 @@ namespace TerrainModule.Editor
             reason = GetChunkReason.Success;
             return true;
         }
+        #endregion
 
+        #region ChunkId
+        public bool IsValidChunkId(int id)
+        {
+            return id >= 0 && id < ChunkNum.x * ChunkNum.y * ChunkNum.z;
+        }
         public int GetChunkId(Vector3 position)
         {
             var chunkCoord = GetChunkCoordinates(position);
@@ -162,16 +187,9 @@ namespace TerrainModule.Editor
                 chunkCoord.z * ChunkNum.x +
                 chunkCoord.y * (ChunkNum.x * ChunkNum.z);
         }
+        #endregion
 
-        public Vector3Int GetChunkCoordinates(Vector3 position)
-        {
-            var chunkSize = GetChunkSize();
-            return new Vector3Int(
-                Mathf.FloorToInt(position.x) / chunkSize.x,
-                Mathf.FloorToInt(position.y) / chunkSize.y,
-                Mathf.FloorToInt(position.z) / chunkSize.z);
-        }
-
+        #region ChunkCoordinates
         public bool IsValidChunkCoordinates(Vector3Int chunkCoord)
         {
             if (chunkCoord.x < 0 || chunkCoord.x >= ChunkNum.x)
@@ -183,6 +201,15 @@ namespace TerrainModule.Editor
             return true;
         }
 
+        public Vector3Int GetChunkCoordinates(Vector3 position)
+        {
+            var chunkSize = GetChunkSize();
+            return new Vector3Int(
+                Mathf.FloorToInt(position.x) / chunkSize.x,
+                Mathf.FloorToInt(position.y) / chunkSize.y,
+                Mathf.FloorToInt(position.z) / chunkSize.z);
+        }
+
         public Vector3Int GetChunkCoordinatesWithId(int chunkId)
         {
             var xzId = chunkId % (ChunkNum.x * ChunkNum.z);
@@ -192,6 +219,16 @@ namespace TerrainModule.Editor
             return new Vector3Int(x, y, z);
         }
 
+        public Vector3Int GetChunkCoordWithWorldBlockCoord(Vector3Int worldBlockCoord)
+        {
+            return new Vector3Int(
+                worldBlockCoord.x / ChunkBlockNum.x,
+                worldBlockCoord.y / ChunkBlockNum.y,
+                worldBlockCoord.z / ChunkBlockNum.z);
+        }
+        #endregion
+
+        #region ChunkPivotPosition
         public Vector3 GetChunkPivotPosition(Vector3 position)
         {
             var chunkCoord = GetChunkCoordinates(position);
@@ -212,7 +249,9 @@ namespace TerrainModule.Editor
             var chunkCoord = GetChunkCoordinatesWithId(chunkId);
             return GetChunkPivotPositionWithCoord(chunkCoord);
         }
+        #endregion
 
+        #region ChunkCenterPosition
         public Vector3 GetChunkCenterPositionWithCoord(Vector3Int chunkCoord)
         {
             var chunkSize = GetChunkSize();
@@ -222,10 +261,38 @@ namespace TerrainModule.Editor
                chunkSize.z / 2f);
             return GetChunkPivotPositionWithCoord(chunkCoord) + centerRedress;
         }
+        #endregion
 
         #endregion
 
         #region Block
+
+        #region GetData
+        public bool TryGetBlock(int chunkId, int blockId, out BlockEditRuntimeData blockData, out GetBlockReason reason)
+        {
+            blockData = null;
+            reason = GetBlockReason.Success;
+            if (!IsValidChunkId(chunkId) || !IsValidBlockInChunkId(blockId))
+            {
+                reason = GetBlockReason.IdOutOfRange;
+                return false;
+            }
+
+            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunk))
+            {
+                reason = GetBlockReason.ChunkNotCreated;
+                return false;
+            }
+
+            if (!chunk.IdToBlockEditData.TryGetValue(blockId, out blockData))
+            {
+                reason = GetBlockReason.BlockNotCreated;
+                return false;
+            }
+
+            reason = GetBlockReason.Success;
+            return true;
+        }
 
         public bool TryGetBlock(Vector3 position, out BlockEditRuntimeData blockData, out GetBlockReason reason)
         {
@@ -251,23 +318,54 @@ namespace TerrainModule.Editor
             reason = GetBlockReason.Success;
             return true;
         }
+        #endregion
+
+        #region BlockInChunkId
+        public bool IsValidBlockInChunkId(int id)
+        {
+            return id >= 0 || id < ChunkBlockNum.x * ChunkBlockNum.y * ChunkBlockNum.z;
+        }
 
         public int GetBlockInChunkId(Vector3 inChunkPosition)
         {
-            var blockCoord = GetBlockCoordinates(inChunkPosition);
+            var blockCoord = GetBlockInChunkCoordinates(inChunkPosition);
             return blockCoord.x +
                 blockCoord.z * ChunkBlockNum.x +
                 blockCoord.y * (ChunkBlockNum.x * ChunkBlockNum.z);
         }
 
-        public int GetBlockIdWithCoord(Vector3Int blockCoord)
+        public int GetBlocInChunkIdWithCoord(Vector3Int blockIChunkCoord)
         {
-            return blockCoord.x +
-                blockCoord.z * ChunkBlockNum.x +
-                blockCoord.y * (ChunkBlockNum.x * ChunkBlockNum.z);
+            return blockIChunkCoord.x +
+                blockIChunkCoord.z * ChunkBlockNum.x +
+                blockIChunkCoord.y * (ChunkBlockNum.x * ChunkBlockNum.z);
+        }
+        #endregion
+
+        #region WorldBlockCoordinates
+        public bool IsValidWorldBlockCoordinates(Vector3 worldBlockCoord)
+        {
+            var blockNum = GetBlockNum();
+            if (worldBlockCoord.x < 0 || worldBlockCoord.x >= blockNum.x)
+                return false;
+            if (worldBlockCoord.y < 0 || worldBlockCoord.y >= blockNum.y)
+                return false;
+            if (worldBlockCoord.z < 0 || worldBlockCoord.z >= blockNum.z)
+                return false;
+            return true;
         }
 
-        public bool IsValidBlockCoordinates(Vector3Int blockCoord)
+        public Vector3Int GetWorldBlockCoord(Vector3 worldPosition)
+        {
+            return new Vector3Int(
+                Mathf.FloorToInt(worldPosition.x / BlockSize.x),
+                Mathf.FloorToInt(worldPosition.y / BlockSize.y),
+                Mathf.FloorToInt(worldPosition.z / BlockSize.z));
+        }
+        #endregion
+
+        #region BlockInChunkCoordinates
+        public bool IsValidBlockInChunkCoordinates(Vector3Int blockCoord)
         {
             if (blockCoord.x < 0 || blockCoord.x >= ChunkBlockNum.x)
                 return false;
@@ -278,7 +376,7 @@ namespace TerrainModule.Editor
             return true;
         }
 
-        public Vector3Int GetBlockCoordinates(Vector3 inChunkPosition)
+        public Vector3Int GetBlockInChunkCoordinates(Vector3 inChunkPosition)
         {
             return new Vector3Int(
                 Mathf.FloorToInt(inChunkPosition.x / BlockSize.x),
@@ -286,7 +384,7 @@ namespace TerrainModule.Editor
                 Mathf.FloorToInt(inChunkPosition.z / BlockSize.z));
         }
 
-        public Vector3Int GetBlockCoordinatesWithId(int blockId)
+        public Vector3Int GetBlockInChunkCoordinatesWithId(int blockId)
         {
             var xzId = blockId % (ChunkBlockNum.x * ChunkBlockNum.z);
             var y = blockId / (ChunkBlockNum.x * ChunkBlockNum.z);
@@ -295,37 +393,56 @@ namespace TerrainModule.Editor
             return new Vector3Int(x, y, z);
         }
 
-        public Vector3 GetBlockPivotPosition(Vector3 position)
+        public Vector3Int GetBlockInChunkCoordWithWorldBlockCoord(Vector3Int worldBlockCoord)
         {
-            var blockCoord = GetBlockCoordinates(position);
+            return new Vector3Int(
+                worldBlockCoord.x % ChunkBlockNum.x,
+                worldBlockCoord.y % ChunkBlockNum.y,
+                worldBlockCoord.z % ChunkBlockNum.z);
+        }
+        #endregion
+
+        #region BlockInChunkPivotPosition
+        public Vector3 GetBlockInChunkPivotPosition(Vector3 position)
+        {
+            var blockCoord = GetBlockInChunkCoordinates(position);
             return new Vector3(
                 blockCoord.x * BlockSize.x,
                 blockCoord.y * BlockSize.y,
                 blockCoord.z * BlockSize.z);
         }
 
-        public Vector3 GetBlockPivotPositionWithCoord(Vector3Int blockCoord)
+        public Vector3 GetBlockInChunkPivotPositionWithCoord(Vector3Int blockInChunkCoord)
         {
             return new Vector3(
-                blockCoord.x * BlockSize.x,
-                blockCoord.y * BlockSize.y,
-                blockCoord.z * BlockSize.z);
+                blockInChunkCoord.x * BlockSize.x,
+                blockInChunkCoord.y * BlockSize.y,
+                blockInChunkCoord.z * BlockSize.z);
         }
 
-        public Vector3 GetBlockCenterPositionWithCoord(Vector3Int blockCoord)
+        public Vector3 GetBlockInChunkPivotPositionWithId(int blockId)
+        {
+            var blockCoord = GetBlockInChunkCoordinatesWithId(blockId);
+            return GetBlockInChunkPivotPositionWithCoord(blockCoord);
+        }
+        #endregion
+
+        #region BlockInChunkCenterPosition
+        public Vector3 GetBlockInChunkCenterPositionWithCoord(Vector3Int blockInCoord)
         {
             var centerRedress = new Vector3(
                BlockSize.x / 2f,
                BlockSize.y / 2f,
                BlockSize.z / 2f);
-            return GetBlockPivotPositionWithCoord(blockCoord) + centerRedress;
+            return GetBlockInChunkPivotPositionWithCoord(blockInCoord) + centerRedress;
         }
 
-        public Vector3 GetBlockCenterPositionWithId(int blockId)
+        public Vector3 GetBlockInChunkCenterPositionWithId(int blockId)
         {
-            var blockCoord = GetBlockCoordinatesWithId(blockId);
-            return GetBlockCenterPositionWithCoord(blockCoord);
+            var blockCoord = GetBlockInChunkCoordinatesWithId(blockId);
+            return GetBlockInChunkCenterPositionWithCoord(blockCoord);
         }
+        #endregion
 
         #endregion
 
@@ -341,87 +458,50 @@ namespace TerrainModule.Editor
             return true;
         }
 
-        public bool Raycast(Ray ray, float distance, int chunkNumY, out List<RaycastChunkResult> chunkIds)
+        public void AddBlockData(int chunkId, int blockId)
         {
-            chunkIds = new List<RaycastChunkResult>();
-            Bounds bounds = new Bounds();
-            bounds.SetMinMax(Vector3.zero, TerrainSize());
+            if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
+                return;
+            if (!IsValidBlockInChunkCoordinates(GetBlockInChunkCoordinatesWithId(blockId)))
+                return;
 
-            // 沒有在在任何Chunk範圍內
-            if (!bounds.IntersectRayAABB(ray, distance, out var tDistance))
-                return false;
-
-            var chunkResults = VoxelUtility.RaycastDDA(ray, GetChunkSize(), tDistance, distance);
-            foreach ( var chunkResult in chunkResults)
+            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunkEditRuntime))
             {
-                var chunkCoord = chunkResult.Coordinates;
-                if (!IsValidChunkCoordinates(chunkCoord))
-                    continue;
-                if (chunkCoord.y < chunkNumY)
-                    break;
-                var chunkCenterPosition = GetChunkCenterPositionWithCoord(chunkResult.Coordinates);
-                if (!TryGetChunk(chunkCenterPosition, out var chunkData, out var chunkReason)
-                    && chunkReason == GetChunkReason.PositionOutOfRange)
-                {
-                    continue;
-                }
-
-                int chunkId = -1;
-                if (chunkReason == GetChunkReason.ChunkNotCreated)
-                {
-                    chunkId = GetChunkIdWithCoord(chunkCoord);
-                }
-                else
-                {
-                    chunkId = chunkData.Id;
-                }
-                var rayChunkResult = new RaycastChunkResult(chunkId);
-                chunkIds.Add(rayChunkResult);
-
-                //將座標關係轉換成chunk內的
-                var chunkPivotPosition = GetChunkPivotPositionWithCoord(chunkCoord);
-                var chunkRay = new Ray(ray.origin - chunkPivotPosition, ray.direction);
-                var blockResults = VoxelUtility.RaycastDDA(chunkRay, BlockSize, chunkResult.Distance, distance);
-                foreach (var blockResult in blockResults)
-                {
-                    var blockCoord = blockResult.Coordinates;
-                    if (!IsValidBlockCoordinates(blockCoord))
-                        continue;
-                    var blockCenterPosition = GetBlockCenterPositionWithCoord(blockCoord) + chunkPivotPosition;
-                    if (!TryGetBlock(blockCenterPosition, out var blockData, out var blockReason)
-                        && blockReason == GetBlockReason.PositionOutOfRange)
-                    {
-                        continue;
-                    }
-
-                    if (blockReason == GetBlockReason.ChunkNotCreated || blockReason == GetBlockReason.BlockNotCreated)
-                    {
-                        rayChunkResult.BlockIdList.Add(GetBlockIdWithCoord(blockCoord));
-                    }
-                    else
-                    {
-                        rayChunkResult.BlockIdList.Add(blockData.Id);
-                    }
-                }
+                chunkEditRuntime = new ChunkEditRuntimeData(chunkId);
+                IdToChunkEditData.Add(chunkId, chunkEditRuntime);
             }
-            return chunkIds.Count > 0;
+
+            if (!chunkEditRuntime.IdToBlockEditData.TryGetValue(blockId, out var blockEditRuntimeData))
+            {
+                blockEditRuntimeData = new BlockEditRuntimeData(blockId);
+                chunkEditRuntime.IdToBlockEditData.Add(blockId, blockEditRuntimeData);
+            }
+        }
+
+        public void RemoveBlockData(int chunkId, int blockId)
+        {
+            if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
+                return;
+            if (!IsValidBlockInChunkCoordinates(GetBlockInChunkCoordinatesWithId(blockId)))
+                return;
+
+            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunkEditRuntime))
+                return;
+
+            chunkEditRuntime.IdToBlockEditData.Remove(blockId);
         }
 
         /// <summary>
-        /// 發射射線獲取擊中的Chunk與內部的Block
+        /// 發射射線獲取擊中的Block資訊
         /// </summary>
         /// <param name="ray">GUI投向世界的Ray</param>
         /// <param name="distance">最長距離</param>
         /// <param name="chunkNumY">最低限的ChunkY</param>
-        /// <param name="chunkId">偵測到的ChunkId</param>
-        /// <param name="blockId">偵測到的BlockId</param>
-        /// <param name="hitFaceNormal">投射的射線是透過哪個面擊中Block的</param>
+        /// <param name="result">擊中結果</param>
         /// <returns></returns>
-        public bool Raycast(Ray ray, float distance, int chunkNumY, out int chunkId, out int blockId, out Vector3 hitFaceNormal)
+        public bool RaycastBlock(Ray ray, float distance, int chunkNumY, out RaycastBlockResult result)
         {
-            chunkId = -1;
-            blockId = -1;
-            hitFaceNormal = Vector3.zero;
+            result = default;
             Bounds bounds = new Bounds();
             bounds.SetMinMax(Vector3.zero, TerrainSize());
 
@@ -431,61 +511,42 @@ namespace TerrainModule.Editor
 
             int lastChunkId = -1;
             int lastBlockId = -1;
-            var chunkResults = VoxelUtility.RaycastDDA(ray, GetChunkSize(), tDistance, distance);
-            foreach (var chunkResult in chunkResults)
+            var blockResults = VoxelUtility.RaycastDDA(ray, BlockSize, tDistance, distance);
+            foreach (var blockResult in blockResults)
             {
-                var chunkCoord = chunkResult.Coordinates;
-                if (!IsValidChunkCoordinates(chunkCoord))
-                    continue;
+                var worldCoordinates = blockResult.Coordinates;
+                var chunkCoord = GetChunkCoordWithWorldBlockCoord(worldCoordinates);
                 if (chunkCoord.y < chunkNumY)
                     break;
-                var chunkCenterPosition = GetChunkCenterPositionWithCoord(chunkResult.Coordinates);
-                if (!TryGetChunk(chunkCenterPosition, out var chunkData, out var chunkReason)
-                    && chunkReason == GetChunkReason.PositionOutOfRange)
+                if (!IsValidWorldBlockCoordinates(worldCoordinates))
+                    continue;
+                if (!TryGetId(worldCoordinates, out var cId, out var bId))
+                    continue;
+                if (!TryGetBlock(cId, bId, out var blockData, out var reason)
+                    && (reason == GetBlockReason.IdOutOfRange))
                 {
                     continue;
                 }
 
-                if (chunkReason == GetChunkReason.ChunkNotCreated)
+                result.WorldBlockCoordinates = worldCoordinates;
+                result.HitFaceNormal = blockResult.HitFaceNormal;
+                if (reason == GetBlockReason.ChunkNotCreated
+                    || reason == GetBlockReason.BlockNotCreated)
                 {
-                    lastChunkId = GetChunkIdWithCoord(chunkCoord);
+                    lastChunkId = cId;
+                    lastBlockId = bId;
                 }
                 else
                 {
-                    lastChunkId = chunkData.Id;
-                }
-
-                //將座標關係轉換成chunk內的
-                var chunkPivotPosition = GetChunkPivotPositionWithCoord(chunkCoord);
-                var chunkRay = new Ray(ray.origin - chunkPivotPosition, ray.direction);
-                var blockResults = VoxelUtility.RaycastDDA(chunkRay, BlockSize, chunkResult.Distance, distance);
-                foreach (var blockResult in blockResults)
-                {
-                    var blockCoord = blockResult.Coordinates;
-                    if (!IsValidBlockCoordinates(blockCoord))
-                        continue;
-                    var blockCenterPosition = GetBlockCenterPositionWithCoord(blockCoord) + chunkPivotPosition;
-                    if (!TryGetBlock(blockCenterPosition, out var blockData, out var blockReason)
-                        && blockReason == GetBlockReason.PositionOutOfRange)
-                    {
-                        continue;
-                    }
-
-                    hitFaceNormal = blockResult.HitFaceNormal;
-                    if (blockReason == GetBlockReason.ChunkNotCreated || blockReason == GetBlockReason.BlockNotCreated)
-                    {
-                        lastBlockId = GetBlockIdWithCoord(blockCoord);
-                    }
-                    else
-                    {
-                        lastBlockId = blockData.Id;
-                        break;
-                    }
+                    lastChunkId = cId;
+                    lastBlockId = bId;
+                    break;
                 }
             }
-            chunkId = lastChunkId;
-            blockId = lastBlockId;
-            return chunkId != -1 && blockId != -1;
+
+            result.ChunkId = lastChunkId;
+            result.BlockId = lastBlockId;
+            return result.ChunkId != -1 && result.BlockId != -1;
         }
     }
 }

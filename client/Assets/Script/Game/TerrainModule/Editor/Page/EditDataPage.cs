@@ -12,7 +12,6 @@ namespace TerrainModule.Editor
         private int _editDistance = 0;
 
         private int _targetChunkId = -1;
-        private List<RaycastChunkResult> _chunkIds = new List<RaycastChunkResult>();
 
         public EditDataPage(TerrainEditorData editorData) : base(editorData)
         {
@@ -26,18 +25,6 @@ namespace TerrainModule.Editor
                 return;
             _editChunkFlat = EditorGUILayout.IntSlider(_editChunkFlat, 0, CurEditRuntimeData.ChunkNum.y - 1);
             _editDistance = EditorGUILayout.IntSlider(_editDistance, 0, (int)CurEditRuntimeData.TerrainSize().y);
-            var msg = string.Empty;
-            for (int i = 0; i < _chunkIds.Count; i++)
-            {
-                var chunk = _chunkIds[i];
-                msg += $"ChunkId:{chunk.ChunkId}\n" +
-                    $"      BlockId:\n";
-                foreach (var blockId in chunk.BlockIdList)
-                {
-                    msg += blockId + "\n";
-                }
-            }
-            EditorGUILayout.TextArea(msg);
         }
 
         public override void OnSceneGUI()
@@ -54,20 +41,20 @@ namespace TerrainModule.Editor
             Vector3 mousePosition = currentEvent.mousePosition;
             Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
 
-            if (CurEditRuntimeData.Raycast(ray, _editDistance, _editChunkFlat, out int chunkId, out int blockId, out var hitFaceNormal))
+            if (CurEditRuntimeData.RaycastBlock(ray, _editDistance, _editChunkFlat, out var hitResult))
             {
                 var chunkCenterRedress = new Vector3(
                     chunkSize.x / 2f,
                     chunkSize.y / 2f,
                     chunkSize.z / 2f);
-                var chunkPivotPosition = CurEditRuntimeData.GetChunkPivotPositionWithId(chunkId);
+                var chunkPivotPosition = CurEditRuntimeData.GetChunkPivotPositionWithId(hitResult.ChunkId);
                 Handles.color = Color.red;
                 Handles.DrawWireCube(chunkPivotPosition + chunkCenterRedress, chunkSize);
-                var blockPivotPosition = CurEditRuntimeData.GetBlockCenterPositionWithId(blockId);
+                var blockPivotPosition = CurEditRuntimeData.GetBlockInChunkCenterPositionWithId(hitResult.BlockId);
                 Handles.color = Color.green;
                 Handles.DrawWireCube(blockPivotPosition + chunkPivotPosition, CurEditRuntimeData.BlockSize);
                 Handles.color = Color.blue;
-                Handles.DrawLine(blockPivotPosition + chunkPivotPosition, blockPivotPosition + chunkPivotPosition + hitFaceNormal * 8 * -1);
+                Handles.DrawLine(blockPivotPosition + chunkPivotPosition, blockPivotPosition + chunkPivotPosition + hitResult.HitFaceNormal * 8 * -1);
 
                 if (currentEvent.type == EventType.MouseMove)
                 {
