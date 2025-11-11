@@ -92,6 +92,8 @@ namespace TerrainModule.Editor
 
         public Dictionary<int, ChunkEditRuntimeData> IdToChunkEditData = new Dictionary<int, ChunkEditRuntimeData>();
 
+        public Material TerrainMaterial;
+
         public TerrainEditRuntimeData(TerrainEditData editData)
         {
             Name = editData.name;
@@ -109,6 +111,7 @@ namespace TerrainModule.Editor
                 var chunkRuntimeData = new ChunkEditRuntimeData(chunk);
                 IdToChunkEditData.Add(chunkRuntimeData.Id, chunkRuntimeData);
             }
+            TerrainMaterial = editData.TerrainMaterial;
         }
 
         public Vector3Int GetBlockNum()

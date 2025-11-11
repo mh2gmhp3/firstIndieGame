@@ -36,6 +36,12 @@ namespace TerrainModule.Editor
                 EditorGUILayout.Vector3IntField("BlockSize", CurEditRuntimeData.BlockSize);
                 EditorGUILayout.Vector3IntField("ChunkBlockNum", CurEditRuntimeData.ChunkBlockNum);
                 EditorGUILayout.Vector3IntField("ChunkNum", CurEditRuntimeData.ChunkNum);
+                CurEditRuntimeData.TerrainMaterial =
+                    (Material)EditorGUILayout.ObjectField(
+                        "材質:",
+                        CurEditRuntimeData.TerrainMaterial,
+                        typeof(Material),
+                        false);
             }
             EditorGUILayout.EndVertical();
 

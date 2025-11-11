@@ -313,6 +313,8 @@ namespace TerrainModule.Editor
             mesh.RecalculateNormals();
             mesh.RecalculateTangents();
             mesh.RecalculateBounds();
+
+            previewMesh.MeshRenderer.sharedMaterial = _curEditData.TerrainMaterial;
         }
     }
 }

@@ -13,6 +13,7 @@ namespace TerrainModule.Editor
             public Vector3Int BlockSize;
             public Vector3Int ChunkBlockNum;
             public Vector3Int ChunkNum;
+            public Material TerrainMaterial;
         }
 
         //New Data
@@ -49,6 +50,12 @@ namespace TerrainModule.Editor
             _createDataDescription.BlockSize = ClampValidValue(EditorGUILayout.Vector3IntField("BlockSize", _createDataDescription.BlockSize));
             _createDataDescription.ChunkBlockNum = ClampValidValue(EditorGUILayout.Vector3IntField("ChunkBlockNum", _createDataDescription.ChunkBlockNum));
             _createDataDescription.ChunkNum = ClampValidValue(EditorGUILayout.Vector3IntField("ChunkNum", _createDataDescription.ChunkNum));
+            _createDataDescription.TerrainMaterial =
+                (Material)EditorGUILayout.ObjectField(
+                    "材質:",
+                    _createDataDescription.TerrainMaterial,
+                    typeof(Material),
+                    false);
 
             if (GUILayout.Button("新增檔案"))
             {
@@ -90,7 +97,8 @@ namespace TerrainModule.Editor
             var newEditData = new TerrainEditData(
                 _createDataDescription.BlockSize,
                 _createDataDescription.ChunkBlockNum,
-                _createDataDescription.ChunkNum);
+                _createDataDescription.ChunkNum,
+                _createDataDescription.TerrainMaterial);
             newEditData.name = _createDataDescription.Name;
             AssetDatabase.CreateAsset(newEditData, Path.Combine(TerrainEditorDefine.EditDataFolderPath, newEditData.name) + ".asset");
             AssetDatabase.Refresh();

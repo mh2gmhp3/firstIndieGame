@@ -55,11 +55,14 @@ namespace TerrainModule.Editor
 
         public List<ChunkEditData> ChunkEditDataList = new List<ChunkEditData>();
 
-        public TerrainEditData(Vector3Int blockSize, Vector3Int chunkBlockNum, Vector3Int chunkNum)
+        public Material TerrainMaterial;
+
+        public TerrainEditData(Vector3Int blockSize, Vector3Int chunkBlockNum, Vector3Int chunkNum, Material terrainMat)
         {
             BlockSize = blockSize;
             ChunkBlockNum = chunkBlockNum;
             ChunkNum = chunkNum;
+            TerrainMaterial = terrainMat;
         }
 
         public TerrainEditData(TerrainEditRuntimeData runtimeData)
@@ -73,6 +76,7 @@ namespace TerrainModule.Editor
             {
                 ChunkEditDataList.Add(new ChunkEditData(chunkEditData));
             }
+            TerrainMaterial = runtimeData.TerrainMaterial;
         }
     }
 }
