@@ -71,58 +71,195 @@ namespace TerrainModule.Editor
             List<int> triangles,
             List<Vector3> normals,
             List<Vector2> uvs,
-            Vector3 worldPos,
-            Vector3 size)
+            ChunkEditRuntimeData chunkEditRuntimeData,
+            BlockEditRuntimeData blockEditRuntimeData)
         {
+            var chunkId = chunkEditRuntimeData.Id;
+            var blockId = blockEditRuntimeData.Id;
+            var size = _curEditData.BlockSize;
+            var worldBlockCoord = _curEditData.GetWorldBlockCoordWithId(chunkId, blockId);
+            var worldBlockPivotPos = worldBlockCoord * size;
+
+            BlockEditRuntimeData refBlockData = null;
             // +x
-            Vector3[] addVertices = new Vector3[]
+            var worldRefBlockCoord = worldBlockCoord + Vector3Int.right;
+            if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
             {
-                worldPos, // Bottom-left
-                new Vector3(worldPos.x + size.x, worldPos.y, worldPos.z),  // Bottom-right
-                new Vector3(worldPos.x , worldPos.y + size.y, worldPos.z),  // Top-left
-                new Vector3(worldPos.x + size.x, worldPos.y + size.y, worldPos.z)   // Top-right
-            };
-            var curVerticesCount = vertices.Count;
-            int[] addTriangles = new int[]
+                var p0Pos = worldBlockPivotPos + new Vector3(size.x , 0, 0);
+                var addVertices = new Vector3[]
+                {
+                    p0Pos,                                   // Bottom-left
+                    p0Pos + new Vector3(0, 0, size.z),       // Bottom-right
+                    p0Pos + new Vector3(0, size.y, 0),       // Top-left
+                    p0Pos + new Vector3(0, size.y, size.z)   // Top-right
+                };
+                var curVerticesCount = vertices.Count;
+                var  addTriangles = new int[]
                 {
                     curVerticesCount + 0, curVerticesCount + 2, curVerticesCount + 1,
                     curVerticesCount + 2, curVerticesCount + 3, curVerticesCount + 1
                 };
-            Vector2[] addUVs = new Vector2[]
+                var addUVs = new Vector2[]
                 {
                     new Vector2(0, 0),
                     new Vector2(1, 0),
                     new Vector2(0, 1),
                     new Vector2(1, 1)
                 };
-            vertices.AddRange(addVertices);
-            triangles.AddRange(addTriangles);
-            uvs.AddRange(addUVs);
+                vertices.AddRange(addVertices);
+                triangles.AddRange(addTriangles);
+                uvs.AddRange(addUVs);
+            }
 
             // -x
-            addVertices = new Vector3[]
+            worldRefBlockCoord = worldBlockCoord + Vector3Int.left;
+            if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
             {
-                worldPos + new Vector3(size.x, 0, size.z), // Bottom-left
-                new Vector3(worldPos.x + size.x, worldPos.y, worldPos.z) + new Vector3(size.x, 0, size.z),  // Bottom-right
-                new Vector3(worldPos.x , worldPos.y + size.y, worldPos.z) + new Vector3(size.x, 0, size.z),  // Top-left
-                new Vector3(worldPos.x + size.x, worldPos.y + size.y, worldPos.z) + new Vector3(size.x, 0, size.z)   // Top-right
-            };
-            curVerticesCount = vertices.Count;
-            addTriangles = new int[]
+                var p0Pos = worldBlockPivotPos + new Vector3(0, 0, size.z);
+                var addVertices = new Vector3[]
+                {
+                    p0Pos,                                    // Bottom-left
+                    p0Pos + new Vector3(0, 0, -size.z),       // Bottom-right
+                    p0Pos + new Vector3(0, size.y, 0),        // Top-left
+                    p0Pos + new Vector3(0, size.y, -size.z)   // Top-right
+                };
+                var curVerticesCount = vertices.Count;
+                var addTriangles = new int[]
                 {
                     curVerticesCount + 0, curVerticesCount + 2, curVerticesCount + 1,
                     curVerticesCount + 2, curVerticesCount + 3, curVerticesCount + 1
                 };
-            addUVs = new Vector2[]
+                var addUVs = new Vector2[]
                 {
                     new Vector2(0, 0),
                     new Vector2(1, 0),
                     new Vector2(0, 1),
                     new Vector2(1, 1)
                 };
-            vertices.AddRange(addVertices);
-            triangles.AddRange(addTriangles);
-            uvs.AddRange(addUVs);
+                vertices.AddRange(addVertices);
+                triangles.AddRange(addTriangles);
+                uvs.AddRange(addUVs);
+            }
+
+            // +z
+            worldRefBlockCoord = worldBlockCoord + Vector3Int.forward;
+            if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            {
+                var p0Pos = worldBlockPivotPos + new Vector3(size.x, 0, size.z);
+                var addVertices = new Vector3[]
+                {
+                    p0Pos,                                    // Bottom-left
+                    p0Pos + new Vector3(-size.x, 0, 0),       // Bottom-right
+                    p0Pos + new Vector3(0, size.y, 0) ,       // Top-left
+                    p0Pos + new Vector3(-size.x, size.y, 0)   // Top-right
+                };
+                var curVerticesCount = vertices.Count;
+                var addTriangles = new int[]
+                {
+                    curVerticesCount + 0, curVerticesCount + 2, curVerticesCount + 1,
+                    curVerticesCount + 2, curVerticesCount + 3, curVerticesCount + 1
+                };
+                var addUVs = new Vector2[]
+                {
+                    new Vector2(0, 0),
+                    new Vector2(1, 0),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1)
+                };
+                vertices.AddRange(addVertices);
+                triangles.AddRange(addTriangles);
+                uvs.AddRange(addUVs);
+            }
+
+            // -z
+            worldRefBlockCoord = worldBlockCoord + Vector3Int.back;
+            if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            {
+                var p0Pos = worldBlockPivotPos;
+                var addVertices = new Vector3[]
+                {
+                    p0Pos,                                    // Bottom-left
+                    p0Pos + new Vector3(size.x, 0, 0),        // Bottom-right
+                    p0Pos + new Vector3(0, size.y, 0) ,       // Top-left
+                    p0Pos + new Vector3(size.x, size.y, 0)    // Top-right
+                };
+                var curVerticesCount = vertices.Count;
+                var addTriangles = new int[]
+                {
+                    curVerticesCount + 0, curVerticesCount + 2, curVerticesCount + 1,
+                    curVerticesCount + 2, curVerticesCount + 3, curVerticesCount + 1
+                };
+                var addUVs = new Vector2[]
+                {
+                    new Vector2(0, 0),
+                    new Vector2(1, 0),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1)
+                };
+                vertices.AddRange(addVertices);
+                triangles.AddRange(addTriangles);
+                uvs.AddRange(addUVs);
+            }
+
+            // +y
+            worldRefBlockCoord = worldBlockCoord + Vector3Int.up;
+            if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            {
+                var p0Pos = worldBlockPivotPos + new Vector3(0, size.y, 0);
+                var addVertices = new Vector3[]
+                {
+                    p0Pos,                                    // Bottom-left
+                    p0Pos + new Vector3(size.x, 0, 0),        // Bottom-right
+                    p0Pos + new Vector3(0, 0, size.z) ,       // Top-left
+                    p0Pos + new Vector3(size.x, 0, size.z)    // Top-right
+                };
+                var curVerticesCount = vertices.Count;
+                var addTriangles = new int[]
+                {
+                    curVerticesCount + 0, curVerticesCount + 2, curVerticesCount + 1,
+                    curVerticesCount + 2, curVerticesCount + 3, curVerticesCount + 1
+                };
+                var addUVs = new Vector2[]
+                {
+                    new Vector2(0, 0),
+                    new Vector2(1, 0),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1)
+                };
+                vertices.AddRange(addVertices);
+                triangles.AddRange(addTriangles);
+                uvs.AddRange(addUVs);
+            }
+
+            // -y
+            worldRefBlockCoord = worldBlockCoord + Vector3Int.down;
+            if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            {
+                var p0Pos = worldBlockPivotPos + new Vector3(0, 0, size.z);
+                var addVertices = new Vector3[]
+                {
+                    p0Pos,                                     // Bottom-left
+                    p0Pos + new Vector3(size.x, 0, 0),         // Bottom-right
+                    p0Pos + new Vector3(0, 0, -size.z) ,       // Top-left
+                    p0Pos + new Vector3(size.x, 0, -size.z)    // Top-right
+                };
+                var curVerticesCount = vertices.Count;
+                var addTriangles = new int[]
+                {
+                    curVerticesCount + 0, curVerticesCount + 2, curVerticesCount + 1,
+                    curVerticesCount + 2, curVerticesCount + 3, curVerticesCount + 1
+                };
+                var addUVs = new Vector2[]
+                {
+                    new Vector2(0, 0),
+                    new Vector2(1, 0),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1)
+                };
+                vertices.AddRange(addVertices);
+                triangles.AddRange(addTriangles);
+                uvs.AddRange(addUVs);
+            }
         }
 
         public void RefreshChunkMesh(int chunkId)
@@ -149,15 +286,24 @@ namespace TerrainModule.Editor
             foreach (var blockEditDataPair in chunkEditData.IdToBlockEditData)
             {
                 var blockEditData = blockEditDataPair.Value;
-                var inChunkBlockPos = _curEditData.GetBlockInChunkPivotPositionWithId(blockEditData.Id);
-                var worldPos = chunkPivotPos + inChunkBlockPos;
                 CreateBlock(
                     vertices,
                     triangles,
                     normals,
                     uvs,
-                    worldPos,
-                    _curEditData.BlockSize);
+                    chunkEditData,
+                    blockEditData);
+
+
+                //var inChunkBlockPos = _curEditData.GetBlockInChunkPivotPositionWithId(blockEditData.Id);
+                //var worldPos = chunkPivotPos + inChunkBlockPos;
+                //CreateBlock(
+                //    vertices,
+                //    triangles,
+                //    normals,
+                //    uvs,
+                //    worldPos,
+                //    _curEditData.BlockSize);
             }
 
             mesh.vertices = vertices.ToArray();

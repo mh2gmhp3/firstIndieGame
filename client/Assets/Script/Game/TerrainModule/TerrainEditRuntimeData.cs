@@ -304,20 +304,21 @@ namespace TerrainModule.Editor
                 reason = GetBlockReason.PositionOutOfRange;
                 return false;
             }
-            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunk))
-            {
-                reason = GetBlockReason.ChunkNotCreated;
-                return false;
-            }
 
-            if (!chunk.IdToBlockEditData.TryGetValue(blockInChunkId, out blockData))
-            {
-                reason = GetBlockReason.BlockNotCreated;
-                return false;
-            }
+            return TryGetBlock(chunkId, blockInChunkId, out blockData, out reason);
+        }
 
+        public bool TryGetBlock(Vector3Int worldBlockCoord, out BlockEditRuntimeData blockData, out GetBlockReason reason)
+        {
             reason = GetBlockReason.Success;
-            return true;
+            blockData = null;
+            if (!TryGetId(worldBlockCoord, out var chunkId, out var blockInChunkId))
+            {
+                reason = GetBlockReason.PositionOutOfRange;
+                return false;
+            }
+
+            return TryGetBlock(chunkId, blockInChunkId, out blockData, out reason);
         }
         #endregion
 
@@ -362,6 +363,16 @@ namespace TerrainModule.Editor
                 Mathf.FloorToInt(worldPosition.x / BlockSize.x),
                 Mathf.FloorToInt(worldPosition.y / BlockSize.y),
                 Mathf.FloorToInt(worldPosition.z / BlockSize.z));
+        }
+
+        public Vector3Int GetWorldBlockCoordWithId(int chunkId, int blockId)
+        {
+            var chunkCoord = GetChunkCoordinatesWithId(chunkId);
+            var blockInChunkCoord = GetBlockInChunkCoordinatesWithId(blockId);
+            return new Vector3Int(
+                chunkCoord.x * ChunkBlockNum.x + blockInChunkCoord.x,
+                chunkCoord.y * ChunkBlockNum.y + blockInChunkCoord.y,
+                chunkCoord.z * ChunkBlockNum.z + blockInChunkCoord.z);
         }
         #endregion
 
