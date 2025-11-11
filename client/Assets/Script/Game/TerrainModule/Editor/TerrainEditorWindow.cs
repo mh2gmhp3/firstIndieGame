@@ -63,12 +63,6 @@ namespace TerrainModule.Editor
             Debug.Log("TerrainEditor Enable");
             EditorSceneManager.OpenScene(TerrainEditorDefine.EditorScenePath, OpenSceneMode.Single);
 
-            _pageContainer = new EditorPageContainer(4, Repaint);
-            _pageContainer.AddPage(new CreateDataPage(_editorData));
-            _pageContainer.AddPage(new LoadDataPage(_editorData));
-            _pageContainer.AddPage(new EditDataPage(_editorData));
-            _pageContainer.ChangeToPage(0);
-
             var mgr = FindObjectOfType<TerrainEditorManager>();
             if (mgr == null)
             {
@@ -81,6 +75,12 @@ namespace TerrainModule.Editor
                 _editorData.TerrainEditorMgrObj = mgr.gameObject;
                 _editorData.TerrainEditorMgr = mgr;
             }
+
+            _pageContainer = new EditorPageContainer(4, Repaint);
+            _pageContainer.AddPage(new CreateDataPage(_editorData));
+            _pageContainer.AddPage(new LoadDataPage(_editorData));
+            _pageContainer.AddPage(new EditDataPage(_editorData));
+            _pageContainer.ChangeToPage(0);
 
             SceneView.duringSceneGui += OnSceneGUI;
         }
