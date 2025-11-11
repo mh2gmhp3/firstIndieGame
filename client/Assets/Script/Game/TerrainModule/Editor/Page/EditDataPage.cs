@@ -12,7 +12,7 @@ namespace TerrainModule.Editor
         private int _editChunkFlat = 0;
         private int _editDistance = 0;
 
-        private new List<int> _notifyChunkList = new List<int>();
+        private List<int> _notifyChunkList = new List<int>();
 
         public EditDataPage(TerrainEditorData editorData) : base(editorData)
         {
