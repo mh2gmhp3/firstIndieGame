@@ -34,7 +34,8 @@ namespace TerrainModule.Editor
             TerrainEditorUtility.HandleDrawChunk(
                 _createDataDescription.BlockSize,
                 _createDataDescription.ChunkBlockNum,
-                _createDataDescription.ChunkNum);
+                _createDataDescription.ChunkNum,
+                Color.white);
         }
 
         private void DrawGUI_CreateDataDescription()

@@ -33,6 +33,7 @@ namespace TerrainModule.Editor
 
         public Vector3Int WorldBlockCoordinates;
         public Vector3Int HitFaceNormal;
+        public bool HaveData;
     }
 
     public class BlockEditRuntimeData
@@ -530,6 +531,7 @@ namespace TerrainModule.Editor
 
                 result.WorldBlockCoordinates = worldCoordinates;
                 result.HitFaceNormal = blockResult.HitFaceNormal;
+                result.HaveData = false;
                 if (reason == GetBlockReason.ChunkNotCreated
                     || reason == GetBlockReason.BlockNotCreated)
                 {
@@ -540,6 +542,7 @@ namespace TerrainModule.Editor
                 {
                     lastChunkId = cId;
                     lastBlockId = bId;
+                    result.HaveData = true;
                     break;
                 }
             }

@@ -27,6 +27,21 @@ namespace TerrainModule.Editor
             TerrainEditorMgr.Init(CurEditRuntimeData);
             return true;
         }
+
+        public bool SaveCurData()
+        {
+            if (CurEditRuntimeData == null)
+                return false;
+
+            var path = Path.Combine(TerrainEditorDefine.EditDataFolderPath, CurEditRuntimeData.Name + ".asset");
+            var assetData = AssetDatabase.LoadAssetAtPath<TerrainEditData>(path);
+            if (assetData != null)
+                AssetDatabase.DeleteAsset(path);
+            var saveData = new TerrainEditData(CurEditRuntimeData);
+            AssetDatabase.CreateAsset(saveData, path);
+            AssetDatabase.Refresh();
+            return true;
+        }
     }
 
     public class TerrainEditorWindow : EditorWindow

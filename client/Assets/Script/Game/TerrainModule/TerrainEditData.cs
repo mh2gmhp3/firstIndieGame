@@ -10,6 +10,11 @@ namespace TerrainModule.Editor
     {
         //In Chunk
         public int Id;
+
+        public BlockEditData(BlockEditRuntimeData runtimeData)
+        {
+            Id = runtimeData.Id;
+        }
     }
 
     [Serializable]
@@ -17,6 +22,16 @@ namespace TerrainModule.Editor
     {
         public int Id;
         public List<BlockEditData> BlockEditDataList = new List<BlockEditData>();
+
+        public ChunkEditData(ChunkEditRuntimeData runtimeData)
+        {
+            Id = runtimeData.Id;
+            BlockEditDataList.Clear();
+            foreach (var blockEditData in runtimeData.IdToBlockEditData.Values)
+            {
+                BlockEditDataList.Add(new BlockEditData(blockEditData));
+            }
+        }
     }
 
     /// <summary>
@@ -52,6 +67,12 @@ namespace TerrainModule.Editor
             BlockSize = runtimeData.BlockSize;
             ChunkBlockNum = runtimeData.ChunkBlockNum;
             ChunkNum = runtimeData.ChunkNum;
+
+            ChunkEditDataList.Clear();
+            foreach (var chunkEditData in runtimeData.IdToChunkEditData.Values)
+            {
+                ChunkEditDataList.Add(new ChunkEditData(chunkEditData));
+            }
         }
     }
 }

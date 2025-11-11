@@ -21,27 +21,72 @@ namespace TerrainModule.Editor
             return result;
         }
 
-        public static void HandleDrawChunk(Vector3Int blockSize, Vector3Int chunkBlockNum, Vector3Int chunkNum)
+        /// <summary>
+        /// 繪製Chunk網格
+        /// </summary>
+        /// <param name="blockSize"></param>
+        /// <param name="chunkBlockNum"></param>
+        /// <param name="chunkNum"></param>
+        /// <param name="color"></param>
+        /// <param name="startChunkNumY"></param>
+        public static void HandleDrawChunk(
+            Vector3Int blockSize,
+            Vector3Int chunkBlockNum,
+            Vector3Int chunkNum,
+            Color color,
+            int startChunkNumY = 0)
         {
             var chunkSize = blockSize * chunkBlockNum;
-            var centerRedress = new Vector3(
-                chunkSize.x / 2f,
-                chunkSize.y / 2f,
-                chunkSize.z / 2f);
-            for (int yIndex = 0; yIndex < chunkNum.y; yIndex++)
+            Handles.color = color;
+            for (int yIndex = 0; yIndex <= chunkNum.y; yIndex++)
             {
-                for (int zIndex = 0; zIndex < chunkNum.z; zIndex++)
+                if (startChunkNumY > yIndex)
+                    continue;
+
+                for (int zIndex = 0; zIndex <= chunkNum.z; zIndex++)
                 {
-                    for (int xIndex = 0; xIndex < chunkNum.x; xIndex++)
-                    {
-                        var center = new Vector3(
-                                xIndex * chunkSize.x,
-                                yIndex * chunkSize.y,
-                                zIndex * chunkSize.z) + centerRedress;
-                        Handles.DrawWireCube(center, chunkSize);
-                    }
+                    var start = new Vector3(
+                        0,
+                        yIndex * chunkSize.y,
+                        zIndex * chunkSize.z);
+                    var end = new Vector3(
+                            chunkNum.x * chunkSize.x,
+                            yIndex * chunkSize.y,
+                            zIndex * chunkSize.z);
+                    Handles.DrawLine(start, end);
+                }
+
+                for (int xIndex = 0; xIndex <= chunkNum.x; xIndex++)
+                {
+                    var start = new Vector3(
+                            xIndex * chunkSize.x,
+                            yIndex * chunkSize.y,
+                            0);
+                    var end = new Vector3(
+                            xIndex * chunkSize.x,
+                            yIndex * chunkSize.y,
+                            chunkNum.z * chunkSize.z);
+                    Handles.DrawLine(start, end);
                 }
             }
+
+            var startPosY = Mathf.Max(0, startChunkNumY) * chunkSize.y;
+            for (int zIndex = 0; zIndex <= chunkNum.z; zIndex++)
+            {
+                for (int xIndex = 0; xIndex <= chunkNum.x; xIndex++)
+                {
+                    var start = new Vector3(
+                            xIndex * chunkSize.x,
+                            startPosY,
+                            zIndex * chunkSize.z);
+                    var end = new Vector3(
+                            xIndex * chunkSize.x,
+                            chunkNum.y * chunkSize.y,
+                            zIndex * chunkSize.z);
+                    Handles.DrawLine(start, end);
+                }
+            }
+
             //Handles.BeginGUI();
             //for (int yIndex = 0; yIndex < chunkNum.y; yIndex++)
             //{
@@ -59,6 +104,33 @@ namespace TerrainModule.Editor
             //    }
             //}
             //Handles.EndGUI();
+        }
+
+        /// <summary>
+        /// 繪製指定ChunkNumY的Plane
+        /// </summary>
+        /// <param name="blockSize"></param>
+        /// <param name="chunkBlockNum"></param>
+        /// <param name="chunkNum"></param>
+        /// <param name="color"></param>
+        /// <param name="chunkNumY"></param>
+        public static void HandleDrawChunkPlane(
+            Vector3Int blockSize,
+            Vector3Int chunkBlockNum,
+            Vector3Int chunkNum,
+            Color color,
+            int chunkNumY)
+        {
+            var terrainSize = blockSize * chunkBlockNum * chunkNum;
+            var y = chunkNumY * blockSize.y * chunkBlockNum.y;
+            var verts = new Vector3[]
+            {
+                new Vector3(0, y, 0),
+                new Vector3(terrainSize.x, y, 0),
+                new Vector3(terrainSize.x, y, terrainSize.z),
+                new Vector3(0, y, terrainSize.z)
+            };
+            Handles.DrawSolidRectangleWithOutline(verts, color, new Color(0, 0, 0, 0));
         }
     }
 }
