@@ -32,6 +32,9 @@ namespace TerrainModule.Editor
         public int BlockId;
 
         public Vector3Int WorldBlockCoordinates;
+        /// <summary>
+        /// 被射線檢測到的面方向
+        /// </summary>
         public Vector3Int HitFaceNormal;
         public bool HaveData;
     }
@@ -47,6 +50,16 @@ namespace TerrainModule.Editor
         public BlockEditRuntimeData(int id)
         {
             Id = id;
+
+            YTopValue = Vector4.one;
+            YBottomValue = Vector4.zero;
+        }
+
+        public BlockEditRuntimeData(int id, Vector4 yTopValue, Vector4 yBottomValue)
+        {
+            Id = id;
+
+            SetYValue(yTopValue, yBottomValue);
         }
 
         public BlockEditRuntimeData(BlockEditData editData)
@@ -55,6 +68,30 @@ namespace TerrainModule.Editor
 
             YTopValue = editData.YTopValue;
             YBottomValue = editData.YBottomValue;
+        }
+
+        public void SetYValue(Vector4 topValue, Vector4 bottomValue)
+        {
+            topValue = new Vector4(
+                Mathf.Clamp01(topValue.x),
+                Mathf.Clamp01(topValue.y),
+                Mathf.Clamp01(topValue.z),
+                Mathf.Clamp01(topValue.w));
+            bottomValue = new Vector4(
+                Mathf.Clamp01(bottomValue.x),
+                Mathf.Clamp01(bottomValue.y),
+                Mathf.Clamp01(bottomValue.z),
+                Mathf.Clamp01(bottomValue.w));
+            YTopValue = new Vector4(
+                (float)Math.Round((double)Mathf.Clamp(topValue.x, bottomValue.x, 1), 1),
+                (float)Math.Round((double)Mathf.Clamp(topValue.y, bottomValue.y, 1), 1),
+                (float)Math.Round((double)Mathf.Clamp(topValue.z, bottomValue.z, 1), 1),
+                (float)Math.Round((double)Mathf.Clamp(topValue.w, bottomValue.w, 1), 1));
+            YBottomValue = new Vector4(
+                (float)Math.Round((double)Mathf.Clamp(bottomValue.x, 0, topValue.x), 1),
+                (float)Math.Round((double)Mathf.Clamp(bottomValue.y, 0, topValue.y), 1),
+                (float)Math.Round((double)Mathf.Clamp(bottomValue.z, 0, topValue.z), 1),
+                (float)Math.Round((double)Mathf.Clamp(bottomValue.w, 0, topValue.w), 1));
         }
     }
 
@@ -526,6 +563,26 @@ namespace TerrainModule.Editor
             }
         }
 
+        public void AddBlockData(int chunkId, int blockId, Vector4 yTopValue, Vector4 yBottomValue)
+        {
+            if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
+                return;
+            if (!IsValidBlockInChunkCoordinates(GetBlockInChunkCoordinatesWithId(blockId)))
+                return;
+
+            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunkEditRuntime))
+            {
+                chunkEditRuntime = new ChunkEditRuntimeData(chunkId);
+                IdToChunkEditData.Add(chunkId, chunkEditRuntime);
+            }
+
+            if (!chunkEditRuntime.IdToBlockEditData.TryGetValue(blockId, out var blockEditRuntimeData))
+            {
+                blockEditRuntimeData = new BlockEditRuntimeData(blockId, yTopValue, yBottomValue);
+                chunkEditRuntime.IdToBlockEditData.Add(blockId, blockEditRuntimeData);
+            }
+        }
+
         public void RemoveBlockData(int chunkId, int blockId)
         {
             if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
@@ -577,7 +634,8 @@ namespace TerrainModule.Editor
                 }
 
                 result.WorldBlockCoordinates = worldCoordinates;
-                result.HitFaceNormal = blockResult.HitFaceNormal;
+                //將射線方向反轉
+                result.HitFaceNormal = -blockResult.HitRayNormal;
                 result.HaveData = false;
                 if (reason == GetBlockReason.ChunkNotCreated
                     || reason == GetBlockReason.BlockNotCreated)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Extension;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TerrainModule.Editor
@@ -82,11 +83,26 @@ namespace TerrainModule.Editor
 
             BlockEditRuntimeData refBlockData = null;
 
+            bool createFace = false;
             Vector4 topY = size.y * blockEditRuntimeData.YTopValue;
             Vector4 bottomY = size.y * blockEditRuntimeData.YBottomValue;
+
+            //方向沒方塊必須建立面
+            //有方塊必須完全共面才不需建立 不考慮交錯要補面問題
             // +x
             var worldRefBlockCoord = worldBlockCoord + Vector3Int.right;
-            if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            if (_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            {
+                createFace = !(blockEditRuntimeData.YTopValue.y.ApproximateEqual(refBlockData.YTopValue.x)
+                    && blockEditRuntimeData.YBottomValue.y.ApproximateEqual(refBlockData.YBottomValue.x)
+                    && blockEditRuntimeData.YTopValue.w.ApproximateEqual(refBlockData.YTopValue.z)
+                    && blockEditRuntimeData.YBottomValue.w.ApproximateEqual(refBlockData.YBottomValue.z));
+            }
+            else
+            {
+                createFace = true;
+            }
+            if (createFace)
             {
                 var p0Pos = worldBlockPivotPos + new Vector3(size.x , 0, 0);
                 var addVertices = new Vector3[]
@@ -116,7 +132,18 @@ namespace TerrainModule.Editor
 
             // -x
             worldRefBlockCoord = worldBlockCoord + Vector3Int.left;
-            if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            if (_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            {
+                createFace = !(blockEditRuntimeData.YTopValue.x.ApproximateEqual(refBlockData.YTopValue.y)
+                    && blockEditRuntimeData.YBottomValue.x.ApproximateEqual(refBlockData.YBottomValue.y)
+                    && blockEditRuntimeData.YTopValue.z.ApproximateEqual(refBlockData.YTopValue.w)
+                    && blockEditRuntimeData.YBottomValue.z.ApproximateEqual(refBlockData.YBottomValue.w));
+            }
+            else
+            {
+                createFace = true;
+            }
+            if (createFace)
             {
                 var p0Pos = worldBlockPivotPos + new Vector3(0, 0, size.z);
                 var addVertices = new Vector3[]
@@ -146,7 +173,18 @@ namespace TerrainModule.Editor
 
             // +z
             worldRefBlockCoord = worldBlockCoord + Vector3Int.forward;
-            if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            if (_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            {
+                createFace = !(blockEditRuntimeData.YTopValue.z.ApproximateEqual(refBlockData.YTopValue.x)
+                    && blockEditRuntimeData.YBottomValue.z.ApproximateEqual(refBlockData.YBottomValue.x)
+                    && blockEditRuntimeData.YTopValue.w.ApproximateEqual(refBlockData.YTopValue.y)
+                    && blockEditRuntimeData.YBottomValue.w.ApproximateEqual(refBlockData.YBottomValue.y));
+            }
+            else
+            {
+                createFace = true;
+            }
+            if (createFace)
             {
                 var p0Pos = worldBlockPivotPos + new Vector3(size.x, 0, size.z);
                 var addVertices = new Vector3[]
@@ -176,7 +214,18 @@ namespace TerrainModule.Editor
 
             // -z
             worldRefBlockCoord = worldBlockCoord + Vector3Int.back;
-            if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            if (_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            {
+                createFace = !(blockEditRuntimeData.YTopValue.x.ApproximateEqual(refBlockData.YTopValue.z)
+                    && blockEditRuntimeData.YBottomValue.x.ApproximateEqual(refBlockData.YBottomValue.z)
+                    && blockEditRuntimeData.YTopValue.y.ApproximateEqual(refBlockData.YTopValue.w)
+                    && blockEditRuntimeData.YBottomValue.y.ApproximateEqual(refBlockData.YBottomValue.w));
+            }
+            else
+            {
+                createFace = true;
+            }
+            if (createFace)
             {
                 var p0Pos = worldBlockPivotPos;
                 var addVertices = new Vector3[]
@@ -206,7 +255,15 @@ namespace TerrainModule.Editor
 
             // +y
             worldRefBlockCoord = worldBlockCoord + Vector3Int.up;
-            if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            if (_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            {
+                createFace = blockEditRuntimeData.YTopValue != Vector4.one || refBlockData.YBottomValue != Vector4.zero;
+            }
+            else
+            {
+                createFace = true;
+            }
+            if (createFace)
             {
                 var p0Pos = worldBlockPivotPos;
                 var addVertices = new Vector3[]
@@ -236,7 +293,15 @@ namespace TerrainModule.Editor
 
             // -y
             worldRefBlockCoord = worldBlockCoord + Vector3Int.down;
-            if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            if (_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            {
+                createFace = blockEditRuntimeData.YBottomValue != Vector4.zero || refBlockData.YTopValue != Vector4.one;
+            }
+            else
+            {
+                createFace = true;
+            }
+            if (createFace)
             {
                 var p0Pos = worldBlockPivotPos + new Vector3(0, 0, size.z);
                 var addVertices = new Vector3[]
@@ -296,17 +361,6 @@ namespace TerrainModule.Editor
                     uvs,
                     chunkEditData,
                     blockEditData);
-
-
-                //var inChunkBlockPos = _curEditData.GetBlockInChunkPivotPositionWithId(blockEditData.Id);
-                //var worldPos = chunkPivotPos + inChunkBlockPos;
-                //CreateBlock(
-                //    vertices,
-                //    triangles,
-                //    normals,
-                //    uvs,
-                //    worldPos,
-                //    _curEditData.BlockSize);
             }
 
             mesh.vertices = vertices.ToArray();

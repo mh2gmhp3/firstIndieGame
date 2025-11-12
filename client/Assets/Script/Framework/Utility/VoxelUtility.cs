@@ -12,7 +12,10 @@ namespace Utility
         {
             public Vector3Int Coordinates;
             public float Distance;
-            public Vector3Int HitFaceNormal;
+            /// <summary>
+            /// 射線投射至Voxel的方向
+            /// </summary>
+            public Vector3Int HitRayNormal;
         }
 
         /// <summary>
@@ -94,7 +97,7 @@ namespace Utility
                 {
                     Coordinates = coord,
                     Distance = tCurrent,
-                    HitFaceNormal = hitNormal,
+                    HitRayNormal = hitNormal,
                 };
 
                 // 確定最短路徑的軸向 (即 tMax 最小的軸)
