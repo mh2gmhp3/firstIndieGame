@@ -192,58 +192,8 @@ namespace TerrainModule.Editor
                 {
                     if (currentEvent.button == 0)
                     {
-                        _notifyChunkList.Clear();
-                        if (_curMouseFunction == MouseFunction.AddBlock)
-                        {
-                            if (hitResult.HaveData)
-                            {
-                                var newAddWorldBlockCoord = hitResult.WorldBlockCoordinates - hitResult.HitFaceNormal;
-                                if (CurEditRuntimeData.TryGetId(newAddWorldBlockCoord, out var chunkId, out var blockInChunkId))
-                                {
-                                    CurEditRuntimeData.AddBlockData(chunkId, blockInChunkId);
-                                    _notifyChunkList.Add(hitResult.ChunkId);
-                                    if (hitResult.ChunkId != chunkId)
-                                        _notifyChunkList.Add(chunkId);
-                                }
-                            }
-                            else
-                            {
-                                CurEditRuntimeData.AddBlockData(hitResult.ChunkId, hitResult.BlockId);
-                                _notifyChunkList.Add(hitResult.ChunkId);
-                            }
-                        }
-                        else if (_curMouseFunction == MouseFunction.DeleteBlock)
-                        {
-                            CurEditRuntimeData.RemoveBlockData(hitResult.ChunkId, hitResult.BlockId);
-                            _notifyChunkList.Add(hitResult.ChunkId);
-                        }
-                        else if (_curMouseFunction == MouseFunction.SelectBlock)
-                        {
-                            if (hitResult.HaveData)
-                            {
-                                if (CurEditRuntimeData.TryGetBlock(hitResult.ChunkId, hitResult.BlockId, out var blockData, out _))
-                                {
-                                    _curSelectedChunkId = hitResult.ChunkId;
-                                    _curSelectedBlockData = blockData;
-                                    Repaint();
-                                }
-                                else
-                                {
-                                    ClearSelected();
-                                }
-                            }
-                            else
-                            {
-                                ClearSelected();
-                            }
-                        }
-
+                        InvokeMouseFunction(hitResult);
                         currentEvent.Use();
-
-                        for (int i = 0; i < _notifyChunkList.Count; i++)
-                        {
-                            _editorData.TerrainEditorMgr.RefreshChunkMesh(_notifyChunkList[i]);
-                        }
                     }
                 }
             }
@@ -287,6 +237,60 @@ namespace TerrainModule.Editor
                 ClearSelected();
 
             _curMouseFunction = function;
+        }
+
+        private void InvokeMouseFunction(RaycastBlockResult hitResult)
+        {
+            _notifyChunkList.Clear();
+            if (_curMouseFunction == MouseFunction.AddBlock)
+            {
+                if (hitResult.HaveData)
+                {
+                    var newAddWorldBlockCoord = hitResult.WorldBlockCoordinates - hitResult.HitFaceNormal;
+                    if (CurEditRuntimeData.TryGetId(newAddWorldBlockCoord, out var chunkId, out var blockInChunkId))
+                    {
+                        CurEditRuntimeData.AddBlockData(chunkId, blockInChunkId);
+                        _notifyChunkList.Add(hitResult.ChunkId);
+                        if (hitResult.ChunkId != chunkId)
+                            _notifyChunkList.Add(chunkId);
+                    }
+                }
+                else
+                {
+                    CurEditRuntimeData.AddBlockData(hitResult.ChunkId, hitResult.BlockId);
+                    _notifyChunkList.Add(hitResult.ChunkId);
+                }
+            }
+            else if (_curMouseFunction == MouseFunction.DeleteBlock)
+            {
+                CurEditRuntimeData.RemoveBlockData(hitResult.ChunkId, hitResult.BlockId);
+                _notifyChunkList.Add(hitResult.ChunkId);
+            }
+            else if (_curMouseFunction == MouseFunction.SelectBlock)
+            {
+                if (hitResult.HaveData)
+                {
+                    if (CurEditRuntimeData.TryGetBlock(hitResult.ChunkId, hitResult.BlockId, out var blockData, out _))
+                    {
+                        _curSelectedChunkId = hitResult.ChunkId;
+                        _curSelectedBlockData = blockData;
+                        Repaint();
+                    }
+                    else
+                    {
+                        ClearSelected();
+                    }
+                }
+                else
+                {
+                    ClearSelected();
+                }
+            }
+
+            for (int i = 0; i < _notifyChunkList.Count; i++)
+            {
+                _editorData.TerrainEditorMgr.RefreshChunkMesh(_notifyChunkList[i]);
+            }
         }
     }
 }
