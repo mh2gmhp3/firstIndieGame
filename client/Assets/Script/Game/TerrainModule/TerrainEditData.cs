@@ -11,9 +11,15 @@ namespace TerrainModule.Editor
         //In Chunk
         public int Id;
 
+        public Vector4 YTopValue = Vector4.one;
+        public Vector4 YBottomValue = Vector4.zero;
+
         public BlockEditData(BlockEditRuntimeData runtimeData)
         {
             Id = runtimeData.Id;
+
+            YTopValue = runtimeData.YTopValue;
+            YBottomValue = runtimeData.YBottomValue;
         }
     }
 
@@ -53,9 +59,9 @@ namespace TerrainModule.Editor
         /// </summary>
         public Vector3Int ChunkNum = Vector3Int.one;
 
-        public List<ChunkEditData> ChunkEditDataList = new List<ChunkEditData>();
-
         public Material TerrainMaterial;
+
+        public List<ChunkEditData> ChunkEditDataList = new List<ChunkEditData>();
 
         public TerrainEditData(Vector3Int blockSize, Vector3Int chunkBlockNum, Vector3Int chunkNum, Material terrainMat)
         {

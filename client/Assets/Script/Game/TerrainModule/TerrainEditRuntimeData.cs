@@ -41,6 +41,9 @@ namespace TerrainModule.Editor
         //In Chunk
         public int Id;
 
+        public Vector4 YTopValue = Vector4.one;
+        public Vector4 YBottomValue = Vector4.zero;
+
         public BlockEditRuntimeData(int id)
         {
             Id = id;
@@ -49,6 +52,9 @@ namespace TerrainModule.Editor
         public BlockEditRuntimeData(BlockEditData editData)
         {
             Id = editData.Id;
+
+            YTopValue = editData.YTopValue;
+            YBottomValue = editData.YBottomValue;
         }
     }
 
@@ -90,9 +96,9 @@ namespace TerrainModule.Editor
         public Vector3Int ChunkBlockNum = Vector3Int.one;
         public Vector3Int ChunkNum = Vector3Int.one;
 
-        public Dictionary<int, ChunkEditRuntimeData> IdToChunkEditData = new Dictionary<int, ChunkEditRuntimeData>();
-
         public Material TerrainMaterial;
+
+        public Dictionary<int, ChunkEditRuntimeData> IdToChunkEditData = new Dictionary<int, ChunkEditRuntimeData>();
 
         public TerrainEditRuntimeData(TerrainEditData editData)
         {
@@ -100,6 +106,7 @@ namespace TerrainModule.Editor
             BlockSize = editData.BlockSize;
             ChunkBlockNum = editData.ChunkBlockNum;
             ChunkNum = editData.ChunkNum;
+            TerrainMaterial = editData.TerrainMaterial;
 
             IdToChunkEditData.Clear();
             for (int i = 0; i < editData.ChunkEditDataList.Count; i++)
@@ -111,7 +118,6 @@ namespace TerrainModule.Editor
                 var chunkRuntimeData = new ChunkEditRuntimeData(chunk);
                 IdToChunkEditData.Add(chunkRuntimeData.Id, chunkRuntimeData);
             }
-            TerrainMaterial = editData.TerrainMaterial;
         }
 
         public Vector3Int GetBlockNum()
@@ -264,6 +270,15 @@ namespace TerrainModule.Editor
                chunkSize.y / 2f,
                chunkSize.z / 2f);
             return GetChunkPivotPositionWithCoord(chunkCoord) + centerRedress;
+        }
+        public Vector3 GetChunkCenterPositionWithId(int chunkId)
+        {
+            var chunkSize = GetChunkSize();
+            var centerRedress = new Vector3(
+               chunkSize.x / 2f,
+               chunkSize.y / 2f,
+               chunkSize.z / 2f);
+            return GetChunkPivotPositionWithId(chunkId) + centerRedress;
         }
         #endregion
 
@@ -456,6 +471,24 @@ namespace TerrainModule.Editor
         {
             var blockCoord = GetBlockInChunkCoordinatesWithId(blockId);
             return GetBlockInChunkCenterPositionWithCoord(blockCoord);
+        }
+        #endregion
+
+        #region WorldBlockPivotPosition
+        public Vector3 GetWorldBlockPivotPositionWithId(int chunkId, int blockId)
+        {
+            var chunkPivotPosition = GetChunkPivotPositionWithId(chunkId);
+            var blockPivotPosition = GetBlockInChunkPivotPositionWithId(blockId);
+            return chunkPivotPosition + blockPivotPosition;
+        }
+        #endregion
+
+        #region WorldBlockCenterPosition
+        public Vector3 GetWorldBlockCenterPositionWithId(int chunkId, int blockId)
+        {
+            var chunkPivotPosition = GetChunkPivotPositionWithId(chunkId);
+            var blockCenterPosition = GetBlockInChunkCenterPositionWithId(blockId);
+            return chunkPivotPosition + blockCenterPosition;
         }
         #endregion
 

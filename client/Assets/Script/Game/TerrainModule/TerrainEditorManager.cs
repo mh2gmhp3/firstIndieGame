@@ -48,7 +48,7 @@ namespace TerrainModule.Editor
             RebuildAllPreviewMesh();
         }
 
-        private void RebuildAllPreviewMesh()
+        public void RebuildAllPreviewMesh()
         {
             if (_curEditData == null)
                 return;
@@ -81,6 +81,9 @@ namespace TerrainModule.Editor
             var worldBlockPivotPos = worldBlockCoord * size;
 
             BlockEditRuntimeData refBlockData = null;
+
+            Vector4 topY = size.y * blockEditRuntimeData.YTopValue;
+            Vector4 bottomY = size.y * blockEditRuntimeData.YBottomValue;
             // +x
             var worldRefBlockCoord = worldBlockCoord + Vector3Int.right;
             if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
@@ -88,10 +91,10 @@ namespace TerrainModule.Editor
                 var p0Pos = worldBlockPivotPos + new Vector3(size.x , 0, 0);
                 var addVertices = new Vector3[]
                 {
-                    p0Pos,                                   // Bottom-left
-                    p0Pos + new Vector3(0, 0, size.z),       // Bottom-right
-                    p0Pos + new Vector3(0, size.y, 0),       // Top-left
-                    p0Pos + new Vector3(0, size.y, size.z)   // Top-right
+                    p0Pos + new Vector3(0, bottomY.y, 0),                                   // Bottom-left
+                    p0Pos + new Vector3(0, bottomY.w, size.z),                              // Bottom-right
+                    p0Pos + new Vector3(0, topY.y, 0),                                      // Top-left
+                    p0Pos + new Vector3(0, topY.w, size.z)                                  // Top-right
                 };
                 var curVerticesCount = vertices.Count;
                 var  addTriangles = new int[]
@@ -118,10 +121,10 @@ namespace TerrainModule.Editor
                 var p0Pos = worldBlockPivotPos + new Vector3(0, 0, size.z);
                 var addVertices = new Vector3[]
                 {
-                    p0Pos,                                    // Bottom-left
-                    p0Pos + new Vector3(0, 0, -size.z),       // Bottom-right
-                    p0Pos + new Vector3(0, size.y, 0),        // Top-left
-                    p0Pos + new Vector3(0, size.y, -size.z)   // Top-right
+                    p0Pos + new Vector3(0, bottomY.z, 0),                                    // Bottom-left
+                    p0Pos + new Vector3(0, bottomY.x, -size.z),                              // Bottom-right
+                    p0Pos + new Vector3(0, topY.z, 0),                                       // Top-left
+                    p0Pos + new Vector3(0, topY.x, -size.z)                                  // Top-right
                 };
                 var curVerticesCount = vertices.Count;
                 var addTriangles = new int[]
@@ -148,10 +151,10 @@ namespace TerrainModule.Editor
                 var p0Pos = worldBlockPivotPos + new Vector3(size.x, 0, size.z);
                 var addVertices = new Vector3[]
                 {
-                    p0Pos,                                    // Bottom-left
-                    p0Pos + new Vector3(-size.x, 0, 0),       // Bottom-right
-                    p0Pos + new Vector3(0, size.y, 0) ,       // Top-left
-                    p0Pos + new Vector3(-size.x, size.y, 0)   // Top-right
+                    p0Pos + new Vector3(0, bottomY.w, 0),                                    // Bottom-left
+                    p0Pos + new Vector3(-size.x, bottomY.z, 0),                              // Bottom-right
+                    p0Pos + new Vector3(0, topY.w, 0) ,                                      // Top-left
+                    p0Pos + new Vector3(-size.x, topY.z, 0)                                  // Top-right
                 };
                 var curVerticesCount = vertices.Count;
                 var addTriangles = new int[]
@@ -178,10 +181,10 @@ namespace TerrainModule.Editor
                 var p0Pos = worldBlockPivotPos;
                 var addVertices = new Vector3[]
                 {
-                    p0Pos,                                    // Bottom-left
-                    p0Pos + new Vector3(size.x, 0, 0),        // Bottom-right
-                    p0Pos + new Vector3(0, size.y, 0) ,       // Top-left
-                    p0Pos + new Vector3(size.x, size.y, 0)    // Top-right
+                    p0Pos + new Vector3(0, bottomY.x, 0),                                    // Bottom-left
+                    p0Pos + new Vector3(size.x, bottomY.y, 0),                               // Bottom-right
+                    p0Pos + new Vector3(0, topY.x, 0) ,                                      // Top-left
+                    p0Pos + new Vector3(size.x, topY.y, 0)                                   // Top-right
                 };
                 var curVerticesCount = vertices.Count;
                 var addTriangles = new int[]
@@ -205,13 +208,13 @@ namespace TerrainModule.Editor
             worldRefBlockCoord = worldBlockCoord + Vector3Int.up;
             if (!_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
             {
-                var p0Pos = worldBlockPivotPos + new Vector3(0, size.y, 0);
+                var p0Pos = worldBlockPivotPos;
                 var addVertices = new Vector3[]
                 {
-                    p0Pos,                                    // Bottom-left
-                    p0Pos + new Vector3(size.x, 0, 0),        // Bottom-right
-                    p0Pos + new Vector3(0, 0, size.z) ,       // Top-left
-                    p0Pos + new Vector3(size.x, 0, size.z)    // Top-right
+                    p0Pos + new Vector3(0, topY.x, 0),                                    // Bottom-left
+                    p0Pos + new Vector3(size.x, topY.y, 0),                               // Bottom-right
+                    p0Pos + new Vector3(0, topY.z, size.z) ,                              // Top-left
+                    p0Pos + new Vector3(size.x, topY.w, size.z)                           // Top-right
                 };
                 var curVerticesCount = vertices.Count;
                 var addTriangles = new int[]
@@ -238,10 +241,10 @@ namespace TerrainModule.Editor
                 var p0Pos = worldBlockPivotPos + new Vector3(0, 0, size.z);
                 var addVertices = new Vector3[]
                 {
-                    p0Pos,                                     // Bottom-left
-                    p0Pos + new Vector3(size.x, 0, 0),         // Bottom-right
-                    p0Pos + new Vector3(0, 0, -size.z) ,       // Top-left
-                    p0Pos + new Vector3(size.x, 0, -size.z)    // Top-right
+                    p0Pos + new Vector3(0, bottomY.z, 0),                                     // Bottom-left
+                    p0Pos + new Vector3(size.x, bottomY.w, 0),         // Bottom-right
+                    p0Pos + new Vector3(0, bottomY.x, -size.z) ,       // Top-left
+                    p0Pos + new Vector3(size.x, bottomY.y, -size.z)    // Top-right
                 };
                 var curVerticesCount = vertices.Count;
                 var addTriangles = new int[]
