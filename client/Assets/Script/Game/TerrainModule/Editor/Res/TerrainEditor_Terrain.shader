@@ -57,7 +57,7 @@ Shader "TerrainEditor/Terrain"
                 float3 normalWS     : TEXCOORD1;
                 float2 uv           : TEXCOORD2;
                 float2 uv2_Tiling   : TEXCOORD3;
-                float2 uv3_Rotate   : TEXCOORD4;
+                float2 uv3_Rotation : TEXCOORD4;
 
                 float4 shadowCoord : TEXCOORD5;
             };
@@ -105,7 +105,7 @@ Shader "TerrainEditor/Terrain"
                 OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
                 OUT.uv = IN.uv; //TRANSFORM_TEX(IN.uv, _BaseMap);
                 OUT.uv2_Tiling = IN.uv2;
-                OUT.uv3_Rotate = IN.uv3;
+                OUT.uv3_Rotation = IN.uv3;
 
                 OUT.shadowCoord = TransformWorldToShadowCoord(OUT.positionWS);
 
@@ -117,7 +117,7 @@ Shader "TerrainEditor/Terrain"
             {
                 float2 uvTiling = 1 / _Tiling;
                 float2 uv = frac(IN.uv) * uvTiling + IN.uv2_Tiling;
-                uv = RotateUV(uv, IN.uv2_Tiling + uvTiling / 2, IN.uv3_Rotate.x);
+                uv = RotateUV(uv, IN.uv2_Tiling + uvTiling / 2, IN.uv3_Rotation.x);
                 half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv);
 
                 float3 normalWS = normalize(IN.normalWS);

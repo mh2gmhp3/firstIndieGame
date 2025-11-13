@@ -92,7 +92,7 @@ namespace TerrainModule.Editor
             Vector4 bottomY = size.y * bottomTValue;
 
             var tiling = new Vector2(0, 0);
-            var rotate = new Vector2(0, 0);
+            var rotation = new Vector2(0, 0);
 
             //方向沒方塊必須建立面
             //有方塊必須完全共面才不需建立 不考慮交錯要補面問題
@@ -136,10 +136,10 @@ namespace TerrainModule.Editor
                 };
                 var addUVs3 = new Vector2[]
                 {
-                    rotate,
-                    rotate,
-                    rotate,
-                    rotate
+                    rotation,
+                    rotation,
+                    rotation,
+                    rotation
                 };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
@@ -188,10 +188,10 @@ namespace TerrainModule.Editor
                 };
                 var addUVs3 = new Vector2[]
                 {
-                    rotate,
-                    rotate,
-                    rotate,
-                    rotate
+                    rotation,
+                    rotation,
+                    rotation,
+                    rotation
                 };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
@@ -240,10 +240,10 @@ namespace TerrainModule.Editor
                 };
                 var addUVs3 = new Vector2[]
                 {
-                    rotate,
-                    rotate,
-                    rotate,
-                    rotate
+                    rotation,
+                    rotation,
+                    rotation,
+                    rotation
                 };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
@@ -292,10 +292,10 @@ namespace TerrainModule.Editor
                 };
                 var addUVs3 = new Vector2[]
                 {
-                    rotate,
-                    rotate,
-                    rotate,
-                    rotate
+                    rotation,
+                    rotation,
+                    rotation,
+                    rotation
                 };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
@@ -344,10 +344,10 @@ namespace TerrainModule.Editor
                 };
                 var addUVs3 = new Vector2[]
                 {
-                    rotate,
-                    rotate,
-                    rotate,
-                    rotate
+                    rotation,
+                    rotation,
+                    rotation,
+                    rotation
                 };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
@@ -396,10 +396,10 @@ namespace TerrainModule.Editor
                 };
                 var addUVs3 = new Vector2[]
                 {
-                    rotate,
-                    rotate,
-                    rotate,
-                    rotate
+                    rotation,
+                    rotation,
+                    rotation,
+                    rotation
                 };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
