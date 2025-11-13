@@ -84,8 +84,10 @@ namespace TerrainModule.Editor
             BlockEditRuntimeData refBlockData = null;
 
             bool createFace = false;
-            Vector4 topY = size.y * blockEditRuntimeData.YTopValue;
-            Vector4 bottomY = size.y * blockEditRuntimeData.YBottomValue;
+            Vector4 topYValue = blockEditRuntimeData.YTopValue;
+            Vector4 bottomTValue = blockEditRuntimeData.YBottomValue;
+            Vector4 topY = size.y * topYValue;
+            Vector4 bottomY = size.y * bottomTValue;
 
             //方向沒方塊必須建立面
             //有方塊必須完全共面才不需建立 不考慮交錯要補面問題
@@ -112,18 +114,13 @@ namespace TerrainModule.Editor
                     p0Pos + new Vector3(0, topY.y, 0),                                      // Top-left
                     p0Pos + new Vector3(0, topY.w, size.z)                                  // Top-right
                 };
-                var curVerticesCount = vertices.Count;
-                var  addTriangles = new int[]
-                {
-                    curVerticesCount + 0, curVerticesCount + 2, curVerticesCount + 1,
-                    curVerticesCount + 2, curVerticesCount + 3, curVerticesCount + 1
-                };
+                var addTriangles = GetTriangle(vertices.Count, false);
                 var addUVs = new Vector2[]
                 {
-                    new Vector2(0, 0),
-                    new Vector2(1, 0),
-                    new Vector2(0, 1),
-                    new Vector2(1, 1)
+                    new Vector2(0, bottomTValue.y),
+                    new Vector2(1 , bottomTValue.w),
+                    new Vector2(0, topYValue.y),
+                    new Vector2(1, topYValue.w)
                 };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
@@ -153,18 +150,13 @@ namespace TerrainModule.Editor
                     p0Pos + new Vector3(0, topY.z, 0),                                       // Top-left
                     p0Pos + new Vector3(0, topY.x, -size.z)                                  // Top-right
                 };
-                var curVerticesCount = vertices.Count;
-                var addTriangles = new int[]
-                {
-                    curVerticesCount + 0, curVerticesCount + 2, curVerticesCount + 1,
-                    curVerticesCount + 2, curVerticesCount + 3, curVerticesCount + 1
-                };
+                var addTriangles = GetTriangle(vertices.Count, false);
                 var addUVs = new Vector2[]
                 {
-                    new Vector2(0, 0),
-                    new Vector2(1, 0),
-                    new Vector2(0, 1),
-                    new Vector2(1, 1)
+                    new Vector2(0, bottomTValue.z),
+                    new Vector2(1 , bottomTValue.x),
+                    new Vector2(0, topYValue.z),
+                    new Vector2(1, topYValue.x)
                 };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
@@ -194,18 +186,13 @@ namespace TerrainModule.Editor
                     p0Pos + new Vector3(0, topY.w, 0) ,                                      // Top-left
                     p0Pos + new Vector3(-size.x, topY.z, 0)                                  // Top-right
                 };
-                var curVerticesCount = vertices.Count;
-                var addTriangles = new int[]
-                {
-                    curVerticesCount + 0, curVerticesCount + 2, curVerticesCount + 1,
-                    curVerticesCount + 2, curVerticesCount + 3, curVerticesCount + 1
-                };
+                var addTriangles = GetTriangle(vertices.Count, false);
                 var addUVs = new Vector2[]
                 {
-                    new Vector2(0, 0),
-                    new Vector2(1, 0),
-                    new Vector2(0, 1),
-                    new Vector2(1, 1)
+                    new Vector2(0, bottomTValue.w),
+                    new Vector2(1 , bottomTValue.z),
+                    new Vector2(0, topYValue.w),
+                    new Vector2(1, topYValue.z)
                 };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
@@ -235,18 +222,13 @@ namespace TerrainModule.Editor
                     p0Pos + new Vector3(0, topY.x, 0) ,                                      // Top-left
                     p0Pos + new Vector3(size.x, topY.y, 0)                                   // Top-right
                 };
-                var curVerticesCount = vertices.Count;
-                var addTriangles = new int[]
-                {
-                    curVerticesCount + 0, curVerticesCount + 2, curVerticesCount + 1,
-                    curVerticesCount + 2, curVerticesCount + 3, curVerticesCount + 1
-                };
+                var addTriangles = GetTriangle(vertices.Count, false);
                 var addUVs = new Vector2[]
                 {
-                    new Vector2(0, 0),
-                    new Vector2(1, 0),
-                    new Vector2(0, 1),
-                    new Vector2(1, 1)
+                    new Vector2(0, bottomTValue.x),
+                    new Vector2(1 , bottomTValue.y),
+                    new Vector2(0, topYValue.x),
+                    new Vector2(1, topYValue.y)
                 };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
@@ -273,12 +255,10 @@ namespace TerrainModule.Editor
                     p0Pos + new Vector3(0, topY.z, size.z) ,                              // Top-left
                     p0Pos + new Vector3(size.x, topY.w, size.z)                           // Top-right
                 };
-                var curVerticesCount = vertices.Count;
-                var addTriangles = new int[]
-                {
-                    curVerticesCount + 0, curVerticesCount + 2, curVerticesCount + 1,
-                    curVerticesCount + 2, curVerticesCount + 3, curVerticesCount + 1
-                };
+                bool mirrorTriangle =
+                    blockEditRuntimeData.YTopValue.x > blockEditRuntimeData.YTopValue.y ||
+                    blockEditRuntimeData.YTopValue.w > blockEditRuntimeData.YTopValue.z;
+                var addTriangles = GetTriangle(vertices.Count, mirrorTriangle);
                 var addUVs = new Vector2[]
                 {
                     new Vector2(0, 0),
@@ -311,12 +291,10 @@ namespace TerrainModule.Editor
                     p0Pos + new Vector3(0, bottomY.x, -size.z) ,       // Top-left
                     p0Pos + new Vector3(size.x, bottomY.y, -size.z)    // Top-right
                 };
-                var curVerticesCount = vertices.Count;
-                var addTriangles = new int[]
-                {
-                    curVerticesCount + 0, curVerticesCount + 2, curVerticesCount + 1,
-                    curVerticesCount + 2, curVerticesCount + 3, curVerticesCount + 1
-                };
+                bool mirrorTriangle =
+                    blockEditRuntimeData.YBottomValue.x > blockEditRuntimeData.YBottomValue.y ||
+                    blockEditRuntimeData.YBottomValue.w > blockEditRuntimeData.YBottomValue.z;
+                var addTriangles = GetTriangle(vertices.Count, mirrorTriangle);
                 var addUVs = new Vector2[]
                 {
                     new Vector2(0, 0),
@@ -327,6 +305,26 @@ namespace TerrainModule.Editor
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
                 uvs.AddRange(addUVs);
+            }
+        }
+
+        private int[] GetTriangle(int startIndex, bool isMirror)
+        {
+            if (!isMirror)
+            {
+                return new int[]
+                {
+                    startIndex + 0, startIndex + 2, startIndex + 1,
+                    startIndex + 2, startIndex + 3, startIndex + 1
+                };
+            }
+            else
+            {
+                return new int[]
+                {
+                    startIndex + 0, startIndex + 2, startIndex + 3,
+                    startIndex + 0, startIndex + 3, startIndex + 1
+                };
             }
         }
 
