@@ -6,6 +6,7 @@ Shader "TerrainEditor/Terrain"
     Properties
     {
         _BaseMap("Base Map", 2D) = "white"
+        _Tiling("Tiling", Vector) = (4, 4, 0, 0)
     }
 
     // The SubShader block containing the Shader code.
@@ -44,6 +45,8 @@ Shader "TerrainEditor/Terrain"
                 float4 positionOS   : POSITION;
                 float3 normalOS : NORMAL;     // 物体空间法线
                 float2 uv           : TEXCOORD0;
+                float2 uv2          : TEXCOORD1;
+                float2 uv3          : TEXCOORD2;
             };
 
             struct Varyings
@@ -53,8 +56,10 @@ Shader "TerrainEditor/Terrain"
                 float3 positionWS   : TEXCOORD0;
                 float3 normalWS     : TEXCOORD1;
                 float2 uv           : TEXCOORD2;
+                float2 uv2_Tiling   : TEXCOORD3;
+                float2 uv3_Rotate   : TEXCOORD4;
 
-                float4 shadowCoord : TEXCOORD3;
+                float4 shadowCoord : TEXCOORD5;
             };
 
             TEXTURE2D(_BaseMap);
@@ -62,7 +67,29 @@ Shader "TerrainEditor/Terrain"
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
+                float2 _Tiling;
             CBUFFER_END
+
+            float2 RotateUV(float2 uv, float2 uvCenter, float progress)
+            {
+                #define PI 3.1415926535f
+
+                // to radian
+                float rotation = progress * (2.0f * PI);
+
+                // set to center
+                float2 rotatedUV = uv - uvCenter;
+
+                // rotate
+                float s = sin(rotation);
+                float c = cos(rotation);
+                float x = rotatedUV.x * c - rotatedUV.y * s;
+                float y = rotatedUV.x * s + rotatedUV.y * c;
+                rotatedUV = float2(x, y);
+
+                // revert to uv
+                return rotatedUV + uvCenter;
+            }
 
             // The vertex shader definition with properties defined in the Varyings
             // structure. The type of the vert function must match the type (struct)
@@ -76,7 +103,9 @@ Shader "TerrainEditor/Terrain"
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.positionWS = TransformObjectToWorld(IN.positionOS.xyz);
                 OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
-                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
+                OUT.uv = IN.uv; //TRANSFORM_TEX(IN.uv, _BaseMap);
+                OUT.uv2_Tiling = IN.uv2;
+                OUT.uv3_Rotate = IN.uv3;
 
                 OUT.shadowCoord = TransformWorldToShadowCoord(OUT.positionWS);
 
@@ -86,7 +115,10 @@ Shader "TerrainEditor/Terrain"
             // The fragment shader definition.
             half4 frag(Varyings IN) : SV_Target
             {
-                half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv);
+                float2 uvTiling = 1 / _Tiling;
+                float2 uv = frac(IN.uv) * uvTiling + IN.uv2_Tiling;
+                uv = RotateUV(uv, IN.uv2_Tiling + uvTiling / 2, IN.uv3_Rotate.x);
+                half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv);
 
                 float3 normalWS = normalize(IN.normalWS);
 

@@ -72,6 +72,8 @@ namespace TerrainModule.Editor
             List<int> triangles,
             List<Vector3> normals,
             List<Vector2> uvs,
+            List<Vector2> uvs2,
+            List<Vector2> uvs3,
             ChunkEditRuntimeData chunkEditRuntimeData,
             BlockEditRuntimeData blockEditRuntimeData)
         {
@@ -88,6 +90,9 @@ namespace TerrainModule.Editor
             Vector4 bottomTValue = blockEditRuntimeData.YBottomValue;
             Vector4 topY = size.y * topYValue;
             Vector4 bottomY = size.y * bottomTValue;
+
+            var tiling = new Vector2(0, 0);
+            var rotate = new Vector2(0, 0);
 
             //方向沒方塊必須建立面
             //有方塊必須完全共面才不需建立 不考慮交錯要補面問題
@@ -122,9 +127,25 @@ namespace TerrainModule.Editor
                     new Vector2(0, topYValue.y),
                     new Vector2(1, topYValue.w)
                 };
+                var addUVs2 = new Vector2[]
+                {
+                    tiling,
+                    tiling,
+                    tiling,
+                    tiling
+                };
+                var addUVs3 = new Vector2[]
+                {
+                    rotate,
+                    rotate,
+                    rotate,
+                    rotate
+                };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
                 uvs.AddRange(addUVs);
+                uvs2.AddRange(addUVs2);
+                uvs3.AddRange(addUVs3);
             }
 
             // -x
@@ -158,9 +179,25 @@ namespace TerrainModule.Editor
                     new Vector2(0, topYValue.z),
                     new Vector2(1, topYValue.x)
                 };
+                var addUVs2 = new Vector2[]
+                {
+                    tiling,
+                    tiling,
+                    tiling,
+                    tiling
+                };
+                var addUVs3 = new Vector2[]
+                {
+                    rotate,
+                    rotate,
+                    rotate,
+                    rotate
+                };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
                 uvs.AddRange(addUVs);
+                uvs2.AddRange(addUVs2);
+                uvs3.AddRange(addUVs3);
             }
 
             // +z
@@ -194,9 +231,25 @@ namespace TerrainModule.Editor
                     new Vector2(0, topYValue.w),
                     new Vector2(1, topYValue.z)
                 };
+                var addUVs2 = new Vector2[]
+                {
+                    tiling,
+                    tiling,
+                    tiling,
+                    tiling
+                };
+                var addUVs3 = new Vector2[]
+                {
+                    rotate,
+                    rotate,
+                    rotate,
+                    rotate
+                };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
                 uvs.AddRange(addUVs);
+                uvs2.AddRange(addUVs2);
+                uvs3.AddRange(addUVs3);
             }
 
             // -z
@@ -230,9 +283,25 @@ namespace TerrainModule.Editor
                     new Vector2(0, topYValue.x),
                     new Vector2(1, topYValue.y)
                 };
+                var addUVs2 = new Vector2[]
+                {
+                    tiling,
+                    tiling,
+                    tiling,
+                    tiling
+                };
+                var addUVs3 = new Vector2[]
+                {
+                    rotate,
+                    rotate,
+                    rotate,
+                    rotate
+                };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
                 uvs.AddRange(addUVs);
+                uvs2.AddRange(addUVs2);
+                uvs3.AddRange(addUVs3);
             }
 
             // +y
@@ -266,9 +335,25 @@ namespace TerrainModule.Editor
                     new Vector2(0, 1),
                     new Vector2(1, 1)
                 };
+                var addUVs2 = new Vector2[]
+                {
+                    tiling,
+                    tiling,
+                    tiling,
+                    tiling
+                };
+                var addUVs3 = new Vector2[]
+                {
+                    rotate,
+                    rotate,
+                    rotate,
+                    rotate
+                };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
                 uvs.AddRange(addUVs);
+                uvs2.AddRange(addUVs2);
+                uvs3.AddRange(addUVs3);
             }
 
             // -y
@@ -302,9 +387,25 @@ namespace TerrainModule.Editor
                     new Vector2(0, 1),
                     new Vector2(1, 1)
                 };
+                var addUVs2 = new Vector2[]
+                {
+                    tiling,
+                    tiling,
+                    tiling,
+                    tiling
+                };
+                var addUVs3 = new Vector2[]
+                {
+                    rotate,
+                    rotate,
+                    rotate,
+                    rotate
+                };
                 vertices.AddRange(addVertices);
                 triangles.AddRange(addTriangles);
                 uvs.AddRange(addUVs);
+                uvs2.AddRange(addUVs2);
+                uvs3.AddRange(addUVs3);
             }
         }
 
@@ -348,6 +449,8 @@ namespace TerrainModule.Editor
             var triangles = new List<int>();
             var normals = new List<Vector3>();
             var uvs = new List<Vector2>();
+            var uvs2 = new List<Vector2>();
+            var uvs3 = new List<Vector2>();
             var chunkPivotPos = _curEditData.GetChunkPivotPositionWithId(chunkId);
             foreach (var blockEditDataPair in chunkEditData.IdToBlockEditData)
             {
@@ -357,6 +460,8 @@ namespace TerrainModule.Editor
                     triangles,
                     normals,
                     uvs,
+                    uvs2,
+                    uvs3,
                     chunkEditData,
                     blockEditData);
             }
@@ -364,6 +469,8 @@ namespace TerrainModule.Editor
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
             mesh.uv = uvs.ToArray();
+            mesh.uv2 = uvs2.ToArray();
+            mesh.uv3 = uvs3.ToArray();
 
             mesh.RecalculateNormals();
             mesh.RecalculateTangents();
