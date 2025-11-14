@@ -4,21 +4,20 @@ using UnityEngine;
 
 namespace TerrainModule.Editor
 {
-    public class LoadDataPage : TerrainEditorPage
+    public class TerrainLoadDataPage : TerrainEditBasePage
     {
         //Select Load Data
         private string[] _terrainEditDataNames;
         private int _curSelectEditDataIndex = -1;
 
-        public LoadDataPage(TerrainEditorData editorData) : base(editorData)
+        public TerrainLoadDataPage(TerrainEditorData editorData) : base(editorData)
         {
         }
 
-        public override string Name => TerrainEditorDefine.PageToName[(int)TerrainEditorPageType.Load];
+        public override string Name => TerrainEditorDefine.TerrainEditPageToName[(int)TerrainEditPageType.Load];
 
         public override void OnEnable()
         {
-            _editorData.TerrainEditorMgrObj.SetActive(true);
             RefreshEditDataList();
         }
 
@@ -41,9 +40,9 @@ namespace TerrainModule.Editor
 
                 if (GUILayout.Button("讀取檔案"))
                 {
-                    if (_editorData.LoadData(_terrainEditDataNames[_curSelectEditDataIndex]))
+                    if (_editorData.LoadTerrainData(_terrainEditDataNames[_curSelectEditDataIndex]))
                     {
-                        ChangeToPage(TerrainEditorPageType.Edit);
+                        ChangeToPage(TerrainEditPageType.Edit);
                     }
                 }
             }
@@ -51,7 +50,7 @@ namespace TerrainModule.Editor
 
         private void RefreshEditDataList()
         {
-            _terrainEditDataNames = TerrainEditorUtility.GetEditDataFolderNames();
+            _terrainEditDataNames = TerrainEditorUtility.GetTerrainEditDataNames();
         }
     }
 }

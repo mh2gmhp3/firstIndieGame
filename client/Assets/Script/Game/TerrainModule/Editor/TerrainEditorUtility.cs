@@ -8,9 +8,22 @@ namespace TerrainModule.Editor
 {
     public static class TerrainEditorUtility
     {
-        public static string[] GetEditDataFolderNames()
+        public static string[] GetTerrainEditDataNames()
         {
-            var editDataGUIDs = AssetDatabase.FindAssets("t:TerrainEditData", new string[] { TerrainEditorDefine.EditDataFolderPath });
+            var editDataGUIDs = AssetDatabase.FindAssets("t:TerrainEditData", new string[] { TerrainEditorDefine.EditTerrainDataFolderPath });
+            var result = new string[editDataGUIDs.Length];
+            for (int i = 0; i < editDataGUIDs.Length; i++)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(editDataGUIDs[i]);
+                var name = Path.GetFileNameWithoutExtension(assetPath);
+                result[i] = name;
+            }
+            return result;
+        }
+
+        public static string[] GetBlockTemplateEditDataNames()
+        {
+            var editDataGUIDs = AssetDatabase.FindAssets("t:BlockTemplateEditData", new string[] { TerrainEditorDefine.EditBlockTemplateDataFolderPath });
             var result = new string[editDataGUIDs.Length];
             for (int i = 0; i < editDataGUIDs.Length; i++)
             {

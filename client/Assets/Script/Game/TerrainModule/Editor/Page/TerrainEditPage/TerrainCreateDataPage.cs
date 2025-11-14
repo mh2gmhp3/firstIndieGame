@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace TerrainModule.Editor
 {
-    public class CreateDataPage : TerrainEditorPage
+    public class TerrainCreateDataPage : TerrainEditorBasePage
     {
         private struct CreateDataDescription
         {
@@ -19,15 +19,15 @@ namespace TerrainModule.Editor
         //New Data
         private CreateDataDescription _createDataDescription;
 
-        public CreateDataPage(TerrainEditorData editorData) : base(editorData)
+        public TerrainCreateDataPage(TerrainEditorData editorData) : base(editorData)
         {
         }
 
-        public override string Name => TerrainEditorDefine.PageToName[(int)TerrainEditorPageType.Create];
+        public override string Name => TerrainEditorDefine.TerrainEditPageToName[(int)TerrainEditPageType.Create];
 
         public override void OnEnable()
         {
-            _editorData.TerrainEditorMgrObj.SetActive(false);
+
         }
 
         public override void OnGUI()
@@ -79,7 +79,7 @@ namespace TerrainModule.Editor
                 EditorUtility.DisplayDialog(TerrainEditorDefine.Dialog_Title_Error, "名稱不能為空白", TerrainEditorDefine.Dialog_Ok_Confirm);
                 return;
             }
-            var existNames = TerrainEditorUtility.GetEditDataFolderNames();
+            var existNames = TerrainEditorUtility.GetTerrainEditDataNames();
             for (int i = 0; i < existNames.Length; i++)
             {
                 if (_createDataDescription.Name == existNames[i])
@@ -100,9 +100,9 @@ namespace TerrainModule.Editor
                 _createDataDescription.ChunkNum,
                 _createDataDescription.TerrainMaterial);
             newEditData.name = _createDataDescription.Name;
-            AssetDatabase.CreateAsset(newEditData, Path.Combine(TerrainEditorDefine.EditDataFolderPath, newEditData.name) + ".asset");
+            AssetDatabase.CreateAsset(newEditData, Path.Combine(TerrainEditorDefine.EditTerrainDataFolderPath, newEditData.name) + ".asset");
             AssetDatabase.Refresh();
-            _editorData.LoadData(newEditData.name);
+            _editorData.LoadTerrainData(newEditData.name);
         }
     }
 }

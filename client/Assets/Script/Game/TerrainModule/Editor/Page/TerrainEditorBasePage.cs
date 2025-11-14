@@ -1,11 +1,10 @@
 ﻿using Framework.Editor.Utility;
-using System.Collections.Generic;
 
 namespace TerrainModule.Editor
 {
-    public abstract class TerrainEditorPage : EditorPage
+    public abstract class TerrainEditorBasePage : EditorPage
     {
-        public TerrainEditorPage(TerrainEditorData editorData)
+        public TerrainEditorBasePage(TerrainEditorData editorData)
         {
             _editorData = editorData;
         }
@@ -14,7 +13,7 @@ namespace TerrainModule.Editor
 
         protected void ChangeToPage(TerrainEditorPageType page)
         {
-            if (!TerrainEditorDefine.PageToName.TryGetValue((int)page, out var name))
+            if (!TerrainEditorDefine.TerrainEditorPageToName.TryGetValue((int)page, out var name))
                 return;
             ChangeToPage(name);
         }

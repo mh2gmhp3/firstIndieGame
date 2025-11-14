@@ -10,9 +10,19 @@ namespace TerrainModule.Editor
     {
         //In Chunk
         public int Id;
+        public int TemplateId;
 
         public Vector4 YTopValue = Vector4.one;
         public Vector4 YBottomValue = Vector4.zero;
+
+        public float PXRotation;
+        public float NXRotation;
+
+        public float PYRotation;
+        public float NYRotation;
+
+        public float PZRotation;
+        public float ZRotation;
 
         public BlockEditData(BlockEditRuntimeData runtimeData)
         {

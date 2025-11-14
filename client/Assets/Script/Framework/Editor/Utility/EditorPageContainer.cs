@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace Framework.Editor.Utility
         private Action _guiRepaintEvent = null;
 
         private int _gridXCount = 3;
+
+        public Action GUIRepaintEvent => _guiRepaintEvent;
 
         public EditorPageContainer(int gridXCount, Action guiRepaintEvent = null)
         {
@@ -113,6 +116,7 @@ namespace Framework.Editor.Utility
         public void SetContainer(EditorPageContainer pageContainer)
         {
             _pageContainer = pageContainer;
+            OnAddToContainer();
         }
 
         protected void ChangeToPage(string name)
@@ -128,6 +132,15 @@ namespace Framework.Editor.Utility
                 return;
             _pageContainer.Repaint();
         }
+
+        protected Action GetPageContainerRepaintEvent()
+        {
+            if (_pageContainer == null)
+                return null;
+            return _pageContainer.GUIRepaintEvent;
+        }
+
+        protected virtual void OnAddToContainer() { }
 
         public virtual void OnEnable() { }
         public virtual void OnGUI() { }

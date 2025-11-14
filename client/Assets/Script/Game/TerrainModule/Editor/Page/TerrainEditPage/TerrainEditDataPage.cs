@@ -7,7 +7,7 @@ using Framework.Editor.Utility;
 
 namespace TerrainModule.Editor
 {
-    public class EditDataPage : TerrainEditorPage
+    public class TerrainEditDataPage : TerrainEditBasePage
     {
         private enum MouseFunction
         {
@@ -16,7 +16,7 @@ namespace TerrainModule.Editor
             SelectBlock,
         }
 
-        private TerrainEditRuntimeData CurEditRuntimeData => _editorData.CurEditRuntimeData;
+        private TerrainEditRuntimeData CurEditRuntimeData => _editorData.CurTerrainEditRuntimeData;
         private int _editChunkFlat = 0;
         private int _editDistance = 0;
         private bool _autoYValueFit = true;
@@ -28,15 +28,15 @@ namespace TerrainModule.Editor
         private int _curSelectedChunkId = -1;
         private BlockEditRuntimeData _curSelectedBlockData = null;
 
-        public EditDataPage(TerrainEditorData editorData) : base(editorData)
+        public TerrainEditDataPage(TerrainEditorData editorData) : base(editorData)
         {
         }
 
-        public override string Name => TerrainEditorDefine.PageToName[(int)TerrainEditorPageType.Edit];
+        public override string Name => TerrainEditorDefine.TerrainEditPageToName[(int)TerrainEditPageType.Edit];
 
         public override void OnEnable()
         {
-            _editorData.TerrainEditorMgrObj.SetActive(true);
+
         }
 
         public override void OnGUI()
@@ -371,7 +371,7 @@ namespace TerrainModule.Editor
                         typeof(Material),
                         false);
                 if (EditorGUI.EndChangeCheck())
-                    _editorData.TerrainEditorMgr.RebuildAllPreviewMesh();
+                    _editorData.TerrainEditorMgr.RebuildAllTerrainPreviewMesh();
             }
             EditorGUILayout.EndVertical();
         }
@@ -465,7 +465,7 @@ namespace TerrainModule.Editor
         {
             if (GUILayout.Button("存檔"))
             {
-                _editorData.SaveCurData();
+                _editorData.SaveCurTerrainData();
             }
         }
 

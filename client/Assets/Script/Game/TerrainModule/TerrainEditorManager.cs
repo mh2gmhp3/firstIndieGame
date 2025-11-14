@@ -6,6 +6,12 @@ namespace TerrainModule.Editor
 {
     public class TerrainEditorManager : MonoBehaviour
     {
+        public enum EditorMode
+        {
+            Terrain,
+            BlockTemplate
+        }
+
         private class ChunkPreviewMesh
         {
             public GameObject Obj;
@@ -34,24 +40,103 @@ namespace TerrainModule.Editor
             }
         }
 
-        private TerrainEditRuntimeData _curEditData;
+        private class BlockTemplatePreviewMesh
+        {
+            public GameObject Obj;
+            public MeshFilter MeshFilter;
+            public MeshRenderer MeshRenderer;
+            public Mesh Mesh;
+
+            public BlockTemplatePreviewMesh(Transform parent)
+            {
+                Obj = new GameObject($"BlockTemplatePreview");
+                Obj.transform.SetParent(parent);
+                MeshFilter = Obj.AddComponent<MeshFilter>();
+                MeshRenderer = Obj.AddComponent<MeshRenderer>();
+                Mesh = new Mesh();
+                Mesh.name = $"BlockTemplatePreview";
+                Mesh.MarkDynamic();
+                MeshFilter.mesh = Mesh;
+            }
+
+            public void Clear()
+            {
+                if (Obj != null)
+                    DestroyImmediate(Obj);
+                MeshFilter = null;
+                Mesh = null;
+            }
+        }
+
+        private EditorMode _curEditorMode = EditorMode.Terrain;
+
+        private Transform _terrainChunkParent;
+        private TerrainEditRuntimeData _curTerrainEditData;
         private Dictionary<int, ChunkPreviewMesh> _chunkIdToPreviewMeshDic = new Dictionary<int, ChunkPreviewMesh>();
 
-        public void Init(TerrainEditRuntimeData editData)
+        private Transform _blockTemplateParent;
+        private BlockEditRuntimeData _curBlockTemplateEditData;
+        private BlockTemplatePreviewMesh _blockTemplatePreviewMesh;
+
+        public void ChangeMode(EditorMode editorMode)
         {
-            _curEditData = editData;
-            RefreshPreview();
+            if (_curEditorMode == editorMode)
+                return;
+
+            //Exit
+            if (_curEditorMode == EditorMode.Terrain)
+            {
+                if (_terrainChunkParent != null)
+                    _terrainChunkParent.gameObject.SetActive(false);
+            }
+            else if (_curEditorMode == EditorMode.BlockTemplate)
+            {
+                if (_blockTemplateParent != null)
+                    _blockTemplateParent.gameObject.SetActive(false);
+            }
+
+            //Enter
+            if (editorMode == EditorMode.Terrain)
+            {
+                if (_terrainChunkParent != null)
+                {
+                    _terrainChunkParent.gameObject.SetActive(true);
+                    RefreshBlockTemplatePreview();
+                }
+            }
+            else if (editorMode == EditorMode.BlockTemplate)
+            {
+                if (_blockTemplateParent != null)
+                {
+                    _blockTemplateParent.gameObject.SetActive(true);
+                    RefreshBlockTemplatePreview();
+                }
+            }
+
+            _curEditorMode = editorMode;
         }
 
-        private void RefreshPreview()
+        #region Terrain
+
+        public void SetData(TerrainEditRuntimeData editData)
         {
-            //重建
-            RebuildAllPreviewMesh();
+            _curTerrainEditData = editData;
+            if (_terrainChunkParent == null)
+            {
+                var terrainChunkParentGo = new GameObject("TerrainChunk");
+                _terrainChunkParent = terrainChunkParentGo.transform;
+                _terrainChunkParent.SetParent(transform);
+            }
+
+            RebuildAllTerrainPreviewMesh();
         }
 
-        public void RebuildAllPreviewMesh()
+        public void RebuildAllTerrainPreviewMesh()
         {
-            if (_curEditData == null)
+            if (_curEditorMode != EditorMode.Terrain)
+                return;
+
+            if (_curTerrainEditData == null)
                 return;
 
             //Clear Origin
@@ -61,10 +146,63 @@ namespace TerrainModule.Editor
             }
             _chunkIdToPreviewMeshDic.Clear();
 
-            foreach (var chunkId in _curEditData.IdToChunkEditData.Keys)
+            foreach (var chunkId in _curTerrainEditData.IdToChunkEditData.Keys)
             {
                 RefreshChunkMesh(chunkId);
             }
+        }
+
+        public void RefreshChunkMesh(int chunkId)
+        {
+            if (_curEditorMode != EditorMode.Terrain)
+                return;
+
+            if (_curTerrainEditData == null)
+                return;
+
+            if (!_chunkIdToPreviewMeshDic.TryGetValue(chunkId, out var previewMesh))
+            {
+                previewMesh = new ChunkPreviewMesh(chunkId, _terrainChunkParent);
+                _chunkIdToPreviewMeshDic.Add(chunkId, previewMesh);
+            }
+            previewMesh.Mesh.Clear();
+
+            if (!_curTerrainEditData.IdToChunkEditData.TryGetValue(chunkId, out var chunkEditData))
+                return;
+
+            var mesh = previewMesh.Mesh;
+            var vertices = new List<Vector3>();
+            var triangles = new List<int>();
+            var normals = new List<Vector3>();
+            var uvs = new List<Vector2>();
+            var uvs2 = new List<Vector2>();
+            var uvs3 = new List<Vector2>();
+            var chunkPivotPos = _curTerrainEditData.GetChunkPivotPositionWithId(chunkId);
+            foreach (var blockEditDataPair in chunkEditData.IdToBlockEditData)
+            {
+                var blockEditData = blockEditDataPair.Value;
+                CreateBlock(
+                    vertices,
+                    triangles,
+                    normals,
+                    uvs,
+                    uvs2,
+                    uvs3,
+                    chunkEditData,
+                    blockEditData);
+            }
+
+            mesh.vertices = vertices.ToArray();
+            mesh.triangles = triangles.ToArray();
+            mesh.uv = uvs.ToArray();
+            mesh.uv2 = uvs2.ToArray();
+            mesh.uv3 = uvs3.ToArray();
+
+            mesh.RecalculateNormals();
+            mesh.RecalculateTangents();
+            mesh.RecalculateBounds();
+
+            previewMesh.MeshRenderer.sharedMaterial = _curTerrainEditData.TerrainMaterial;
         }
 
         private void CreateBlock(
@@ -79,8 +217,8 @@ namespace TerrainModule.Editor
         {
             var chunkId = chunkEditRuntimeData.Id;
             var blockId = blockEditRuntimeData.Id;
-            var size = _curEditData.BlockSize;
-            var worldBlockCoord = _curEditData.GetWorldBlockCoordWithId(chunkId, blockId);
+            var size = _curTerrainEditData.BlockSize;
+            var worldBlockCoord = _curTerrainEditData.GetWorldBlockCoordWithId(chunkId, blockId);
             var worldBlockPivotPos = worldBlockCoord * size;
 
             BlockEditRuntimeData refBlockData = null;
@@ -98,7 +236,7 @@ namespace TerrainModule.Editor
             //有方塊必須完全共面才不需建立 不考慮交錯要補面問題
             // +x
             var worldRefBlockCoord = worldBlockCoord + Vector3Int.right;
-            if (_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            if (_curTerrainEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
             {
                 createFace = !(blockEditRuntimeData.YTopValue.y.ApproximateEqual(refBlockData.YTopValue.x)
                     && blockEditRuntimeData.YBottomValue.y.ApproximateEqual(refBlockData.YBottomValue.x)
@@ -111,7 +249,7 @@ namespace TerrainModule.Editor
             }
             if (createFace)
             {
-                var p0Pos = worldBlockPivotPos + new Vector3(size.x , 0, 0);
+                var p0Pos = worldBlockPivotPos + new Vector3(size.x, 0, 0);
                 var addVertices = new Vector3[]
                 {
                     p0Pos + new Vector3(0, bottomY.y, 0),                                   // Bottom-left
@@ -150,7 +288,7 @@ namespace TerrainModule.Editor
 
             // -x
             worldRefBlockCoord = worldBlockCoord + Vector3Int.left;
-            if (_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            if (_curTerrainEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
             {
                 createFace = !(blockEditRuntimeData.YTopValue.x.ApproximateEqual(refBlockData.YTopValue.y)
                     && blockEditRuntimeData.YBottomValue.x.ApproximateEqual(refBlockData.YBottomValue.y)
@@ -202,7 +340,7 @@ namespace TerrainModule.Editor
 
             // +z
             worldRefBlockCoord = worldBlockCoord + Vector3Int.forward;
-            if (_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            if (_curTerrainEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
             {
                 createFace = !(blockEditRuntimeData.YTopValue.z.ApproximateEqual(refBlockData.YTopValue.x)
                     && blockEditRuntimeData.YBottomValue.z.ApproximateEqual(refBlockData.YBottomValue.x)
@@ -254,7 +392,7 @@ namespace TerrainModule.Editor
 
             // -z
             worldRefBlockCoord = worldBlockCoord + Vector3Int.back;
-            if (_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            if (_curTerrainEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
             {
                 createFace = !(blockEditRuntimeData.YTopValue.x.ApproximateEqual(refBlockData.YTopValue.z)
                     && blockEditRuntimeData.YBottomValue.x.ApproximateEqual(refBlockData.YBottomValue.z)
@@ -306,7 +444,7 @@ namespace TerrainModule.Editor
 
             // +y
             worldRefBlockCoord = worldBlockCoord + Vector3Int.up;
-            if (_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            if (_curTerrainEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
             {
                 createFace = blockEditRuntimeData.YTopValue != Vector4.one || refBlockData.YBottomValue != Vector4.zero;
             }
@@ -358,7 +496,7 @@ namespace TerrainModule.Editor
 
             // -y
             worldRefBlockCoord = worldBlockCoord + Vector3Int.down;
-            if (_curEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
+            if (_curTerrainEditData.TryGetBlock(worldRefBlockCoord, out refBlockData, out _))
             {
                 createFace = blockEditRuntimeData.YBottomValue != Vector4.zero || refBlockData.YTopValue != Vector4.one;
             }
@@ -429,54 +567,29 @@ namespace TerrainModule.Editor
             }
         }
 
-        public void RefreshChunkMesh(int chunkId)
+        #endregion
+
+        #region BlockTemplate
+
+        public void SetData(BlockEditRuntimeData editData)
         {
-            if (_curEditData == null)
-                return;
-
-            if (!_chunkIdToPreviewMeshDic.TryGetValue(chunkId, out var previewMesh))
+            _curBlockTemplateEditData = editData;
+            if (_blockTemplateParent == null)
             {
-                previewMesh = new ChunkPreviewMesh(chunkId, transform);
-                _chunkIdToPreviewMeshDic.Add(chunkId, previewMesh);
-            }
-            previewMesh.Mesh.Clear();
-
-            if (!_curEditData.IdToChunkEditData.TryGetValue(chunkId, out var chunkEditData))
-                return;
-
-            var mesh = previewMesh.Mesh;
-            var vertices = new List<Vector3>();
-            var triangles = new List<int>();
-            var normals = new List<Vector3>();
-            var uvs = new List<Vector2>();
-            var uvs2 = new List<Vector2>();
-            var uvs3 = new List<Vector2>();
-            var chunkPivotPos = _curEditData.GetChunkPivotPositionWithId(chunkId);
-            foreach (var blockEditDataPair in chunkEditData.IdToBlockEditData)
-            {
-                var blockEditData = blockEditDataPair.Value;
-                CreateBlock(
-                    vertices,
-                    triangles,
-                    normals,
-                    uvs,
-                    uvs2,
-                    uvs3,
-                    chunkEditData,
-                    blockEditData);
+                var blockTemplateParentGo = new GameObject("BlockTemplate");
+                _blockTemplateParent = blockTemplateParentGo.transform;
+                _blockTemplateParent.SetParent(_terrainChunkParent);
             }
 
-            mesh.vertices = vertices.ToArray();
-            mesh.triangles = triangles.ToArray();
-            mesh.uv = uvs.ToArray();
-            mesh.uv2 = uvs2.ToArray();
-            mesh.uv3 = uvs3.ToArray();
-
-            mesh.RecalculateNormals();
-            mesh.RecalculateTangents();
-            mesh.RecalculateBounds();
-
-            previewMesh.MeshRenderer.sharedMaterial = _curEditData.TerrainMaterial;
+            RefreshBlockTemplatePreview();
         }
+
+        public void RefreshBlockTemplatePreview()
+        {
+            if (_curEditorMode != EditorMode.BlockTemplate)
+                return;
+        }
+
+        #endregion
     }
 }
