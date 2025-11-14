@@ -34,8 +34,8 @@ namespace TerrainModule.Editor
 
         protected override void OnAddToContainer()
         {
-            _pageContainer = new EditorPageContainer(4, GetPageContainerRepaintEvent());
-            _pageContainer.AddPage(new BlockTemplateCreateDataPage(_editorData));
+            _pageContainer = new EditorPageContainer(2, GetPageContainerRepaintEvent());
+            _pageContainer.AddPage(new BlockTemplateDataManagePage(_editorData));
             _pageContainer.AddPage(new BlockTemplateEditDataPage(_editorData));
             _pageContainer.ChangeToPage(0);
         }

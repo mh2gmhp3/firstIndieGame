@@ -35,6 +35,7 @@ namespace TerrainModule.Editor
     public class BlockTemplateEditData : ScriptableObject
     {
         public List<BlockTemplateData> BlockTemplateDataList = new List<BlockTemplateData>();
+        public Material Material;
 
         public BlockTemplateEditData(BlockTemplateEditRuntimeData runtimeData)
         {
@@ -43,6 +44,11 @@ namespace TerrainModule.Editor
             {
                 BlockTemplateDataList.Add(new BlockTemplateData(runtimeData.BlockTemplateDataList[i]));
             }
+        }
+
+        public BlockTemplateEditData(Material material)
+        {
+            Material = material;
         }
     }
 }

@@ -12,15 +12,13 @@ namespace TerrainModule.Editor
 
     public enum TerrainEditPageType
     {
-        Create,
-        Load,
+        DataManage,
         Edit,
     }
 
     public enum BlockTemplateEditPageType
     {
-        Create,
-        Load,
+        DataManage,
         Edit,
     }
 
@@ -46,15 +44,14 @@ namespace TerrainModule.Editor
         public static Dictionary<int, string> TerrainEditPageToName =
             new Dictionary<int, string>()
             {
-                { (int)TerrainEditPageType.Create, "建立"},
-                { (int)TerrainEditPageType.Load, "讀取"},
+                { (int)TerrainEditPageType.DataManage, "檔案管理"},
                 { (int)TerrainEditPageType.Edit, "編輯"}
             };
 
         public static Dictionary<int, string> BlockTemplateEditPageToName =
             new Dictionary<int, string>()
             {
-                { (int)BlockTemplateEditPageType.Create, "建立"},
+                { (int)BlockTemplateEditPageType.DataManage, "檔案管理"},
                 { (int)BlockTemplateEditPageType.Edit, "編輯"}
             };
     }

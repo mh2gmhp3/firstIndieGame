@@ -55,7 +55,7 @@ namespace TerrainModule.Editor
         public float NYRotation;
 
         public float PZRotation;
-        public float ZRotation;
+        public float NZRotation;
 
         public BlockEditRuntimeData(int id)
         {

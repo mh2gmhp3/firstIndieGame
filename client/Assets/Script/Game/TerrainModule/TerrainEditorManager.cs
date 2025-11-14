@@ -40,6 +40,24 @@ namespace TerrainModule.Editor
             }
         }
 
+        public class BlockTemplatePreviewSetting
+        {
+            public Vector3 BlockSize;
+            public Vector4 YTopValue;
+            public Vector4 YBottomValue;
+
+            public float PXRotation;
+            public float NXRotation;
+
+            public float PYRotation;
+            public float NYRotation;
+
+            public float PZRotation;
+            public float NZRotation;
+
+            public int PreviewId;
+        }
+
         private class BlockTemplatePreviewMesh
         {
             public GameObject Obj;
@@ -75,7 +93,8 @@ namespace TerrainModule.Editor
         private Dictionary<int, ChunkPreviewMesh> _chunkIdToPreviewMeshDic = new Dictionary<int, ChunkPreviewMesh>();
 
         private Transform _blockTemplateParent;
-        private BlockEditRuntimeData _curBlockTemplateEditData;
+        private BlockTemplateEditRuntimeData _curBlockTemplateEditData;
+        private BlockTemplatePreviewSetting _blockTemplatePreviewSetting;
         private BlockTemplatePreviewMesh _blockTemplatePreviewMesh;
 
         public void ChangeMode(EditorMode editorMode)
@@ -177,7 +196,6 @@ namespace TerrainModule.Editor
             var uvs = new List<Vector2>();
             var uvs2 = new List<Vector2>();
             var uvs3 = new List<Vector2>();
-            var chunkPivotPos = _curTerrainEditData.GetChunkPivotPositionWithId(chunkId);
             foreach (var blockEditDataPair in chunkEditData.IdToBlockEditData)
             {
                 var blockEditData = blockEditDataPair.Value;
@@ -571,9 +589,10 @@ namespace TerrainModule.Editor
 
         #region BlockTemplate
 
-        public void SetData(BlockEditRuntimeData editData)
+        public void SetData(BlockTemplateEditRuntimeData editData, BlockTemplatePreviewSetting previewSetting)
         {
             _curBlockTemplateEditData = editData;
+            _blockTemplatePreviewSetting = previewSetting;
             if (_blockTemplateParent == null)
             {
                 var blockTemplateParentGo = new GameObject("BlockTemplate");
@@ -588,6 +607,292 @@ namespace TerrainModule.Editor
         {
             if (_curEditorMode != EditorMode.BlockTemplate)
                 return;
+
+            if (_curBlockTemplateEditData == null)
+                return;
+
+            if (_blockTemplatePreviewSetting == null)
+                return;
+
+            if (!_curBlockTemplateEditData.TryGetBlockData(_blockTemplatePreviewSetting.PreviewId, out var previewBlockData))
+                return;
+
+            var size = _blockTemplatePreviewSetting.BlockSize;
+            var worldBlockPivotPos = Vector3.zero;
+
+            Vector4 topYValue = _blockTemplatePreviewSetting.YTopValue;
+            Vector4 bottomTValue = _blockTemplatePreviewSetting.YBottomValue;
+            Vector4 topY = size.y * topYValue;
+            Vector4 bottomY = size.y * bottomTValue;
+
+            var tiling = Vector2.zero;
+            var rotation = Vector2.zero;
+
+            if (_blockTemplatePreviewMesh == null)
+            {
+                _blockTemplatePreviewMesh = new BlockTemplatePreviewMesh(_blockTemplateParent);
+            }
+            _blockTemplatePreviewMesh.Mesh.Clear();
+
+            var mesh = _blockTemplatePreviewMesh.Mesh;
+            var vertices = new List<Vector3>();
+            var triangles = new List<int>();
+            var normals = new List<Vector3>();
+            var uvs = new List<Vector2>();
+            var uvs2 = new List<Vector2>();
+            var uvs3 = new List<Vector2>();
+
+            //方向沒方塊必須建立面
+            //有方塊必須完全共面才不需建立 不考慮交錯要補面問題
+            // +x
+            tiling = previewBlockData.PXTiling;
+            rotation = new Vector2(_blockTemplatePreviewSetting.PXRotation, 0);
+            var p0Pos = worldBlockPivotPos + new Vector3(size.x, 0, 0);
+            var addVertices = new Vector3[]
+            {
+                    p0Pos + new Vector3(0, bottomY.y, 0),                                   // Bottom-left
+                    p0Pos + new Vector3(0, bottomY.w, size.z),                              // Bottom-right
+                    p0Pos + new Vector3(0, topY.y, 0),                                      // Top-left
+                    p0Pos + new Vector3(0, topY.w, size.z)                                  // Top-right
+            };
+            var addTriangles = GetTriangle(vertices.Count, false);
+            var addUVs = new Vector2[]
+            {
+                    new Vector2(0, bottomTValue.y),
+                    new Vector2(1 , bottomTValue.w),
+                    new Vector2(0, topYValue.y),
+                    new Vector2(1, topYValue.w)
+            };
+            var addUVs2 = new Vector2[]
+            {
+                    tiling,
+                    tiling,
+                    tiling,
+                    tiling
+            };
+            var addUVs3 = new Vector2[]
+            {
+                    rotation,
+                    rotation,
+                    rotation,
+                    rotation
+            };
+            vertices.AddRange(addVertices);
+            triangles.AddRange(addTriangles);
+            uvs.AddRange(addUVs);
+            uvs2.AddRange(addUVs2);
+            uvs3.AddRange(addUVs3);
+
+            // -x
+            tiling = previewBlockData.NXTiling;
+            rotation = new Vector2(_blockTemplatePreviewSetting.NXRotation, 0);
+            p0Pos = worldBlockPivotPos + new Vector3(0, 0, size.z);
+            addVertices = new Vector3[]
+            {
+                    p0Pos + new Vector3(0, bottomY.z, 0),                                    // Bottom-left
+                    p0Pos + new Vector3(0, bottomY.x, -size.z),                              // Bottom-right
+                    p0Pos + new Vector3(0, topY.z, 0),                                       // Top-left
+                    p0Pos + new Vector3(0, topY.x, -size.z)                                  // Top-right
+            };
+            addTriangles = GetTriangle(vertices.Count, false);
+            addUVs = new Vector2[]
+            {
+                    new Vector2(0, bottomTValue.z),
+                    new Vector2(1 , bottomTValue.x),
+                    new Vector2(0, topYValue.z),
+                    new Vector2(1, topYValue.x)
+            };
+            addUVs2 = new Vector2[]
+            {
+                    tiling,
+                    tiling,
+                    tiling,
+                    tiling
+            };
+            addUVs3 = new Vector2[]
+            {
+                    rotation,
+                    rotation,
+                    rotation,
+                    rotation
+            };
+            vertices.AddRange(addVertices);
+            triangles.AddRange(addTriangles);
+            uvs.AddRange(addUVs);
+            uvs2.AddRange(addUVs2);
+            uvs3.AddRange(addUVs3);
+
+            // +z
+            tiling = previewBlockData.PZTiling;
+            rotation = new Vector2(_blockTemplatePreviewSetting.PZRotation, 0);
+            p0Pos = worldBlockPivotPos + new Vector3(size.x, 0, size.z);
+            addVertices = new Vector3[]
+            {
+                    p0Pos + new Vector3(0, bottomY.w, 0),                                    // Bottom-left
+                    p0Pos + new Vector3(-size.x, bottomY.z, 0),                              // Bottom-right
+                    p0Pos + new Vector3(0, topY.w, 0) ,                                      // Top-left
+                    p0Pos + new Vector3(-size.x, topY.z, 0)                                  // Top-right
+            };
+            addTriangles = GetTriangle(vertices.Count, false);
+            addUVs = new Vector2[]
+            {
+                    new Vector2(0, bottomTValue.w),
+                    new Vector2(1 , bottomTValue.z),
+                    new Vector2(0, topYValue.w),
+                    new Vector2(1, topYValue.z)
+            };
+            addUVs2 = new Vector2[]
+            {
+                    tiling,
+                    tiling,
+                    tiling,
+                    tiling
+            };
+            addUVs3 = new Vector2[]
+            {
+                    rotation,
+                    rotation,
+                    rotation,
+                    rotation
+            };
+            vertices.AddRange(addVertices);
+            triangles.AddRange(addTriangles);
+            uvs.AddRange(addUVs);
+            uvs2.AddRange(addUVs2);
+            uvs3.AddRange(addUVs3);
+
+            // -z
+            tiling = previewBlockData.NZTiling;
+            rotation = new Vector2(_blockTemplatePreviewSetting.NZRotation, 0);
+            p0Pos = worldBlockPivotPos;
+            addVertices = new Vector3[]
+            {
+                    p0Pos + new Vector3(0, bottomY.x, 0),                                    // Bottom-left
+                    p0Pos + new Vector3(size.x, bottomY.y, 0),                               // Bottom-right
+                    p0Pos + new Vector3(0, topY.x, 0) ,                                      // Top-left
+                    p0Pos + new Vector3(size.x, topY.y, 0)                                   // Top-right
+            };
+            addTriangles = GetTriangle(vertices.Count, false);
+            addUVs = new Vector2[]
+            {
+                    new Vector2(0, bottomTValue.x),
+                    new Vector2(1 , bottomTValue.y),
+                    new Vector2(0, topYValue.x),
+                    new Vector2(1, topYValue.y)
+            };
+            addUVs2 = new Vector2[]
+            {
+                    tiling,
+                    tiling,
+                    tiling,
+                    tiling
+            };
+            addUVs3 = new Vector2[]
+            {
+                    rotation,
+                    rotation,
+                    rotation,
+                    rotation
+            };
+            vertices.AddRange(addVertices);
+            triangles.AddRange(addTriangles);
+            uvs.AddRange(addUVs);
+            uvs2.AddRange(addUVs2);
+            uvs3.AddRange(addUVs3);
+
+            // +y
+            tiling = previewBlockData.PYTiling;
+            rotation = new Vector2(_blockTemplatePreviewSetting.PYRotation, 0);
+            p0Pos = worldBlockPivotPos;
+            addVertices = new Vector3[]
+            {
+                    p0Pos + new Vector3(0, topY.x, 0),                                    // Bottom-left
+                    p0Pos + new Vector3(size.x, topY.y, 0),                               // Bottom-right
+                    p0Pos + new Vector3(0, topY.z, size.z) ,                              // Top-left
+                    p0Pos + new Vector3(size.x, topY.w, size.z)                           // Top-right
+            };
+            bool mirrorTriangle =
+                _blockTemplatePreviewSetting.YTopValue.x > _blockTemplatePreviewSetting.YTopValue.y ||
+                _blockTemplatePreviewSetting.YTopValue.w > _blockTemplatePreviewSetting.YTopValue.z;
+            addTriangles = GetTriangle(vertices.Count, mirrorTriangle);
+            addUVs = new Vector2[]
+            {
+                    new Vector2(0, 0),
+                    new Vector2(1, 0),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1)
+            };
+            addUVs2 = new Vector2[]
+            {
+                    tiling,
+                    tiling,
+                    tiling,
+                    tiling
+            };
+            addUVs3 = new Vector2[]
+            {
+                    rotation,
+                    rotation,
+                    rotation,
+                    rotation
+            };
+            vertices.AddRange(addVertices);
+            triangles.AddRange(addTriangles);
+            uvs.AddRange(addUVs);
+            uvs2.AddRange(addUVs2);
+            uvs3.AddRange(addUVs3);
+
+            // -y
+            tiling = previewBlockData.NYTiling;
+            rotation = new Vector2(_blockTemplatePreviewSetting.NYRotation, 0);
+            p0Pos = worldBlockPivotPos + new Vector3(0, 0, size.z);
+            addVertices = new Vector3[]
+            {
+                    p0Pos + new Vector3(0, bottomY.z, 0),                                     // Bottom-left
+                    p0Pos + new Vector3(size.x, bottomY.w, 0),         // Bottom-right
+                    p0Pos + new Vector3(0, bottomY.x, -size.z) ,       // Top-left
+                    p0Pos + new Vector3(size.x, bottomY.y, -size.z)    // Top-right
+            };
+            mirrorTriangle =
+                _blockTemplatePreviewSetting.YBottomValue.x > _blockTemplatePreviewSetting.YBottomValue.y ||
+                _blockTemplatePreviewSetting.YBottomValue.w > _blockTemplatePreviewSetting.YBottomValue.z;
+            addTriangles = GetTriangle(vertices.Count, mirrorTriangle);
+            addUVs = new Vector2[]
+            {
+                    new Vector2(0, 0),
+                    new Vector2(1, 0),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1)
+            };
+            addUVs2 = new Vector2[]
+            {
+                    tiling,
+                    tiling,
+                    tiling,
+                    tiling
+            };
+            addUVs3 = new Vector2[]
+            {
+                    rotation,
+                    rotation,
+                    rotation,
+                    rotation
+            };
+            vertices.AddRange(addVertices);
+            triangles.AddRange(addTriangles);
+            uvs.AddRange(addUVs);
+            uvs2.AddRange(addUVs2);
+            uvs3.AddRange(addUVs3);
+
+            mesh.vertices = vertices.ToArray();
+            mesh.triangles = triangles.ToArray();
+            mesh.uv = uvs.ToArray();
+            mesh.uv2 = uvs2.ToArray();
+            mesh.uv3 = uvs3.ToArray();
+
+            mesh.RecalculateNormals();
+            mesh.RecalculateTangents();
+            mesh.RecalculateBounds();
         }
 
         #endregion

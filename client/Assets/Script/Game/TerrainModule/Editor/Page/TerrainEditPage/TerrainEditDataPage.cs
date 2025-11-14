@@ -225,7 +225,7 @@ namespace TerrainModule.Editor
                     {
                         var yTopValue = Vector4.one;
                         var yBottomValue = Vector4.zero;
-                        if (CurEditRuntimeData.TryGetBlock(hitResult.ChunkId, hitResult.BlockId, out var blockData, out _))
+                        if (_autoYValueFit &&CurEditRuntimeData.TryGetBlock(hitResult.ChunkId, hitResult.BlockId, out var blockData, out _))
                         {
                             if (hitResult.HitFaceNormal.x == 1)
                             {
