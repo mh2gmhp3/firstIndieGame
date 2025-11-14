@@ -578,7 +578,7 @@ namespace TerrainModule.Editor
             {
                 var blockTemplateParentGo = new GameObject("BlockTemplate");
                 _blockTemplateParent = blockTemplateParentGo.transform;
-                _blockTemplateParent.SetParent(_terrainChunkParent);
+                _blockTemplateParent.SetParent(transform);
             }
 
             RefreshBlockTemplatePreview();
