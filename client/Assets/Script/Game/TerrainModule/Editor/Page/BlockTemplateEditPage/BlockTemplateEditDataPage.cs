@@ -12,7 +12,6 @@ namespace TerrainModule.Editor
     {
         public override string Name => TerrainEditorDefine.BlockTemplateEditPageToName[(int)BlockTemplateEditPageType.Edit];
 
-        private bool _enablePreviewSettingPanel = false;
         private BlockTemplatePreviewSetting _previewSetting = new BlockTemplatePreviewSetting();
 
         private Vector2 _blockTemplateScrollPos = Vector2.zero;
