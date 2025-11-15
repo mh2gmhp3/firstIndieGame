@@ -212,6 +212,9 @@ namespace TerrainModule.Editor
                 ClearSelected();
 
             _curMouseFunction = function;
+
+            SceneView.RepaintAll();
+            Repaint();
         }
 
         private void InvokeMouseFunction(RaycastBlockResult hitResult)
