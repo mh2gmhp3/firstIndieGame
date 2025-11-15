@@ -325,7 +325,7 @@ namespace TerrainModule.Editor
                 }
                 else
                 {
-                    CurEditRuntimeData.AddBlockData(hitResult.ChunkId, blockTemplateData.Id, hitResult.BlockId);
+                    CurEditRuntimeData.AddBlockData(hitResult.ChunkId, hitResult.BlockId, blockTemplateData.Id);
                     _notifyChunkList.Add(hitResult.ChunkId);
                 }
             }
