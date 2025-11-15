@@ -14,13 +14,13 @@ namespace TerrainModule.Editor
             public Vector3Int BlockSize;
             public Vector3Int ChunkBlockNum;
             public Vector3Int ChunkNum;
-            public Material TerrainMaterial;
+            public BlockTemplateEditData BlockTemplateEditData;
         }
 
         //New Data
         private CreateDataDescription _createDataDescription;
 
-        //Select Load Data
+        //Select Terrain Load Data
         private string[] _editDataNames;
         private int _curSelectEditDataIndex = -1;
 
@@ -32,14 +32,18 @@ namespace TerrainModule.Editor
 
         public override void OnEnable()
         {
-            RefreshEditDataList();
+            RefreshTerrainEditDataList();
         }
 
         public override void OnGUI()
         {
-            DrawGUI_CreateDataDescription();
-            GUILayout.Space(5f);
-            DrawGUI_LoadData();
+            EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
+            {
+                DrawGUI_CreateDataDescription();
+                GUILayout.Space(5f);
+                DrawGUI_LoadData();
+            }
+            EditorGUILayout.EndHorizontal();
         }
 
         public override void OnSceneGUI()
@@ -53,18 +57,18 @@ namespace TerrainModule.Editor
 
         private void DrawGUI_CreateDataDescription()
         {
-            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
+            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box, GUILayout.MaxWidth(_editorData.EditorWindow.position.width / 2));
             {
                 EditorGUILayout.LabelField("新建檔案");
                 _createDataDescription.Name = EditorGUILayout.TextField("名稱", _createDataDescription.Name);
                 _createDataDescription.BlockSize = ClampValidValue(EditorGUILayout.Vector3IntField("BlockSize", _createDataDescription.BlockSize));
                 _createDataDescription.ChunkBlockNum = ClampValidValue(EditorGUILayout.Vector3IntField("ChunkBlockNum", _createDataDescription.ChunkBlockNum));
                 _createDataDescription.ChunkNum = ClampValidValue(EditorGUILayout.Vector3IntField("ChunkNum", _createDataDescription.ChunkNum));
-                _createDataDescription.TerrainMaterial =
-                    (Material)EditorGUILayout.ObjectField(
-                        "材質:",
-                        _createDataDescription.TerrainMaterial,
-                        typeof(Material),
+                _createDataDescription.BlockTemplateEditData =
+                    (BlockTemplateEditData)EditorGUILayout.ObjectField(
+                        "地格範本:",
+                        _createDataDescription.BlockTemplateEditData,
+                        typeof(BlockTemplateEditData),
                         false);
 
                 if (GUILayout.Button("新建檔案"))
@@ -80,12 +84,12 @@ namespace TerrainModule.Editor
 
         private void DrawGUI_LoadData()
         {
-            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
+            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box, GUILayout.MaxWidth(_editorData.EditorWindow.position.width / 2));
             {
                 EditorGUILayout.LabelField("讀取檔案");
                 if (GUILayout.Button("刷新檔案列表"))
                 {
-                    RefreshEditDataList();
+                    RefreshTerrainEditDataList();
                 }
 
                 if (_editDataNames.Length > 0)
@@ -140,16 +144,21 @@ namespace TerrainModule.Editor
                 _createDataDescription.BlockSize,
                 _createDataDescription.ChunkBlockNum,
                 _createDataDescription.ChunkNum,
-                _createDataDescription.TerrainMaterial);
+                _createDataDescription.BlockTemplateEditData);
             newEditData.name = _createDataDescription.Name;
             AssetDatabase.CreateAsset(newEditData, Path.Combine(TerrainEditorDefine.EditTerrainDataFolderPath, newEditData.name) + ".asset");
             AssetDatabase.Refresh();
             return _editorData.LoadTerrainData(newEditData.name);
         }
 
-        private void RefreshEditDataList()
+        private void RefreshTerrainEditDataList()
         {
             _editDataNames = TerrainEditorUtility.GetTerrainEditDataNames();
+        }
+
+        private void RefreshBlockTemplateEditDataList()
+        {
+            _editDataNames = TerrainEditorUtility.GetBlockTemplateEditDataNames();
         }
     }
 }

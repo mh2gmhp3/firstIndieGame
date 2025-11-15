@@ -27,6 +27,7 @@ namespace TerrainModule.Editor
         public BlockEditData(BlockEditRuntimeData runtimeData)
         {
             Id = runtimeData.Id;
+            TemplateId = runtimeData.TemplateId;
 
             YTopValue = runtimeData.YTopValue;
             YBottomValue = runtimeData.YBottomValue;
@@ -69,30 +70,35 @@ namespace TerrainModule.Editor
         /// </summary>
         public Vector3Int ChunkNum = Vector3Int.one;
 
-        public Material TerrainMaterial;
+        public BlockTemplateEditData BlockTemplateEditData;
 
         public List<ChunkEditData> ChunkEditDataList = new List<ChunkEditData>();
 
-        public TerrainEditData(Vector3Int blockSize, Vector3Int chunkBlockNum, Vector3Int chunkNum, Material terrainMat)
+        public TerrainEditData(Vector3Int blockSize, Vector3Int chunkBlockNum, Vector3Int chunkNum, BlockTemplateEditData blockTemplateEditData)
         {
             BlockSize = blockSize;
             ChunkBlockNum = chunkBlockNum;
             ChunkNum = chunkNum;
-            TerrainMaterial = terrainMat;
+            BlockTemplateEditData = blockTemplateEditData;
         }
 
         public TerrainEditData(TerrainEditRuntimeData runtimeData)
         {
+            Update(runtimeData);
+        }
+
+        public void Update(TerrainEditRuntimeData runtimeData)
+        {
             BlockSize = runtimeData.BlockSize;
             ChunkBlockNum = runtimeData.ChunkBlockNum;
             ChunkNum = runtimeData.ChunkNum;
+            BlockTemplateEditData = runtimeData.BlockTemplateEditData;
 
             ChunkEditDataList.Clear();
             foreach (var chunkEditData in runtimeData.IdToChunkEditData.Values)
             {
                 ChunkEditDataList.Add(new ChunkEditData(chunkEditData));
             }
-            TerrainMaterial = runtimeData.TerrainMaterial;
         }
     }
 }

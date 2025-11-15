@@ -25,17 +25,13 @@ namespace TerrainModule.Editor
             Debug.Log("TerrainEditor Enable");
             EditorSceneManager.OpenScene(TerrainEditorDefine.EditorScenePath, OpenSceneMode.Single);
 
-            var mgr = FindObjectOfType<TerrainEditorManager>();
-            if (mgr == null)
+            _editorData.EditorWindow = this;
+
+            if (_editorData.TerrainEditorMgr == null)
             {
                 var mgrObj = new GameObject(TerrainEditorDefine.ManagerName);
                 _editorData.TerrainEditorMgrObj = mgrObj;
-                _editorData.TerrainEditorMgr = mgrObj.AddComponent<TerrainEditorManager>();
-            }
-            else
-            {
-                _editorData.TerrainEditorMgrObj = mgr.gameObject;
-                _editorData.TerrainEditorMgr = mgr;
+                _editorData.TerrainEditorMgr = new TerrainEditorManager(mgrObj);
             }
 
             _pageContainer = new EditorPageContainer(2, Repaint);

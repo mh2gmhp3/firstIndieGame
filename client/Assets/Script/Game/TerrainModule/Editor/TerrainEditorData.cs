@@ -7,6 +7,8 @@ namespace TerrainModule.Editor
 {
     public class TerrainEditorData
     {
+        public TerrainEditorWindow EditorWindow;
+
         public GameObject TerrainEditorMgrObj;
         public TerrainEditorManager TerrainEditorMgr;
         //Current Edit Runtime Data
@@ -39,11 +41,19 @@ namespace TerrainModule.Editor
 
             var path = Path.Combine(TerrainEditorDefine.EditTerrainDataFolderPath, CurTerrainEditRuntimeData.Name + ".asset");
             var assetData = AssetDatabase.LoadAssetAtPath<TerrainEditData>(path);
-            if (assetData != null)
-                AssetDatabase.DeleteAsset(path);
-            var saveData = new TerrainEditData(CurTerrainEditRuntimeData);
-            AssetDatabase.CreateAsset(saveData, path);
-            AssetDatabase.Refresh();
+            if (assetData == null)
+            {
+                var saveData = new TerrainEditData(CurTerrainEditRuntimeData);
+                AssetDatabase.CreateAsset(saveData, path);
+                AssetDatabase.Refresh();
+            }
+            else
+            {
+                assetData.Update(CurTerrainEditRuntimeData);
+                EditorUtility.SetDirty(assetData);
+                AssetDatabase.SaveAssets();
+            }
+
             return true;
         }
 
@@ -73,11 +83,19 @@ namespace TerrainModule.Editor
 
             var path = Path.Combine(TerrainEditorDefine.EditBlockTemplateDataFolderPath, CurBlockTemplateEditRuntimeData.Name + ".asset");
             var assetData = AssetDatabase.LoadAssetAtPath<BlockTemplateEditData>(path);
-            if (assetData != null)
-                AssetDatabase.DeleteAsset(path);
-            var saveData = new BlockTemplateEditData(CurBlockTemplateEditRuntimeData);
-            AssetDatabase.CreateAsset(saveData, path);
-            AssetDatabase.Refresh();
+            if (assetData == null)
+            {
+                var saveData = new BlockTemplateEditData(CurBlockTemplateEditRuntimeData);
+                AssetDatabase.CreateAsset(saveData, path);
+                AssetDatabase.Refresh();
+            }
+            else
+            {
+                assetData.Update(CurBlockTemplateEditRuntimeData);
+                EditorUtility.SetDirty(assetData);
+                AssetDatabase.SaveAssets();
+            }
+
             return true;
         }
 

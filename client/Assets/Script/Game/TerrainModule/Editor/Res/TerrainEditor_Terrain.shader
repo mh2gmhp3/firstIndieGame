@@ -5,7 +5,7 @@ Shader "TerrainEditor/Terrain"
     // because the output color is predefined in the fragment shader code.
     Properties
     {
-        _BaseMap("Base Map", 2D) = "white"
+        _TileMap("Tile Map", 2D) = "white"
         _Tiling("Tiling", Vector) = (4, 4, 0, 0)
     }
 
@@ -62,11 +62,11 @@ Shader "TerrainEditor/Terrain"
                 float4 shadowCoord : TEXCOORD5;
             };
 
-            TEXTURE2D(_BaseMap);
-            SAMPLER(sampler_BaseMap);
+            TEXTURE2D(_TileMap);
+            SAMPLER(sampler_TileMap);
 
             CBUFFER_START(UnityPerMaterial)
-                float4 _BaseMap_ST;
+                float4 _TileMap_ST;
                 float2 _Tiling;
             CBUFFER_END
 
@@ -103,7 +103,7 @@ Shader "TerrainEditor/Terrain"
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.positionWS = TransformObjectToWorld(IN.positionOS.xyz);
                 OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
-                OUT.uv = IN.uv; //TRANSFORM_TEX(IN.uv, _BaseMap);
+                OUT.uv = IN.uv; //TRANSFORM_TEX(IN.uv, _TileMap);
                 OUT.uv2_Tiling = IN.uv2;
                 OUT.uv3_Rotation = IN.uv3;
 
@@ -118,7 +118,7 @@ Shader "TerrainEditor/Terrain"
                 float2 uvTiling = 1 / _Tiling;
                 float2 uv = frac(IN.uv) * uvTiling + IN.uv2_Tiling;
                 uv = RotateUV(uv, IN.uv2_Tiling + uvTiling / 2, IN.uv3_Rotation.x);
-                half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv);
+                half4 color = SAMPLE_TEXTURE2D(_TileMap, sampler_TileMap, uv);
 
                 float3 normalWS = normalize(IN.normalWS);
 

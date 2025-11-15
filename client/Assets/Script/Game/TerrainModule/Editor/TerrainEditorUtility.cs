@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -32,6 +31,64 @@ namespace TerrainModule.Editor
                 result[i] = name;
             }
             return result;
+        }
+
+        public static Material GenTerrainMaterial(Shader shader, Texture2D tileMap, Vector2 tiling)
+        {
+            var result = new Material(shader);
+            result.SetTexture("_TileMap", tileMap);
+            result.SetVector("Tiling", tiling);
+            return result;
+        }
+
+        public static (Vector4 TopValue, Vector4 BottomValue) ClampYValue(Vector4 topValue, Vector4 bottomValue)
+        {
+            topValue = new Vector4(
+                Mathf.Clamp01(topValue.x),
+                Mathf.Clamp01(topValue.y),
+                Mathf.Clamp01(topValue.z),
+                Mathf.Clamp01(topValue.w));
+            bottomValue = new Vector4(
+                Mathf.Clamp01(bottomValue.x),
+                Mathf.Clamp01(bottomValue.y),
+                Mathf.Clamp01(bottomValue.z),
+                Mathf.Clamp01(bottomValue.w));
+            topValue = new Vector4(
+                (float)Math.Round((double)Mathf.Clamp(topValue.x, bottomValue.x, 1), 1),
+                (float)Math.Round((double)Mathf.Clamp(topValue.y, bottomValue.y, 1), 1),
+                (float)Math.Round((double)Mathf.Clamp(topValue.z, bottomValue.z, 1), 1),
+                (float)Math.Round((double)Mathf.Clamp(topValue.w, bottomValue.w, 1), 1));
+            bottomValue = new Vector4(
+                (float)Math.Round((double)Mathf.Clamp(bottomValue.x, 0, topValue.x), 1),
+                (float)Math.Round((double)Mathf.Clamp(bottomValue.y, 0, topValue.y), 1),
+                (float)Math.Round((double)Mathf.Clamp(bottomValue.z, 0, topValue.z), 1),
+                (float)Math.Round((double)Mathf.Clamp(bottomValue.w, 0, topValue.w), 1));
+            return (topValue, bottomValue);
+        }
+
+        public static void DrawTiling(BlockTemplateRuntimeData data, bool canEdit)
+        {
+            DrawTiling("+x", ref data.PXTiling, "-x", ref data.NXTiling, canEdit);
+            DrawTiling("+y", ref data.PYTiling, "-y", ref data.NYTiling, canEdit);
+            DrawTiling("+z", ref data.PZTiling, "-z", ref data.NZTiling, canEdit);
+        }
+
+        private static void DrawTiling(string pLabel, ref Vector2 pTiling, string nLabel, ref Vector2 nTiling, bool canEdit)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                if (canEdit)
+                {
+                    pTiling = EditorGUILayout.Vector2Field(pLabel, pTiling);
+                    nTiling = EditorGUILayout.Vector2Field(nLabel, nTiling);
+                }
+                else
+                {
+                    EditorGUILayout.LabelField($"{pLabel}:{pTiling}");
+                    EditorGUILayout.LabelField($"{nLabel}:{nTiling}");
+                }
+            }
+            EditorGUILayout.EndHorizontal();
         }
 
         /// <summary>

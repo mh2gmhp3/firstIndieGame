@@ -57,17 +57,19 @@ namespace TerrainModule.Editor
         public float PZRotation;
         public float NZRotation;
 
-        public BlockEditRuntimeData(int id)
+        public BlockEditRuntimeData(int id, int templateId)
         {
             Id = id;
+            TemplateId = templateId;
 
             YTopValue = Vector4.one;
             YBottomValue = Vector4.zero;
         }
 
-        public BlockEditRuntimeData(int id, Vector4 yTopValue, Vector4 yBottomValue)
+        public BlockEditRuntimeData(int id, int templateId, Vector4 yTopValue, Vector4 yBottomValue)
         {
             Id = id;
+            TemplateId = templateId;
 
             SetYValue(yTopValue, yBottomValue);
         }
@@ -75,6 +77,7 @@ namespace TerrainModule.Editor
         public BlockEditRuntimeData(BlockEditData editData)
         {
             Id = editData.Id;
+            TemplateId = editData.TemplateId;
 
             YTopValue = editData.YTopValue;
             YBottomValue = editData.YBottomValue;
@@ -82,26 +85,9 @@ namespace TerrainModule.Editor
 
         public void SetYValue(Vector4 topValue, Vector4 bottomValue)
         {
-            topValue = new Vector4(
-                Mathf.Clamp01(topValue.x),
-                Mathf.Clamp01(topValue.y),
-                Mathf.Clamp01(topValue.z),
-                Mathf.Clamp01(topValue.w));
-            bottomValue = new Vector4(
-                Mathf.Clamp01(bottomValue.x),
-                Mathf.Clamp01(bottomValue.y),
-                Mathf.Clamp01(bottomValue.z),
-                Mathf.Clamp01(bottomValue.w));
-            YTopValue = new Vector4(
-                (float)Math.Round((double)Mathf.Clamp(topValue.x, bottomValue.x, 1), 1),
-                (float)Math.Round((double)Mathf.Clamp(topValue.y, bottomValue.y, 1), 1),
-                (float)Math.Round((double)Mathf.Clamp(topValue.z, bottomValue.z, 1), 1),
-                (float)Math.Round((double)Mathf.Clamp(topValue.w, bottomValue.w, 1), 1));
-            YBottomValue = new Vector4(
-                (float)Math.Round((double)Mathf.Clamp(bottomValue.x, 0, topValue.x), 1),
-                (float)Math.Round((double)Mathf.Clamp(bottomValue.y, 0, topValue.y), 1),
-                (float)Math.Round((double)Mathf.Clamp(bottomValue.z, 0, topValue.z), 1),
-                (float)Math.Round((double)Mathf.Clamp(bottomValue.w, 0, topValue.w), 1));
+            var clampValue = TerrainEditorUtility.ClampYValue(topValue, bottomValue);
+            YTopValue = clampValue.TopValue;
+            YBottomValue = clampValue.BottomValue;
         }
     }
 
@@ -143,9 +129,12 @@ namespace TerrainModule.Editor
         public Vector3Int ChunkBlockNum = Vector3Int.one;
         public Vector3Int ChunkNum = Vector3Int.one;
 
-        public Material TerrainMaterial;
+        public BlockTemplateEditData BlockTemplateEditData;
 
         public Dictionary<int, ChunkEditRuntimeData> IdToChunkEditData = new Dictionary<int, ChunkEditRuntimeData>();
+
+        public BlockTemplateEditRuntimeData BlockTemplateEditRuntimeData { get; private set; }
+        public Material TerrainMaterial { get; private set; }
 
         public TerrainEditRuntimeData(TerrainEditData editData)
         {
@@ -153,7 +142,7 @@ namespace TerrainModule.Editor
             BlockSize = editData.BlockSize;
             ChunkBlockNum = editData.ChunkBlockNum;
             ChunkNum = editData.ChunkNum;
-            TerrainMaterial = editData.TerrainMaterial;
+            BlockTemplateEditData = editData.BlockTemplateEditData;
 
             IdToChunkEditData.Clear();
             for (int i = 0; i < editData.ChunkEditDataList.Count; i++)
@@ -165,6 +154,19 @@ namespace TerrainModule.Editor
                 var chunkRuntimeData = new ChunkEditRuntimeData(chunk);
                 IdToChunkEditData.Add(chunkRuntimeData.Id, chunkRuntimeData);
             }
+
+            RefreshBlockTemplateRuntimeData();
+        }
+
+        public void RefreshBlockTemplateRuntimeData()
+        {
+            if (BlockTemplateEditData == null)
+                return;
+            BlockTemplateEditRuntimeData = new BlockTemplateEditRuntimeData(BlockTemplateEditData);
+            TerrainMaterial = TerrainEditorUtility.GenTerrainMaterial(
+                BlockTemplateEditRuntimeData.Shader,
+                BlockTemplateEditRuntimeData.TileMap,
+                BlockTemplateEditRuntimeData.Tiling);
         }
 
         public Vector3Int GetBlockNum()
@@ -553,7 +555,7 @@ namespace TerrainModule.Editor
             return true;
         }
 
-        public void AddBlockData(int chunkId, int blockId)
+        public void AddBlockData(int chunkId, int blockId, int blockTemplateId)
         {
             if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
                 return;
@@ -568,12 +570,12 @@ namespace TerrainModule.Editor
 
             if (!chunkEditRuntime.IdToBlockEditData.TryGetValue(blockId, out var blockEditRuntimeData))
             {
-                blockEditRuntimeData = new BlockEditRuntimeData(blockId);
+                blockEditRuntimeData = new BlockEditRuntimeData(blockId, blockTemplateId);
                 chunkEditRuntime.IdToBlockEditData.Add(blockId, blockEditRuntimeData);
             }
         }
 
-        public void AddBlockData(int chunkId, int blockId, Vector4 yTopValue, Vector4 yBottomValue)
+        public void AddBlockData(int chunkId, int blockId, int blockTemplateId, Vector4 yTopValue, Vector4 yBottomValue)
         {
             if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
                 return;
@@ -588,7 +590,7 @@ namespace TerrainModule.Editor
 
             if (!chunkEditRuntime.IdToBlockEditData.TryGetValue(blockId, out var blockEditRuntimeData))
             {
-                blockEditRuntimeData = new BlockEditRuntimeData(blockId, yTopValue, yBottomValue);
+                blockEditRuntimeData = new BlockEditRuntimeData(blockId, blockTemplateId, yTopValue, yBottomValue);
                 chunkEditRuntime.IdToBlockEditData.Add(blockId, blockEditRuntimeData);
             }
         }

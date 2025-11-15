@@ -29,13 +29,33 @@ namespace TerrainModule.Editor
             PZTiling = data.PZTiling;
             NZTiling = data.NZTiling;
         }
+
+        public BlockTemplateRuntimeData(int id)
+        {
+            Id = id;
+
+            PXTiling = Vector2.zero;
+            NXTiling = Vector2.zero;
+
+            PYTiling = Vector2.zero;
+            NYTiling = Vector2.zero;
+
+            PZTiling = Vector2.zero;
+            NZTiling = Vector2.zero;
+        }
     }
 
     public class BlockTemplateEditRuntimeData
     {
         public string Name;
 
+        public Texture2D TileMap;
+        public Vector2 Tiling;
+        public Shader Shader;
+
         public List<BlockTemplateRuntimeData> BlockTemplateDataList = new List<BlockTemplateRuntimeData>();
+
+        public Material Material { get; private set; }
 
         public BlockTemplateEditRuntimeData(BlockTemplateEditData editData)
         {
@@ -45,6 +65,17 @@ namespace TerrainModule.Editor
             {
                 BlockTemplateDataList.Add(new BlockTemplateRuntimeData(editData.BlockTemplateDataList[i]));
             }
+
+            TileMap = editData.TileMap;
+            Tiling = editData.Tiling;
+            Shader = editData.Shader;
+
+            RefreshMaterial();
+        }
+
+        public void RefreshMaterial()
+        {
+            Material = TerrainEditorUtility.GenTerrainMaterial(Shader, TileMap, Tiling);
         }
 
         public bool TryGetBlockData(int id, out BlockTemplateRuntimeData result)
@@ -60,6 +91,26 @@ namespace TerrainModule.Editor
 
             result = null;
             return false;
+        }
+
+        public int AddBlockData()
+        {
+            var nextId = GetNextId();
+            BlockTemplateDataList.Add(new BlockTemplateRuntimeData(nextId));
+            return nextId;
+        }
+
+        private int GetNextId()
+        {
+            var maxId = 0;
+            for (int i = 0; i < BlockTemplateDataList.Count; i++)
+            {
+                if (BlockTemplateDataList[i].Id > maxId)
+                {
+                    maxId = BlockTemplateDataList[i].Id;
+                }
+            }
+            return maxId + 1;
         }
     }
 }

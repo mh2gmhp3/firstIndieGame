@@ -25,6 +25,9 @@ namespace TerrainModule.Editor
 
         private MouseFunction _curMouseFunction = MouseFunction.AddBlock;
 
+        private Vector2 _blockTemplateScrollPos = Vector2.zero;
+        private int _addBlockTemplateId = 0;
+
         private int _curSelectedChunkId = -1;
         private BlockEditRuntimeData _curSelectedBlockData = null;
 
@@ -51,8 +54,6 @@ namespace TerrainModule.Editor
             DrawEditorSetting();
             EditorGUILayout.Space(5f);
             DrawMouseFunction();
-            EditorGUILayout.Space(5f);
-            DrawSaveData();
         }
 
         public override void OnSceneGUI()
@@ -218,6 +219,15 @@ namespace TerrainModule.Editor
             _notifyChunkList.Clear();
             if (_curMouseFunction == MouseFunction.AddBlock)
             {
+                if (!CurEditRuntimeData.BlockTemplateEditRuntimeData.TryGetBlockData(_addBlockTemplateId, out var blockTemplateData))
+                {
+                    EditorUtility.DisplayDialog(
+                        TerrainEditorDefine.Dialog_Title_Error,
+                        "找不到要新增的方塊範本，請重新選擇",
+                        TerrainEditorDefine.Dialog_Ok_Confirm);
+                    return;
+                }
+
                 if (hitResult.HaveData)
                 {
                     var newAddWorldBlockCoord = hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal;
@@ -307,7 +317,7 @@ namespace TerrainModule.Editor
                             }
                         }
 
-                        CurEditRuntimeData.AddBlockData(chunkId, blockInChunkId, yTopValue, yBottomValue);
+                        CurEditRuntimeData.AddBlockData(chunkId, blockInChunkId, blockTemplateData.Id, yTopValue, yBottomValue);
                         _notifyChunkList.Add(hitResult.ChunkId);
                         if (hitResult.ChunkId != chunkId)
                             _notifyChunkList.Add(chunkId);
@@ -315,7 +325,7 @@ namespace TerrainModule.Editor
                 }
                 else
                 {
-                    CurEditRuntimeData.AddBlockData(hitResult.ChunkId, hitResult.BlockId);
+                    CurEditRuntimeData.AddBlockData(hitResult.ChunkId, blockTemplateData.Id, hitResult.BlockId);
                     _notifyChunkList.Add(hitResult.ChunkId);
                 }
             }
@@ -364,14 +374,36 @@ namespace TerrainModule.Editor
                 EditorGUILayout.Vector3IntField("ChunkBlockNum", CurEditRuntimeData.ChunkBlockNum);
                 EditorGUILayout.Vector3IntField("ChunkNum", CurEditRuntimeData.ChunkNum);
                 EditorGUI.BeginChangeCheck();
-                CurEditRuntimeData.TerrainMaterial =
-                    (Material)EditorGUILayout.ObjectField(
-                        "材質:",
-                        CurEditRuntimeData.TerrainMaterial,
-                        typeof(Material),
+                CurEditRuntimeData.BlockTemplateEditData =
+                    (BlockTemplateEditData)EditorGUILayout.ObjectField(
+                        "地格範本:",
+                        CurEditRuntimeData.BlockTemplateEditData,
+                        typeof(BlockTemplateEditData),
                         false);
                 if (EditorGUI.EndChangeCheck())
+                {
+                    CurEditRuntimeData.RefreshBlockTemplateRuntimeData();
                     _editorData.TerrainEditorMgr.RebuildAllTerrainPreviewMesh();
+                }
+                EditorGUILayout.BeginHorizontal();
+                {
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("刷新範本"))
+                    {
+                        CurEditRuntimeData.RefreshBlockTemplateRuntimeData();
+                        _editorData.TerrainEditorMgr.RebuildAllTerrainPreviewMesh();
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();
+                {
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("存檔"))
+                    {
+                        _editorData.SaveCurTerrainData();
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
             }
             EditorGUILayout.EndVertical();
         }
@@ -399,8 +431,24 @@ namespace TerrainModule.Editor
             {
                 EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
                 {
-                    EditorGUILayout.LabelField("選擇新增方塊類型");
                     _autoYValueFit = EditorGUILayout.Toggle("自動貼合Y高低值:", _autoYValueFit);
+                    EditorGUILayout.LabelField("新增方塊類型");
+                    if (CurEditRuntimeData.BlockTemplateEditRuntimeData == null)
+                    {
+                        EditorGUILayout.LabelField("沒有設定方塊範本");
+                    }
+                    else
+                    {
+                        EditorGUILayout.LabelField($"當前選擇Id:{_addBlockTemplateId}");
+                        _blockTemplateScrollPos = EditorGUILayout.BeginScrollView(_blockTemplateScrollPos, CommonGUIStyle.Default_Box);
+                        {
+                            for (int i = 0; i < CurEditRuntimeData.BlockTemplateEditRuntimeData.BlockTemplateDataList.Count; i++)
+                            {
+                                DrawBlockTemplateScrollCell(CurEditRuntimeData.BlockTemplateEditRuntimeData.BlockTemplateDataList[i]);
+                            }
+                        }
+                        EditorGUILayout.EndScrollView();
+                    }
                 }
                 EditorGUILayout.EndVertical();
             }
@@ -415,7 +463,10 @@ namespace TerrainModule.Editor
                     }
                     else
                     {
-                        EditorGUILayout.LabelField($"選擇方塊: ChunkId:{_curSelectedChunkId} BlockId:{_curSelectedBlockData.Id}");
+                        EditorGUILayout.LabelField($"選擇方塊: " +
+                            $"ChunkId:{_curSelectedChunkId} " +
+                            $"BlockId:{_curSelectedBlockData.Id} " +
+                            $"TemplateId:{_curSelectedBlockData.TemplateId}");
                         EditorGUILayout.Space(5f);
 
                         Vector4 newYTopValue = _curSelectedBlockData.YTopValue;
@@ -461,12 +512,18 @@ namespace TerrainModule.Editor
             }
         }
 
-        private void DrawSaveData()
+        private void DrawBlockTemplateScrollCell(BlockTemplateRuntimeData data)
         {
-            if (GUILayout.Button("存檔"))
+            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
             {
-                _editorData.SaveCurTerrainData();
+                EditorGUILayout.LabelField($"Id:{data.Id}");
+                TerrainEditorUtility.DrawTiling(data, false);
+                if (GUILayout.Button("選擇"))
+                {
+                    _addBlockTemplateId = data.Id;
+                }
             }
+            EditorGUILayout.EndVertical();
         }
 
         #endregion
