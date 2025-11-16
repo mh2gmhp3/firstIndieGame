@@ -37,7 +37,7 @@ namespace TerrainModule.Editor
         {
             var result = new Material(shader);
             result.SetTexture("_TileMap", tileMap);
-            result.SetVector("Tiling", tiling);
+            result.SetVector("_Tiling", new Vector4(tiling.x, tiling.y, 0, 0));
             return result;
         }
 
