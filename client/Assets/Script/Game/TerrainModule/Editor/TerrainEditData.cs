@@ -84,10 +84,10 @@ namespace TerrainModule.Editor
 
         public TerrainEditData(TerrainEditRuntimeData runtimeData)
         {
-            Update(runtimeData);
+            UpdateData(runtimeData);
         }
 
-        public void Update(TerrainEditRuntimeData runtimeData)
+        public void UpdateData(TerrainEditRuntimeData runtimeData)
         {
             BlockSize = runtimeData.BlockSize;
             ChunkBlockNum = runtimeData.ChunkBlockNum;

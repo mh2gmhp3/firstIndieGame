@@ -43,10 +43,10 @@ namespace TerrainModule.Editor
 
         public BlockTemplateEditData(BlockTemplateEditRuntimeData runtimeData)
         {
-            Update(runtimeData);
+            UpdateData(runtimeData);
         }
 
-        public void Update(BlockTemplateEditRuntimeData runtimeData)
+        public void UpdateData(BlockTemplateEditRuntimeData runtimeData)
         {
             BlockTemplateDataList.Clear();
             for (int i = 0; i < runtimeData.BlockTemplateDataList.Count; i++)

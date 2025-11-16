@@ -49,7 +49,7 @@ namespace TerrainModule.Editor
             }
             else
             {
-                assetData.Update(CurTerrainEditRuntimeData);
+                assetData.UpdateData(CurTerrainEditRuntimeData);
                 EditorUtility.SetDirty(assetData);
                 AssetDatabase.SaveAssets();
             }
@@ -91,7 +91,7 @@ namespace TerrainModule.Editor
             }
             else
             {
-                assetData.Update(CurBlockTemplateEditRuntimeData);
+                assetData.UpdateData(CurBlockTemplateEditRuntimeData);
                 EditorUtility.SetDirty(assetData);
                 AssetDatabase.SaveAssets();
             }
