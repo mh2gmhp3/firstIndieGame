@@ -55,6 +55,7 @@ namespace TerrainModule.Editor
             EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box, GUILayout.MaxWidth(_editorData.EditorWindow.position.width / 2));
             {
                 EditorGUILayout.TextField("名稱", CurEditRuntimeData.Name);
+                EditorGUI.BeginChangeCheck();
                 CurEditRuntimeData.TileMap =
                     (Texture2D)EditorGUILayout.ObjectField(
                         "TileMap:",
