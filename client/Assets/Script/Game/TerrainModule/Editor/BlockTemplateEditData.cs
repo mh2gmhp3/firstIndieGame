@@ -36,7 +36,7 @@ namespace TerrainModule.Editor
     public class BlockTemplateEditData : ScriptableObject
     {
         public Texture2D TileMap;
-        public Vector2 Tiling;
+        public Vector2Int Tiling;
         public Shader Shader;
 
         public List<BlockTemplateData> BlockTemplateDataList = new List<BlockTemplateData>();
@@ -59,7 +59,7 @@ namespace TerrainModule.Editor
             Shader = runtimeData.Shader;
         }
 
-        public BlockTemplateEditData(Texture2D tileMap, Vector2 tiling, Shader shader)
+        public BlockTemplateEditData(Texture2D tileMap, Vector2Int tiling, Shader shader)
         {
             TileMap = tileMap; ;
             Tiling = tiling;

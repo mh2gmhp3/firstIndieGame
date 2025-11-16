@@ -14,7 +14,7 @@ namespace TerrainModule.Editor
         {
             public string Name;
             public Texture2D TileMap;
-            public Vector2 Tiling;
+            public Vector2Int Tiling;
             public Shader Shader;
         }
 
@@ -60,7 +60,7 @@ namespace TerrainModule.Editor
                         _createDataDescription.TileMap,
                         typeof(Texture2D),
                         false);
-                _createDataDescription.Tiling = EditorGUILayout.Vector2Field("Tiling:", _createDataDescription.Tiling);
+                _createDataDescription.Tiling = EditorGUILayout.Vector2IntField("Tiling:", _createDataDescription.Tiling);
                 _createDataDescription.Shader =
                     (Shader)EditorGUILayout.ObjectField(
                         "Shader:",

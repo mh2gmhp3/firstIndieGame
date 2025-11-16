@@ -1,5 +1,6 @@
 ﻿using Framework.Editor.Utility;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -45,6 +46,7 @@ namespace TerrainModule.Editor
         private void OnDisable()
         {
             SceneView.duringSceneGui -= OnSceneGUI;
+            EditorPreviewUtility.Cleanup();
         }
 
         private void OnGUI()

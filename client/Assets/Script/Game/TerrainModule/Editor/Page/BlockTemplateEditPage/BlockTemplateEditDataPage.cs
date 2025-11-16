@@ -15,12 +15,19 @@ namespace TerrainModule.Editor
         private BlockTemplatePreviewSetting _previewSetting = new BlockTemplatePreviewSetting();
 
         private Vector2 _blockTemplateScrollPos = Vector2.zero;
+        private bool _scrollerShowTilingValue = false;
+        private List<int> _removeBlockDataId = new List<int>();
 
         private BlockTemplateEditRuntimeData CurEditRuntimeData => _editorData.CurBlockTemplateEditRuntimeData;
 
         public BlockTemplateEditDataPage(TerrainEditorData editorData) : base(editorData)
         {
             editorData.BlockTemplatePreviewSetting = _previewSetting;
+        }
+
+        public override void OnDisable()
+        {
+            EditorPreviewUtility.Cleanup();
         }
 
         public override void OnGUI()
@@ -54,7 +61,7 @@ namespace TerrainModule.Editor
                         CurEditRuntimeData.TileMap,
                         typeof(Texture2D),
                         false);
-                CurEditRuntimeData.Tiling = EditorGUILayout.Vector2Field("Tiling:", CurEditRuntimeData.Tiling);
+                CurEditRuntimeData.Tiling = EditorGUILayout.Vector2IntField("Tiling:", CurEditRuntimeData.Tiling);
                 CurEditRuntimeData.Shader =
                     (Shader)EditorGUILayout.ObjectField(
                         "Shader:",
@@ -129,7 +136,8 @@ namespace TerrainModule.Editor
 
         private void DrawBlockTemplateList()
         {
-            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box, GUILayout.MaxWidth(_editorData.EditorWindow.position.width / 2));
+            var maxWidth = _scrollerShowTilingValue ? _editorData.EditorWindow.position.width / 2 : 190;
+            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box, GUILayout.MaxWidth(maxWidth));
             {
                 if (GUILayout.Button("新增"))
                 {
@@ -137,35 +145,65 @@ namespace TerrainModule.Editor
                     SelectPreviewBlock(id);
                 }
 
+                _scrollerShowTilingValue = EditorGUILayout.Toggle("顯示TilingValue:", _scrollerShowTilingValue);
+
                 _blockTemplateScrollPos = EditorGUILayout.BeginScrollView(_blockTemplateScrollPos, CommonGUIStyle.Default_Box);
                 {
                     for (int i = 0; i < CurEditRuntimeData.BlockTemplateDataList.Count; i++)
                     {
                         DrawBlockTemplateScrollCell(CurEditRuntimeData.BlockTemplateDataList[i]);
+                        GUILayout.Space(2f);
                     }
                 }
                 EditorGUILayout.EndScrollView();
             }
             EditorGUILayout.EndVertical();
+
+            for (int i = 0; i < _removeBlockDataId.Count; i++)
+            {
+                CurEditRuntimeData.RemoveBlockData(_removeBlockDataId[i]);
+            }
+            _removeBlockDataId.Clear();
         }
 
         private void DrawBlockTemplateScrollCell(BlockTemplateRuntimeData data)
         {
-            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
+            EditorGUILayout.BeginVertical(CommonGUIStyle.SelectableBlueBox(_previewSetting.PreviewId == data.Id));
             {
                 EditorGUILayout.LabelField($"Id:{data.Id}");
-                TerrainEditorUtility.DrawTiling(data, false);
-                if (GUILayout.Button("選擇"))
+                EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
+                {
+                    var rect = GUILayoutUtility.GetRect(150, 150, GUILayout.Width(150), GUILayout.Height(150));
+                    TerrainEditorUtility.DrawBlockTemplatePreview(
+                        data,
+                        _editorData.TerrainEditorMgr,
+                        CurEditRuntimeData.Material,
+                        _previewSetting.BlockSize,
+                        rect);
+                    if (_scrollerShowTilingValue)
+                        TerrainEditorUtility.DrawTiling(data, false);
+                }
+                EditorGUILayout.EndHorizontal();
+                if (GUILayout.Button("X", GUILayout.MaxWidth(50)))
+                {
+                    _removeBlockDataId.Add(data.Id);
+                }
+            }
+            EditorGUILayout.EndVertical();
+            var lastRect = GUILayoutUtility.GetLastRect();
+            Event current = Event.current;
+            if (lastRect.Contains(current.mousePosition))
+            {
+                if (current.type == EventType.MouseDown && current.button == 0)
                 {
                     SelectPreviewBlock(data.Id);
                 }
             }
-            EditorGUILayout.EndVertical();
         }
 
         private void DrawSelectedBlock()
         {
-            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box, GUILayout.MaxWidth(_editorData.EditorWindow.position.width / 2));
+            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
             {
                 if (CurEditRuntimeData.TryGetBlockData(_previewSetting.PreviewId, out var blockTemplate))
                 {
@@ -176,7 +214,40 @@ namespace TerrainModule.Editor
                     if (EditorGUI.EndChangeCheck())
                     {
                         _editorData.TerrainEditorMgr.RefreshBlockTemplatePreview();
+                        blockTemplate.PreviewInfo.MarkRefreshTexture();
                     }
+                    var rect = GUILayoutUtility.GetRect(200, 200, GUILayout.Width(200), GUILayout.Height(200));
+                    TerrainEditorUtility.DrawBlockTemplatePreview(
+                        blockTemplate,
+                        _editorData.TerrainEditorMgr,
+                        CurEditRuntimeData.Material,
+                        _previewSetting.BlockSize,
+                        rect);
+
+                    rect = GUILayoutUtility.GetRect(200, 200, GUILayout.Width(200), GUILayout.Height(200));
+                    GUI.DrawTexture(rect, CurEditRuntimeData.TileMap);
+                    Handles.BeginGUI();
+                    GUI.BeginClip(rect);
+                    Handles.color = Color.red;
+                    var gridSize = new Vector2(rect.width / CurEditRuntimeData.Tiling.x, rect.height / CurEditRuntimeData.Tiling.y);
+                    for (int i = 0; i <= CurEditRuntimeData.Tiling.x; i++)
+                    {
+                        var x = Mathf.Clamp(i * gridSize.x, 0.1f, rect.width - 0.1f);
+                        Handles.DrawLine(new Vector2(x, 0), new Vector2(x, rect.height));
+                    }
+                    for (int i = 0; i <= CurEditRuntimeData.Tiling.y; i++)
+                    {
+                        var y = Mathf.Clamp(i * gridSize.y, 0.1f, rect.height - 0.1f);
+                        Handles.DrawLine(new Vector2(0, y), new Vector2(rect.width, y));
+                    }
+                    var current = Event.current;
+                    if (current.type == EventType.MouseDown && current.button == 0)
+                    {
+                        var pos = new Vector2(current.mousePosition.x, Mathf.Abs(current.mousePosition.y - rect.height));
+                        Debug.Log(pos / rect.size);
+                    }
+                    GUI.EndClip();
+                    Handles.EndGUI();
                 }
                 else
                 {
@@ -190,6 +261,7 @@ namespace TerrainModule.Editor
         {
             _previewSetting.PreviewId = id;
             _editorData.TerrainEditorMgr.RefreshBlockTemplatePreview();
+            Repaint();
         }
     }
 }

@@ -5,6 +5,20 @@ using UnityEngine;
 
 namespace TerrainModule.Editor
 {
+    public class BlockTemplateRuntimeDataPreviewInfo
+    {
+        public Texture Texture;
+        public Texture2D CachedTexture;
+        public Vector3 Rotation = new Vector3(-45, -45, 0);
+        public float Distance;
+
+        public void MarkRefreshTexture()
+        {
+            //清空 沒有繪製時會重建
+            Texture = null;
+        }
+    }
+
     [Serializable]
     public class BlockTemplateRuntimeData
     {
@@ -18,6 +32,8 @@ namespace TerrainModule.Editor
 
         public Vector2 PZTiling;
         public Vector2 NZTiling;
+
+        public BlockTemplateRuntimeDataPreviewInfo PreviewInfo = new BlockTemplateRuntimeDataPreviewInfo();
 
         public BlockTemplateRuntimeData(BlockTemplateData data)
         {
@@ -50,7 +66,7 @@ namespace TerrainModule.Editor
         public string Name;
 
         public Texture2D TileMap;
-        public Vector2 Tiling;
+        public Vector2Int Tiling;
         public Shader Shader;
 
         public List<BlockTemplateRuntimeData> BlockTemplateDataList = new List<BlockTemplateRuntimeData>();
@@ -98,6 +114,18 @@ namespace TerrainModule.Editor
             var nextId = GetNextId();
             BlockTemplateDataList.Add(new BlockTemplateRuntimeData(nextId));
             return nextId;
+        }
+
+        public void RemoveBlockData(int id)
+        {
+            for (int i = 0; i < BlockTemplateDataList.Count; i++)
+            {
+                if (BlockTemplateDataList[i].Id == id)
+                {
+                    BlockTemplateDataList.RemoveAt(i);
+                    break;
+                }
+            }
         }
 
         private int GetNextId()

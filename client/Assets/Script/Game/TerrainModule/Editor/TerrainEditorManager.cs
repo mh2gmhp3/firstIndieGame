@@ -1,4 +1,5 @@
 ﻿using Extension;
+using Framework.Editor.Utility;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -814,5 +815,148 @@ namespace TerrainModule.Editor
         }
 
         #endregion
+
+        private Mesh _previewTextureMesh = null;
+        public Texture GetBlockPreviewTexture(
+            BlockTemplateRuntimeData blockTemplate,
+            Material material,
+            Vector2 textureSize,
+            Vector3 blockSize,
+            Vector3 cameraPos,
+            Quaternion cameraRotation)
+        {
+            var worldBlockPivotPos = Vector3.zero - blockSize / 2;
+
+            Vector4 yTopValue = Vector4.one;
+            Vector4 yBottomValue = Vector4.zero;
+
+            if (_previewTextureMesh == null)
+            {
+                _previewTextureMesh = new Mesh();
+            }
+
+            var mesh = _previewTextureMesh;
+            mesh.Clear();
+            var vertices = new List<Vector3>();
+            var triangles = new List<int>();
+            var normals = new List<Vector3>();
+            var uvs = new List<Vector2>();
+            var uvs2 = new List<Vector2>();
+            var uvs3 = new List<Vector2>();
+
+            // +x
+            CreateBlockFace(
+                vertices,
+                triangles,
+                normals,
+                uvs,
+                uvs2,
+                uvs3,
+                worldBlockPivotPos,
+                blockSize,
+                Vector3Int.right,
+                yTopValue,
+                yBottomValue,
+                blockTemplate.PXTiling,
+                0);
+
+            // -x
+            CreateBlockFace(
+                vertices,
+                triangles,
+                normals,
+                uvs,
+                uvs2,
+                uvs3,
+                worldBlockPivotPos,
+                blockSize,
+                Vector3Int.left,
+                yTopValue,
+                yBottomValue,
+                blockTemplate.NXTiling,
+                0);
+
+            // +z
+            CreateBlockFace(
+                vertices,
+                triangles,
+                normals,
+                uvs,
+                uvs2,
+                uvs3,
+                worldBlockPivotPos,
+                blockSize,
+                Vector3Int.forward,
+                yTopValue,
+                yBottomValue,
+                blockTemplate.PZTiling,
+                0);
+
+            // -z
+            CreateBlockFace(
+                vertices,
+                triangles,
+                normals,
+                uvs,
+                uvs2,
+                uvs3,
+                worldBlockPivotPos,
+                blockSize,
+                Vector3Int.back,
+                yTopValue,
+                yBottomValue,
+                blockTemplate.NZTiling,
+                0);
+
+            // +y
+            CreateBlockFace(
+                vertices,
+                triangles,
+                normals,
+                uvs,
+                uvs2,
+                uvs3,
+                worldBlockPivotPos,
+                blockSize,
+                Vector3Int.up,
+                yTopValue,
+                yBottomValue,
+                blockTemplate.PYTiling,
+                0);
+
+            // -y
+            CreateBlockFace(
+                vertices,
+                triangles,
+                normals,
+                uvs,
+                uvs2,
+                uvs3,
+                worldBlockPivotPos,
+                blockSize,
+                Vector3Int.down,
+                yTopValue,
+                yBottomValue,
+                blockTemplate.NYTiling,
+                0);
+
+            mesh.vertices = vertices.ToArray();
+            mesh.triangles = triangles.ToArray();
+            mesh.uv = uvs.ToArray();
+            mesh.uv2 = uvs2.ToArray();
+            mesh.uv3 = uvs3.ToArray();
+
+            mesh.RecalculateNormals();
+            mesh.RecalculateTangents();
+            mesh.RecalculateBounds();
+
+            return EditorPreviewUtility.GenPreviewTexture(
+                mesh,
+                material,
+                textureSize,
+                cameraPos,
+                cameraRotation,
+                Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one));
+        }
     }
 }

@@ -68,9 +68,13 @@ namespace TerrainModule.Editor
 
         public static void DrawTiling(BlockTemplateRuntimeData data, bool canEdit)
         {
-            DrawTiling("+x", ref data.PXTiling, "-x", ref data.NXTiling, canEdit);
-            DrawTiling("+y", ref data.PYTiling, "-y", ref data.NYTiling, canEdit);
-            DrawTiling("+z", ref data.PZTiling, "-z", ref data.NZTiling, canEdit);
+            EditorGUILayout.BeginVertical();
+            {
+                DrawTiling("+x", ref data.PXTiling, "-x", ref data.NXTiling, canEdit);
+                DrawTiling("+y", ref data.PYTiling, "-y", ref data.NYTiling, canEdit);
+                DrawTiling("+z", ref data.PZTiling, "-z", ref data.NZTiling, canEdit);
+            }
+            EditorGUILayout.EndVertical();
         }
 
         private static void DrawTiling(string pLabel, ref Vector2 pTiling, string nLabel, ref Vector2 nTiling, bool canEdit)
@@ -89,6 +93,93 @@ namespace TerrainModule.Editor
                 }
             }
             EditorGUILayout.EndHorizontal();
+        }
+
+        /// <summary>
+        /// 繪製方塊範本預覽圖
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="mgr"></param>
+        /// <param name="material"></param>
+        /// <param name="blockSize"></param>
+        /// <param name="rect"></param>
+        /// <param name="backgroundColor"></param>
+        public static void DrawBlockTemplatePreview(
+            BlockTemplateRuntimeData data,
+            TerrainEditorManager mgr,
+            Material material,
+            Vector3Int blockSize,
+            Rect rect,
+            Color backgroundColor)
+        {
+            if (rect.x == 0 && rect.y == 0 && rect.width == 1 && rect.height == 1)
+                return;
+
+            var previewInfo = data.PreviewInfo;
+
+            Event current = Event.current;
+            if (rect.Contains(current.mousePosition))
+            {
+                if (current.type == EventType.MouseDrag && current.button == 0)
+                {
+                    previewInfo.Rotation.x += current.delta.x;
+                    previewInfo.Rotation.y -= current.delta.y;
+
+                    previewInfo.Rotation.y = Mathf.Clamp(previewInfo.Rotation.y, -90f, 90f);
+                    previewInfo.MarkRefreshTexture();
+                    current.Use(); // 標記事件已處理
+                }
+                if (current.type == EventType.ScrollWheel)
+                {
+                    var distance = Mathf.Max(Mathf.Max(blockSize.x, blockSize.y), blockSize.z);
+                    previewInfo.Distance += current.delta.y * 0.1f;
+                    previewInfo.Distance = Mathf.Clamp(previewInfo.Distance, distance, distance * 2f);
+                    previewInfo.MarkRefreshTexture();
+                    current.Use(); // 標記事件已處理
+                }
+            }
+
+            if (previewInfo.Texture == null)
+            {
+                if (previewInfo.Distance == 0)
+                {
+                    var distance = Mathf.Max(Mathf.Max(blockSize.x, blockSize.y), blockSize.z);
+                    previewInfo.Distance = distance * 2;
+                }
+                Quaternion camRotation = Quaternion.Euler(-previewInfo.Rotation.y, previewInfo.Rotation.x, 0);
+                Vector3 camPos = camRotation * Vector3.back * previewInfo.Distance;
+
+                var rt = mgr.GetBlockPreviewTexture(data, material, new Vector2(300f, 300f), blockSize, camPos, camRotation);
+                if (previewInfo.CachedTexture == null)
+                    previewInfo.CachedTexture = new Texture2D(rt.width, rt.height, TextureFormat.RGBA32, false);
+                RenderTexture.active = (RenderTexture)rt;
+                previewInfo.CachedTexture.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+                previewInfo.CachedTexture.Apply();
+                RenderTexture.active = null;
+
+                previewInfo.Texture = previewInfo.CachedTexture;
+            }
+
+            EditorGUI.DrawRect(rect, Color.black);
+            EditorGUI.DrawRect(rect, backgroundColor);
+            GUI.DrawTexture(rect, previewInfo.Texture);
+        }
+
+        /// <summary>
+        /// 繪製方塊範本預覽圖
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="mgr"></param>
+        /// <param name="blockSize"></param>
+        /// <param name="rect"></param>
+        public static void DrawBlockTemplatePreview(
+            BlockTemplateRuntimeData data,
+            TerrainEditorManager mgr,
+            Material material,
+            Vector3Int blockSize,
+            Rect rect)
+        {
+            DrawBlockTemplatePreview(data, mgr, material, blockSize, rect, new Color(0, 0, 1, 0.5f));
         }
 
         /// <summary>

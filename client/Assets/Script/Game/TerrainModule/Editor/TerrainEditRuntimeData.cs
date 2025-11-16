@@ -163,10 +163,7 @@ namespace TerrainModule.Editor
             if (BlockTemplateEditData == null)
                 return;
             BlockTemplateEditRuntimeData = new BlockTemplateEditRuntimeData(BlockTemplateEditData);
-            TerrainMaterial = TerrainEditorUtility.GenTerrainMaterial(
-                BlockTemplateEditRuntimeData.Shader,
-                BlockTemplateEditRuntimeData.TileMap,
-                BlockTemplateEditRuntimeData.Tiling);
+            TerrainMaterial = BlockTemplateEditRuntimeData.Material;
         }
 
         public Vector3Int GetBlockNum()

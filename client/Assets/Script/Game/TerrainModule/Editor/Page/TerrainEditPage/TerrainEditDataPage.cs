@@ -42,6 +42,11 @@ namespace TerrainModule.Editor
 
         }
 
+        public override void OnDisable()
+        {
+            EditorPreviewUtility.Cleanup();
+        }
+
         public override void OnGUI()
         {
             ReceiveInputForMouseFunction();
@@ -430,7 +435,7 @@ namespace TerrainModule.Editor
 
         private void DrawMouseFunction()
         {
-            if (_curMouseFunction == MouseFunction.AddBlock)
+            if (_curMouseFunction == MouseFunction.AddBlock || _curMouseFunction == MouseFunction.DeleteBlock)
             {
                 EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
                 {
@@ -443,11 +448,27 @@ namespace TerrainModule.Editor
                     else
                     {
                         EditorGUILayout.LabelField($"當前選擇Id:{_addBlockTemplateId}");
+                        var columnCount = 5;
+                        var dataCount = CurEditRuntimeData.BlockTemplateEditRuntimeData.BlockTemplateDataList.Count;
+                        var rowCount = Mathf.CeilToInt(dataCount / (float)columnCount);
+                        var maxWidth = _editorData.EditorWindow.position.width / columnCount;
                         _blockTemplateScrollPos = EditorGUILayout.BeginScrollView(_blockTemplateScrollPos, CommonGUIStyle.Default_Box);
                         {
-                            for (int i = 0; i < CurEditRuntimeData.BlockTemplateEditRuntimeData.BlockTemplateDataList.Count; i++)
+                            for (int i = 0; i < rowCount; i++)
                             {
-                                DrawBlockTemplateScrollCell(CurEditRuntimeData.BlockTemplateEditRuntimeData.BlockTemplateDataList[i]);
+                                EditorGUILayout.BeginHorizontal();
+                                {
+                                    for (int j = 0; j < columnCount; j++)
+                                    {
+                                        int index = i * columnCount + j;
+                                        if (index >= dataCount)
+                                            break;
+                                        DrawBlockTemplateScrollCell(CurEditRuntimeData.BlockTemplateEditRuntimeData.BlockTemplateDataList[index], maxWidth);
+                                        GUILayout.Space(2f);
+                                    }
+                                }
+                                EditorGUILayout.EndHorizontal();
+                                GUILayout.Space(2f);
                             }
                         }
                         EditorGUILayout.EndScrollView();
@@ -515,18 +536,34 @@ namespace TerrainModule.Editor
             }
         }
 
-        private void DrawBlockTemplateScrollCell(BlockTemplateRuntimeData data)
+        private void DrawBlockTemplateScrollCell(BlockTemplateRuntimeData data, float maxWidth)
         {
-            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
+            EditorGUILayout.BeginVertical(CommonGUIStyle.SelectableBlueBox(_addBlockTemplateId == data.Id), GUILayout.MaxWidth(maxWidth));
             {
                 EditorGUILayout.LabelField($"Id:{data.Id}");
-                TerrainEditorUtility.DrawTiling(data, false);
-                if (GUILayout.Button("選擇"))
+                EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
                 {
-                    _addBlockTemplateId = data.Id;
+                    var rect = GUILayoutUtility.GetRect(150, 150, GUILayout.Width(150), GUILayout.Height(150));
+                    TerrainEditorUtility.DrawBlockTemplatePreview(
+                        data,
+                        _editorData.TerrainEditorMgr,
+                        CurEditRuntimeData.TerrainMaterial,
+                        CurEditRuntimeData.BlockSize,
+                        rect);
                 }
+                EditorGUILayout.EndHorizontal();
             }
             EditorGUILayout.EndVertical();
+            var lastRect = GUILayoutUtility.GetLastRect();
+            Event current = Event.current;
+            if (lastRect.Contains(current.mousePosition))
+            {
+                if (current.type == EventType.MouseDown && current.button == 0)
+                {
+                    _addBlockTemplateId = data.Id;
+                    Repaint();
+                }
+            }
         }
 
         #endregion
