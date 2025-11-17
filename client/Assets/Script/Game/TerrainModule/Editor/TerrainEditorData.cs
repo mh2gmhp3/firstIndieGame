@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using static TerrainModule.Editor.TerrainEditorManager;
@@ -69,26 +71,52 @@ namespace TerrainModule.Editor
                 Directory.Delete(folderPath, true);
             }
             Directory.CreateDirectory(folderPath);
+
+            var terrainData = new TerrainData
+                (CurTerrainEditRuntimeData.BlockSize,
+                CurTerrainEditRuntimeData.ChunkBlockNum,
+                CurTerrainEditRuntimeData.ChunkNum);
+            var idToChunkData = new Dictionary<int, ChunkData>();
+
             if (CurTerrainEditRuntimeData.BlockTemplateEditRuntimeData != null)
             {
-                var materialFolderPath = folderPath + "/Material";
+                var materialFolderPath = TerrainDefine.GetExportMaterialFolderPath(dataName);
                 Directory.CreateDirectory(materialFolderPath);
                 var blockTemplateData = CurTerrainEditRuntimeData.BlockTemplateEditRuntimeData;
                 var material = TerrainEditorUtility.GenTerrainMaterial(blockTemplateData.Shader, blockTemplateData.TileMap, blockTemplateData.Tiling);
                 AssetDatabase.CreateAsset(material, Path.Combine(materialFolderPath, "Terrain.mat"));
             }
 
-            var meshFolderPath = folderPath + "/Mesh";
+            var meshFolderPath = TerrainDefine.GetExportChunkMeshFolderPath(dataName);
             Directory.CreateDirectory(meshFolderPath);
             foreach (var idToChunkEditData in CurTerrainEditRuntimeData.IdToChunkEditData)
             {
                 var chunkEditData = idToChunkEditData.Value;
                 var chunkMesh = TerrainEditorUtility.CreateChunkMesh(CurTerrainEditRuntimeData, chunkEditData.Id);
                 chunkMesh.name = $"Chunk_{chunkEditData.Id}";
+                var chunkData = GetChunkData(chunkEditData.Id);
+                chunkData.MeshName = chunkMesh.name;
                 AssetDatabase.CreateAsset(chunkMesh, Path.Combine(meshFolderPath, chunkMesh.name + ".mesh"));
             }
 
+            terrainData.ChunkDataList.AddRange(idToChunkData.Values);
+            AssetDatabase.CreateAsset(terrainData, Path.Combine(folderPath, CurTerrainEditRuntimeData.Name + ".asset"));
+
             AssetDatabase.Refresh();
+
+            #region Method
+
+            ChunkData GetChunkData(int id)
+            {
+                if (!idToChunkData.TryGetValue(id, out var data))
+                {
+                    data = new ChunkData(id);
+                    idToChunkData.Add(id, data);
+                }
+                return data;
+            }
+
+            #endregion
         }
 
         #endregion
