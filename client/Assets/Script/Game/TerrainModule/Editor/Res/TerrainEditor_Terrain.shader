@@ -72,8 +72,6 @@ Shader "TerrainEditor/Terrain"
 
             float2 RotateUV(float2 uv, float2 uvCenter, float progress)
             {
-                #define PI 3.1415926535f
-
                 // to radian
                 float rotation = progress * (2.0f * PI);
 
