@@ -410,10 +410,13 @@ namespace TerrainModule.Editor
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.BeginHorizontal();
                 {
-                    GUILayout.FlexibleSpace();
                     if (GUILayout.Button("存檔"))
                     {
                         _editorData.SaveCurTerrainData();
+                    }
+                    if (GUILayout.Button("輸出"))
+                    {
+                        _editorData.ExportCurTerrainData();
                     }
                 }
                 EditorGUILayout.EndHorizontal();

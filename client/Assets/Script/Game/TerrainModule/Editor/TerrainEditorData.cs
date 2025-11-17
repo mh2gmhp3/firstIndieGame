@@ -57,6 +57,40 @@ namespace TerrainModule.Editor
             return true;
         }
 
+        public void ExportCurTerrainData()
+        {
+            if (CurTerrainEditRuntimeData == null)
+                return;
+
+            var dataName = CurTerrainEditRuntimeData.Name;
+            var folderPath = TerrainDefine.GetExportFolderPath(dataName);
+            if (Directory.Exists(folderPath))
+            {
+                Directory.Delete(folderPath, true);
+            }
+            Directory.CreateDirectory(folderPath);
+            if (CurTerrainEditRuntimeData.BlockTemplateEditRuntimeData != null)
+            {
+                var materialFolderPath = folderPath + "/Material";
+                Directory.CreateDirectory(materialFolderPath);
+                var blockTemplateData = CurTerrainEditRuntimeData.BlockTemplateEditRuntimeData;
+                var material = TerrainEditorUtility.GenTerrainMaterial(blockTemplateData.Shader, blockTemplateData.TileMap, blockTemplateData.Tiling);
+                AssetDatabase.CreateAsset(material, Path.Combine(materialFolderPath, "Terrain.mat"));
+            }
+
+            var meshFolderPath = folderPath + "/Mesh";
+            Directory.CreateDirectory(meshFolderPath);
+            foreach (var idToChunkEditData in CurTerrainEditRuntimeData.IdToChunkEditData)
+            {
+                var chunkEditData = idToChunkEditData.Value;
+                var chunkMesh = TerrainEditorUtility.CreateChunkMesh(CurTerrainEditRuntimeData, chunkEditData.Id);
+                chunkMesh.name = $"Chunk_{chunkEditData.Id}";
+                AssetDatabase.CreateAsset(chunkMesh, Path.Combine(meshFolderPath, chunkMesh.name + ".mesh"));
+            }
+
+            AssetDatabase.Refresh();
+        }
+
         #endregion
 
         #region BlockTemplate
