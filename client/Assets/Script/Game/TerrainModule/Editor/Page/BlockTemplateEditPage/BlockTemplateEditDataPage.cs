@@ -2,6 +2,7 @@
 using Framework.Editor.Utility;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using static TerrainModule.Editor.TerrainEditorManager;
@@ -17,6 +18,8 @@ namespace TerrainModule.Editor
         private Vector2 _blockTemplateScrollPos = Vector2.zero;
         private bool _scrollerShowTilingValue = false;
         private List<int> _removeBlockDataId = new List<int>();
+
+        private Vector3Int _curEditFace = Vector3Int.zero;
 
         private BlockTemplateEditRuntimeData CurEditRuntimeData => _editorData.CurBlockTemplateEditRuntimeData;
 
@@ -90,15 +93,15 @@ namespace TerrainModule.Editor
 
         private void DrawPreviewSetting()
         {
+            Vector4 newYTopValue = _previewSetting.YTopValue;
+            Vector4 newYBottomValue = _previewSetting.YBottomValue;
             EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box, GUILayout.MaxWidth(_editorData.EditorWindow.position.width / 2));
             {
                 EditorGUILayout.LabelField("預覽參數");
-                _previewSetting.BlockSize = EditorGUILayout.Vector3IntField("BlockSize", _previewSetting.BlockSize);
-                Vector4 newYTopValue = _previewSetting.YTopValue;
-                Vector4 newYBottomValue = _previewSetting.YBottomValue;
-                EditorGUILayout.LabelField("Y高低值");
                 EditorGUI.BeginChangeCheck();
                 {
+                    _previewSetting.BlockSize = EditorGUILayout.Vector3IntField("BlockSize", _previewSetting.BlockSize);
+                    EditorGUILayout.LabelField("Y高低值");
                     EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
                     {
                         EditorGUIUtil.MinMaxSlider("-z-x", ref newYBottomValue.x, ref newYTopValue.x, 0, 1);
@@ -130,6 +133,7 @@ namespace TerrainModule.Editor
                 {
                     _previewSetting.SetYValue(newYTopValue, newYBottomValue);
                     _editorData.TerrainEditorMgr.RefreshBlockTemplatePreview();
+                    CurEditRuntimeData.MarkRefreshAllPreviewTexture();
                 }
             }
             EditorGUILayout.EndVertical();
@@ -182,7 +186,7 @@ namespace TerrainModule.Editor
                         _previewSetting.BlockSize,
                         rect);
                     if (_scrollerShowTilingValue)
-                        TerrainEditorUtility.DrawTiling(data, false);
+                        TerrainEditorUtility.DrawTiling(data);
                 }
                 EditorGUILayout.EndHorizontal();
                 if (GUILayout.Button("X", GUILayout.MaxWidth(50)))
@@ -211,44 +215,24 @@ namespace TerrainModule.Editor
                     EditorGUILayout.LabelField("選擇方塊");
                     EditorGUILayout.LabelField($"Id:{blockTemplate.Id}");
                     EditorGUI.BeginChangeCheck();
-                    TerrainEditorUtility.DrawTiling(blockTemplate, true);
+                    _curEditFace = TerrainEditorUtility.DrawSelectableTiling(blockTemplate, _curEditFace);
                     if (EditorGUI.EndChangeCheck())
                     {
-                        _editorData.TerrainEditorMgr.RefreshBlockTemplatePreview();
-                        blockTemplate.PreviewInfo.MarkRefreshTexture();
+                        Repaint();
                     }
-                    var rect = GUILayoutUtility.GetRect(200, 200, GUILayout.Width(200), GUILayout.Height(200));
-                    TerrainEditorUtility.DrawBlockTemplatePreview(
-                        blockTemplate,
-                        _editorData.TerrainEditorMgr,
-                        CurEditRuntimeData.Material,
-                        _previewSetting.BlockSize,
-                        rect);
-
-                    rect = GUILayoutUtility.GetRect(200, 200, GUILayout.Width(200), GUILayout.Height(200));
-                    GUI.DrawTexture(rect, CurEditRuntimeData.TileMap);
-                    Handles.BeginGUI();
-                    GUI.BeginClip(rect);
-                    Handles.color = Color.red;
-                    var gridSize = new Vector2(rect.width / CurEditRuntimeData.Tiling.x, rect.height / CurEditRuntimeData.Tiling.y);
-                    for (int i = 0; i <= CurEditRuntimeData.Tiling.x; i++)
+                    EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
                     {
-                        var x = Mathf.Clamp(i * gridSize.x, 0.1f, rect.width - 0.1f);
-                        Handles.DrawLine(new Vector2(x, 0), new Vector2(x, rect.height));
+                        var rect = GUILayoutUtility.GetRect(200, 200, GUILayout.Width(200), GUILayout.Height(200));
+                        TerrainEditorUtility.DrawBlockTemplatePreview(
+                            blockTemplate,
+                            _editorData.TerrainEditorMgr,
+                            CurEditRuntimeData.Material,
+                            _previewSetting.BlockSize,
+                            rect);
+                        GUILayout.Space(10f);
+                        DrawGridTexture();
                     }
-                    for (int i = 0; i <= CurEditRuntimeData.Tiling.y; i++)
-                    {
-                        var y = Mathf.Clamp(i * gridSize.y, 0.1f, rect.height - 0.1f);
-                        Handles.DrawLine(new Vector2(0, y), new Vector2(rect.width, y));
-                    }
-                    var current = Event.current;
-                    if (current.type == EventType.MouseDown && current.button == 0)
-                    {
-                        var pos = new Vector2(current.mousePosition.x, Mathf.Abs(current.mousePosition.y - rect.height));
-                        Debug.Log(pos / rect.size);
-                    }
-                    GUI.EndClip();
-                    Handles.EndGUI();
+                    EditorGUILayout.EndHorizontal();
                 }
                 else
                 {
@@ -258,10 +242,55 @@ namespace TerrainModule.Editor
             EditorGUILayout.EndVertical();
         }
 
+        private void DrawGridTexture()
+        {
+            //Texture
+            var rect = GUILayoutUtility.GetRect(CurEditRuntimeData.TileMap.width, CurEditRuntimeData.TileMap.height, GUILayout.MaxWidth(256), GUILayout.Height(256));
+            GUI.DrawTexture(rect, CurEditRuntimeData.TileMap);
+            Handles.BeginGUI();
+            GUI.BeginClip(rect);
+            Handles.color = Color.red;
+            //Grid
+            var gridSize = new Vector2(rect.width / CurEditRuntimeData.Tiling.x, rect.height / CurEditRuntimeData.Tiling.y);
+            for (int i = 0; i <= CurEditRuntimeData.Tiling.x; i++)
+            {
+                var x = Mathf.Clamp(i * gridSize.x, 0.1f, rect.width - 0.1f);
+                Handles.DrawLine(new Vector2(x, 0), new Vector2(x, rect.height));
+            }
+            for (int i = 0; i <= CurEditRuntimeData.Tiling.y; i++)
+            {
+                var y = Mathf.Clamp(i * gridSize.y, 0.1f, rect.height - 0.1f);
+                Handles.DrawLine(new Vector2(0, y), new Vector2(rect.width, y));
+            }
+            //Change Tiling
+            if (_curEditFace != Vector3Int.zero)
+            {
+                var current = Event.current;
+                if (current.type == EventType.MouseDown && current.button == 0)
+                {
+                    var pos = new Vector2(current.mousePosition.x, Mathf.Abs(current.mousePosition.y - rect.height));
+                    var normalUV = pos / rect.size;
+                    var tilingValue = new Vector2(1f, 1f) / CurEditRuntimeData.Tiling;
+                    var tilingUV = new Vector2(Mathf.Floor(normalUV.x / tilingValue.x) * tilingValue.x, Mathf.Floor(normalUV.y / tilingValue.y) * tilingValue.y);
+                    if (CurEditRuntimeData.TryGetBlockData(_previewSetting.PreviewId, out var blockTemplate))
+                    {
+                        blockTemplate.SetTiling(_curEditFace, tilingUV);
+                        _editorData.TerrainEditorMgr.RefreshBlockTemplatePreview();
+                        blockTemplate.PreviewInfo.MarkRefreshTexture();
+                        Repaint();
+                    }
+                }
+            }
+            GUI.EndClip();
+            Handles.EndGUI();
+        }
+
         private void SelectPreviewBlock(int id)
         {
             _previewSetting.PreviewId = id;
             _editorData.TerrainEditorMgr.RefreshBlockTemplatePreview();
+            //有選擇清空當前編輯面
+            _curEditFace = Vector3Int.zero;
             Repaint();
         }
     }

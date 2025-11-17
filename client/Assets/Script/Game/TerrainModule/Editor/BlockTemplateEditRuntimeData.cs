@@ -59,6 +59,41 @@ namespace TerrainModule.Editor
             PZTiling = Vector2.zero;
             NZTiling = Vector2.zero;
         }
+
+        public void SetTiling(Vector3Int face, Vector2 tiling)
+        {
+            tiling = new Vector2(Mathf.Clamp01(tiling.x), Mathf.Clamp01(tiling.y));
+            //+x
+            if (face == Vector3Int.right)
+            {
+                PXTiling = tiling;
+            }
+            //-x
+            else if (face == Vector3Int.left)
+            {
+                NXTiling = tiling;
+            }
+            //+y
+            else if (face == Vector3Int.up)
+            {
+                PYTiling = tiling;
+            }
+            //-y
+            else if (face == Vector3Int.down)
+            {
+                NYTiling = tiling;
+            }
+            //+z
+            else if (face == Vector3Int.forward)
+            {
+                PZTiling = tiling;
+            }
+            //-z
+            else if (face == Vector3Int.back)
+            {
+                NZTiling= tiling;
+            }
+        }
     }
 
     public class BlockTemplateEditRuntimeData
@@ -92,6 +127,14 @@ namespace TerrainModule.Editor
         public void RefreshMaterial()
         {
             Material = TerrainEditorUtility.GenTerrainMaterial(Shader, TileMap, Tiling);
+        }
+
+        public void MarkRefreshAllPreviewTexture()
+        {
+            for (int i = 0; i < BlockTemplateDataList.Count; i++)
+            {
+                BlockTemplateDataList[i].PreviewInfo.MarkRefreshTexture();
+            }
         }
 
         public bool TryGetBlockData(int id, out BlockTemplateRuntimeData result)

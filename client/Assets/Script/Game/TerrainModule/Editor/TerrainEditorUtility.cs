@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Framework.Editor;
+using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -66,33 +67,84 @@ namespace TerrainModule.Editor
             return (topValue, bottomValue);
         }
 
-        public static void DrawTiling(BlockTemplateRuntimeData data, bool canEdit)
+        public static void DrawTiling(BlockTemplateRuntimeData data)
         {
             EditorGUILayout.BeginVertical();
             {
-                DrawTiling("+x", ref data.PXTiling, "-x", ref data.NXTiling, canEdit);
-                DrawTiling("+y", ref data.PYTiling, "-y", ref data.NYTiling, canEdit);
-                DrawTiling("+z", ref data.PZTiling, "-z", ref data.NZTiling, canEdit);
+                DrawTiling("+x", data.PXTiling, "-x", data.NXTiling);
+                DrawTiling("+y", data.PYTiling, "-y", data.NYTiling);
+                DrawTiling("+z", data.PZTiling, "-z", data.NZTiling);
             }
             EditorGUILayout.EndVertical();
         }
 
-        private static void DrawTiling(string pLabel, ref Vector2 pTiling, string nLabel, ref Vector2 nTiling, bool canEdit)
+        private static void DrawTiling(string pLabel, Vector2 pTiling, string nLabel, Vector2 nTiling)
         {
             EditorGUILayout.BeginHorizontal();
             {
-                if (canEdit)
-                {
-                    pTiling = EditorGUILayout.Vector2Field(pLabel, pTiling);
-                    nTiling = EditorGUILayout.Vector2Field(nLabel, nTiling);
-                }
-                else
-                {
-                    EditorGUILayout.LabelField($"{pLabel}:{pTiling}");
-                    EditorGUILayout.LabelField($"{nLabel}:{nTiling}");
-                }
+                EditorGUILayout.LabelField($"{pLabel}:{pTiling}");
+                EditorGUILayout.LabelField($"{nLabel}:{nTiling}");
             }
             EditorGUILayout.EndHorizontal();
+        }
+
+        public static Vector3Int DrawSelectableTiling(BlockTemplateRuntimeData data, Vector3Int selectFace)
+        {
+            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
+            {
+                selectFace = DrawSelectableTiling("+x", data.PXTiling, Vector3Int.right, "-x", data.NXTiling, Vector3Int.left, selectFace);
+                GUILayout.Space(2f);
+                selectFace = DrawSelectableTiling("+y", data.PYTiling, Vector3Int.up, "-y", data.NYTiling, Vector3Int.down, selectFace);
+                GUILayout.Space(2f);
+                selectFace = DrawSelectableTiling("+z", data.PZTiling, Vector3Int.forward, "-z", data.NZTiling, Vector3Int.back, selectFace);
+            }
+            EditorGUILayout.EndVertical();
+
+            return selectFace;
+        }
+
+        private static Vector3Int DrawSelectableTiling(string pLabel, Vector2 pTiling, Vector3Int pFace, string nLabel, Vector2 nTiling, Vector3Int nFace, Vector3Int selectFace)
+        {
+            var pTilingRect = new Rect();
+            var nTilingRect = new Rect();
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.BeginHorizontal(CommonGUIStyle.SelectableBlueBox(pFace == selectFace));
+                {
+                    EditorGUILayout.LabelField($"{pLabel}");
+                    EditorGUILayout.Vector2Field("", pTiling);
+                }
+                EditorGUILayout.EndHorizontal();
+                pTilingRect = GUILayoutUtility.GetLastRect();
+                GUILayout.Space(2f);
+                EditorGUILayout.BeginHorizontal(CommonGUIStyle.SelectableBlueBox(nFace == selectFace));
+                {
+                    EditorGUILayout.LabelField($"{nLabel}");
+                    EditorGUILayout.Vector2Field("", nTiling);
+                }
+                EditorGUILayout.EndHorizontal();
+                nTilingRect = GUILayoutUtility.GetLastRect();
+            }
+            EditorGUILayout.EndHorizontal();
+            var current = Event.current;
+            if (current.isMouse)
+            {
+                if (current.type == EventType.MouseDown && current.button == 0)
+                {
+                    if (pTilingRect.Contains(current.mousePosition))
+                    {
+                        GUI.changed = true;
+                        return pFace;
+                    }
+                    else if (nTilingRect.Contains(current.mousePosition))
+                    {
+                        GUI.changed = true;
+                        return nFace;
+                    }
+                }
+            }
+
+            return selectFace;
         }
 
         /// <summary>
