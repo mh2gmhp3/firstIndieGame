@@ -181,9 +181,8 @@ namespace TerrainModule.Editor
                     var rect = GUILayoutUtility.GetRect(150, 150, GUILayout.Width(150), GUILayout.Height(150));
                     TerrainEditorUtility.DrawBlockTemplatePreview(
                         data,
-                        _editorData.TerrainEditorMgr,
+                        _previewSetting,
                         CurEditRuntimeData.Material,
-                        _previewSetting.BlockSize,
                         rect);
                     if (_scrollerShowTilingValue)
                         TerrainEditorUtility.DrawTiling(data);
@@ -225,9 +224,8 @@ namespace TerrainModule.Editor
                         var rect = GUILayoutUtility.GetRect(200, 200, GUILayout.Width(200), GUILayout.Height(200));
                         TerrainEditorUtility.DrawBlockTemplatePreview(
                             blockTemplate,
-                            _editorData.TerrainEditorMgr,
+                            _previewSetting,
                             CurEditRuntimeData.Material,
-                            _previewSetting.BlockSize,
                             rect);
                         GUILayout.Space(10f);
                         DrawGridTexture();

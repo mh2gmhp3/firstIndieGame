@@ -31,6 +31,8 @@ namespace TerrainModule.Editor
         private int _curSelectedChunkId = -1;
         private BlockEditRuntimeData _curSelectedBlockData = null;
 
+        private BlockTemplatePreviewSetting _blockPreviewSetting = new BlockTemplatePreviewSetting();
+
         public TerrainEditDataPage(TerrainEditorData editorData) : base(editorData)
         {
         }
@@ -39,7 +41,10 @@ namespace TerrainModule.Editor
 
         public override void OnEnable()
         {
-
+            if (CurEditRuntimeData != null)
+            {
+                _blockPreviewSetting.BlockSize = CurEditRuntimeData.BlockSize;
+            }
         }
 
         public override void OnDisable()
@@ -546,9 +551,8 @@ namespace TerrainModule.Editor
                     var rect = GUILayoutUtility.GetRect(150, 150, GUILayout.Width(150), GUILayout.Height(150));
                     TerrainEditorUtility.DrawBlockTemplatePreview(
                         data,
-                        _editorData.TerrainEditorMgr,
+                        _blockPreviewSetting,
                         CurEditRuntimeData.TerrainMaterial,
-                        CurEditRuntimeData.BlockSize,
                         rect);
                 }
                 EditorGUILayout.EndHorizontal();
