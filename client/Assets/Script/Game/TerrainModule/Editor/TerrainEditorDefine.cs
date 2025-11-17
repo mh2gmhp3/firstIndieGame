@@ -25,7 +25,7 @@ namespace TerrainModule.Editor
     public class TerrainEditorDefine
     {
         public const string EditorScenePath = "Assets/Script/Game/TerrainModule/Editor/TerrainEditor.unity";
-        public const string EditDataFolderPath = "Assets/Script/Game/TerrainModule/EditData";
+        public const string EditDataFolderPath = "Assets/Script/Game/TerrainModule/Editor/EditData";
         public const string EditTerrainDataFolderPath = EditDataFolderPath + "/TerrainData";
         public const string EditBlockTemplateDataFolderPath = EditDataFolderPath + "/BlockTemplateData";
 
