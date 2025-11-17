@@ -210,6 +210,11 @@ namespace GameMainModule
             _movementData.DashData.DashTrigger = true;
         }
 
+        public void Teleport(Vector3 worldPosition)
+        {
+            _movementData.UnitMovementSetting.RootTransform.position = worldPosition;
+        }
+
         #endregion
 
         #region Attack

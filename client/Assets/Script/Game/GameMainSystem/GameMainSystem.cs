@@ -36,6 +36,7 @@ namespace GameMainModule
                 InitGameData();
                 InitAssetSetting();
                 InitUnitManager();
+                InitTerrainManager();
                 CreateTestData(10);
                 InitGameTest();
             }
@@ -52,6 +53,7 @@ namespace GameMainModule
                 InitGameData();
                 InitAssetSetting();
                 InitUnitManager();
+                InitTerrainManager();
                 InitGameMain();
             }
         }

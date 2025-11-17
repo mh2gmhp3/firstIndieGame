@@ -84,7 +84,7 @@ namespace TerrainModule.Editor
                 Directory.CreateDirectory(materialFolderPath);
                 var blockTemplateData = CurTerrainEditRuntimeData.BlockTemplateEditRuntimeData;
                 var material = TerrainEditorUtility.GenTerrainMaterial(blockTemplateData.Shader, blockTemplateData.TileMap, blockTemplateData.Tiling);
-                AssetDatabase.CreateAsset(material, Path.Combine(materialFolderPath, "Terrain.mat"));
+                AssetDatabase.CreateAsset(material, TerrainDefine.GetExportMaterialPath(dataName));
             }
 
             var meshFolderPath = TerrainDefine.GetExportChunkMeshFolderPath(dataName);
@@ -96,11 +96,11 @@ namespace TerrainModule.Editor
                 chunkMesh.name = $"Chunk_{chunkEditData.Id}";
                 var chunkData = GetChunkData(chunkEditData.Id);
                 chunkData.MeshName = chunkMesh.name;
-                AssetDatabase.CreateAsset(chunkMesh, Path.Combine(meshFolderPath, chunkMesh.name + ".mesh"));
+                AssetDatabase.CreateAsset(chunkMesh, TerrainDefine.GetExportChunkMeshPath(dataName, chunkMesh.name));
             }
 
             terrainData.ChunkDataList.AddRange(idToChunkData.Values);
-            AssetDatabase.CreateAsset(terrainData, Path.Combine(folderPath, CurTerrainEditRuntimeData.Name + ".asset"));
+            AssetDatabase.CreateAsset(terrainData, TerrainDefine.GetExportTerrainDataPath(CurTerrainEditRuntimeData.Name));
 
             AssetDatabase.Refresh();
 

@@ -20,7 +20,9 @@ namespace GameMainModule
         {
             SetCurGameState(GameState.Normal);
             InitTestPlayerCharacterUnit();
-            SceneSystem.SwitchStage(new SwitchStageData("world_map_test"));
+            EnterTerrain("256_128_256_4");
+            CharacterTeleportTo(new Vector3(2, 4, 2));
+            //SceneSystem.SwitchStage(new SwitchStageData("world_map_test"));
         }
 
         /// <summary>
@@ -59,7 +61,7 @@ namespace GameMainModule
 
             //Test Enemy
             AddEnemySpawnPoint(
-                new Vector3(5, 0, 0),
+                new Vector3(5, 10, 5),
                 5,
                 new List<TestEnemySpawnData>()
                 {

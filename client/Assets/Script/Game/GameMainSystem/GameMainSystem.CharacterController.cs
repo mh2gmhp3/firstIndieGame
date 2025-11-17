@@ -49,5 +49,10 @@ namespace GameMainModule
         {
             _instance._characterAttackController.SetCombination(index, new AttackCombinationRuntimeSetupData(weaponBehaviorSetup));
         }
+
+        public static void CharacterTeleportTo(Vector3 worldPosition)
+        {
+            _instance._characterController.Teleport(worldPosition);
+        }
     }
 }
