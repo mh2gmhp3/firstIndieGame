@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 1
+  m_Script: {fileID: 11500000, guid: 451f7b423cb6c8140beaefc0faea454e, type: 3}
+  m_Name: test_block
+  m_EditorClassIdentifier: 
+  TileMap: {fileID: 2800000, guid: 6344bf96fbda94141a525046d088fb23, type: 3}
+  Tiling: {x: 4, y: 4}
+  Shader: {fileID: 4800000, guid: 0273231d23bbd6045992ff43db3578e7, type: 3}
+  BlockTemplateDataList:
+  - Id: 1
+    PXTiling: {x: 0.25, y: 0.25}
+    NXTiling: {x: 0.25, y: 0.25}
+    PYTiling: {x: 0, y: 0.75}
+    NYTiling: {x: 0.25, y: 0.25}
+    PZTiling: {x: 0.25, y: 0.25}
+    NZTiling: {x: 0.25, y: 0.25}
+  - Id: 2
+    PXTiling: {x: 0.25, y: 0.25}
+    NXTiling: {x: 0.25, y: 0.25}
+    PYTiling: {x: 0.25, y: 0.25}
+    NYTiling: {x: 0.25, y: 0.25}
+    PZTiling: {x: 0.25, y: 0.25}
+    NZTiling: {x: 0.25, y: 0.25}
+  - Id: 3
+    PXTiling: {x: 0.25, y: 0.25}
+    NXTiling: {x: 0.25, y: 0.25}
+    PYTiling: {x: 0.75, y: 0.75}
+    NYTiling: {x: 0.25, y: 0.25}
+    PZTiling: {x: 0.25, y: 0.25}
+    NZTiling: {x: 0.25, y: 0.25}
+  - Id: 4
+    PXTiling: {x: 0, y: 0}
+    NXTiling: {x: 0, y: 0}
+    PYTiling: {x: 0, y: 0}
+    NYTiling: {x: 0, y: 0}
+    PZTiling: {x: 0, y: 0}
+    NZTiling: {x: 0, y: 0}
+  - Id: 5
+    PXTiling: {x: 0, y: 0}
+    NXTiling: {x: 0, y: 0}
+    PYTiling: {x: 0, y: 0}
+    NYTiling: {x: 0, y: 0}
+    PZTiling: {x: 0, y: 0}
+    NZTiling: {x: 0, y: 0}
+  - Id: 6
+    PXTiling: {x: 0, y: 0}
+    NXTiling: {x: 0, y: 0}
+    PYTiling: {x: 0, y: 0}
+    NYTiling: {x: 0, y: 0}
+    PZTiling: {x: 0, y: 0}
+    NZTiling: {x: 0, y: 0}

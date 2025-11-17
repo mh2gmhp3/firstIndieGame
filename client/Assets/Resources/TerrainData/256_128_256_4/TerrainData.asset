@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 703f1dba673a6a34f8ab7e0650666b9c, type: 3}
+  m_Name: TerrainData
+  m_EditorClassIdentifier: 
+  BlockSize: {x: 4, y: 4, z: 4}
+  ChunkBlockNum: {x: 16, y: 16, z: 16}
+  ChunkNum: {x: 16, y: 8, z: 16}
+  ChunkDataList:
+  - Id: 0
+    MeshName: Chunk_0
+    BlockDataList: []
+  - Id: 1
+    MeshName: Chunk_1
+    BlockDataList: []
+  - Id: 2
+    MeshName: Chunk_2
+    BlockDataList: []
+  - Id: 258
+    MeshName: Chunk_258
+    BlockDataList: []
