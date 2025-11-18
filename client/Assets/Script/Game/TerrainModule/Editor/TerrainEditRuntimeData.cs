@@ -39,6 +39,13 @@ namespace TerrainModule.Editor
         public bool HaveData;
     }
 
+    public enum RaycastBlockFilterType
+    {
+        Ok,
+        Continue,
+        Break
+    }
+
     public class BlockEditRuntimeData
     {
         //In Chunk
@@ -613,7 +620,7 @@ namespace TerrainModule.Editor
         /// <param name="chunkNumY">最低限的ChunkY</param>
         /// <param name="result">擊中結果</param>
         /// <returns></returns>
-        public bool RaycastBlock(Ray ray, float distance, int chunkNumY, out RaycastBlockResult result)
+        public bool RaycastBlock(Ray ray, float distance, out RaycastBlockResult result, Func<Vector3Int, RaycastBlockFilterType> filter = null)
         {
             result = default;
             Bounds bounds = new Bounds();
@@ -623,15 +630,21 @@ namespace TerrainModule.Editor
             if (!bounds.IntersectRayAABB(ray, distance, out var tDistance))
                 return false;
 
+            bool haveFilter = filter != null;
             int lastChunkId = -1;
             int lastBlockId = -1;
             var blockResults = VoxelUtility.RaycastDDA(ray, BlockSize, tDistance, distance);
             foreach (var blockResult in blockResults)
             {
                 var worldCoordinates = blockResult.Coordinates;
-                var chunkCoord = GetChunkCoordWithWorldBlockCoord(worldCoordinates);
-                if (chunkCoord.y < chunkNumY)
-                    break;
+                if (haveFilter)
+                {
+                    var filterType = filter.Invoke(worldCoordinates);
+                    if (filterType == RaycastBlockFilterType.Continue)
+                        continue;
+                    else if (filterType == RaycastBlockFilterType.Break)
+                        break;
+                }
                 if (!IsValidWorldBlockCoordinates(worldCoordinates))
                     continue;
                 if (!TryGetId(worldCoordinates, out var cId, out var bId))

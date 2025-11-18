@@ -4,6 +4,7 @@ using Extension;
 using System.Collections.Generic;
 using Framework.Editor;
 using Framework.Editor.Utility;
+using System;
 
 namespace TerrainModule.Editor
 {
@@ -16,14 +17,23 @@ namespace TerrainModule.Editor
             SelectBlock,
         }
 
+        private enum AddBlockType
+        {
+            Single,
+            Area,
+        }
+
         private TerrainEditRuntimeData CurEditRuntimeData => _editorData.CurTerrainEditRuntimeData;
         private int _editChunkFlat = 0;
         private int _editDistance = 0;
         private bool _autoYValueFit = true;
 
-        private List<int> _notifyChunkList = new List<int>();
+        private HashSet<int> _notifyChunkSet = new HashSet<int>();
 
         private MouseFunction _curMouseFunction = MouseFunction.AddBlock;
+        private AddBlockType _addBlockType = AddBlockType.Single;
+        private List<Vector3Int> _addAreaBlock = new List<Vector3Int>();
+        private List<Vector3Int> _addAreaPreviewBlock = new List<Vector3Int>();
 
         private Vector2 _blockTemplateScrollPos = Vector2.zero;
         private int _addBlockTemplateId = 0;
@@ -50,6 +60,7 @@ namespace TerrainModule.Editor
         public override void OnDisable()
         {
             EditorPreviewUtility.Cleanup();
+            _addAreaBlock.Clear();
         }
 
         public override void OnGUI()
@@ -88,12 +99,14 @@ namespace TerrainModule.Editor
 
             if (_curSelectedBlockData != null)
             {
+                //Draw SelectBlcok in Chunk
                 Handles.color = Color.red;
                 Handles.DrawWireCube(
                     CurEditRuntimeData.GetWorldBlockCenterPositionWithId(_curSelectedChunkId, _curSelectedBlockData.Id),
                     CurEditRuntimeData.BlockSize);
                 var blockWorldPivotPos = CurEditRuntimeData.GetWorldBlockPivotPositionWithId(_curSelectedChunkId, _curSelectedBlockData.Id);
 
+                //Draw YValue SphereSlider Handler
                 Vector4 newYTopValue = Vector4.one;
                 Vector4 newYBottomValue = Vector4.zero;
                 EditorGUI.BeginChangeCheck();
@@ -139,12 +152,14 @@ namespace TerrainModule.Editor
             Vector3 mousePosition = currentEvent.mousePosition;
             Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
 
-            if (CurEditRuntimeData.RaycastBlock(ray, _editDistance, _editChunkFlat, out var hitResult))
+            if (CurEditRuntimeData.RaycastBlock(ray, _editDistance, out var hitResult, RaycastFilter))
             {
+                //Draw Current Chunk
                 Handles.color = Color.red;
                 Handles.DrawWireCube(
                     CurEditRuntimeData.GetChunkCenterPositionWithId(hitResult.ChunkId),
                     chunkSize);
+                //Draw Current Block
                 Handles.color = Color.green;
                 Handles.DrawWireCube(
                     CurEditRuntimeData.GetWorldBlockCenterPositionWithId(hitResult.ChunkId, hitResult.BlockId),
@@ -152,6 +167,7 @@ namespace TerrainModule.Editor
                 //要Add才會顯示
                 if (_curMouseFunction == MouseFunction.AddBlock)
                 {
+                    //Draw FaceNormal Block
                     if (hitResult.HaveData)
                     {
                         var newAddWorldBlockCoord = hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal;
@@ -161,6 +177,44 @@ namespace TerrainModule.Editor
                             Handles.DrawWireCube(
                                 CurEditRuntimeData.GetWorldBlockCenterPositionWithId(chunkId, blockInChunkId),
                                 CurEditRuntimeData.BlockSize);
+                        }
+                    }
+
+                    //Draw Add Block Area
+                    if (_addBlockType == AddBlockType.Area)
+                    {
+                        if (_addAreaBlock.Count > 0)
+                        {
+                            _addAreaPreviewBlock.Clear();
+                            for (int i = 0; i < 3; i++)
+                            {
+                                if (i < _addAreaBlock.Count)
+                                {
+                                    _addAreaPreviewBlock.Add(_addAreaBlock[i]);
+                                    continue;
+                                }
+
+                                if (hitResult.HaveData)
+                                    _addAreaPreviewBlock.Add(hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal);
+                                else
+                                    _addAreaPreviewBlock.Add(hitResult.WorldBlockCoordinates);
+                            }
+                            var diff = new Vector3Int(
+                                _addAreaPreviewBlock[1].x - _addAreaPreviewBlock[0].x,
+                                _addAreaPreviewBlock[2].y - _addAreaPreviewBlock[0].y,
+                                _addAreaPreviewBlock[1].z - _addAreaPreviewBlock[0].z);
+                            var absDiff = new Vector3Int(
+                                Math.Abs(diff.x),
+                                Math.Abs(diff.y),
+                                Math.Abs(diff.z));
+                            var blockSize = CurEditRuntimeData.BlockSize;
+                            Handles.color = Color.yellow;
+                            var xzPlaneCenterCoordDiff = ((Vector3)_addAreaPreviewBlock[1] - _addAreaPreviewBlock[0]) / 2f;
+                            var yCenterCoordDiff = (_addAreaPreviewBlock[2].y - _addAreaPreviewBlock[1].y) / 2f;
+                            var centerCoord = _addAreaPreviewBlock[0] + new Vector3(xzPlaneCenterCoordDiff.x, yCenterCoordDiff, xzPlaneCenterCoordDiff.z);
+                            Handles.DrawWireCube(
+                                new Vector3 (centerCoord.x * blockSize.x, centerCoord.y * blockSize.y, centerCoord.z * blockSize.z) + (Vector3)blockSize / 2f,
+                                new Vector3((absDiff.x + 1) * blockSize.x, (absDiff.y + 1) * blockSize.y, (absDiff.z + 1) * blockSize.z));
                         }
                     }
                 }
@@ -182,6 +236,31 @@ namespace TerrainModule.Editor
             }
 
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+        }
+
+        private RaycastBlockFilterType RaycastFilter(Vector3Int blockWorldCoord)
+        {
+            var chunkCoord = CurEditRuntimeData.GetChunkCoordWithWorldBlockCoord(blockWorldCoord);
+            if (chunkCoord.y < _editChunkFlat)
+                return RaycastBlockFilterType.Break;
+
+            if (_addBlockType == AddBlockType.Area)
+            {
+                if (_addAreaBlock.Count == 1)
+                {
+                    if (blockWorldCoord.y == _addAreaBlock[0].y)
+                        return RaycastBlockFilterType.Ok;
+                }
+                else if (_addAreaBlock.Count == 2)
+                {
+                    if (blockWorldCoord.x == _addAreaBlock[1].x && blockWorldCoord.z == _addAreaBlock[1].z)
+                        return RaycastBlockFilterType.Ok;
+                }
+
+                return _addAreaBlock.Count == 0 ? RaycastBlockFilterType.Ok : RaycastBlockFilterType.Continue;
+            }
+
+            return RaycastBlockFilterType.Ok;
         }
 
         private void ClearSelected()
@@ -218,6 +297,9 @@ namespace TerrainModule.Editor
             if (_curMouseFunction == function)
                 return;
 
+            if (_curMouseFunction == MouseFunction.AddBlock)
+                _addAreaBlock.Clear();
+
             if (_curMouseFunction == MouseFunction.SelectBlock)
                 ClearSelected();
 
@@ -229,7 +311,7 @@ namespace TerrainModule.Editor
 
         private void InvokeMouseFunction(RaycastBlockResult hitResult)
         {
-            _notifyChunkList.Clear();
+            _notifyChunkSet.Clear();
             if (_curMouseFunction == MouseFunction.AddBlock)
             {
                 if (!CurEditRuntimeData.BlockTemplateEditRuntimeData.TryGetBlockData(_addBlockTemplateId, out var blockTemplateData))
@@ -241,111 +323,153 @@ namespace TerrainModule.Editor
                     return;
                 }
 
-                if (hitResult.HaveData)
+                if (_addBlockType == AddBlockType.Single)
                 {
-                    var newAddWorldBlockCoord = hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal;
-                    if (CurEditRuntimeData.TryGetId(newAddWorldBlockCoord, out var chunkId, out var blockInChunkId))
+                    if (hitResult.HaveData)
                     {
-                        var yTopValue = Vector4.one;
-                        var yBottomValue = Vector4.zero;
-                        if (_autoYValueFit &&CurEditRuntimeData.TryGetBlock(hitResult.ChunkId, hitResult.BlockId, out var blockData, out _))
+                        var newAddWorldBlockCoord = hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal;
+                        if (CurEditRuntimeData.TryGetId(newAddWorldBlockCoord, out var chunkId, out var blockInChunkId))
                         {
-                            if (hitResult.HitFaceNormal.x == 1)
+                            var yTopValue = Vector4.one;
+                            var yBottomValue = Vector4.zero;
+                            if (_autoYValueFit && CurEditRuntimeData.TryGetBlock(hitResult.ChunkId, hitResult.BlockId, out var blockData, out _))
                             {
-                                //+x (-zb, -zt, +zb, +zt)
-                                var zdiff = new Vector4(
-                                    blockData.YBottomValue.y - blockData.YBottomValue.x,
-                                    blockData.YTopValue.y - blockData.YTopValue.x,
-                                    blockData.YBottomValue.w - blockData.YBottomValue.z,
-                                    blockData.YTopValue.w - blockData.YTopValue.z);
-                                yTopValue = new Vector4(
-                                    blockData.YTopValue.y,
-                                    Mathf.Clamp01(blockData.YTopValue.y + zdiff.y),
-                                    blockData.YTopValue.w,
-                                    Mathf.Clamp01(blockData.YTopValue.w + zdiff.w));
-                                yBottomValue = new Vector4(
-                                    blockData.YBottomValue.y,
-                                    Mathf.Clamp01(blockData.YBottomValue.y + zdiff.x),
-                                    blockData.YBottomValue.w,
-                                    Mathf.Clamp01(blockData.YBottomValue.w + zdiff.z));
+                                if (hitResult.HitFaceNormal.x == 1)
+                                {
+                                    //+x (-zb, -zt, +zb, +zt)
+                                    var zdiff = new Vector4(
+                                        blockData.YBottomValue.y - blockData.YBottomValue.x,
+                                        blockData.YTopValue.y - blockData.YTopValue.x,
+                                        blockData.YBottomValue.w - blockData.YBottomValue.z,
+                                        blockData.YTopValue.w - blockData.YTopValue.z);
+                                    yTopValue = new Vector4(
+                                        blockData.YTopValue.y,
+                                        Mathf.Clamp01(blockData.YTopValue.y + zdiff.y),
+                                        blockData.YTopValue.w,
+                                        Mathf.Clamp01(blockData.YTopValue.w + zdiff.w));
+                                    yBottomValue = new Vector4(
+                                        blockData.YBottomValue.y,
+                                        Mathf.Clamp01(blockData.YBottomValue.y + zdiff.x),
+                                        blockData.YBottomValue.w,
+                                        Mathf.Clamp01(blockData.YBottomValue.w + zdiff.z));
+                                }
+                                else if (hitResult.HitFaceNormal.x == -1)
+                                {
+                                    //-x (-zb, -zt, +zb, +zt)
+                                    var zdiff = new Vector4(
+                                        blockData.YBottomValue.y - blockData.YBottomValue.x,
+                                        blockData.YTopValue.y - blockData.YTopValue.x,
+                                        blockData.YBottomValue.w - blockData.YBottomValue.z,
+                                        blockData.YTopValue.w - blockData.YTopValue.z)
+                                        * -1;
+                                    yTopValue = new Vector4(
+                                        Mathf.Clamp01(blockData.YTopValue.x + zdiff.y),
+                                        blockData.YTopValue.x,
+                                        Mathf.Clamp01(blockData.YTopValue.z + zdiff.w),
+                                        blockData.YTopValue.z);
+                                    yBottomValue = new Vector4(
+                                        Mathf.Clamp01(blockData.YBottomValue.x + zdiff.x),
+                                        blockData.YBottomValue.x,
+                                        Mathf.Clamp01(blockData.YBottomValue.z + zdiff.z),
+                                        blockData.YBottomValue.z);
+                                }
+                                else if (hitResult.HitFaceNormal.z == 1)
+                                {
+                                    //+z (+xb, +xt, -xb, -xt)
+                                    var zdiff = new Vector4(
+                                        blockData.YBottomValue.w - blockData.YBottomValue.y,
+                                        blockData.YTopValue.w - blockData.YTopValue.y,
+                                        blockData.YBottomValue.z - blockData.YBottomValue.x,
+                                        blockData.YTopValue.z - blockData.YTopValue.x);
+                                    yTopValue = new Vector4(
+                                        blockData.YTopValue.z,
+                                        blockData.YTopValue.w,
+                                        Mathf.Clamp01(blockData.YTopValue.z + zdiff.w),
+                                        Mathf.Clamp01(blockData.YTopValue.w + zdiff.y));
+                                    yBottomValue = new Vector4(
+                                        blockData.YBottomValue.z,
+                                        blockData.YBottomValue.w,
+                                        Mathf.Clamp01(blockData.YBottomValue.z + zdiff.z),
+                                        Mathf.Clamp01(blockData.YBottomValue.w + zdiff.x));
+                                }
+                                else if (hitResult.HitFaceNormal.z == -1)
+                                {
+                                    //-z (+xb, +xt, -xb, -xt)
+                                    var zdiff = new Vector4(
+                                        blockData.YBottomValue.w - blockData.YBottomValue.y,
+                                        blockData.YTopValue.w - blockData.YTopValue.y,
+                                        blockData.YBottomValue.z - blockData.YBottomValue.x,
+                                        blockData.YTopValue.z - blockData.YTopValue.x)
+                                        * -1;
+                                    yTopValue = new Vector4(
+                                        Mathf.Clamp01(blockData.YTopValue.x + zdiff.w),
+                                        Mathf.Clamp01(blockData.YTopValue.y + zdiff.y),
+                                        blockData.YTopValue.x,
+                                        blockData.YTopValue.y);
+                                    yBottomValue = new Vector4(
+                                        Mathf.Clamp01(blockData.YBottomValue.x + zdiff.z),
+                                        Mathf.Clamp01(blockData.YBottomValue.y + zdiff.x),
+                                        blockData.YBottomValue.x,
+                                        blockData.YBottomValue.y);
+                                }
                             }
-                            else if (hitResult.HitFaceNormal.x == -1)
-                            {
-                                //-x (-zb, -zt, +zb, +zt)
-                                var zdiff = new Vector4(
-                                    blockData.YBottomValue.y - blockData.YBottomValue.x,
-                                    blockData.YTopValue.y - blockData.YTopValue.x,
-                                    blockData.YBottomValue.w - blockData.YBottomValue.z,
-                                    blockData.YTopValue.w - blockData.YTopValue.z)
-                                    * -1;
-                                yTopValue = new Vector4(
-                                    Mathf.Clamp01(blockData.YTopValue.x + zdiff.y),
-                                    blockData.YTopValue.x,
-                                    Mathf.Clamp01(blockData.YTopValue.z + zdiff.w),
-                                    blockData.YTopValue.z);
-                                yBottomValue = new Vector4(
-                                    Mathf.Clamp01(blockData.YBottomValue.x + zdiff.x),
-                                    blockData.YBottomValue.x,
-                                    Mathf.Clamp01(blockData.YBottomValue.z + zdiff.z),
-                                    blockData.YBottomValue.z);
-                            }
-                            else if (hitResult.HitFaceNormal.z == 1)
-                            {
-                                //+z (+xb, +xt, -xb, -xt)
-                                var zdiff = new Vector4(
-                                    blockData.YBottomValue.w - blockData.YBottomValue.y,
-                                    blockData.YTopValue.w - blockData.YTopValue.y,
-                                    blockData.YBottomValue.z - blockData.YBottomValue.x,
-                                    blockData.YTopValue.z - blockData.YTopValue.x);
-                                yTopValue = new Vector4(
-                                    blockData.YTopValue.z,
-                                    blockData.YTopValue.w,
-                                    Mathf.Clamp01(blockData.YTopValue.z + zdiff.w),
-                                    Mathf.Clamp01(blockData.YTopValue.w + zdiff.y));
-                                yBottomValue = new Vector4(
-                                    blockData.YBottomValue.z,
-                                    blockData.YBottomValue.w,
-                                    Mathf.Clamp01(blockData.YBottomValue.z + zdiff.z),
-                                    Mathf.Clamp01(blockData.YBottomValue.w + zdiff.x));
-                            }
-                            else if (hitResult.HitFaceNormal.z == -1)
-                            {
-                                //-z (+xb, +xt, -xb, -xt)
-                                var zdiff = new Vector4(
-                                    blockData.YBottomValue.w - blockData.YBottomValue.y,
-                                    blockData.YTopValue.w - blockData.YTopValue.y,
-                                    blockData.YBottomValue.z - blockData.YBottomValue.x,
-                                    blockData.YTopValue.z - blockData.YTopValue.x)
-                                    * -1;
-                                yTopValue = new Vector4(
-                                    Mathf.Clamp01(blockData.YTopValue.x + zdiff.w),
-                                    Mathf.Clamp01(blockData.YTopValue.y + zdiff.y),
-                                    blockData.YTopValue.x,
-                                    blockData.YTopValue.y);
-                                yBottomValue = new Vector4(
-                                    Mathf.Clamp01(blockData.YBottomValue.x + zdiff.z),
-                                    Mathf.Clamp01(blockData.YBottomValue.y + zdiff.x),
-                                    blockData.YBottomValue.x,
-                                    blockData.YBottomValue.y);
-                            }
-                        }
 
-                        CurEditRuntimeData.AddBlockData(chunkId, blockInChunkId, blockTemplateData.Id, yTopValue, yBottomValue);
-                        _notifyChunkList.Add(hitResult.ChunkId);
-                        if (hitResult.ChunkId != chunkId)
-                            _notifyChunkList.Add(chunkId);
+                            CurEditRuntimeData.AddBlockData(chunkId, blockInChunkId, blockTemplateData.Id, yTopValue, yBottomValue);
+                            _notifyChunkSet.Add(hitResult.ChunkId);
+                            if (hitResult.ChunkId != chunkId)
+                                _notifyChunkSet.Add(chunkId);
+                        }
+                    }
+                    else
+                    {
+                        CurEditRuntimeData.AddBlockData(hitResult.ChunkId, hitResult.BlockId, blockTemplateData.Id);
+                        _notifyChunkSet.Add(hitResult.ChunkId);
                     }
                 }
-                else
+                else if (_addBlockType == AddBlockType.Area)
                 {
-                    CurEditRuntimeData.AddBlockData(hitResult.ChunkId, hitResult.BlockId, blockTemplateData.Id);
-                    _notifyChunkList.Add(hitResult.ChunkId);
+                    if (hitResult.HaveData)
+                        _addAreaBlock.Add(hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal);
+                    else
+                        _addAreaBlock.Add(hitResult.WorldBlockCoordinates);
+                    if (_addAreaBlock.Count == 3)
+                    {
+                        var startCoord = _addAreaBlock[0];
+                        var diff = new Vector3Int(
+                            _addAreaBlock[1].x - _addAreaBlock[0].x,
+                            _addAreaBlock[2].y - _addAreaBlock[0].y,
+                            _addAreaBlock[1].z - _addAreaBlock[0].z);
+                        var absDiff = new Vector3Int(
+                            Math.Abs(diff.x),
+                            Math.Abs(diff.y),
+                            Math.Abs(diff.z));
+                        var sign = new Vector3Int(
+                            Math.Sign(diff.x),
+                            Math.Sign(diff.y),
+                            Math.Sign(diff.z));
+                        for (int y = 0; y < absDiff.y + 1; y++)
+                        {
+                            for (int z = 0; z < absDiff.z + 1; z++)
+                            {
+                                for (int x = 0; x < absDiff.x + 1; x++)
+                                {
+                                    var worldCoord = startCoord + new Vector3Int(x * sign.x, y * sign.y, z * sign.z);
+                                    if (CurEditRuntimeData.TryGetId(worldCoord, out var chunkId, out var blockId))
+                                    {
+                                        CurEditRuntimeData.AddBlockData(chunkId, blockId, blockTemplateData.Id);
+                                        _notifyChunkSet.Add(chunkId);
+                                    }
+                                }
+                            }
+                        }
+                        _addAreaBlock.Clear();
+                    }
                 }
             }
             else if (_curMouseFunction == MouseFunction.DeleteBlock)
             {
                 CurEditRuntimeData.RemoveBlockData(hitResult.ChunkId, hitResult.BlockId);
-                _notifyChunkList.Add(hitResult.ChunkId);
+                _notifyChunkSet.Add(hitResult.ChunkId);
             }
             else if (_curMouseFunction == MouseFunction.SelectBlock)
             {
@@ -368,9 +492,9 @@ namespace TerrainModule.Editor
                 }
             }
 
-            for (int i = 0; i < _notifyChunkList.Count; i++)
+            foreach (var notifyChunk in _notifyChunkSet)
             {
-                _editorData.TerrainEditorMgr.RefreshChunkMesh(_notifyChunkList[i]);
+                _editorData.TerrainEditorMgr.RefreshChunkMesh(notifyChunk);
             }
         }
 
@@ -448,6 +572,7 @@ namespace TerrainModule.Editor
                 EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
                 {
                     _autoYValueFit = EditorGUILayout.Toggle("自動貼合Y高低值:", _autoYValueFit);
+                    _addBlockType = (AddBlockType)EditorGUILayout.EnumPopup("新增模式:", _addBlockType);
                     EditorGUILayout.LabelField("新增方塊類型");
                     if (CurEditRuntimeData.BlockTemplateEditRuntimeData == null)
                     {
