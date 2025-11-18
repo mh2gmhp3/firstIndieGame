@@ -17,7 +17,7 @@ namespace TerrainModule.Editor
             SelectBlock,
         }
 
-        private enum AddBlockType
+        private enum BlockOperateMode
         {
             Single,
             Area,
@@ -31,9 +31,10 @@ namespace TerrainModule.Editor
         private HashSet<int> _notifyChunkSet = new HashSet<int>();
 
         private MouseFunction _curMouseFunction = MouseFunction.AddBlock;
-        private AddBlockType _addBlockType = AddBlockType.Single;
-        private List<Vector3Int> _addAreaBlock = new List<Vector3Int>();
-        private List<Vector3Int> _addAreaPreviewBlock = new List<Vector3Int>();
+        private BlockOperateMode _blockOperateMode = BlockOperateMode.Single;
+        private List<Vector3Int> _areaBlockCoord = new List<Vector3Int>();
+        private List<Vector3Int> _areaPreviewBlockCoord = new List<Vector3Int>();
+        private List<Vector3Int> _inAreaBlockCoord = new List<Vector3Int>();
 
         private Vector2 _blockTemplateScrollPos = Vector2.zero;
         private int _addBlockTemplateId = 0;
@@ -60,7 +61,7 @@ namespace TerrainModule.Editor
         public override void OnDisable()
         {
             EditorPreviewUtility.Cleanup();
-            _addAreaBlock.Clear();
+            _areaBlockCoord.Clear();
         }
 
         public override void OnGUI()
@@ -180,42 +181,22 @@ namespace TerrainModule.Editor
                         }
                     }
 
-                    //Draw Add Block Area
-                    if (_addBlockType == AddBlockType.Area)
+                    //Draw Area Block
+                    if (_blockOperateMode == BlockOperateMode.Area)
                     {
-                        if (_addAreaBlock.Count > 0)
-                        {
-                            _addAreaPreviewBlock.Clear();
-                            for (int i = 0; i < 3; i++)
-                            {
-                                if (i < _addAreaBlock.Count)
-                                {
-                                    _addAreaPreviewBlock.Add(_addAreaBlock[i]);
-                                    continue;
-                                }
+                        if (hitResult.HaveData)
+                            DrawAreaPreviewBlock(hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal);
+                        else
+                            DrawAreaPreviewBlock(hitResult.WorldBlockCoordinates);
+                    }
+                }
 
-                                if (hitResult.HaveData)
-                                    _addAreaPreviewBlock.Add(hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal);
-                                else
-                                    _addAreaPreviewBlock.Add(hitResult.WorldBlockCoordinates);
-                            }
-                            var diff = new Vector3Int(
-                                _addAreaPreviewBlock[1].x - _addAreaPreviewBlock[0].x,
-                                _addAreaPreviewBlock[2].y - _addAreaPreviewBlock[0].y,
-                                _addAreaPreviewBlock[1].z - _addAreaPreviewBlock[0].z);
-                            var absDiff = new Vector3Int(
-                                Math.Abs(diff.x),
-                                Math.Abs(diff.y),
-                                Math.Abs(diff.z));
-                            var blockSize = CurEditRuntimeData.BlockSize;
-                            Handles.color = Color.yellow;
-                            var xzPlaneCenterCoordDiff = ((Vector3)_addAreaPreviewBlock[1] - _addAreaPreviewBlock[0]) / 2f;
-                            var yCenterCoordDiff = (_addAreaPreviewBlock[2].y - _addAreaPreviewBlock[1].y) / 2f;
-                            var centerCoord = _addAreaPreviewBlock[0] + new Vector3(xzPlaneCenterCoordDiff.x, yCenterCoordDiff, xzPlaneCenterCoordDiff.z);
-                            Handles.DrawWireCube(
-                                new Vector3 (centerCoord.x * blockSize.x, centerCoord.y * blockSize.y, centerCoord.z * blockSize.z) + (Vector3)blockSize / 2f,
-                                new Vector3((absDiff.x + 1) * blockSize.x, (absDiff.y + 1) * blockSize.y, (absDiff.z + 1) * blockSize.z));
-                        }
+                if (_curMouseFunction == MouseFunction.DeleteBlock)
+                {
+                    //Draw Area Block
+                    if (_blockOperateMode == BlockOperateMode.Area)
+                    {
+                        DrawAreaPreviewBlock(hitResult.WorldBlockCoordinates);
                     }
                 }
 
@@ -238,26 +219,64 @@ namespace TerrainModule.Editor
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
         }
 
+        private void DrawAreaPreviewBlock(Vector3Int curWorldBlockCoord)
+        {
+            if (_areaBlockCoord.Count > 0)
+            {
+                _areaPreviewBlockCoord.Clear();
+                for (int i = 0; i < 3; i++)
+                {
+                    if (i < _areaBlockCoord.Count)
+                    {
+                        _areaPreviewBlockCoord.Add(_areaBlockCoord[i]);
+                        continue;
+                    }
+
+                    _areaPreviewBlockCoord.Add(curWorldBlockCoord);
+
+                }
+                var diff = new Vector3Int(
+                    _areaPreviewBlockCoord[1].x - _areaPreviewBlockCoord[0].x,
+                    _areaPreviewBlockCoord[2].y - _areaPreviewBlockCoord[0].y,
+                    _areaPreviewBlockCoord[1].z - _areaPreviewBlockCoord[0].z);
+                var absDiff = new Vector3Int(
+                    Math.Abs(diff.x),
+                    Math.Abs(diff.y),
+                    Math.Abs(diff.z));
+                var blockSize = CurEditRuntimeData.BlockSize;
+                Handles.color = Color.yellow;
+                var xzPlaneCenterCoordDiff = ((Vector3)_areaPreviewBlockCoord[1] - _areaPreviewBlockCoord[0]) / 2f;
+                var yCenterCoordDiff = (_areaPreviewBlockCoord[2].y - _areaPreviewBlockCoord[1].y) / 2f;
+                var centerCoord = _areaPreviewBlockCoord[0] + new Vector3(xzPlaneCenterCoordDiff.x, yCenterCoordDiff, xzPlaneCenterCoordDiff.z);
+                Handles.DrawWireCube(
+                    new Vector3(centerCoord.x * blockSize.x, centerCoord.y * blockSize.y, centerCoord.z * blockSize.z) + (Vector3)blockSize / 2f,
+                    new Vector3((absDiff.x + 1) * blockSize.x, (absDiff.y + 1) * blockSize.y, (absDiff.z + 1) * blockSize.z));
+            }
+        }
+
         private RaycastBlockFilterType RaycastFilter(Vector3Int blockWorldCoord)
         {
             var chunkCoord = CurEditRuntimeData.GetChunkCoordWithWorldBlockCoord(blockWorldCoord);
             if (chunkCoord.y < _editChunkFlat)
                 return RaycastBlockFilterType.Break;
 
-            if (_addBlockType == AddBlockType.Area)
+            if (_curMouseFunction == MouseFunction.AddBlock || _curMouseFunction == MouseFunction.DeleteBlock)
             {
-                if (_addAreaBlock.Count == 1)
+                if (_blockOperateMode == BlockOperateMode.Area)
                 {
-                    if (blockWorldCoord.y == _addAreaBlock[0].y)
-                        return RaycastBlockFilterType.Ok;
-                }
-                else if (_addAreaBlock.Count == 2)
-                {
-                    if (blockWorldCoord.x == _addAreaBlock[1].x && blockWorldCoord.z == _addAreaBlock[1].z)
-                        return RaycastBlockFilterType.Ok;
-                }
+                    if (_areaBlockCoord.Count == 1)
+                    {
+                        if (blockWorldCoord.y == _areaBlockCoord[0].y)
+                            return RaycastBlockFilterType.Ok;
+                    }
+                    else if (_areaBlockCoord.Count == 2)
+                    {
+                        if (blockWorldCoord.x == _areaBlockCoord[1].x && blockWorldCoord.z == _areaBlockCoord[1].z)
+                            return RaycastBlockFilterType.Ok;
+                    }
 
-                return _addAreaBlock.Count == 0 ? RaycastBlockFilterType.Ok : RaycastBlockFilterType.Continue;
+                    return _areaBlockCoord.Count == 0 ? RaycastBlockFilterType.Ok : RaycastBlockFilterType.Continue;
+                }
             }
 
             return RaycastBlockFilterType.Ok;
@@ -298,7 +317,9 @@ namespace TerrainModule.Editor
                 return;
 
             if (_curMouseFunction == MouseFunction.AddBlock)
-                _addAreaBlock.Clear();
+                _areaBlockCoord.Clear();
+            if (_curMouseFunction == MouseFunction.DeleteBlock)
+                _areaBlockCoord.Clear();
 
             if (_curMouseFunction == MouseFunction.SelectBlock)
                 ClearSelected();
@@ -323,7 +344,7 @@ namespace TerrainModule.Editor
                     return;
                 }
 
-                if (_addBlockType == AddBlockType.Single)
+                if (_blockOperateMode == BlockOperateMode.Single)
                 {
                     if (hitResult.HaveData)
                     {
@@ -426,50 +447,43 @@ namespace TerrainModule.Editor
                         _notifyChunkSet.Add(hitResult.ChunkId);
                     }
                 }
-                else if (_addBlockType == AddBlockType.Area)
+                else if (_blockOperateMode == BlockOperateMode.Area)
                 {
                     if (hitResult.HaveData)
-                        _addAreaBlock.Add(hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal);
+                        _areaBlockCoord.Add(hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal);
                     else
-                        _addAreaBlock.Add(hitResult.WorldBlockCoordinates);
-                    if (_addAreaBlock.Count == 3)
+                        _areaBlockCoord.Add(hitResult.WorldBlockCoordinates);
+                    var inAreaWorldBlockCoordList = GetInAreaWorldBlockCoordList();
+                    for (int i = 0; i < inAreaWorldBlockCoordList.Count; i++)
                     {
-                        var startCoord = _addAreaBlock[0];
-                        var diff = new Vector3Int(
-                            _addAreaBlock[1].x - _addAreaBlock[0].x,
-                            _addAreaBlock[2].y - _addAreaBlock[0].y,
-                            _addAreaBlock[1].z - _addAreaBlock[0].z);
-                        var absDiff = new Vector3Int(
-                            Math.Abs(diff.x),
-                            Math.Abs(diff.y),
-                            Math.Abs(diff.z));
-                        var sign = new Vector3Int(
-                            Math.Sign(diff.x),
-                            Math.Sign(diff.y),
-                            Math.Sign(diff.z));
-                        for (int y = 0; y < absDiff.y + 1; y++)
+                        if (CurEditRuntimeData.TryGetId(inAreaWorldBlockCoordList[i], out var chunkId, out var blockId))
                         {
-                            for (int z = 0; z < absDiff.z + 1; z++)
-                            {
-                                for (int x = 0; x < absDiff.x + 1; x++)
-                                {
-                                    var worldCoord = startCoord + new Vector3Int(x * sign.x, y * sign.y, z * sign.z);
-                                    if (CurEditRuntimeData.TryGetId(worldCoord, out var chunkId, out var blockId))
-                                    {
-                                        CurEditRuntimeData.AddBlockData(chunkId, blockId, blockTemplateData.Id);
-                                        _notifyChunkSet.Add(chunkId);
-                                    }
-                                }
-                            }
+                            CurEditRuntimeData.AddBlockData(chunkId, blockId, blockTemplateData.Id);
+                            _notifyChunkSet.Add(chunkId);
                         }
-                        _addAreaBlock.Clear();
                     }
                 }
             }
             else if (_curMouseFunction == MouseFunction.DeleteBlock)
             {
-                CurEditRuntimeData.RemoveBlockData(hitResult.ChunkId, hitResult.BlockId);
-                _notifyChunkSet.Add(hitResult.ChunkId);
+                if (_blockOperateMode == BlockOperateMode.Single)
+                {
+                    CurEditRuntimeData.RemoveBlockData(hitResult.ChunkId, hitResult.BlockId);
+                    _notifyChunkSet.Add(hitResult.ChunkId);
+                }
+                else if (_blockOperateMode == BlockOperateMode.Area)
+                {
+                    _areaBlockCoord.Add(hitResult.WorldBlockCoordinates);
+                    var inAreaWorldBlockCoordList = GetInAreaWorldBlockCoordList();
+                    for (int i = 0; i < inAreaWorldBlockCoordList.Count; i++)
+                    {
+                        if (CurEditRuntimeData.TryGetId(inAreaWorldBlockCoordList[i], out var chunkId, out var blockId))
+                        {
+                            CurEditRuntimeData.RemoveBlockData(chunkId, blockId);
+                            _notifyChunkSet.Add(chunkId);
+                        }
+                    }
+                }
             }
             else if (_curMouseFunction == MouseFunction.SelectBlock)
             {
@@ -496,6 +510,40 @@ namespace TerrainModule.Editor
             {
                 _editorData.TerrainEditorMgr.RefreshChunkMesh(notifyChunk);
             }
+        }
+
+        private List<Vector3Int> GetInAreaWorldBlockCoordList()
+        {
+            _inAreaBlockCoord.Clear();
+            if (_areaBlockCoord.Count == 3)
+            {
+                var startCoord = _areaBlockCoord[0];
+                var diff = new Vector3Int(
+                    _areaBlockCoord[1].x - _areaBlockCoord[0].x,
+                    _areaBlockCoord[2].y - _areaBlockCoord[0].y,
+                    _areaBlockCoord[1].z - _areaBlockCoord[0].z);
+                var absDiff = new Vector3Int(
+                    Math.Abs(diff.x),
+                    Math.Abs(diff.y),
+                    Math.Abs(diff.z));
+                var sign = new Vector3Int(
+                    Math.Sign(diff.x),
+                    Math.Sign(diff.y),
+                    Math.Sign(diff.z));
+                for (int y = 0; y < absDiff.y + 1; y++)
+                {
+                    for (int z = 0; z < absDiff.z + 1; z++)
+                    {
+                        for (int x = 0; x < absDiff.x + 1; x++)
+                        {
+                            var worldCoord = startCoord + new Vector3Int(x * sign.x, y * sign.y, z * sign.z);
+                            _inAreaBlockCoord.Add(worldCoord);
+                        }
+                    }
+                }
+                _areaBlockCoord.Clear();
+            }
+            return _inAreaBlockCoord;
         }
 
         #endregion
@@ -572,7 +620,7 @@ namespace TerrainModule.Editor
                 EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
                 {
                     _autoYValueFit = EditorGUILayout.Toggle("自動貼合Y高低值:", _autoYValueFit);
-                    _addBlockType = (AddBlockType)EditorGUILayout.EnumPopup("新增模式:", _addBlockType);
+                    _blockOperateMode = (BlockOperateMode)EditorGUILayout.EnumPopup("模式:", _blockOperateMode);
                     EditorGUILayout.LabelField("新增方塊類型");
                     if (CurEditRuntimeData.BlockTemplateEditRuntimeData == null)
                     {
