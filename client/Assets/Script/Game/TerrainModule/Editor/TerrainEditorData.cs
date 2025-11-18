@@ -77,7 +77,7 @@ namespace TerrainModule.Editor
                 CurTerrainEditRuntimeData.ChunkBlockNum,
                 CurTerrainEditRuntimeData.ChunkNum);
             var idToChunkData = new Dictionary<int, ChunkData>();
-
+            var title = "輸出地形";
             if (CurTerrainEditRuntimeData.BlockTemplateEditRuntimeData != null)
             {
                 var materialFolderPath = TerrainDefine.GetExportMaterialFolderPath(dataName);
@@ -85,10 +85,13 @@ namespace TerrainModule.Editor
                 var blockTemplateData = CurTerrainEditRuntimeData.BlockTemplateEditRuntimeData;
                 var material = TerrainEditorUtility.GenTerrainMaterial(blockTemplateData.Shader, blockTemplateData.TileMap, blockTemplateData.Tiling);
                 AssetDatabase.CreateAsset(material, TerrainDefine.GetExportMaterialPath(dataName));
+                EditorUtility.DisplayProgressBar(title, "輸出地形材質", 0.1f);
             }
 
             var meshFolderPath = TerrainDefine.GetExportChunkMeshFolderPath(dataName);
             Directory.CreateDirectory(meshFolderPath);
+            var chunkCount = CurTerrainEditRuntimeData.IdToChunkEditData.Count;
+            var exportedChunkCount = 0;
             foreach (var idToChunkEditData in CurTerrainEditRuntimeData.IdToChunkEditData)
             {
                 var chunkEditData = idToChunkEditData.Value;
@@ -97,12 +100,19 @@ namespace TerrainModule.Editor
                 var chunkData = GetChunkData(chunkEditData.Id);
                 chunkData.MeshName = chunkMesh.name;
                 AssetDatabase.CreateAsset(chunkMesh, TerrainDefine.GetExportChunkMeshPath(dataName, chunkMesh.name));
+                exportedChunkCount++;
+                EditorUtility.DisplayProgressBar(
+                    title,
+                    $"輸出Chunk: {exportedChunkCount}/{chunkCount}",
+                    0.1f + 0.9f * (exportedChunkCount / (float)chunkCount));
             }
 
             terrainData.ChunkDataList.AddRange(idToChunkData.Values);
             AssetDatabase.CreateAsset(terrainData, TerrainDefine.GetExportTerrainDataPath(CurTerrainEditRuntimeData.Name));
-
             AssetDatabase.Refresh();
+
+            EditorUtility.ClearProgressBar();
+            EditorUtility.DisplayDialog(title, "輸出完成", "確認");
 
             #region Method
 
