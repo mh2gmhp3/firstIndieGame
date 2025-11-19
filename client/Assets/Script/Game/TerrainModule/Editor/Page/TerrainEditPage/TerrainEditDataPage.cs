@@ -629,10 +629,10 @@ namespace TerrainModule.Editor
                     else
                     {
                         EditorGUILayout.LabelField($"當前選擇Id:{_addBlockTemplateId}");
-                        var columnCount = 5;
+                        var columnCount = 8;
                         var dataCount = CurEditRuntimeData.BlockTemplateEditRuntimeData.BlockTemplateDataList.Count;
                         var rowCount = Mathf.CeilToInt(dataCount / (float)columnCount);
-                        var maxWidth = _editorData.EditorWindow.position.width / columnCount;
+                        var maxWidth = (_editorData.EditorWindow.position.width - 100) / columnCount;
                         _blockTemplateScrollPos = EditorGUILayout.BeginScrollView(_blockTemplateScrollPos, CommonGUIStyle.Default_Box);
                         {
                             for (int i = 0; i < rowCount; i++)
@@ -719,12 +719,13 @@ namespace TerrainModule.Editor
 
         private void DrawBlockTemplateScrollCell(BlockTemplateRuntimeData data, float maxWidth)
         {
-            EditorGUILayout.BeginVertical(CommonGUIStyle.SelectableBlueBox(_addBlockTemplateId == data.Id), GUILayout.MaxWidth(maxWidth));
+            EditorGUILayout.BeginVertical(CommonGUIStyle.SelectableBlueBox(_addBlockTemplateId == data.Id), GUILayout.Width(maxWidth), GUILayout.MaxWidth(maxWidth));
             {
-                EditorGUILayout.LabelField($"Id:{data.Id}");
+                EditorGUILayout.LabelField($"Id:{data.Id}", GUILayout.MaxWidth(maxWidth));
                 EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
                 {
-                    var rect = GUILayoutUtility.GetRect(150, 150, GUILayout.Width(150), GUILayout.Height(150));
+                    var width = maxWidth - 10;
+                    var rect = GUILayoutUtility.GetRect(width, width, GUILayout.Width(width), GUILayout.Height(width));
                     TerrainEditorUtility.DrawBlockTemplatePreview(
                         data,
                         _blockPreviewSetting,
