@@ -599,6 +599,22 @@ namespace TerrainModule.Editor
             }
         }
 
+        public void UpdateBlockData(int chunkId, int blockId, int blockTemplateId)
+        {
+            if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
+                return;
+            if (!IsValidBlockInChunkCoordinates(GetBlockInChunkCoordinatesWithId(blockId)))
+                return;
+
+            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunkEditRuntime))
+                return;
+
+            if (!chunkEditRuntime.IdToBlockEditData.TryGetValue(blockId, out var blockEditRuntimeData))
+                return;
+
+            blockEditRuntimeData.TemplateId = blockTemplateId;
+        }
+
         public void RemoveBlockData(int chunkId, int blockId)
         {
             if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
