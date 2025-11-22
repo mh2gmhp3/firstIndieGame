@@ -213,7 +213,7 @@ namespace TerrainModule.Editor
                     }
                     else if (_blockOperateMode == BlockOperateMode.Area)
                     {
-                        DrawSinglePreviewBlock(hitResult, false);
+                        DrawSinglePreviewBlock(hitResult, !_replaceBlock);
                         if (hitResult.HaveData && !_replaceBlock)
                             DrawAreaPreviewBlock(hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal);
                         else
