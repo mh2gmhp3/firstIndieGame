@@ -1,6 +1,5 @@
 ﻿using Extension;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +15,7 @@ namespace Utility
             /// 射線投射至Voxel的方向
             /// </summary>
             public Vector3Int HitRayNormal;
+            public Vector3 HitWorldPosition;
         }
 
         /// <summary>
@@ -90,6 +90,8 @@ namespace Utility
             const int MAX_ITERATIONS = 10000;
             int iterations = 0;
             var hitNormal = Vector3Int.zero;
+            Vector3 hitWorldPosition = currentPosition;
+
             while (tCurrent < distance && iterations < MAX_ITERATIONS)
             {
                 // 在循環開始時，返回當前的單元格座標
@@ -98,21 +100,24 @@ namespace Utility
                     Coordinates = coord,
                     Distance = tCurrent,
                     HitRayNormal = hitNormal,
+                    HitWorldPosition = hitWorldPosition
                 };
 
                 // 確定最短路徑的軸向 (即 tMax 最小的軸)
                 if (tMax.x <= tMax.y && tMax.x <= tMax.z)
                 {
                     // X 軸是最近的
-                    tCurrent = tMax.x;                              // 更新累計距離參數
-                    coord.x += step.x;                              // 步進到下一個單元格
-                    tMax.x += tDelta.x;                             // 更新 tMax
-                    hitNormal = new Vector3Int(step.x, 0, 0);       // 那面被擊中
+                    tCurrent = tMax.x;                                 // 更新累計距離參數
+                    hitWorldPosition = ray.GetPoint(tCurrent);         // 世界座標
+                    coord.x += step.x;                                 // 步進到下一個單元格
+                    tMax.x += tDelta.x;                                // 更新 tMax
+                    hitNormal = new Vector3Int(step.x, 0, 0);          // 那面被擊中
                 }
                 else if (tMax.y <= tMax.z)
                 {
                     // Y 軸是最近的
                     tCurrent = tMax.y;
+                    hitWorldPosition = ray.GetPoint(tCurrent);         // <--- !!! 在這裡計算擊中世界座標
                     coord.y += step.y;
                     tMax.y += tDelta.y;
                     hitNormal = new Vector3Int(0, step.y, 0);
@@ -121,6 +126,7 @@ namespace Utility
                 {
                     // Z 軸是最近的
                     tCurrent = tMax.z;
+                    hitWorldPosition = ray.GetPoint(tCurrent);         // <--- !!! 在這裡計算擊中世界座標
                     coord.z += step.z;
                     tMax.z += tDelta.z;
                     hitNormal = new Vector3Int(0, 0, step.z);
@@ -130,6 +136,58 @@ namespace Utility
             }
 
             yield break;
+        }
+
+        public static bool CircleIntersectsVoxel(Vector2 center, float radius, Vector2 voxelMin, Vector2 voxelMax)
+        {
+            float closestX = Math.Clamp(center.x, voxelMin.x, voxelMax.x);
+            float closestY = Math.Clamp(center.y, voxelMin.y, voxelMax.y);
+
+            float dx = center.x - closestX;
+            float dy = center.y - closestY;
+
+            float dist = dx * dx + dy * dy;
+
+            return dist <= radius * radius;
+        }
+
+        public static void GetCircleIntersectsVoxel(Vector2 center, float radius, Vector2 size, List<Vector2Int> result)
+        {
+            if (result == null)
+                return;
+
+            result.Clear();
+            var coord = new Vector2Int(Mathf.FloorToInt(center.x / size.x), Mathf.FloorToInt(center.y / size.y));
+            Vector2Int coordRadius = new Vector2Int(Mathf.CeilToInt(radius / size.x), Mathf.CeilToInt(radius / size.y));
+            var minXCoord = coord.x - coordRadius.x;
+            var maxXCoord = coord.x + coordRadius.x;
+            var minYCoord = coord.y - coordRadius.y;
+            var maxYCoord = coord.y + coordRadius.y;
+            for (var x = minXCoord; x <= maxXCoord; x++)
+            {
+                for (int y = minYCoord; y <= maxYCoord; y++)
+                {
+                    var blockCoord = new Vector2Int(x, y);
+                    var blockPivotPos = new Vector2(blockCoord.x * size.x, blockCoord.y * size.y);
+                    if (!CircleIntersectsVoxel(
+                        center,
+                        radius,
+                        blockPivotPos,
+                        blockPivotPos + size))
+                    {
+                        continue;
+                    }
+                    result.Add(blockCoord);
+                }
+            }
+        }
+
+        public static bool PointInCircle(Vector2 center, Vector2 point, float radius)
+        {
+            float dx = point.x - center.x;
+            float dy = point.y - center.y;
+            float dist2 = dx * dx + dy * dy;
+            return dist2 <= radius * radius;
         }
     }
 }
