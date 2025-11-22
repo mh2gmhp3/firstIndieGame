@@ -75,6 +75,7 @@ namespace TerrainModule.Editor
         private bool _brushDrawing = false;
         private int _brushDrawingYCoord = -1;
         private Dictionary<int, Dictionary<int, Vector4>> _brushDrewIdDic = new Dictionary<int, Dictionary<int, Vector4>>();
+        private bool _brushIncludeAllYPoint = false;
 
         private Vector2 _blockTemplateScrollPos = Vector2.zero;
         private int _addBlockTemplateId = 0;
@@ -1007,6 +1008,8 @@ namespace TerrainModule.Editor
         private Vector4 GetInBrushYPoint(Vector2 xzWorldPos, Vector2 yXZPoint, float radius)
         {
             Vector4 inBrushYPoint = Vector4.zero;
+            if (_brushIncludeAllYPoint)
+                return Vector4.one;
             if (VoxelUtility.PointInCircle(xzWorldPos, yXZPoint, radius))
             {
                 inBrushYPoint.x = 1;
@@ -1219,6 +1222,7 @@ namespace TerrainModule.Editor
             _brushSize = EditorGUILayout.Slider("筆刷大小:", _brushSize, 1f, 200f);
             _brushWeight = (float)Math.Round(EditorGUILayout.Slider("筆刷強度:", _brushWeight, 0.1f, 1f), 1) ;
             _brushOnlySetYValue = EditorGUILayout.Toggle("筆刷只設定Y高度:", _brushOnlySetYValue);
+            _brushIncludeAllYPoint = EditorGUILayout.Toggle("筆刷包含所有Y點:", _brushIncludeAllYPoint);
         }
 
         private void DrawBlockTemplateScrollCell(BlockTemplateRuntimeData data, float maxWidth)
