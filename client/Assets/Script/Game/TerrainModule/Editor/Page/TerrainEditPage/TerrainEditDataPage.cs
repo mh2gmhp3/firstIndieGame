@@ -954,16 +954,14 @@ namespace TerrainModule.Editor
                 }
                 else
                 {
-                    if (!_brushOnlySetYValue)
+                    for (int i = 0; i < _brushNeedAddBlockCoord.Count; i++)
                     {
-                        for (int i = 0; i < _brushNeedAddBlockCoord.Count; i++)
-                        {
-                            var addBlockInfo = _brushNeedAddBlockCoord[i];
-                            if (!CurEditRuntimeData.TryGetId(addBlockInfo.Coord, out var chunkId, out var blockId))
-                                continue;
+                        var addBlockInfo = _brushNeedAddBlockCoord[i];
+                        if (!CurEditRuntimeData.TryGetId(addBlockInfo.Coord, out var chunkId, out var blockId))
+                            continue;
+                        if (!_brushOnlySetYValue)
                             CurEditRuntimeData.RemoveBlockData(chunkId, blockId);
-                            _notifyChunkSet.Add(chunkId);
-                        }
+                        _notifyChunkSet.Add(chunkId);
                     }
                 }
             }
