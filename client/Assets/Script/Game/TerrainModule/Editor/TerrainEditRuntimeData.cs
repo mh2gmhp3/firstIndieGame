@@ -36,6 +36,7 @@ namespace TerrainModule.Editor
         /// 被射線檢測到的面方向
         /// </summary>
         public Vector3Int HitFaceNormal;
+        public Vector3 HitWorldPosition;
         public bool HaveData;
     }
 
@@ -674,6 +675,7 @@ namespace TerrainModule.Editor
                 result.WorldBlockCoordinates = worldCoordinates;
                 //將射線方向反轉
                 result.HitFaceNormal = -blockResult.HitRayNormal;
+                result.HitWorldPosition = blockResult.HitWorldPosition;
                 result.HaveData = false;
                 if (reason == GetBlockReason.ChunkNotCreated
                     || reason == GetBlockReason.BlockNotCreated)
