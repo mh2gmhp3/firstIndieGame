@@ -5,11 +5,28 @@ using System.Collections.Generic;
 using Framework.Editor;
 using Framework.Editor.Utility;
 using System;
+using Utility;
 
 namespace TerrainModule.Editor
 {
     public class TerrainEditDataPage : TerrainEditBasePage
     {
+        private struct BrushAddBlockInfo
+        {
+            public Vector3Int Coord;
+            public Vector4 YValue;
+            public int TemplateId;
+            public int Direction;
+
+            public BrushAddBlockInfo(Vector3Int coord, Vector4 yValue, int templateId, int dirextion)
+            {
+                Coord = coord;
+                YValue = yValue;
+                TemplateId = templateId;
+                Direction = dirextion;
+            }
+        }
+
         private enum MouseFunction
         {
             AddBlock,
@@ -41,8 +58,13 @@ namespace TerrainModule.Editor
         private List<Vector3Int> _inAreaBlockCoord = new List<Vector3Int>();
 
         //Brush Mode
-
-
+        private Color _brushHandlesCircleColor = new Color(0, 0, 1, 0.3f);
+        private Color _brushHandlesBlockColor = new Color(0, 0, 1, 0.8f);
+        private float _brushSize = 10f;
+        private float _brushWeight = 1.0f;
+        private bool _brushOnlySetYValue = false;
+        private List<Vector2Int> _intersectsXZBrushBlockCoord = new List<Vector2Int>();
+        private List<BrushAddBlockInfo> _brushNeedAddBlockCoord = new List<BrushAddBlockInfo>();
 
         private Vector2 _blockTemplateScrollPos = Vector2.zero;
         private int _addBlockTemplateId = 0;
@@ -172,43 +194,45 @@ namespace TerrainModule.Editor
                 Handles.DrawWireCube(
                     CurEditRuntimeData.GetChunkCenterPositionWithId(hitResult.ChunkId),
                     chunkSize);
-                //Draw Current Block
-                Handles.color = Color.green;
-                Handles.DrawWireCube(
-                    CurEditRuntimeData.GetWorldBlockCenterPositionWithId(hitResult.ChunkId, hitResult.BlockId),
-                    CurEditRuntimeData.BlockSize);
                 //要Add才會顯示
                 if (_curMouseFunction == MouseFunction.AddBlock)
                 {
-                    //Draw FaceNormal Block
-                    if (hitResult.HaveData && !_replaceBlock)
+                    if (_blockOperateMode == BlockOperateMode.Single)
                     {
-                        var newAddWorldBlockCoord = hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal;
-                        if (CurEditRuntimeData.TryGetId(newAddWorldBlockCoord, out var chunkId, out var blockInChunkId))
-                        {
-                            Handles.color = Color.blue;
-                            Handles.DrawWireCube(
-                                CurEditRuntimeData.GetWorldBlockCenterPositionWithId(chunkId, blockInChunkId),
-                                CurEditRuntimeData.BlockSize);
-                        }
+                        DrawSinglePreviewBlock(hitResult, !_replaceBlock);
                     }
-
-                    //Draw Area Block
-                    if (_blockOperateMode == BlockOperateMode.Area)
+                    else if (_blockOperateMode == BlockOperateMode.Area)
                     {
+                        DrawSinglePreviewBlock(hitResult, false);
                         if (hitResult.HaveData && !_replaceBlock)
                             DrawAreaPreviewBlock(hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal);
                         else
                             DrawAreaPreviewBlock(hitResult.WorldBlockCoordinates);
                     }
+                    else if (_blockOperateMode == BlockOperateMode.Brush)
+                    {
+                        DrawBushPreviewBlock(hitResult);
+                    }
                 }
                 else if (_curMouseFunction == MouseFunction.DeleteBlock)
                 {
-                    //Draw Area Block
-                    if (_blockOperateMode == BlockOperateMode.Area)
+                    if (_blockOperateMode == BlockOperateMode.Single)
                     {
+                        DrawSinglePreviewBlock(hitResult, false);
+                    }
+                    else if (_blockOperateMode == BlockOperateMode.Area)
+                    {
+                        DrawSinglePreviewBlock(hitResult, false);
                         DrawAreaPreviewBlock(hitResult.WorldBlockCoordinates);
                     }
+                    else if (_blockOperateMode == BlockOperateMode.Brush)
+                    {
+                        DrawBushPreviewBlock(hitResult);
+                    }
+                }
+                else if (_curMouseFunction == MouseFunction.SelectBlock)
+                {
+                    DrawSinglePreviewBlock(hitResult, false);
                 }
 
                 if (currentEvent.type == EventType.MouseMove)
@@ -228,6 +252,28 @@ namespace TerrainModule.Editor
             }
 
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+        }
+
+        private void DrawSinglePreviewBlock(RaycastBlockResult hitResult, bool drawFaceNormalBlock)
+        {
+            //Draw Current Block
+            Handles.color = Color.green;
+            Handles.DrawWireCube(
+                CurEditRuntimeData.GetWorldBlockCenterPositionWithId(hitResult.ChunkId, hitResult.BlockId),
+                CurEditRuntimeData.BlockSize);
+
+            //Draw FaceNormal Block
+            if (hitResult.HaveData && drawFaceNormalBlock)
+            {
+                var newAddWorldBlockCoord = hitResult.WorldBlockCoordinates + hitResult.HitFaceNormal;
+                if (CurEditRuntimeData.TryGetId(newAddWorldBlockCoord, out var chunkId, out var blockInChunkId))
+                {
+                    Handles.color = Color.blue;
+                    Handles.DrawWireCube(
+                        CurEditRuntimeData.GetWorldBlockCenterPositionWithId(chunkId, blockInChunkId),
+                        CurEditRuntimeData.BlockSize);
+                }
+            }
         }
 
         private void DrawAreaPreviewBlock(Vector3Int curWorldBlockCoord)
@@ -262,6 +308,37 @@ namespace TerrainModule.Editor
                 Handles.DrawWireCube(
                     new Vector3(centerCoord.x * blockSize.x, centerCoord.y * blockSize.y, centerCoord.z * blockSize.z) + (Vector3)blockSize / 2f,
                     new Vector3((absDiff.x + 1) * blockSize.x, (absDiff.y + 1) * blockSize.y, (absDiff.z + 1) * blockSize.z));
+            }
+        }
+
+        private void DrawBushPreviewBlock(RaycastBlockResult hitResult)
+        {
+            float radius = _brushSize / 2f;
+            Handles.color = _brushHandlesCircleColor;
+            Handles.DrawSolidDisc(
+                new Vector3(
+                    hitResult.HitWorldPosition.x,
+                    (hitResult.HaveData ?
+                        hitResult.WorldBlockCoordinates.y + 1 :
+                        hitResult.WorldBlockCoordinates.y) * CurEditRuntimeData.BlockSize.y,
+                    hitResult.HitWorldPosition.z),
+                Vector3.up,
+                radius);
+            VoxelUtility.GetCircleIntersectsVoxel(
+                new Vector2(hitResult.HitWorldPosition.x, hitResult.HitWorldPosition.z),
+                radius,
+                new Vector2(CurEditRuntimeData.BlockSize.x, CurEditRuntimeData.BlockSize.z),
+                _intersectsXZBrushBlockCoord);
+            Handles.color = _brushHandlesBlockColor;
+            for (int i = 0; i < _intersectsXZBrushBlockCoord.Count; i++)
+            {
+                var xzCoord = _intersectsXZBrushBlockCoord[i];
+                var blockCoord = new Vector3Int(xzCoord.x, hitResult.WorldBlockCoordinates.y, xzCoord.y);
+                if (!CurEditRuntimeData.TryGetId(blockCoord, out var chunkId, out var blockInChunkId))
+                    continue;
+                Handles.DrawWireCube(
+                    CurEditRuntimeData.GetWorldBlockCenterPositionWithId(chunkId, blockInChunkId),
+                    CurEditRuntimeData.BlockSize);
             }
         }
 
@@ -345,22 +422,16 @@ namespace TerrainModule.Editor
             _notifyChunkSet.Clear();
             if (_curMouseFunction == MouseFunction.AddBlock)
             {
-                if (!CurEditRuntimeData.BlockTemplateEditRuntimeData.TryGetBlockData(_addBlockTemplateId, out var blockTemplateData))
-                {
-                    EditorUtility.DisplayDialog(
-                        TerrainEditorDefine.Dialog_Title_Error,
-                        "找不到要新增的方塊範本，請重新選擇",
-                        TerrainEditorDefine.Dialog_Ok_Confirm);
-                    return;
-                }
-
                 if (_blockOperateMode == BlockOperateMode.Single)
                 {
+                    if (!CheckBlockTemplateId())
+                        return;
+
                     if (hitResult.HaveData)
                     {
                         if (_replaceBlock)
                         {
-                            CurEditRuntimeData.UpdateBlockData(hitResult.ChunkId, hitResult.BlockId, blockTemplateData.Id);
+                            CurEditRuntimeData.UpdateBlockData(hitResult.ChunkId, hitResult.BlockId, _addBlockTemplateId);
                             _notifyChunkSet.Add(hitResult.ChunkId);
                         }
                         else
@@ -452,7 +523,7 @@ namespace TerrainModule.Editor
                                     }
                                 }
 
-                                CurEditRuntimeData.AddBlockData(chunkId, blockInChunkId, blockTemplateData.Id, yTopValue, yBottomValue);
+                                CurEditRuntimeData.AddBlockData(chunkId, blockInChunkId, _addBlockTemplateId, yTopValue, yBottomValue);
                                 _notifyChunkSet.Add(hitResult.ChunkId);
                                 if (hitResult.ChunkId != chunkId)
                                     _notifyChunkSet.Add(chunkId);
@@ -461,12 +532,15 @@ namespace TerrainModule.Editor
                     }
                     else
                     {
-                        CurEditRuntimeData.AddBlockData(hitResult.ChunkId, hitResult.BlockId, blockTemplateData.Id);
+                        CurEditRuntimeData.AddBlockData(hitResult.ChunkId, hitResult.BlockId, _addBlockTemplateId);
                         _notifyChunkSet.Add(hitResult.ChunkId);
                     }
                 }
                 else if (_blockOperateMode == BlockOperateMode.Area)
                 {
+                    if (!CheckBlockTemplateId())
+                        return;
+
                     if (_replaceBlock)
                     {
                         _areaBlockCoord.Add(hitResult.WorldBlockCoordinates);
@@ -484,12 +558,16 @@ namespace TerrainModule.Editor
                         if (CurEditRuntimeData.TryGetId(inAreaWorldBlockCoordList[i], out var chunkId, out var blockId))
                         {
                             if (_replaceBlock)
-                                CurEditRuntimeData.UpdateBlockData(chunkId, blockId, blockTemplateData.Id);
+                                CurEditRuntimeData.UpdateBlockData(chunkId, blockId, _addBlockTemplateId);
                             else
-                                CurEditRuntimeData.AddBlockData(chunkId, blockId, blockTemplateData.Id);
+                                CurEditRuntimeData.AddBlockData(chunkId, blockId, _addBlockTemplateId);
                             _notifyChunkSet.Add(chunkId);
                         }
                     }
+                }
+                else if (_blockOperateMode == BlockOperateMode.Brush)
+                {
+                    BrushDraw(hitResult, true);
                 }
             }
             else if (_curMouseFunction == MouseFunction.DeleteBlock)
@@ -511,6 +589,10 @@ namespace TerrainModule.Editor
                             _notifyChunkSet.Add(chunkId);
                         }
                     }
+                }
+                else if (_blockOperateMode == BlockOperateMode.Brush)
+                {
+                    BrushDraw(hitResult, false);
                 }
             }
             else if (_curMouseFunction == MouseFunction.SelectBlock)
@@ -538,6 +620,19 @@ namespace TerrainModule.Editor
             {
                 _editorData.TerrainEditorMgr.RefreshChunkMesh(notifyChunk);
             }
+        }
+
+        private bool CheckBlockTemplateId()
+        {
+            if (!CurEditRuntimeData.BlockTemplateEditRuntimeData.TryGetBlockData(_addBlockTemplateId, out _))
+            {
+                EditorUtility.DisplayDialog(
+                    TerrainEditorDefine.Dialog_Title_Error,
+                    "找不到要新增的方塊範本，請重新選擇",
+                    TerrainEditorDefine.Dialog_Ok_Confirm);
+                return false;
+            }
+            return true;
         }
 
         private List<Vector3Int> GetInAreaWorldBlockCoordList()
@@ -572,6 +667,217 @@ namespace TerrainModule.Editor
                 _areaBlockCoord.Clear();
             }
             return _inAreaBlockCoord;
+        }
+
+        private void BrushDraw(RaycastBlockResult hitResult, bool add)
+        {
+            if (_replaceBlock)
+            {
+                if (!CheckBlockTemplateId())
+                    return;
+            }
+
+            _brushNeedAddBlockCoord.Clear();
+            float radius = _brushSize / 2f;
+            var hitXZWorldPos = new Vector2(hitResult.HitWorldPosition.x, hitResult.HitWorldPosition.z);
+            VoxelUtility.GetCircleIntersectsVoxel(
+                hitXZWorldPos,
+                radius,
+                new Vector2(CurEditRuntimeData.BlockSize.x, CurEditRuntimeData.BlockSize.z),
+                _intersectsXZBrushBlockCoord);
+            Handles.color = _brushHandlesBlockColor;
+            var direction = 0;
+            if (add)
+            {
+                if (hitResult.HitFaceNormal == Vector3Int.down)
+                    direction = -1;
+                else
+                    direction = 1;
+            }
+            else
+            {
+                if (hitResult.HitFaceNormal == Vector3Int.down)
+                    direction = 1;
+                else
+                    direction = -1;
+            }
+            var weight = _brushWeight * direction;
+            bool allMax = true;
+            for (int i = 0; i < _intersectsXZBrushBlockCoord.Count; i++)
+            {
+                var xzCoord = _intersectsXZBrushBlockCoord[i];
+                var blockCoord = new Vector3Int(xzCoord.x, hitResult.WorldBlockCoordinates.y, xzCoord.y);
+                if (!CurEditRuntimeData.TryGetId(blockCoord, out var chunkId, out var blockInChunkId))
+                    continue;
+                var worldPos = CurEditRuntimeData.GetWorldBlockPivotPositionWithId(chunkId, blockInChunkId);
+                var xzPos = new Vector2(worldPos.x, worldPos.z);
+                var inBrushYPoint = GetInBrushYPoint(hitXZWorldPos, xzPos, radius);
+                //都沒有碰到任何Y點
+                if (inBrushYPoint == Vector4.zero)
+                    continue;
+                var addValue = inBrushYPoint * weight;
+                if (add)
+                {
+                    if (CurEditRuntimeData.TryGetBlock(chunkId, blockInChunkId, out var blockData, out _))
+                    {
+                        if (_replaceBlock)
+                        {
+                            //只更新類型
+                            CurEditRuntimeData.UpdateBlockData(chunkId, blockInChunkId, _addBlockTemplateId);
+                            _notifyChunkSet.Add(chunkId);
+                            continue;
+                        }
+                        if (direction > 0)
+                        {
+                            //由上而下新增
+                            if (blockData.YTopValue == Vector4.one)
+                            {
+                                _brushNeedAddBlockCoord.Add(new BrushAddBlockInfo(blockCoord, addValue, blockData.TemplateId, direction));
+                            }
+                            else
+                            {
+                                var oriYTop = blockData.YTopValue;
+                                blockData.SetYValue(blockData.YTopValue + addValue, blockData.YBottomValue);
+                                if (oriYTop != blockData.YTopValue)
+                                {
+                                    _notifyChunkSet.Add(chunkId);
+                                    allMax = false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //由下而上新增
+                            if (blockData.YBottomValue == Vector4.zero)
+                            {
+                                _brushNeedAddBlockCoord.Add(new BrushAddBlockInfo(blockCoord, addValue, blockData.TemplateId, direction));
+                            }
+                            else
+                            {
+                                var oriYBottom = blockData.YBottomValue;
+                                blockData.SetYValue(blockData.YTopValue, blockData.YBottomValue + addValue);
+                                if (oriYBottom != blockData.YBottomValue)
+                                {
+                                    _notifyChunkSet.Add(chunkId);
+                                    allMax = false;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (CurEditRuntimeData.TryGetBlock(chunkId, blockInChunkId, out var blockData, out _))
+                    {
+                        if (direction > 0)
+                        {
+                            //由下而上刪除
+                            var oriYBottom = blockData.YBottomValue;
+                            blockData.SetYValue(blockData.YTopValue, blockData.YBottomValue + addValue);
+                            if (blockData.YBottomValue == Vector4.one)
+                            {
+                                _brushNeedAddBlockCoord.Add(new BrushAddBlockInfo(blockCoord, addValue, blockData.TemplateId, direction));
+                            }
+                            else if (oriYBottom != blockData.YBottomValue)
+                            {
+                                _notifyChunkSet.Add(chunkId);
+                                allMax = false;
+                            }
+                        }
+                        else
+                        {
+                            //由上而下刪除
+                            var oriYTop = blockData.YTopValue;
+                            blockData.SetYValue(blockData.YTopValue + addValue, blockData.YBottomValue);
+                            if (blockData.YTopValue == Vector4.zero)
+                            {
+                                _brushNeedAddBlockCoord.Add(new BrushAddBlockInfo(blockCoord, addValue, blockData.TemplateId, direction));
+                            }
+                            else if (oriYTop != blockData.YTopValue)
+                            {
+                                _notifyChunkSet.Add(chunkId);
+                                allMax = false;
+                            }
+                        }
+                    }
+                }
+            }
+            if (allMax)
+            {
+                if (add)
+                {
+                    for (int i = 0; i < _brushNeedAddBlockCoord.Count; i++)
+                    {
+                        var addBlockInfo = _brushNeedAddBlockCoord[i];
+                        var addBlockCoord = addBlockInfo.Coord + new Vector3Int(0, addBlockInfo.Direction, 0);
+                        if (!CurEditRuntimeData.TryGetId(addBlockCoord, out var chunkId, out var blockId))
+                            continue;
+                        if (CurEditRuntimeData.TryGetBlock(addBlockCoord, out var blockData, out _))
+                        {
+                            if (addBlockInfo.Direction > 0)
+                            {
+                                blockData.SetYValue(blockData.YTopValue + addBlockInfo.YValue, blockData.YBottomValue);
+                            }
+                            else
+                            {
+                                blockData.SetYValue(blockData.YTopValue, blockData.YBottomValue + addBlockInfo.YValue);
+                            }
+                        }
+                        else
+                        {
+                            if (!_brushOnlySetYValue)
+                            {
+                                if (addBlockInfo.Direction > 0)
+                                {
+                                    CurEditRuntimeData.AddBlockData(chunkId, blockId, addBlockInfo.TemplateId, addBlockInfo.YValue, Vector4.zero);
+                                }
+                                else
+                                {
+                                    CurEditRuntimeData.AddBlockData(chunkId, blockId, addBlockInfo.TemplateId, Vector4.one, Vector4.one + addBlockInfo.YValue);
+                                }
+                            }
+                        }
+
+                        _notifyChunkSet.Add(chunkId);
+                    }
+                }
+                else
+                {
+                    if (!_brushOnlySetYValue)
+                    {
+                        for (int i = 0; i < _brushNeedAddBlockCoord.Count; i++)
+                        {
+                            var addBlockInfo = _brushNeedAddBlockCoord[i];
+                            if (!CurEditRuntimeData.TryGetId(addBlockInfo.Coord, out var chunkId, out var blockId))
+                                continue;
+                            CurEditRuntimeData.RemoveBlockData(chunkId, blockId);
+                            _notifyChunkSet.Add(chunkId);
+                        }
+                    }
+                }
+            }
+        }
+
+        private Vector4 GetInBrushYPoint(Vector2 xzWorldPos, Vector2 yXZPoint, float radius)
+        {
+            Vector4 inBrushYPoint = Vector4.zero;
+            if (VoxelUtility.PointInCircle(xzWorldPos, yXZPoint, radius))
+            {
+                inBrushYPoint.x = 1;
+            }
+            if (VoxelUtility.PointInCircle(xzWorldPos, yXZPoint + new Vector2(CurEditRuntimeData.BlockSize.x, 0), radius))
+            {
+                inBrushYPoint.y = 1;
+            }
+            if (VoxelUtility.PointInCircle(xzWorldPos, yXZPoint + new Vector2(0, CurEditRuntimeData.BlockSize.z), radius))
+            {
+                inBrushYPoint.z = 1;
+            }
+            if (VoxelUtility.PointInCircle(xzWorldPos, yXZPoint + new Vector2(CurEditRuntimeData.BlockSize.x, CurEditRuntimeData.BlockSize.z), radius))
+            {
+                inBrushYPoint.w = 1;
+            }
+            return inBrushYPoint;
         }
 
         #endregion
@@ -650,7 +956,15 @@ namespace TerrainModule.Editor
                     _autoYValueFit = EditorGUILayout.Toggle("自動貼合Y高低值:", _autoYValueFit);
                     _replaceBlock = EditorGUILayout.Toggle("覆蓋既有方塊類型", _replaceBlock);
                     _blockOperateMode = (BlockOperateMode)EditorGUILayout.EnumPopup("模式:", _blockOperateMode);
-                    EditorGUILayout.LabelField("新增方塊類型");
+                    if (_blockOperateMode == BlockOperateMode.Single)
+                    {
+                        _autoYValueFit = EditorGUILayout.Toggle("自動貼合Y高低值:", _autoYValueFit);
+                    }
+                    else if (_blockOperateMode == BlockOperateMode.Brush)
+                    {
+                        DrawBrushSetting();
+                    }
+                    EditorGUILayout.LabelField("使用方塊類型");
                     if (CurEditRuntimeData.BlockTemplateEditRuntimeData == null)
                     {
                         EditorGUILayout.LabelField("沒有設定方塊範本");
@@ -689,6 +1003,10 @@ namespace TerrainModule.Editor
             else if (_curMouseFunction == MouseFunction.DeleteBlock)
             {
                 _blockOperateMode = (BlockOperateMode)EditorGUILayout.EnumPopup("模式:", _blockOperateMode);
+                if (_blockOperateMode == BlockOperateMode.Brush)
+                {
+                    DrawBrushSetting();
+                }
             }
             else if (_curMouseFunction == MouseFunction.SelectBlock)
             {
@@ -748,6 +1066,13 @@ namespace TerrainModule.Editor
                 }
                 EditorGUILayout.EndVertical();
             }
+        }
+
+        private void DrawBrushSetting()
+        {
+            _brushSize = EditorGUILayout.Slider("筆刷大小:", _brushSize, 1f, 200f);
+            _brushWeight = EditorGUILayout.Slider("筆刷強度:", _brushWeight, 0.1f, 1f);
+            _brushOnlySetYValue = EditorGUILayout.Toggle("筆刷只設定Y高度:", _brushOnlySetYValue);
         }
 
         private void DrawBlockTemplateScrollCell(BlockTemplateRuntimeData data, float maxWidth)
