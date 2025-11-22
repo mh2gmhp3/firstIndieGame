@@ -14,16 +14,23 @@ namespace TerrainModule.Editor
         private struct BrushAddBlockInfo
         {
             public Vector3Int Coord;
-            public Vector4 YValue;
+            public Vector4 YPoint;
+            public float Weight;
             public int TemplateId;
             public int Direction;
 
-            public BrushAddBlockInfo(Vector3Int coord, Vector4 yValue, int templateId, int dirextion)
+            public BrushAddBlockInfo(Vector3Int coord, Vector4 yPoint, float weight, int templateId, int direction)
             {
                 Coord = coord;
-                YValue = yValue;
+                YPoint = yPoint;
+                Weight = weight;
                 TemplateId = templateId;
-                Direction = dirextion;
+                Direction = direction;
+            }
+
+            public Vector4 GetYValue(Vector4 yPoint)
+            {
+                return yPoint * Weight;
             }
         }
 
@@ -65,6 +72,9 @@ namespace TerrainModule.Editor
         private bool _brushOnlySetYValue = false;
         private List<Vector2Int> _intersectsXZBrushBlockCoord = new List<Vector2Int>();
         private List<BrushAddBlockInfo> _brushNeedAddBlockCoord = new List<BrushAddBlockInfo>();
+        private bool _brushDrawing = false;
+        private int _brushDrawingYCoord = -1;
+        private Dictionary<int, Dictionary<int, Vector4>> _brushDrewIdDic = new Dictionary<int, Dictionary<int, Vector4>>();
 
         private Vector2 _blockTemplateScrollPos = Vector2.zero;
         private int _addBlockTemplateId = 0;
@@ -245,7 +255,21 @@ namespace TerrainModule.Editor
                 {
                     if (currentEvent.button == 0)
                     {
-                        InvokeMouseFunction(hitResult);
+                        InvokeMouseFunctionDown(hitResult);
+                        currentEvent.Use();
+                    }
+                }
+                else if (currentEvent.type == EventType.MouseDrag)
+                {
+                    if (currentEvent.button == 0 && InvokeMouseFunctionDrag(hitResult))
+                    {
+                        currentEvent.Use();
+                    }
+                }
+                else if (currentEvent.type == EventType.MouseUp)
+                {
+                    if (currentEvent.button == 0 && InvokeMouseFunctionUp(hitResult))
+                    {
                         currentEvent.Use();
                     }
                 }
@@ -365,6 +389,16 @@ namespace TerrainModule.Editor
 
                     return _areaBlockCoord.Count == 0 ? RaycastBlockFilterType.Ok : RaycastBlockFilterType.Continue;
                 }
+                else if (_blockOperateMode == BlockOperateMode.Brush)
+                {
+                    if (_brushDrawing)
+                    {
+                        if (blockWorldCoord.y == _brushDrawingYCoord)
+                            return RaycastBlockFilterType.Ok;
+                        else
+                            return RaycastBlockFilterType.Continue;
+                    }
+                }
             }
 
             return RaycastBlockFilterType.Ok;
@@ -417,9 +451,8 @@ namespace TerrainModule.Editor
             Repaint();
         }
 
-        private void InvokeMouseFunction(RaycastBlockResult hitResult)
+        private void InvokeMouseFunctionDown(RaycastBlockResult hitResult)
         {
-            _notifyChunkSet.Clear();
             if (_curMouseFunction == MouseFunction.AddBlock)
             {
                 if (_blockOperateMode == BlockOperateMode.Single)
@@ -616,10 +649,51 @@ namespace TerrainModule.Editor
                 }
             }
 
-            foreach (var notifyChunk in _notifyChunkSet)
+            NotifyChunkChanged();
+        }
+
+        private bool InvokeMouseFunctionDrag(RaycastBlockResult hitResult)
+        {
+            if (_curMouseFunction == MouseFunction.AddBlock)
             {
-                _editorData.TerrainEditorMgr.RefreshChunkMesh(notifyChunk);
+                if (_blockOperateMode == BlockOperateMode.Brush)
+                {
+                    BrushDraw(hitResult, true);
+                    NotifyChunkChanged();
+                    return true;
+                }
             }
+            else if (_curMouseFunction == MouseFunction.DeleteBlock)
+            {
+                if (_blockOperateMode == BlockOperateMode.Brush)
+                {
+                    BrushDraw(hitResult, false);
+                    NotifyChunkChanged();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool InvokeMouseFunctionUp(RaycastBlockResult hitResult)
+        {
+            if (_curMouseFunction == MouseFunction.AddBlock)
+            {
+                if (_blockOperateMode == BlockOperateMode.Brush)
+                {
+                    _brushDrawing = false;
+                    return true;
+                }
+            }
+            else if (_curMouseFunction == MouseFunction.DeleteBlock)
+            {
+                if (_blockOperateMode == BlockOperateMode.Brush)
+                {
+                    _brushDrawing = false;
+                    return true;
+                }
+            }
+            return false;
         }
 
         private bool CheckBlockTemplateId()
@@ -633,6 +707,15 @@ namespace TerrainModule.Editor
                 return false;
             }
             return true;
+        }
+
+        private void NotifyChunkChanged()
+        {
+            foreach (var notifyChunk in _notifyChunkSet)
+            {
+                _editorData.TerrainEditorMgr.RefreshChunkMesh(notifyChunk);
+            }
+            _notifyChunkSet.Clear();
         }
 
         private List<Vector3Int> GetInAreaWorldBlockCoordList()
@@ -681,6 +764,13 @@ namespace TerrainModule.Editor
                     return;
             }
 
+            if (!_brushDrawing)
+            {
+                _brushDrawing = true;
+                _brushDrawingYCoord = hitResult.WorldBlockCoordinates.y;
+                _brushDrewIdDic.Clear();
+            }
+
             _brushNeedAddBlockCoord.Clear();
             float radius = _brushSize / 2f;
             var hitXZWorldPos = new Vector2(hitResult.HitWorldPosition.x, hitResult.HitWorldPosition.z);
@@ -716,6 +806,8 @@ namespace TerrainModule.Editor
                 var worldPos = CurEditRuntimeData.GetWorldBlockPivotPositionWithId(chunkId, blockInChunkId);
                 var xzPos = new Vector2(worldPos.x, worldPos.z);
                 var inBrushYPoint = GetInBrushYPoint(hitXZWorldPos, xzPos, radius);
+                //剃除已經畫過的
+                inBrushYPoint = RemoveDrewYPoint(chunkId, blockInChunkId, inBrushYPoint);
                 if (!_replaceBlock)
                 {
                     //都沒有碰到任何Y點
@@ -731,6 +823,7 @@ namespace TerrainModule.Editor
                         {
                             //只更新類型
                             CurEditRuntimeData.UpdateBlockData(chunkId, blockInChunkId, _addBlockTemplateId);
+                            AddDrawBlockYPoint(chunkId, blockInChunkId, inBrushYPoint);
                             _notifyChunkSet.Add(chunkId);
                             continue;
                         }
@@ -739,7 +832,7 @@ namespace TerrainModule.Editor
                             //由上而下新增
                             if (blockData.YTopValue == Vector4.one)
                             {
-                                _brushNeedAddBlockCoord.Add(new BrushAddBlockInfo(blockCoord, addValue, blockData.TemplateId, direction));
+                                _brushNeedAddBlockCoord.Add(new BrushAddBlockInfo(blockCoord, inBrushYPoint, weight, blockData.TemplateId, direction));
                             }
                             else
                             {
@@ -747,6 +840,7 @@ namespace TerrainModule.Editor
                                 blockData.SetYValue(blockData.YTopValue + addValue, blockData.YBottomValue);
                                 if (oriYTop != blockData.YTopValue)
                                 {
+                                    AddDrawBlockYPoint(chunkId, blockInChunkId, inBrushYPoint);
                                     _notifyChunkSet.Add(chunkId);
                                     allMax = false;
                                 }
@@ -757,7 +851,7 @@ namespace TerrainModule.Editor
                             //由下而上新增
                             if (blockData.YBottomValue == Vector4.zero)
                             {
-                                _brushNeedAddBlockCoord.Add(new BrushAddBlockInfo(blockCoord, addValue, blockData.TemplateId, direction));
+                                _brushNeedAddBlockCoord.Add(new BrushAddBlockInfo(blockCoord, inBrushYPoint, weight, blockData.TemplateId, direction));
                             }
                             else
                             {
@@ -765,6 +859,7 @@ namespace TerrainModule.Editor
                                 blockData.SetYValue(blockData.YTopValue, blockData.YBottomValue + addValue);
                                 if (oriYBottom != blockData.YBottomValue)
                                 {
+                                    AddDrawBlockYPoint(chunkId, blockInChunkId, inBrushYPoint);
                                     _notifyChunkSet.Add(chunkId);
                                     allMax = false;
                                 }
@@ -783,10 +878,11 @@ namespace TerrainModule.Editor
                             blockData.SetYValue(blockData.YTopValue, blockData.YBottomValue + addValue);
                             if (blockData.YBottomValue == Vector4.one)
                             {
-                                _brushNeedAddBlockCoord.Add(new BrushAddBlockInfo(blockCoord, addValue, blockData.TemplateId, direction));
+                                _brushNeedAddBlockCoord.Add(new BrushAddBlockInfo(blockCoord, inBrushYPoint, weight, blockData.TemplateId, direction));
                             }
                             else if (oriYBottom != blockData.YBottomValue)
                             {
+                                AddDrawBlockYPoint(chunkId, blockInChunkId, inBrushYPoint);
                                 _notifyChunkSet.Add(chunkId);
                                 allMax = false;
                             }
@@ -798,10 +894,11 @@ namespace TerrainModule.Editor
                             blockData.SetYValue(blockData.YTopValue + addValue, blockData.YBottomValue);
                             if (blockData.YTopValue == Vector4.zero)
                             {
-                                _brushNeedAddBlockCoord.Add(new BrushAddBlockInfo(blockCoord, addValue, blockData.TemplateId, direction));
+                                _brushNeedAddBlockCoord.Add(new BrushAddBlockInfo(blockCoord, inBrushYPoint, weight, blockData.TemplateId, direction));
                             }
                             else if (oriYTop != blockData.YTopValue)
                             {
+                                AddDrawBlockYPoint(chunkId, blockInChunkId, inBrushYPoint);
                                 _notifyChunkSet.Add(chunkId);
                                 allMax = false;
                             }
@@ -819,16 +916,21 @@ namespace TerrainModule.Editor
                         var addBlockCoord = addBlockInfo.Coord + new Vector3Int(0, addBlockInfo.Direction, 0);
                         if (!CurEditRuntimeData.TryGetId(addBlockCoord, out var chunkId, out var blockId))
                             continue;
+                        var yPoint = RemoveDrewYPoint(chunkId, blockId, addBlockInfo.YPoint);
+                        if (yPoint == Vector4.zero)
+                            continue;
+                        var addYValue = addBlockInfo.GetYValue(yPoint);
                         if (CurEditRuntimeData.TryGetBlock(addBlockCoord, out var blockData, out _))
                         {
                             if (addBlockInfo.Direction > 0)
                             {
-                                blockData.SetYValue(blockData.YTopValue + addBlockInfo.YValue, blockData.YBottomValue);
+                                blockData.SetYValue(blockData.YTopValue + addYValue, blockData.YBottomValue);
                             }
                             else
                             {
-                                blockData.SetYValue(blockData.YTopValue, blockData.YBottomValue + addBlockInfo.YValue);
+                                blockData.SetYValue(blockData.YTopValue, blockData.YBottomValue + addYValue);
                             }
+                            AddDrawBlockYPoint(chunkId, blockId, yPoint);
                         }
                         else
                         {
@@ -836,12 +938,13 @@ namespace TerrainModule.Editor
                             {
                                 if (addBlockInfo.Direction > 0)
                                 {
-                                    CurEditRuntimeData.AddBlockData(chunkId, blockId, addBlockInfo.TemplateId, addBlockInfo.YValue, Vector4.zero);
+                                    CurEditRuntimeData.AddBlockData(chunkId, blockId, addBlockInfo.TemplateId, addYValue, Vector4.zero);
                                 }
                                 else
                                 {
-                                    CurEditRuntimeData.AddBlockData(chunkId, blockId, addBlockInfo.TemplateId, Vector4.one, Vector4.one + addBlockInfo.YValue);
+                                    CurEditRuntimeData.AddBlockData(chunkId, blockId, addBlockInfo.TemplateId, Vector4.one, Vector4.one + addYValue);
                                 }
+                                AddDrawBlockYPoint(chunkId, blockId, yPoint);
                             }
                         }
 
@@ -862,6 +965,42 @@ namespace TerrainModule.Editor
                         }
                     }
                 }
+            }
+
+            void AddDrawBlockYPoint(int chunkId, int blockId, Vector4 inBrushYPoint)
+            {
+                if (!_brushDrewIdDic.TryGetValue(chunkId, out var yPointDic))
+                {
+                    yPointDic = new Dictionary<int, Vector4>();
+                    _brushDrewIdDic.Add(chunkId, yPointDic);
+                }
+                if (!yPointDic.TryGetValue(blockId, out var drewYPoint))
+                {
+                    yPointDic.Add(blockId, Vector4.zero);
+                }
+
+                yPointDic[blockId] =
+                    new Vector4(
+                        Mathf.Clamp01(drewYPoint.x + inBrushYPoint.x),
+                        Mathf.Clamp01(drewYPoint.y + inBrushYPoint.y),
+                        Mathf.Clamp01(drewYPoint.z + inBrushYPoint.z),
+                        Mathf.Clamp01(drewYPoint.w + inBrushYPoint.w));
+            }
+            Vector4 RemoveDrewYPoint(int chunkId, int blockId, Vector4 inBrushYPoint)
+            {
+                if (!_brushDrewIdDic.TryGetValue(chunkId, out var yPointDic))
+                {
+                    return inBrushYPoint;
+                }
+                if (!yPointDic.TryGetValue(blockId, out var drewYPoint))
+                {
+                    return inBrushYPoint;
+                }
+                return new Vector4(
+                    Mathf.Clamp01(inBrushYPoint.x - drewYPoint.x),
+                    Mathf.Clamp01(inBrushYPoint.y - drewYPoint.y),
+                    Mathf.Clamp01(inBrushYPoint.z - drewYPoint.z),
+                    Mathf.Clamp01(inBrushYPoint.w - drewYPoint.w));
             }
         }
 
