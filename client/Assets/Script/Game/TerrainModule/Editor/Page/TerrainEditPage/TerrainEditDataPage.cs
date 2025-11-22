@@ -673,6 +673,10 @@ namespace TerrainModule.Editor
         {
             if (_replaceBlock)
             {
+                //覆蓋不處理刪除
+                if (!add)
+                    return;
+                //覆蓋必須要有選擇範本
                 if (!CheckBlockTemplateId())
                     return;
             }
@@ -712,9 +716,12 @@ namespace TerrainModule.Editor
                 var worldPos = CurEditRuntimeData.GetWorldBlockPivotPositionWithId(chunkId, blockInChunkId);
                 var xzPos = new Vector2(worldPos.x, worldPos.z);
                 var inBrushYPoint = GetInBrushYPoint(hitXZWorldPos, xzPos, radius);
-                //都沒有碰到任何Y點
-                if (inBrushYPoint == Vector4.zero)
-                    continue;
+                if (!_replaceBlock)
+                {
+                    //都沒有碰到任何Y點
+                    if (inBrushYPoint == Vector4.zero)
+                        continue;
+                }
                 var addValue = inBrushYPoint * weight;
                 if (add)
                 {
