@@ -1217,7 +1217,7 @@ namespace TerrainModule.Editor
         private void DrawBrushSetting()
         {
             _brushSize = EditorGUILayout.Slider("筆刷大小:", _brushSize, 1f, 200f);
-            _brushWeight = EditorGUILayout.Slider("筆刷強度:", _brushWeight, 0.1f, 1f);
+            _brushWeight = (float)Math.Round(EditorGUILayout.Slider("筆刷強度:", _brushWeight, 0.1f, 1f), 1) ;
             _brushOnlySetYValue = EditorGUILayout.Toggle("筆刷只設定Y高度:", _brushOnlySetYValue);
         }
 
