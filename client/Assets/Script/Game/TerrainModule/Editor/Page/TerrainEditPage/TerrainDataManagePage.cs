@@ -75,7 +75,7 @@ namespace TerrainModule.Editor
                 {
                     if (CreateNewEditData())
                     {
-                        ChangeToPage(TerrainEditPageType.Edit);
+                        ChangeToPage(TerrainEditPageType.EditTerrain);
                     }
                 }
             }
@@ -101,7 +101,7 @@ namespace TerrainModule.Editor
                     {
                         if (_editorData.LoadTerrainData(_editDataNames[_curSelectEditDataIndex]))
                         {
-                            ChangeToPage(TerrainEditPageType.Edit);
+                            ChangeToPage(TerrainEditPageType.EditTerrain);
                         }
                     }
                 }
@@ -140,6 +140,9 @@ namespace TerrainModule.Editor
             _createDataDescription.ChunkBlockNum = ClampValidValue(_createDataDescription.ChunkBlockNum);
             _createDataDescription.ChunkNum = ClampValidValue(_createDataDescription.ChunkNum);
 
+            if (!Directory.Exists(TerrainEditorDefine.EditTerrainDataFolderPath))
+                Directory.CreateDirectory(TerrainEditorDefine.EditTerrainDataFolderPath);
+
             var newEditData = new TerrainEditData(
                 _createDataDescription.BlockSize,
                 _createDataDescription.ChunkBlockNum,
@@ -154,11 +157,6 @@ namespace TerrainModule.Editor
         private void RefreshTerrainEditDataList()
         {
             _editDataNames = TerrainEditorUtility.GetTerrainEditDataNames();
-        }
-
-        private void RefreshBlockTemplateEditDataList()
-        {
-            _editDataNames = TerrainEditorUtility.GetBlockTemplateEditDataNames();
         }
     }
 }

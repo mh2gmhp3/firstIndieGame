@@ -22,7 +22,7 @@ namespace TerrainModule.Editor
         }
     }
 
-    public class TerrainEditMainPage : TerrainEditBasePage
+    public class TerrainEditMainPage : TerrainEditorBasePage
     {
         public override string Name => TerrainEditorDefine.TerrainEditorPageToName[(int)TerrainEditorPageType.TerrainEdit];
 
@@ -34,9 +34,10 @@ namespace TerrainModule.Editor
 
         protected override void OnAddToContainer()
         {
-            _pageContainer = new EditorPageContainer(2, GetPageContainerRepaintEvent());
+            _pageContainer = new EditorPageContainer(3, GetPageContainerRepaintEvent());
             _pageContainer.AddPage(new TerrainDataManagePage(_editorData));
             _pageContainer.AddPage(new TerrainEditDataPage(_editorData));
+            _pageContainer.AddPage(new TerrainEditEnvironmentPage(_editorData));
             _pageContainer.ChangeToPage(0);
         }
 

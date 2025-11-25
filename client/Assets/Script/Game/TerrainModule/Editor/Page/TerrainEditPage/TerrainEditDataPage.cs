@@ -93,7 +93,7 @@ namespace TerrainModule.Editor
         {
         }
 
-        public override string Name => TerrainEditorDefine.TerrainEditPageToName[(int)TerrainEditPageType.Edit];
+        public override string Name => TerrainEditorDefine.TerrainEditPageToName[(int)TerrainEditPageType.EditTerrain];
 
         public override void OnEnable()
         {

@@ -19,6 +19,8 @@ namespace TerrainModule.Editor
         public BlockTemplatePreviewSetting BlockTemplatePreviewSetting;
         public BlockTemplateEditRuntimeData CurBlockTemplateEditRuntimeData;
 
+        public EnvironmentTemplateEditRuntimeData CurEnvironmentTemplateEditRuntimeData;
+
         #region Terrain
 
         public bool LoadTerrainData(string name)
@@ -164,6 +166,48 @@ namespace TerrainModule.Editor
             else
             {
                 assetData.UpdateData(CurBlockTemplateEditRuntimeData);
+                EditorUtility.SetDirty(assetData);
+                AssetDatabase.SaveAssets();
+            }
+
+            return true;
+        }
+
+        #endregion
+
+        #region EnviornmentTemplate
+
+        public bool LoadEnvironmentTemplateData(string name)
+        {
+            var path = Path.Combine(TerrainEditorDefine.EditEnvironmentTemplateDataFolderPath, name + ".asset");
+            var assetData = AssetDatabase.LoadAssetAtPath<EnvironmentTemplateEditData>(path);
+            if (assetData == null)
+            {
+                EditorUtility.DisplayDialog(TerrainEditorDefine.Dialog_Title_Error, $"無法讀取到檔案 路徑:{path}", TerrainEditorDefine.Dialog_Ok_Confirm);
+                return false;
+            }
+
+            CurEnvironmentTemplateEditRuntimeData = new EnvironmentTemplateEditRuntimeData(assetData);
+            TerrainEditorMgr.SetData(CurEnvironmentTemplateEditRuntimeData);
+            return true;
+        }
+
+        public bool SaveCurEnvironmentTemplateData()
+        {
+            if (CurEnvironmentTemplateEditRuntimeData == null)
+                return false;
+
+            var path = Path.Combine(TerrainEditorDefine.EditEnvironmentTemplateDataFolderPath, CurEnvironmentTemplateEditRuntimeData.Name + ".asset");
+            var assetData = AssetDatabase.LoadAssetAtPath<EnvironmentTemplateEditData>(path);
+            if (assetData == null)
+            {
+                var saveData = new EnvironmentTemplateEditData(CurEnvironmentTemplateEditRuntimeData);
+                AssetDatabase.CreateAsset(saveData, path);
+                AssetDatabase.Refresh();
+            }
+            else
+            {
+                assetData.UpdateData(CurEnvironmentTemplateEditRuntimeData);
                 EditorUtility.SetDirty(assetData);
                 AssetDatabase.SaveAssets();
             }

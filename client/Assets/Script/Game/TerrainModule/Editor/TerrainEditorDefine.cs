@@ -8,15 +8,23 @@ namespace TerrainModule.Editor
     {
         TerrainEdit,
         BlockTemplateEdit,
+        EnvironmentTemplateEdit,
     }
 
     public enum TerrainEditPageType
     {
         DataManage,
-        Edit,
+        EditTerrain,
+        EditEnvironment,
     }
 
     public enum BlockTemplateEditPageType
+    {
+        DataManage,
+        Edit,
+    }
+
+    public enum EnvironmentTemplateEditPageType
     {
         DataManage,
         Edit,
@@ -28,6 +36,7 @@ namespace TerrainModule.Editor
         public const string EditDataFolderPath = "Assets/Script/Game/TerrainModule/Editor/EditData";
         public const string EditTerrainDataFolderPath = EditDataFolderPath + "/TerrainData";
         public const string EditBlockTemplateDataFolderPath = EditDataFolderPath + "/BlockTemplateData";
+        public const string EditEnvironmentTemplateDataFolderPath = EditDataFolderPath + "/EnvironmentTemplateData";
 
         public const string ManagerName = "TerrainEditorManager";
 
@@ -38,14 +47,16 @@ namespace TerrainModule.Editor
             new Dictionary<int, string>()
             {
                 { (int)TerrainEditorPageType.TerrainEdit, "地形"},
-                { (int)TerrainEditorPageType.BlockTemplateEdit, "方格範本"}
+                { (int)TerrainEditorPageType.BlockTemplateEdit, "方格範本"},
+                { (int)TerrainEditorPageType.EnvironmentTemplateEdit, "環境範本" }
             };
 
         public static Dictionary<int, string> TerrainEditPageToName =
             new Dictionary<int, string>()
             {
                 { (int)TerrainEditPageType.DataManage, "檔案管理"},
-                { (int)TerrainEditPageType.Edit, "編輯"}
+                { (int)TerrainEditPageType.EditTerrain, "編輯"},
+                { (int)TerrainEditPageType.EditEnvironment, "編輯環境"}
             };
 
         public static Dictionary<int, string> BlockTemplateEditPageToName =
@@ -53,6 +64,13 @@ namespace TerrainModule.Editor
             {
                 { (int)BlockTemplateEditPageType.DataManage, "檔案管理"},
                 { (int)BlockTemplateEditPageType.Edit, "編輯"}
+            };
+
+        public static Dictionary<int, string> EnvironmentTemplateEditPageToName =
+            new Dictionary<int, string>()
+            {
+                { (int)EnvironmentTemplateEditPageType.DataManage, "檔案管理"},
+                { (int)EnvironmentTemplateEditPageType.Edit, "編輯"}
             };
     }
 }

@@ -35,9 +35,10 @@ namespace TerrainModule.Editor
                 _editorData.TerrainEditorMgr = new TerrainEditorManager(mgrObj);
             }
 
-            _pageContainer = new EditorPageContainer(2, Repaint);
+            _pageContainer = new EditorPageContainer(3, Repaint);
             _pageContainer.AddPage(new TerrainEditMainPage(_editorData));
             _pageContainer.AddPage(new BlockTemplateEditMainPage(_editorData));
+            _pageContainer.AddPage(new EnvironmentTemplateMainPage(_editorData));
             _pageContainer.ChangeToPage(0);
 
             SceneView.duringSceneGui += OnSceneGUI;

@@ -1,4 +1,5 @@
 ﻿using Framework.Editor;
+using Framework.Editor.Utility;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,14 +9,17 @@ using UnityEngine;
 
 namespace TerrainModule.Editor
 {
-    public class BlockTemplateDataManagePage : BlockTemplateEditBasePage
+    public class EnvironmentTemplateDataManagePage : EnvironmentTemplateBasePage
     {
+        public override string Name => TerrainEditorDefine.EnvironmentTemplateEditPageToName[(int)EnvironmentTemplateEditPageType.DataManage];
+
+        public EnvironmentTemplateDataManagePage(TerrainEditorData editorData) : base(editorData)
+        {
+        }
+
         private struct CreateDataDescription
         {
             public string Name;
-            public Texture2D TileMap;
-            public Vector2Int Tiling;
-            public Shader Shader;
         }
 
         //New Data
@@ -25,17 +29,10 @@ namespace TerrainModule.Editor
         private string[] _editDataNames;
         private int _curSelectEditDataIndex = -1;
 
-        public override string Name => TerrainEditorDefine.BlockTemplateEditPageToName[(int)BlockTemplateEditPageType.DataManage];
-
-        public BlockTemplateDataManagePage(TerrainEditorData editorData) : base(editorData)
-        {
-        }
-
         public override void OnEnable()
         {
             RefreshEditDataList();
         }
-
 
         public override void OnGUI()
         {
@@ -54,25 +51,12 @@ namespace TerrainModule.Editor
             {
                 EditorGUILayout.LabelField("新建檔案");
                 _createDataDescription.Name = EditorGUILayout.TextField("名稱", _createDataDescription.Name);
-                _createDataDescription.TileMap =
-                    (Texture2D)EditorGUILayout.ObjectField(
-                        "TileMap:",
-                        _createDataDescription.TileMap,
-                        typeof(Texture2D),
-                        false);
-                _createDataDescription.Tiling = EditorGUILayout.Vector2IntField("Tiling:", _createDataDescription.Tiling);
-                _createDataDescription.Shader =
-                    (Shader)EditorGUILayout.ObjectField(
-                        "Shader:",
-                        _createDataDescription.Shader,
-                        typeof(Shader),
-                        false);
 
                 if (GUILayout.Button("新建檔案"))
                 {
                     if (CreateNewEditData())
                     {
-                        ChangeToPage(BlockTemplateEditPageType.Edit);
+                        ChangeToPage(EnvironmentTemplateEditPageType.Edit);
                     }
                 }
             }
@@ -96,9 +80,9 @@ namespace TerrainModule.Editor
 
                     if (GUILayout.Button("讀取檔案"))
                     {
-                        if (_editorData.LoadBlockTemplateData(_editDataNames[_curSelectEditDataIndex]))
+                        if (_editorData.LoadEnvironmentTemplateData(_editDataNames[_curSelectEditDataIndex]))
                         {
-                            ChangeToPage(BlockTemplateEditPageType.Edit);
+                            ChangeToPage(EnvironmentTemplateEditPageType.Edit);
                         }
                     }
                 }
@@ -114,7 +98,7 @@ namespace TerrainModule.Editor
                 EditorUtility.DisplayDialog(TerrainEditorDefine.Dialog_Title_Error, "名稱不能為空白", TerrainEditorDefine.Dialog_Ok_Confirm);
                 return false;
             }
-            var existNames = TerrainEditorUtility.GetBlockTemplateEditDataNames();
+            var existNames = TerrainEditorUtility.GetEnvironmentTemplateEditDataNames();
             for (int i = 0; i < existNames.Length; i++)
             {
                 if (_createDataDescription.Name == existNames[i])
@@ -124,22 +108,19 @@ namespace TerrainModule.Editor
                 }
             }
 
-            if (!Directory.Exists(TerrainEditorDefine.EditBlockTemplateDataFolderPath))
-                Directory.CreateDirectory(TerrainEditorDefine.EditBlockTemplateDataFolderPath);
+            if (!Directory.Exists(TerrainEditorDefine.EditEnvironmentTemplateDataFolderPath))
+                Directory.CreateDirectory(TerrainEditorDefine.EditEnvironmentTemplateDataFolderPath);
 
-            var newEditData = new BlockTemplateEditData(
-                _createDataDescription.TileMap,
-                _createDataDescription.Tiling,
-                _createDataDescription.Shader);
+            var newEditData = new EnvironmentTemplateEditData();
             newEditData.name = _createDataDescription.Name;
-            AssetDatabase.CreateAsset(newEditData, Path.Combine(TerrainEditorDefine.EditBlockTemplateDataFolderPath, newEditData.name) + ".asset");
+            AssetDatabase.CreateAsset(newEditData, Path.Combine(TerrainEditorDefine.EditEnvironmentTemplateDataFolderPath, newEditData.name) + ".asset");
             AssetDatabase.Refresh();
-            return _editorData.LoadBlockTemplateData(newEditData.name);
+            return _editorData.LoadEnvironmentTemplateData(newEditData.name);
         }
 
         private void RefreshEditDataList()
         {
-            _editDataNames = TerrainEditorUtility.GetBlockTemplateEditDataNames();
+            _editDataNames = TerrainEditorUtility.GetEnvironmentTemplateEditDataNames();
         }
     }
 }

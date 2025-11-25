@@ -41,20 +41,22 @@ namespace TerrainModule.Editor
 
         public static string[] GetTerrainEditDataNames()
         {
-            var editDataGUIDs = AssetDatabase.FindAssets("t:TerrainEditData", new string[] { TerrainEditorDefine.EditTerrainDataFolderPath });
-            var result = new string[editDataGUIDs.Length];
-            for (int i = 0; i < editDataGUIDs.Length; i++)
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath(editDataGUIDs[i]);
-                var name = Path.GetFileNameWithoutExtension(assetPath);
-                result[i] = name;
-            }
-            return result;
+            return GetFolderDataNames("TerrainEditData", TerrainEditorDefine.EditTerrainDataFolderPath);
         }
 
         public static string[] GetBlockTemplateEditDataNames()
         {
-            var editDataGUIDs = AssetDatabase.FindAssets("t:BlockTemplateEditData", new string[] { TerrainEditorDefine.EditBlockTemplateDataFolderPath });
+            return GetFolderDataNames("BlockTemplateEditData", TerrainEditorDefine.EditBlockTemplateDataFolderPath);
+        }
+
+        public static string[] GetEnvironmentTemplateEditDataNames()
+        {
+            return GetFolderDataNames("EnvironmentTemplateEditData", TerrainEditorDefine.EditEnvironmentTemplateDataFolderPath);
+        }
+
+        public static string[] GetFolderDataNames(string typeName, string folderPath)
+        {
+            var editDataGUIDs = AssetDatabase.FindAssets($"t:{typeName}", new string[] { folderPath });
             var result = new string[editDataGUIDs.Length];
             for (int i = 0; i < editDataGUIDs.Length; i++)
             {

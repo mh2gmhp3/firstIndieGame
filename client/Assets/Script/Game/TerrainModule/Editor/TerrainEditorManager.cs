@@ -11,7 +11,8 @@ namespace TerrainModule.Editor
         public enum EditorMode
         {
             Terrain,
-            BlockTemplate
+            BlockTemplate,
+            EnvironmentTemplate
         }
 
         private class ChunkPreviewMesh
@@ -83,6 +84,9 @@ namespace TerrainModule.Editor
         private BlockTemplateEditRuntimeData _curBlockTemplateEditData;
         private BlockTemplatePreviewSetting _blockTemplatePreviewSetting;
         private BlockTemplatePreviewMesh _blockTemplatePreviewMesh;
+
+        private Transform _environmentTemplateParent;
+        private EnvironmentTemplateEditRuntimeData _curEnvironmentTemplateEditData;
 
         public TerrainEditorManager(GameObject sceneObj)
         {
@@ -224,6 +228,21 @@ namespace TerrainModule.Editor
                 _blockTemplatePreviewSetting,
                 Vector3.zero);
             _blockTemplatePreviewMesh.MeshRenderer.sharedMaterial = _curBlockTemplateEditData.Material;
+        }
+
+        #endregion
+
+        #region EnvironmentTemplate
+
+        public void SetData(EnvironmentTemplateEditRuntimeData editData)
+        {
+            _curEnvironmentTemplateEditData = editData;
+            if (_environmentTemplateParent == null)
+            {
+                var environmentTemplateParentGo = new GameObject("EnvironmentTemplate");
+                _environmentTemplateParent = environmentTemplateParentGo.transform;
+                _environmentTemplateParent.SetParent(Transform);
+            }
         }
 
         #endregion
