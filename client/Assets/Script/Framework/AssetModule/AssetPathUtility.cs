@@ -1,9 +1,10 @@
 ﻿using System.IO;
 
-namespace Framework.Editor.Utility
+namespace AssetModule
 {
-    public static class AssetPathUtility
+    public static partial class AssetPathUtility
     {
+#if UNITY_EDITOR
         private const string ResourcesFolderName = "Resources";
         public static string AssetPathToResourcesPath(string assetPath)
         {
@@ -25,5 +26,6 @@ namespace Framework.Editor.Utility
 
             return pathWithoutExtension;
         }
+#endif
     }
 }

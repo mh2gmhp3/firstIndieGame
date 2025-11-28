@@ -13,12 +13,23 @@ namespace TerrainModule.Editor
         public override string Name => TerrainEditorDefine.EnvironmentTemplateEditPageToName[(int)EnvironmentTemplateEditPageType.Edit];
 
         private EnvironmentTemplateEditRuntimeData CurEditRuntimeData => _editorData.CurEnvironmentTemplateEditRuntimeData;
-        private EnvironmentTemplateCategoryRuntimeData _curCategoryRuntimeData;
+        private EnvironmentTemplateCategoryEditRuntimeData _curCategoryRuntimeData;
 
         private string[] _categoryNames;
         private int _curSelectedCategoryIndex = -1;
 
         private string _newCategoryName;
+
+        private GameObject _addNewInstanceMeshPrefab;
+        private Vector2 _instanceMeshScrollPos = Vector2.zero;
+        private int _removeInsMeshIndex = -1;
+
+        private GameObject _addNewPrefab;
+        private Vector2 _prefabScrollPos = Vector2.zero;
+        private int _removePrefabIndex = -1;
+
+        private bool _isSelectInsMesh = false;
+        private int _curSelectIndex = -1;
 
         public EnvironmentTemplateEditDataPage(TerrainEditorData editorData) : base(editorData)
         {
@@ -42,9 +53,33 @@ namespace TerrainModule.Editor
             if (CurEditRuntimeData == null)
                 return;
 
-            DrawGUI_Category();
+            EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
+            {
+                DrawCurEditData();
+                GUILayout.Space(5f);
+                DrawGUI_Category();
+            }
+            EditorGUILayout.EndHorizontal();
             GUILayout.Space(5f);
             DrawGUI_CategoryData();
+        }
+
+        private void DrawCurEditData()
+        {
+            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box, GUILayout.MaxWidth(_editorData.EditorWindow.position.width / 2));
+            {
+                EditorGUILayout.TextField("名稱", CurEditRuntimeData.Name);
+                EditorGUILayout.BeginHorizontal();
+                {
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("存檔"))
+                    {
+                        _editorData.SaveCurEnvironmentTemplateData();
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
+            }
+            EditorGUILayout.EndVertical();
         }
 
         private void DrawGUI_Category()
@@ -114,21 +149,194 @@ namespace TerrainModule.Editor
                 EditorGUILayout.EndHorizontal();
 
                 GUILayout.Space(5f);
-                DrawGUI_InstanceMesh();
-                GUILayout.Space(5f);
                 DrawGUI_Prefab();
+                GUILayout.Space(5f);
+                DrawGUI_InstanceMesh();
             }
             EditorGUILayout.EndVertical();
         }
 
         private void DrawGUI_InstanceMesh()
         {
+            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
+            {
+                EditorGUILayout.LabelField("InstanceMesh");
+                EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
+                {
+                    _addNewInstanceMeshPrefab = EditorGUILayout.ObjectField(_addNewInstanceMeshPrefab, typeof(GameObject), false) as GameObject;
+                    if (GUILayout.Button("新增"))
+                    {
+                        var result = CurEditRuntimeData.AddInstanceMesh(_curCategoryRuntimeData.CategoryName, _addNewInstanceMeshPrefab);
+                        var msg = string.Empty;
+                        switch (result)
+                        {
+                            case AddInstanceMeshResult.ObjectIsNull:
+                                msg = "物件為空";
+                                break;
+                            case AddInstanceMeshResult.CategoryNotFound:
+                                msg = $"無法找到分類名稱 {_curCategoryRuntimeData.CategoryName}";
+                                break;
+                            case AddInstanceMeshResult.DuplicateName:
+                                msg = "不允許有重複名稱物件";
+                                break;
+                            case AddInstanceMeshResult.DoNotHaveAnyMesh:
+                                msg = "此物件不包含任何Mesh";
+                                break;
+                        }
+                        if (!string.IsNullOrEmpty(msg))
+                        {
+                            EditorUtility.DisplayDialog(TerrainEditorDefine.Dialog_Title_Error, msg, TerrainEditorDefine.Dialog_Ok_Confirm);
+                        }
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
 
+                _instanceMeshScrollPos = EditorGUILayout.BeginScrollView(_instanceMeshScrollPos, GUILayout.Height(220), GUILayout.MaxHeight(220));
+                {
+                    EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
+                    {
+                        for (int i = 0; i < _curCategoryRuntimeData.InstanceMeshDataList.Count; i++)
+                        {
+                            var data = _curCategoryRuntimeData.InstanceMeshDataList[i];
+                            DrawGUI_InstanceMeshCell(data, i);
+                            GUILayout.Space(2f);
+                        }
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
+                EditorGUILayout.EndScrollView();
+            }
+            EditorGUILayout.EndVertical();
+            if (_removeInsMeshIndex > -1)
+            {
+                _curCategoryRuntimeData.InstanceMeshDataList.RemoveAt(_removeInsMeshIndex);
+                _removeInsMeshIndex = -1;
+            }
+        }
+
+        private void DrawGUI_InstanceMeshCell(EnvironmentTemplateInstanceMeshEditRuntimeData data, int index)
+        {
+            EditorGUILayout.BeginVertical(CommonGUIStyle.SelectableBlueBox(_isSelectInsMesh && _curSelectIndex == index), GUILayout.Width(160), GUILayout.MaxWidth(160));
+            {
+                EditorGUILayout.ObjectField(data.OriginObject.EditorInstance, typeof(GameObject), false);
+                EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
+                {
+                    var rect = GUILayoutUtility.GetRect(150, 150, GUILayout.Width(150), GUILayout.Height(150));
+                    TerrainEditorUtility.DrawEnvironmentTemplatePreview(data, rect);
+                }
+                EditorGUILayout.EndHorizontal();
+                if (GUILayout.Button("X", GUILayout.MaxWidth(50)))
+                {
+                    _removeInsMeshIndex = index;
+                }
+            }
+            EditorGUILayout.EndVertical();
+            var lastRect = GUILayoutUtility.GetLastRect();
+            Event current = Event.current;
+            if (lastRect.Contains(current.mousePosition))
+            {
+                if (current.type == EventType.MouseDown && current.button == 0)
+                {
+                    SelectInstanceMesh(index);
+                }
+            }
         }
 
         private void DrawGUI_Prefab()
         {
+            EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
+            {
+                EditorGUILayout.LabelField("Prefab");
+                EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
+                {
+                    _addNewPrefab = EditorGUILayout.ObjectField(_addNewPrefab, typeof(GameObject), false) as GameObject;
+                    if (GUILayout.Button("新增"))
+                    {
+                        var result = CurEditRuntimeData.AddPrefab(_curCategoryRuntimeData.CategoryName, _addNewPrefab);
+                        var msg = string.Empty;
+                        switch (result)
+                        {
+                            case AddPrefabResult.ObjectIsNull:
+                                msg = "物件為空";
+                                break;
+                            case AddPrefabResult.CategoryNotFound:
+                                msg = $"無法找到分類名稱 {_curCategoryRuntimeData.CategoryName}";
+                                break;
+                            case AddPrefabResult.DuplicateName:
+                                msg = "不允許有重複名稱物件";
+                                break;
+                        }
+                        if (!string.IsNullOrEmpty(msg))
+                        {
+                            EditorUtility.DisplayDialog(TerrainEditorDefine.Dialog_Title_Error, msg, TerrainEditorDefine.Dialog_Ok_Confirm);
+                        }
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
 
+                _prefabScrollPos = EditorGUILayout.BeginScrollView(_prefabScrollPos, GUILayout.Height(220), GUILayout.MaxHeight(220));
+                {
+                    EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
+                    {
+                        for (int i = 0; i < _curCategoryRuntimeData.PrefabList.Count; i++)
+                        {
+                            var data = _curCategoryRuntimeData.PrefabList[i];
+                            DrawGUI_PrefabCell(data, i);
+                            GUILayout.Space(2f);
+                        }
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
+                EditorGUILayout.EndScrollView();
+            }
+            EditorGUILayout.EndVertical();
+            if (_removePrefabIndex > -1)
+            {
+                _curCategoryRuntimeData.PrefabList.RemoveAt(_removePrefabIndex);
+                _removePrefabIndex = -1;
+            }
+        }
+
+        private void DrawGUI_PrefabCell(EnvironmentTemplatePrefabEditRuntimeData data, int index)
+        {
+            EditorGUILayout.BeginVertical(CommonGUIStyle.SelectableBlueBox(!_isSelectInsMesh && _curSelectIndex == index), GUILayout.Width(160), GUILayout.MaxWidth(160));
+            {
+                EditorGUILayout.ObjectField(data.Prefab.EditorInstance, typeof(GameObject), false);
+                EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
+                {
+                    var rect = GUILayoutUtility.GetRect(150, 150, GUILayout.Width(150), GUILayout.Height(150));
+                    TerrainEditorUtility.DrawEnvironmentTemplatePreview(data, rect);
+                }
+                EditorGUILayout.EndHorizontal();
+                if (GUILayout.Button("X", GUILayout.MaxWidth(50)))
+                {
+                    _removePrefabIndex = index;
+                }
+            }
+            EditorGUILayout.EndVertical();
+            var lastRect = GUILayoutUtility.GetLastRect();
+            Event current = Event.current;
+            if (lastRect.Contains(current.mousePosition))
+            {
+                if (current.type == EventType.MouseDown && current.button == 0)
+                {
+                    SelectPrefab(index);
+                }
+            }
+        }
+
+        private void SelectInstanceMesh(int index)
+        {
+            _isSelectInsMesh = true;
+            _curSelectIndex = index;
+            Repaint();
+        }
+
+        private void SelectPrefab(int index)
+        {
+            _isSelectInsMesh = false;
+            _curSelectIndex = index;
+            Repaint();
         }
 
         private bool CreateNewCategory(string name)

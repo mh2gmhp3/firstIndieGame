@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AssetModule;
+using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -29,6 +30,17 @@ namespace Utility
                     _editorInstance = AssetDatabase.LoadAssetAtPath<T>(path);
                 }
                 return _editorInstance;
+            }
+            set
+            {
+                var path = AssetDatabase.GetAssetPath(value);
+                var guid = AssetDatabase.AssetPathToGUID(path);
+                if (string.IsNullOrEmpty(guid))
+                    return;
+                Path = path;
+                ResourcePath = AssetPathUtility.AssetPathToResourcesPath(path);
+                _guid = guid;
+                _editorInstance = value;
             }
         }
 

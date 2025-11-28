@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AssetModule
 {
-    public static class AssetPathUtility
+    public static partial class AssetPathUtility
     {
         private const string WeaponModelFolderPath = "Prototype/TestObject/Weapon";
 

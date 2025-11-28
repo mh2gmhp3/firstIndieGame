@@ -1,32 +1,171 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 using Utility;
+using static UnityEngine.Mesh;
 
 namespace TerrainModule.Editor
 {
-    [Serializable]
-    public class EnvironmentTemplateInstanceMeshRuntimeData
+    public enum AddInstanceMeshResult
+    {
+        Success,
+        ObjectIsNull,
+        CategoryNotFound,
+        DuplicateName,
+        DoNotHaveAnyMesh,
+    }
+
+    public enum AddPrefabResult
+    {
+        Success,
+        ObjectIsNull,
+        CategoryNotFound,
+        DuplicateName
+    }
+
+    public class EnvironmentTemplateInstanceMeshEditRuntimeSingleData
     {
         public MeshIndirectField Mesh = new MeshIndirectField();
         public MaterialIndirectField Material = new MaterialIndirectField();
+
+        public EnvironmentTemplateInstanceMeshEditRuntimeSingleData(Mesh mesh, Material material)
+        {
+            Mesh.EditorInstance = mesh;
+            Material.EditorInstance = material;
+        }
+
+        public EnvironmentTemplateInstanceMeshEditRuntimeSingleData(EnvironmentTemplateInstanceMeshEditSingleData editData)
+        {
+            editData.Mesh.CopyTo(Mesh);
+            editData.Material.CopyTo(Material);
+        }
+
+        public Bounds GetMeshBounds()
+        {
+            if (Mesh.EditorInstance == null)
+                return new Bounds();
+
+            return Mesh.EditorInstance.bounds;
+        }
     }
 
-    [Serializable]
-    public class EnvironmentTemplatePrefabRuntimeData
+    public class EnvironmentTemplateInstanceMeshEditRuntimeData
+    {
+        public GameObjectIndirectField OriginObject = new GameObjectIndirectField();
+        public List<EnvironmentTemplateInstanceMeshEditRuntimeSingleData> MeshSingleDataList = new List<EnvironmentTemplateInstanceMeshEditRuntimeSingleData>();
+
+        public TerrainPreviewInfo PreviewInfo = new TerrainPreviewInfo();
+
+        public EnvironmentTemplateInstanceMeshEditRuntimeData(GameObject originObject)
+        {
+            OriginObject.EditorInstance = originObject;
+            RefreshMeshData();
+        }
+
+        public EnvironmentTemplateInstanceMeshEditRuntimeData(EnvironmentTemplateInstanceMeshEditData editData)
+        {
+            editData.OriginObject.CopyTo(OriginObject);
+            for (int i = 0; i < editData.MeshSingleDataList.Count; i++)
+            {
+                MeshSingleDataList.Add(new EnvironmentTemplateInstanceMeshEditRuntimeSingleData(editData.MeshSingleDataList[i]));
+            }
+        }
+
+        private void RefreshMeshData()
+        {
+            MeshSingleDataList.Clear();
+            var meshDataList = TerrainEditorUtility.GetGameObjectMeshData(OriginObject.EditorInstance);
+            for (int i = 0; i < meshDataList.Count; i++)
+            {
+                var meshData = meshDataList[i];
+                MeshSingleDataList.Add(new EnvironmentTemplateInstanceMeshEditRuntimeSingleData(meshData.Mesh, meshData.Material));
+            }
+        }
+    }
+
+    public class EnvironmentTemplatePrefabEditRuntimeData
     {
         public GameObjectIndirectField Prefab = new GameObjectIndirectField();
+
+        public List<EnvironmentTemplateInstanceMeshEditRuntimeSingleData> TempMeshSingleDataList = new List<EnvironmentTemplateInstanceMeshEditRuntimeSingleData>();
+
+        public TerrainPreviewInfo PreviewInfo = new TerrainPreviewInfo();
+
+        public EnvironmentTemplatePrefabEditRuntimeData(GameObject go)
+        {
+            Prefab.EditorInstance = go;
+            RefreshMeshData();
+        }
+
+        public EnvironmentTemplatePrefabEditRuntimeData(EnvironmentTemplatePrefabEditData editData)
+        {
+            editData.Prefab.CopyTo(Prefab);
+            RefreshMeshData();
+        }
+
+        private void RefreshMeshData()
+        {
+            TempMeshSingleDataList.Clear();
+            var meshDataList = TerrainEditorUtility.GetGameObjectMeshData(Prefab.EditorInstance);
+            for (int i = 0; i < meshDataList.Count; i++)
+            {
+                var meshData = meshDataList[i];
+                TempMeshSingleDataList.Add(new EnvironmentTemplateInstanceMeshEditRuntimeSingleData(meshData.Mesh, meshData.Material));
+            }
+        }
     }
 
-    [Serializable]
-    public class EnvironmentTemplateCategoryRuntimeData
+    public class EnvironmentTemplateCategoryEditRuntimeData
     {
         public string CategoryName;
-        public List<EnvironmentTemplatePrefabRuntimeData> PrefabList = new List<EnvironmentTemplatePrefabRuntimeData>();
-        public List<EnvironmentTemplateInstanceMeshRuntimeData> InstanceMeshDataList = new List<EnvironmentTemplateInstanceMeshRuntimeData>();
+        public List<EnvironmentTemplatePrefabEditRuntimeData> PrefabList = new List<EnvironmentTemplatePrefabEditRuntimeData>();
+        public List<EnvironmentTemplateInstanceMeshEditRuntimeData> InstanceMeshDataList = new List<EnvironmentTemplateInstanceMeshEditRuntimeData>();
 
-        public EnvironmentTemplateCategoryRuntimeData(string name)
+        public EnvironmentTemplateCategoryEditRuntimeData(string name)
         {
             CategoryName = name;
+        }
+
+        public EnvironmentTemplateCategoryEditRuntimeData(EnvironmentTemplateCategoryEditData editData)
+        {
+            CategoryName = editData.CategoryName;
+            for (int i = 0; i < editData.PrefabList.Count; i++)
+            {
+                PrefabList.Add(new EnvironmentTemplatePrefabEditRuntimeData(editData.PrefabList[i]));
+            }
+            for (int i = 0; i < editData.InstanceMeshDataList.Count; i++)
+            {
+                InstanceMeshDataList.Add(new EnvironmentTemplateInstanceMeshEditRuntimeData(editData.InstanceMeshDataList[i]));
+            }
+        }
+
+        public bool IsExistInstanceMeshName(string name)
+        {
+            for (int i = 0; i < InstanceMeshDataList.Count; i++)
+            {
+                var go = InstanceMeshDataList[i].OriginObject.EditorInstance;
+                if (go == null)
+                    continue;
+
+                if (go.name == name)
+                    return true;
+            }
+            return false;
+        }
+
+        public bool IsExistPrefabName(string name)
+        {
+            for (int i = 0; i < PrefabList.Count; i++)
+            {
+                var go = PrefabList[i].Prefab.EditorInstance;
+                if (go == null)
+                    continue;
+
+                if (go.name == name)
+                    return true;
+            }
+            return false;
         }
     }
 
@@ -41,11 +180,15 @@ namespace TerrainModule.Editor
 
         public string Name;
 
-        public List<EnvironmentTemplateCategoryRuntimeData> CategoryDataList = new List<EnvironmentTemplateCategoryRuntimeData>();
+        public List<EnvironmentTemplateCategoryEditRuntimeData> CategoryDataList = new List<EnvironmentTemplateCategoryEditRuntimeData>();
 
         public EnvironmentTemplateEditRuntimeData(EnvironmentTemplateEditData editData)
         {
             Name = editData.name;
+            for (int i = 0; i < editData.CategoryDataList.Count; i++)
+            {
+                CategoryDataList.Add(new EnvironmentTemplateCategoryEditRuntimeData(editData.CategoryDataList[i]));
+            }
         }
 
         public string[] GetCategoryNames()
@@ -73,7 +216,7 @@ namespace TerrainModule.Editor
                 }
             }
 
-            CategoryDataList.Add(new EnvironmentTemplateCategoryRuntimeData(name));
+            CategoryDataList.Add(new EnvironmentTemplateCategoryEditRuntimeData(name));
             return AddCategoryResult.Success;
         }
 
@@ -90,7 +233,7 @@ namespace TerrainModule.Editor
             return false;
         }
 
-        public bool TryGetCategory(string name, out EnvironmentTemplateCategoryRuntimeData result)
+        public bool TryGetCategory(string name, out EnvironmentTemplateCategoryEditRuntimeData result)
         {
             for (int i = 0; i < CategoryDataList.Count; i++)
             {
@@ -103,6 +246,43 @@ namespace TerrainModule.Editor
 
             result = null;
             return false;
+        }
+
+        public AddInstanceMeshResult AddInstanceMesh(string categoryName, GameObject go)
+        {
+            if (go == null)
+                return AddInstanceMeshResult.ObjectIsNull;
+
+            if (!TryGetCategory(categoryName, out var categoryRuntimeData))
+                return AddInstanceMeshResult.CategoryNotFound;
+
+            var name = go.name;
+            if (categoryRuntimeData.IsExistInstanceMeshName(name))
+                return AddInstanceMeshResult.DuplicateName;
+
+            var meshData = new EnvironmentTemplateInstanceMeshEditRuntimeData(go);
+            if (meshData.MeshSingleDataList.Count == 0)
+                return AddInstanceMeshResult.DoNotHaveAnyMesh;
+
+            categoryRuntimeData.InstanceMeshDataList.Add(meshData);
+            return AddInstanceMeshResult.Success;
+        }
+
+        public AddPrefabResult AddPrefab(string categoryName, GameObject go)
+        {
+            if (go == null)
+                return AddPrefabResult.ObjectIsNull;
+
+            if (!TryGetCategory(categoryName, out var categoryRuntimeData))
+                return AddPrefabResult.CategoryNotFound;
+
+            var name = go.name;
+            if (categoryRuntimeData.IsExistPrefabName(name))
+                return AddPrefabResult.DuplicateName;
+
+            var prefabData = new EnvironmentTemplatePrefabEditRuntimeData(go);
+            categoryRuntimeData.PrefabList.Add(prefabData);
+            return AddPrefabResult.Success;
         }
     }
 }

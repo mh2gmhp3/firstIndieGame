@@ -1,12 +1,33 @@
-﻿using System.Drawing.Drawing2D;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 namespace Framework.Editor.Utility
 {
+    public struct PreviewMeshData
+    {
+        public Mesh Mesh;
+        public Matrix4x4 Matrix;
+        public Material Material;
+
+        public PreviewMeshData(Mesh mesh, Matrix4x4 matrix, Material material)
+        {
+            Mesh = mesh;
+            Matrix = matrix;
+            Material = material;
+        }
+    }
+
     public static class EditorPreviewUtility
     {
         private static PreviewRenderUtility _utility;
+        private static List<PreviewMeshData> _previewMeshDataListCache = new List<PreviewMeshData>();
+
+        public static List<PreviewMeshData> GetPreviewMeshDataListCache()
+        {
+            _previewMeshDataListCache.Clear();
+            return _previewMeshDataListCache;
+        }
 
         private static void CheckUtility()
         {
@@ -36,18 +57,38 @@ namespace Framework.Editor.Utility
         }
 
         public static Texture GenPreviewTexture(
-            Mesh mesh,
-            Material material,
+            PreviewMeshData previewData,
             Vector2 textureSize,
             Vector3 cameraPos,
-            Quaternion cameraRotation,
-            Matrix4x4 meshMatrix)
+            Quaternion cameraRotation)
         {
             CheckUtility();
             _utility.camera.transform.position = cameraPos;
             _utility.camera.transform.rotation = cameraRotation;
             _utility.BeginPreview(new Rect(0, 0, textureSize.x, textureSize.y), GUIStyle.none);
-            _utility.DrawMesh(mesh, meshMatrix, material, 0);
+            _utility.DrawMesh(previewData.Mesh, previewData.Matrix, previewData.Material, 0);
+            _utility.Render(allowScriptableRenderPipeline: true);
+            return _utility.EndPreview();
+        }
+
+        public static Texture GenPreviewTexture(
+            List<PreviewMeshData> previewDataList,
+            Vector2 textureSize,
+            Vector3 cameraPos,
+            Quaternion cameraRotation)
+        {
+            if (previewDataList == null)
+                return null;
+
+            CheckUtility();
+            _utility.camera.transform.position = cameraPos;
+            _utility.camera.transform.rotation = cameraRotation;
+            _utility.BeginPreview(new Rect(0, 0, textureSize.x, textureSize.y), GUIStyle.none);
+            for (int i = 0; i < previewDataList.Count; i++)
+            {
+                var previewData = previewDataList[i];
+                _utility.DrawMesh(previewData.Mesh, previewData.Matrix, previewData.Material, 0);
+            }
             _utility.Render(allowScriptableRenderPipeline: true);
             return _utility.EndPreview();
         }

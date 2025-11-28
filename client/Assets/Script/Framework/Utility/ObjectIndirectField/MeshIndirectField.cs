@@ -5,5 +5,5 @@ using UnityEngine;
 namespace Utility
 {
     [Serializable]
-    public class MeshIndirectField : ObjectIndirectField<GameObject> { }
+    public class MeshIndirectField : ObjectIndirectField<Mesh> { }
 }
