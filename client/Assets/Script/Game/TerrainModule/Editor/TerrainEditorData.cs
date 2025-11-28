@@ -19,6 +19,7 @@ namespace TerrainModule.Editor
         public BlockTemplatePreviewSetting BlockTemplatePreviewSetting;
         public BlockTemplateEditRuntimeData CurBlockTemplateEditRuntimeData;
 
+        public EnvironmentTemplatePreviewSetting EnvironmentTemplatePreviewSetting;
         public EnvironmentTemplateEditRuntimeData CurEnvironmentTemplateEditRuntimeData;
 
         #region Terrain
@@ -188,7 +189,7 @@ namespace TerrainModule.Editor
             }
 
             CurEnvironmentTemplateEditRuntimeData = new EnvironmentTemplateEditRuntimeData(assetData);
-            TerrainEditorMgr.SetData(CurEnvironmentTemplateEditRuntimeData);
+            TerrainEditorMgr.SetData(CurEnvironmentTemplateEditRuntimeData, EnvironmentTemplatePreviewSetting);
             return true;
         }
 

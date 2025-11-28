@@ -1,5 +1,6 @@
 ﻿using Framework.Editor;
 using Framework.Editor.Utility;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,11 +29,11 @@ namespace TerrainModule.Editor
         private Vector2 _prefabScrollPos = Vector2.zero;
         private int _removePrefabIndex = -1;
 
-        private bool _isSelectInsMesh = false;
-        private int _curSelectIndex = -1;
+        private EnvironmentTemplatePreviewSetting _previewSetting = new EnvironmentTemplatePreviewSetting();
 
         public EnvironmentTemplateEditDataPage(TerrainEditorData editorData) : base(editorData)
         {
+            _editorData.EnvironmentTemplatePreviewSetting = _previewSetting;
         }
 
         public override void OnEnable()
@@ -187,6 +188,10 @@ namespace TerrainModule.Editor
                         {
                             EditorUtility.DisplayDialog(TerrainEditorDefine.Dialog_Title_Error, msg, TerrainEditorDefine.Dialog_Ok_Confirm);
                         }
+                        else
+                        {
+                            SelectInstanceMesh(_curCategoryRuntimeData.InstanceMeshDataList.Count - 1);
+                        }
                     }
                 }
                 EditorGUILayout.EndHorizontal();
@@ -216,7 +221,9 @@ namespace TerrainModule.Editor
 
         private void DrawGUI_InstanceMeshCell(EnvironmentTemplateInstanceMeshEditRuntimeData data, int index)
         {
-            EditorGUILayout.BeginVertical(CommonGUIStyle.SelectableBlueBox(_isSelectInsMesh && _curSelectIndex == index), GUILayout.Width(160), GUILayout.MaxWidth(160));
+            EditorGUILayout.BeginVertical(CommonGUIStyle.SelectableBlueBox(
+                _previewSetting.IsInstanceMesh && _previewSetting.Index == index),
+                GUILayout.Width(160), GUILayout.MaxWidth(160));
             {
                 EditorGUILayout.ObjectField(data.OriginObject.EditorInstance, typeof(GameObject), false);
                 EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
@@ -270,6 +277,10 @@ namespace TerrainModule.Editor
                         {
                             EditorUtility.DisplayDialog(TerrainEditorDefine.Dialog_Title_Error, msg, TerrainEditorDefine.Dialog_Ok_Confirm);
                         }
+                        else
+                        {
+                            SelectPrefab(_curCategoryRuntimeData.PrefabList.Count - 1);
+                        }
                     }
                 }
                 EditorGUILayout.EndHorizontal();
@@ -299,7 +310,10 @@ namespace TerrainModule.Editor
 
         private void DrawGUI_PrefabCell(EnvironmentTemplatePrefabEditRuntimeData data, int index)
         {
-            EditorGUILayout.BeginVertical(CommonGUIStyle.SelectableBlueBox(!_isSelectInsMesh && _curSelectIndex == index), GUILayout.Width(160), GUILayout.MaxWidth(160));
+            EditorGUILayout.BeginVertical(CommonGUIStyle.SelectableBlueBox(
+                !_previewSetting.IsInstanceMesh && _previewSetting.Index == index),
+                GUILayout.Width(160),
+                GUILayout.MaxWidth(160));
             {
                 EditorGUILayout.ObjectField(data.Prefab.EditorInstance, typeof(GameObject), false);
                 EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
@@ -327,16 +341,18 @@ namespace TerrainModule.Editor
 
         private void SelectInstanceMesh(int index)
         {
-            _isSelectInsMesh = true;
-            _curSelectIndex = index;
+            _previewSetting.IsInstanceMesh = true;
+            _previewSetting.Index = index;
             Repaint();
+            _editorData.TerrainEditorMgr.RefreshEnvironmentTemplatePreview();
         }
 
         private void SelectPrefab(int index)
         {
-            _isSelectInsMesh = false;
-            _curSelectIndex = index;
+            _previewSetting.IsInstanceMesh = false;
+            _previewSetting.Index = index;
             Repaint();
+            _editorData.TerrainEditorMgr.RefreshEnvironmentTemplatePreview();
         }
 
         private bool CreateNewCategory(string name)
@@ -383,6 +399,8 @@ namespace TerrainModule.Editor
 
                 _curSelectedCategoryIndex = i;
                 _curCategoryRuntimeData = result;
+                _previewSetting.CategoryName = name;
+                _editorData.TerrainEditorMgr.RefreshEnvironmentTemplatePreview();
                 return;
             }
         }

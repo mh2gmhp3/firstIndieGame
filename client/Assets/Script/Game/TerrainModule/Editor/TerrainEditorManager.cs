@@ -1,7 +1,5 @@
 ﻿using Extension;
-using Framework.Editor.Utility;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace TerrainModule.Editor
@@ -87,6 +85,9 @@ namespace TerrainModule.Editor
 
         private Transform _environmentTemplateParent;
         private EnvironmentTemplateEditRuntimeData _curEnvironmentTemplateEditData;
+        private EnvironmentTemplatePreviewSetting _environmentTemplatePreviewSetting;
+        private GameObject _environmentPrefabPreviewObj;
+        private MeshBatchController _environmentIneMeshPreviewController = new MeshBatchController();
 
         public TerrainEditorManager(GameObject sceneObj)
         {
@@ -110,6 +111,12 @@ namespace TerrainModule.Editor
                 if (_blockTemplateParent != null)
                     _blockTemplateParent.gameObject.SetActive(false);
             }
+            else if (_curEditorMode == EditorMode.EnvironmentTemplate)
+            {
+                if (_environmentTemplateParent != null)
+                    _environmentTemplateParent.gameObject.SetActive(false);
+                _environmentIneMeshPreviewController.ClearMeshBatchData();
+            }
 
             //Enter
             if (editorMode == EditorMode.Terrain)
@@ -128,8 +135,21 @@ namespace TerrainModule.Editor
                     RefreshBlockTemplatePreview();
                 }
             }
+            else if (editorMode == EditorMode.EnvironmentTemplate)
+            {
+                if (_environmentTemplateParent != null)
+                {
+                    _environmentTemplateParent.gameObject.SetActive(true);
+                    RefreshEnvironmentTemplatePreview();
+                }
+            }
 
             _curEditorMode = editorMode;
+        }
+
+        public void Update()
+        {
+            EnvironmentTemplateUpdateInsMesh();
         }
 
         #region Terrain
@@ -234,15 +254,74 @@ namespace TerrainModule.Editor
 
         #region EnvironmentTemplate
 
-        public void SetData(EnvironmentTemplateEditRuntimeData editData)
+        public void SetData(EnvironmentTemplateEditRuntimeData editData, EnvironmentTemplatePreviewSetting previewSetting)
         {
             _curEnvironmentTemplateEditData = editData;
+            _environmentTemplatePreviewSetting = previewSetting;
             if (_environmentTemplateParent == null)
             {
                 var environmentTemplateParentGo = new GameObject("EnvironmentTemplate");
                 _environmentTemplateParent = environmentTemplateParentGo.transform;
                 _environmentTemplateParent.SetParent(Transform);
             }
+        }
+
+        public void RefreshEnvironmentTemplatePreview()
+        {
+            if (_curEditorMode != EditorMode.EnvironmentTemplate)
+                return;
+
+            if (_curEnvironmentTemplateEditData == null)
+                return;
+
+            if (_environmentTemplatePreviewSetting == null)
+                return;
+
+            if (_environmentPrefabPreviewObj != null)
+                Object.DestroyImmediate(_environmentPrefabPreviewObj);
+
+            if (!_curEnvironmentTemplateEditData.TryGetCategory(_environmentTemplatePreviewSetting.CategoryName, out var categoryEditRuntimeData))
+                return;
+
+            if (_environmentTemplatePreviewSetting.IsInstanceMesh)
+            {
+                if (categoryEditRuntimeData.InstanceMeshDataList.TryGet(_environmentTemplatePreviewSetting.Index, out var instanceMeshData))
+                {
+                    _environmentIneMeshPreviewController.UnRegisterMesh(0);
+                    _environmentIneMeshPreviewController.ClearMeshBatchData();
+                    for (int i = 0; i < instanceMeshData.MeshSingleDataList.Count; i++)
+                    {
+                        var singleData = instanceMeshData.MeshSingleDataList[i];
+                        var mesh = singleData.Mesh.EditorInstance;
+                        var material = singleData.Material.EditorInstance;
+                        _environmentIneMeshPreviewController.AddMeshBatchData(mesh, material);
+                    }
+                    _environmentIneMeshPreviewController.RegisterMesh(0, Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one));
+                }
+            }
+            else
+            {
+                if (categoryEditRuntimeData.PrefabList.TryGet(_environmentTemplatePreviewSetting.Index, out var prefabData))
+                {
+                    if (prefabData.Prefab.EditorInstance == null)
+                        return;
+                    var go = Object.Instantiate(prefabData.Prefab.EditorInstance);
+                    go.transform.SetParent(_environmentTemplateParent);
+                    go.transform.Reset();
+                    _environmentPrefabPreviewObj = go;
+                }
+            }
+        }
+
+        private void EnvironmentTemplateUpdateInsMesh()
+        {
+            if (_curEditorMode != EditorMode.EnvironmentTemplate)
+                return;
+
+            if (!_environmentTemplatePreviewSetting.IsInstanceMesh)
+                return;
+
+            _environmentIneMeshPreviewController.UpdateInstance();
         }
 
         #endregion

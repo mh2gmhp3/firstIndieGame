@@ -10,6 +10,20 @@ using static TerrainModule.Editor.TerrainEditorManager;
 
 namespace TerrainModule.Editor
 {
+    public class TerrainPreviewInfo
+    {
+        public Texture Texture;
+        public Texture2D CachedTexture;
+        public Vector3 Rotation = new Vector3(-45, -45, 0);
+        public float Distance;
+
+        public void MarkRefreshTexture()
+        {
+            //清空 沒有繪製時會重建
+            Texture = null;
+        }
+    }
+
     public class BlockTemplatePreviewSetting
     {
         public Vector3Int BlockSize = Vector3Int.one;
@@ -33,6 +47,13 @@ namespace TerrainModule.Editor
             YTopValue = clampValue.TopValue;
             YBottomValue = clampValue.BottomValue;
         }
+    }
+
+    public class EnvironmentTemplatePreviewSetting
+    {
+        public string CategoryName;
+        public bool IsInstanceMesh;
+        public int Index;
     }
 
     public static class TerrainEditorUtility
@@ -211,58 +232,12 @@ namespace TerrainModule.Editor
             Rect rect,
             Color backgroundColor)
         {
-            if (rect.x == 0 && rect.y == 0 && rect.width == 1 && rect.height == 1)
-                return;
-
-            var previewInfo = data.PreviewInfo;
-            var blockSize = previewSetting.BlockSize;
-
-            Event current = Event.current;
-            if (rect.Contains(current.mousePosition))
-            {
-                if (current.type == EventType.MouseDrag && current.button == 0)
-                {
-                    previewInfo.Rotation.x += current.delta.x;
-                    previewInfo.Rotation.y -= current.delta.y;
-
-                    previewInfo.Rotation.y = Mathf.Clamp(previewInfo.Rotation.y, -90f, 90f);
-                    previewInfo.MarkRefreshTexture();
-                    current.Use(); // 標記事件已處理
-                }
-                if (current.type == EventType.ScrollWheel)
-                {
-                    var distance = Mathf.Max(Mathf.Max(blockSize.x, blockSize.y), blockSize.z);
-                    previewInfo.Distance += current.delta.y * 0.1f;
-                    previewInfo.Distance = Mathf.Clamp(previewInfo.Distance, distance, distance * 2f);
-                    previewInfo.MarkRefreshTexture();
-                    current.Use(); // 標記事件已處理
-                }
-            }
-
-            if (previewInfo.Texture == null)
-            {
-                if (previewInfo.Distance == 0)
-                {
-                    var distance = Mathf.Max(Mathf.Max(blockSize.x, blockSize.y), blockSize.z);
-                    previewInfo.Distance = distance * 2;
-                }
-                Quaternion camRotation = Quaternion.Euler(-previewInfo.Rotation.y, previewInfo.Rotation.x, 0);
-                Vector3 camPos = camRotation * Vector3.back * previewInfo.Distance;
-
-                var rt = GetBlockPreviewTexture(data, previewSetting, material, new Vector2(300f, 300f), camPos, camRotation);
-                if (previewInfo.CachedTexture == null)
-                    previewInfo.CachedTexture = new Texture2D(rt.width, rt.height, TextureFormat.RGBA32, false);
-                RenderTexture.active = (RenderTexture)rt;
-                previewInfo.CachedTexture.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
-                previewInfo.CachedTexture.Apply();
-                RenderTexture.active = null;
-
-                previewInfo.Texture = previewInfo.CachedTexture;
-            }
-
-            EditorGUI.DrawRect(rect, Color.black);
-            EditorGUI.DrawRect(rect, backgroundColor);
-            GUI.DrawTexture(rect, previewInfo.Texture);
+            DrawPreviewGUI(
+                data.PreviewInfo,
+                previewSetting.BlockSize,
+                (p, q) => GetBlockPreviewTexture(data, previewSetting, material, new Vector2(300f, 300f), p, q),
+                rect,
+                backgroundColor);
         }
 
         /// <summary>
@@ -279,6 +254,145 @@ namespace TerrainModule.Editor
             Rect rect)
         {
             DrawBlockTemplatePreview(data, previewSetting, material, rect, new Color(0, 0, 1, 0.5f));
+        }
+
+        #endregion
+
+        #region EnvironmentPreviewGUI
+
+        /// <summary>
+        /// 繪製環境範本預覽圖
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="rect"></param>
+        /// <param name="backgroundColor"></param>
+        public static void DrawEnvironmentTemplatePreview(
+            EnvironmentTemplateInstanceMeshEditRuntimeData data,
+            Rect rect,
+            Color backgroundColor)
+        {
+            DrawPreviewGUI(
+                data.PreviewInfo,
+                GetMeshMaxSize(data.MeshSingleDataList),
+                (p, q) => GetEnvironmentTemplatePreviewTexture(data, new Vector2(300f, 300f), p, q),
+                rect,
+                backgroundColor);
+        }
+
+        /// <summary>
+        /// 繪製環境範本預覽圖
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="rect"></param>
+        public static void DrawEnvironmentTemplatePreview(
+            EnvironmentTemplateInstanceMeshEditRuntimeData data,
+            Rect rect)
+        {
+            DrawEnvironmentTemplatePreview(data, rect, new Color(0, 0, 1, 0.5f));
+        }
+
+        /// <summary>
+        /// 繪製環境範本預覽圖
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="rect"></param>
+        /// <param name="backgroundColor"></param>
+        public static void DrawEnvironmentTemplatePreview(
+            EnvironmentTemplatePrefabEditRuntimeData data,
+            Rect rect,
+            Color backgroundColor)
+        {
+            DrawPreviewGUI(
+                data.PreviewInfo,
+                GetMeshMaxSize(data.TempMeshSingleDataList),
+                (p, q) => GetEnvironmentTemplatePreviewTexture(data, new Vector2(300f, 300f), p, q),
+                rect,
+                backgroundColor);
+        }
+
+        /// <summary>
+        /// 繪製環境範本預覽圖
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="rect"></param>
+        public static void DrawEnvironmentTemplatePreview(
+            EnvironmentTemplatePrefabEditRuntimeData data,
+            Rect rect)
+        {
+            DrawEnvironmentTemplatePreview(data, rect, new Color(0, 0, 1, 0.5f));
+        }
+
+        #endregion
+
+        #region PreviewTextureGUI
+
+        /// <summary>
+        /// 繪製環境範本預覽圖
+        /// </summary>
+        /// <param name="previewInfo"></param>
+        /// <param name="rect"></param>
+        /// <param name="backgroundColor"></param>
+        public static void DrawPreviewGUI(
+            TerrainPreviewInfo previewInfo,
+            Vector3 maxSize,
+            Func<Vector3, Quaternion, Texture> getTextureFunc,
+            Rect rect,
+            Color backgroundColor)
+        {
+            if (rect.x == 0 && rect.y == 0 && rect.width == 1 && rect.height == 1)
+                return;
+
+            if (previewInfo == null || getTextureFunc == null)
+                return;
+
+            Event current = Event.current;
+            if (rect.Contains(current.mousePosition))
+            {
+                if (current.type == EventType.MouseDrag && current.button == 0)
+                {
+                    previewInfo.Rotation.x += current.delta.x;
+                    previewInfo.Rotation.y -= current.delta.y;
+
+                    previewInfo.Rotation.y = Mathf.Clamp(previewInfo.Rotation.y, -90f, 90f);
+                    previewInfo.MarkRefreshTexture();
+                    current.Use(); // 標記事件已處理
+                }
+                if (current.type == EventType.ScrollWheel)
+                {
+                    var distance = Mathf.Max(Mathf.Max(maxSize.x, maxSize.y), maxSize.z);
+                    previewInfo.Distance += current.delta.y * 0.1f;
+                    previewInfo.Distance = Mathf.Clamp(previewInfo.Distance, distance, distance * 2f);
+                    previewInfo.MarkRefreshTexture();
+                    current.Use(); // 標記事件已處理
+                }
+            }
+
+            if (previewInfo.Texture == null)
+            {
+                if (previewInfo.Distance == 0)
+                {
+                    var distance = Mathf.Max(Mathf.Max(maxSize.x, maxSize.y), maxSize.z);
+                    previewInfo.Distance = distance * 2;
+                }
+                Quaternion camRotation = Quaternion.Euler(-previewInfo.Rotation.y, previewInfo.Rotation.x, 0);
+                Vector3 camPos = camRotation * Vector3.back * previewInfo.Distance;
+
+                var rt = getTextureFunc(camPos, camRotation);
+                if (rt == null)
+                    return;
+                if (previewInfo.CachedTexture == null)
+                    previewInfo.CachedTexture = new Texture2D(rt.width, rt.height, TextureFormat.RGBA32, false);
+                RenderTexture.active = (RenderTexture)rt;
+                previewInfo.CachedTexture.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+                previewInfo.CachedTexture.Apply();
+                RenderTexture.active = null;
+
+                previewInfo.Texture = previewInfo.CachedTexture;
+            }
+
+            EditorGUI.DrawRect(rect, Color.black);
+            EditorGUI.DrawRect(rect, backgroundColor);
+            GUI.DrawTexture(rect, previewInfo.Texture);
         }
 
         #endregion
@@ -1019,12 +1133,133 @@ namespace TerrainModule.Editor
                 worldBlockPivotPos);
 
             return EditorPreviewUtility.GenPreviewTexture(
-                _previewTextureMesh,
-                material,
+                new PreviewMeshData(_previewTextureMesh, Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one), material),
                 textureSize,
                 cameraPos,
-                cameraRotation,
-                Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one));
+                cameraRotation);
+        }
+
+        #endregion
+
+        #region EnvironmentPreviewTexture
+
+        public static Texture GetEnvironmentTemplatePreviewTexture(
+            EnvironmentTemplateInstanceMeshEditRuntimeData data,
+            Vector2 textureSize,
+            Vector3 cameraPos,
+            Quaternion cameraRotation)
+        {
+            var listCache = EditorPreviewUtility.GetPreviewMeshDataListCache();
+            for (int i = 0; i < data.MeshSingleDataList.Count; i++)
+            {
+                var meshData = data.MeshSingleDataList[i];
+                listCache.Add(new PreviewMeshData(
+                    meshData.Mesh.EditorInstance,
+                    Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one),
+                    meshData.Material.EditorInstance));
+            }
+            return EditorPreviewUtility.GenPreviewTexture(
+                listCache,
+                textureSize,
+                cameraPos,
+                cameraRotation);
+        }
+
+        public static Texture GetEnvironmentTemplatePreviewTexture(
+            EnvironmentTemplatePrefabEditRuntimeData data,
+            Vector2 textureSize,
+            Vector3 cameraPos,
+            Quaternion cameraRotation)
+        {
+            var listCache = EditorPreviewUtility.GetPreviewMeshDataListCache();
+            for (int i = 0; i < data.TempMeshSingleDataList.Count; i++)
+            {
+                var meshData = data.TempMeshSingleDataList[i];
+                listCache.Add(new PreviewMeshData(
+                    meshData.Mesh.EditorInstance,
+                    Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one),
+                    meshData.Material.EditorInstance));
+            }
+            return EditorPreviewUtility.GenPreviewTexture(
+                listCache,
+                textureSize,
+                cameraPos,
+                cameraRotation);
+        }
+
+        #endregion
+
+        #region EnvironmentTemplate
+
+        public struct MeshData
+        {
+            public Mesh Mesh;
+            public Matrix4x4 Matrix;
+            public Material Material;
+
+            public MeshData(Mesh mesh, Matrix4x4 matrix, Material material)
+            {
+                Mesh = mesh;
+                Matrix = matrix;
+                Material = material;
+            }
+        }
+
+        private static List<MeshData> _meshDataListCache = new List<MeshData>();
+        public static List<MeshData> GetGameObjectMeshData(GameObject go)
+        {
+            _meshDataListCache.Clear();
+            if (go == null)
+                return _meshDataListCache;
+
+            var meshFilters = go.GetComponentsInChildren<MeshFilter>();
+            if (meshFilters == null)
+                return _meshDataListCache;
+
+            for (int i = 0; i < meshFilters.Length; i++)
+            {
+                var meshFilter = meshFilters[i];
+                var mesh = meshFilter.sharedMesh;
+                var trans = meshFilter.transform;
+                if (trans == null)
+                    continue;
+                var meshRenderer = meshFilter.GetComponent<MeshRenderer>();
+                if (meshRenderer == null)
+                    continue;
+
+                var material = meshRenderer.sharedMaterial;
+                _meshDataListCache.Add(new MeshData(mesh, trans.localToWorldMatrix, material));
+            }
+            return _meshDataListCache;
+        }
+
+        public static Vector3 GetMeshMaxSize(List<EnvironmentTemplateInstanceMeshEditRuntimeSingleData> meshSingleDataList)
+        {
+            if (meshSingleDataList == null)
+                return Vector3.zero;
+
+            var maxSize = Vector3.zero;
+            for (int i = 0; i < meshSingleDataList.Count; i++)
+            {
+                var bounds = meshSingleDataList[i].GetMeshBounds();
+                var size = new Vector3(
+                    Math.Max(Math.Abs(bounds.max.x), Math.Abs(bounds.min.x)),
+                    Math.Max(Math.Abs(bounds.max.y), Math.Abs(bounds.min.y)),
+                    Math.Max(Math.Abs(bounds.max.z), Math.Abs(bounds.min.z)));
+                if (size.x > maxSize.x)
+                {
+                    maxSize.x = size.x;
+                }
+                if (size.y > maxSize.y)
+                {
+                    maxSize.y = size.y;
+                }
+                if (size.z > maxSize.z)
+                {
+                    maxSize.z = size.z;
+                }
+            }
+            return maxSize;
         }
 
         #endregion

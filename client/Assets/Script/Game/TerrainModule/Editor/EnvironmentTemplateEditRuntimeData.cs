@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Utility;
-using static UnityEngine.Mesh;
 
 namespace TerrainModule.Editor
 {

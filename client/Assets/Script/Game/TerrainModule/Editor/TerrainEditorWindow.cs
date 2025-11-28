@@ -58,6 +58,7 @@ namespace TerrainModule.Editor
         private void OnSceneGUI(SceneView sceneView)
         {
             _pageContainer.OnSceneGUI();
+            _editorData.TerrainEditorMgr.Update();
         }
     }
 }
