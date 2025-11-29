@@ -63,10 +63,7 @@ namespace TerrainModule.Editor
         public EnvironmentTemplateInstanceMeshEditRuntimeData(EnvironmentTemplateInstanceMeshEditData editData)
         {
             editData.OriginObject.CopyTo(OriginObject);
-            for (int i = 0; i < editData.MeshSingleDataList.Count; i++)
-            {
-                MeshSingleDataList.Add(new EnvironmentTemplateInstanceMeshEditRuntimeSingleData(editData.MeshSingleDataList[i]));
-            }
+            RefreshMeshData();
         }
 
         private void RefreshMeshData()
