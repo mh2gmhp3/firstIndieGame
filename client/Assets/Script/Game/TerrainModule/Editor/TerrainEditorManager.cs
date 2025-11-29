@@ -115,7 +115,7 @@ namespace TerrainModule.Editor
             {
                 if (_environmentTemplateParent != null)
                     _environmentTemplateParent.gameObject.SetActive(false);
-                _environmentIneMeshPreviewController.ClearMeshBatchData();
+                _environmentIneMeshPreviewController.Clear();
             }
 
             //Enter
@@ -287,8 +287,7 @@ namespace TerrainModule.Editor
             {
                 if (categoryEditRuntimeData.InstanceMeshDataList.TryGet(_environmentTemplatePreviewSetting.Index, out var instanceMeshData))
                 {
-                    _environmentIneMeshPreviewController.UnRegisterMesh(0);
-                    _environmentIneMeshPreviewController.ClearMeshBatchData();
+                    _environmentIneMeshPreviewController.Clear();
                     for (int i = 0; i < instanceMeshData.MeshSingleDataList.Count; i++)
                     {
                         var singleData = instanceMeshData.MeshSingleDataList[i];
