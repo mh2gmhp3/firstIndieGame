@@ -71,15 +71,22 @@ namespace TerrainModule.Editor
         public Vector3Int ChunkNum = Vector3Int.one;
 
         public BlockTemplateEditData BlockTemplateEditData;
+        public EnvironmentTemplateEditData EnvironmentTemplateEditData;
 
         public List<ChunkEditData> ChunkEditDataList = new List<ChunkEditData>();
 
-        public TerrainEditData(Vector3Int blockSize, Vector3Int chunkBlockNum, Vector3Int chunkNum, BlockTemplateEditData blockTemplateEditData)
+        public TerrainEditData(
+            Vector3Int blockSize,
+            Vector3Int chunkBlockNum,
+            Vector3Int chunkNum,
+            BlockTemplateEditData blockTemplateEditData,
+            EnvironmentTemplateEditData environmentTemplateEditData)
         {
             BlockSize = blockSize;
             ChunkBlockNum = chunkBlockNum;
             ChunkNum = chunkNum;
             BlockTemplateEditData = blockTemplateEditData;
+            EnvironmentTemplateEditData = environmentTemplateEditData;
         }
 
         public TerrainEditData(TerrainEditRuntimeData runtimeData)
@@ -93,6 +100,7 @@ namespace TerrainModule.Editor
             ChunkBlockNum = runtimeData.ChunkBlockNum;
             ChunkNum = runtimeData.ChunkNum;
             BlockTemplateEditData = runtimeData.BlockTemplateEditData;
+            EnvironmentTemplateEditData = runtimeData.EnvironmentTemplateEditData;
 
             ChunkEditDataList.Clear();
             foreach (var chunkEditData in runtimeData.IdToChunkEditData.Values)

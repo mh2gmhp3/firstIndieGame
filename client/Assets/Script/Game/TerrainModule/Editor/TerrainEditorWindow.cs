@@ -1,13 +1,13 @@
 ﻿using Framework.Editor.Utility;
-using System.IO;
-using Unity.VisualScripting;
+using GameSystem;
+using GameSystem.RuntimeEditor;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace TerrainModule.Editor
 {
-    public class TerrainEditorWindow : EditorWindow
+    public class TerrainEditorWindow : EditorWindow, IUpdateTarget
     {
         private static TerrainEditorWindow _instance;
 
@@ -32,6 +32,8 @@ namespace TerrainModule.Editor
             {
                 var mgrObj = new GameObject(TerrainEditorDefine.ManagerName);
                 _editorData.TerrainEditorMgrObj = mgrObj;
+                var monoHandler = _editorData.TerrainEditorMgrObj.AddComponent<EditorMonoBehaviorAgent>();
+                monoHandler.Register(this);
                 _editorData.TerrainEditorMgr = new TerrainEditorManager(mgrObj);
             }
 
@@ -58,7 +60,35 @@ namespace TerrainModule.Editor
         private void OnSceneGUI(SceneView sceneView)
         {
             _pageContainer.OnSceneGUI();
+        }
+
+        #region IUpdateTarget
+
+        public void DoUpdate()
+        {
             _editorData.TerrainEditorMgr.Update();
         }
+
+        public void DoFixedUpdate()
+        {
+
+        }
+
+        public void DoLateUpdate()
+        {
+
+        }
+
+        public void DoOnGUI()
+        {
+
+        }
+
+        public void DoDrawGizmos()
+        {
+
+        }
+
+        #endregion
     }
 }

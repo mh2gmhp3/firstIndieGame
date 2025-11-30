@@ -1051,12 +1051,25 @@ namespace TerrainModule.Editor
                     CurEditRuntimeData.RefreshBlockTemplateRuntimeData();
                     _editorData.TerrainEditorMgr.RebuildAllTerrainPreviewMesh();
                 }
+                EditorGUI.BeginChangeCheck();
+                CurEditRuntimeData.EnvironmentTemplateEditData =
+                    (EnvironmentTemplateEditData)EditorGUILayout.ObjectField(
+                        "環境範本:",
+                        CurEditRuntimeData.EnvironmentTemplateEditData,
+                        typeof(EnvironmentTemplateEditData),
+                        false);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    CurEditRuntimeData.RefreshEnvironmentTemplateRuntimeData();
+                    _editorData.TerrainEditorMgr.RebuildAllTerrainPreviewMesh();
+                }
                 EditorGUILayout.BeginHorizontal();
                 {
                     GUILayout.FlexibleSpace();
                     if (GUILayout.Button("刷新範本"))
                     {
                         CurEditRuntimeData.RefreshBlockTemplateRuntimeData();
+                        CurEditRuntimeData.RefreshEnvironmentTemplateRuntimeData();
                         _editorData.TerrainEditorMgr.RebuildAllTerrainPreviewMesh();
                     }
                 }

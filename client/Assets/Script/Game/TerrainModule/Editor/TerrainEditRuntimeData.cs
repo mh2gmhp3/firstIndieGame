@@ -138,11 +138,14 @@ namespace TerrainModule.Editor
         public Vector3Int ChunkNum = Vector3Int.one;
 
         public BlockTemplateEditData BlockTemplateEditData;
+        public EnvironmentTemplateEditData EnvironmentTemplateEditData;
 
         public Dictionary<int, ChunkEditRuntimeData> IdToChunkEditData = new Dictionary<int, ChunkEditRuntimeData>();
 
         public BlockTemplateEditRuntimeData BlockTemplateEditRuntimeData { get; private set; }
         public Material TerrainMaterial { get; private set; }
+
+        public EnvironmentTemplateEditRuntimeData EnvironmentTemplateEditRuntimeData { get; private set; }
 
         public TerrainEditRuntimeData(TerrainEditData editData)
         {
@@ -151,6 +154,7 @@ namespace TerrainModule.Editor
             ChunkBlockNum = editData.ChunkBlockNum;
             ChunkNum = editData.ChunkNum;
             BlockTemplateEditData = editData.BlockTemplateEditData;
+            EnvironmentTemplateEditData = editData.EnvironmentTemplateEditData;
 
             IdToChunkEditData.Clear();
             for (int i = 0; i < editData.ChunkEditDataList.Count; i++)
@@ -164,6 +168,7 @@ namespace TerrainModule.Editor
             }
 
             RefreshBlockTemplateRuntimeData();
+            RefreshEnvironmentTemplateRuntimeData();
         }
 
         public void RefreshBlockTemplateRuntimeData()
@@ -172,6 +177,13 @@ namespace TerrainModule.Editor
                 return;
             BlockTemplateEditRuntimeData = new BlockTemplateEditRuntimeData(BlockTemplateEditData);
             TerrainMaterial = BlockTemplateEditRuntimeData.Material;
+        }
+
+        public void RefreshEnvironmentTemplateRuntimeData()
+        {
+            if (EnvironmentTemplateEditData == null)
+                return;
+            EnvironmentTemplateEditRuntimeData = new EnvironmentTemplateEditRuntimeData(EnvironmentTemplateEditData);
         }
 
         public Vector3Int GetBlockNum()
@@ -695,6 +707,114 @@ namespace TerrainModule.Editor
             result.ChunkId = lastChunkId;
             result.BlockId = lastBlockId;
             return result.ChunkId != -1 && result.BlockId != -1;
+        }
+
+        private List<RaycastBlockResult> _raycastBlockListCache = new List<RaycastBlockResult>();
+        /// <summary>
+        /// 發射射線獲取擊中的Block資訊
+        /// </summary>
+        /// <param name="ray">GUI投向世界的Ray</param>
+        /// <param name="distance">最長距離</param>
+        /// <param name="chunkNumY">最低限的ChunkY</param>
+        /// <param name="result">擊中結果</param>
+        /// <returns></returns>
+        public bool RaycastBlock(Ray ray, float distance, out List<RaycastBlockResult> result, Func<Vector3Int, RaycastBlockFilterType> filter = null, int maxCount = int.MaxValue)
+        {
+            result = _raycastBlockListCache;
+            result.Clear();
+            Bounds bounds = new Bounds();
+            bounds.SetMinMax(Vector3.zero, TerrainSize());
+
+            // 沒有在在任何Chunk範圍內
+            if (!bounds.IntersectRayAABB(ray, distance, out var tDistance))
+                return false;
+
+            bool haveFilter = filter != null;
+            var blockResults = VoxelUtility.RaycastDDA(ray, BlockSize, tDistance, distance);
+            foreach (var blockResult in blockResults)
+            {
+                var worldCoordinates = blockResult.Coordinates;
+                if (haveFilter)
+                {
+                    var filterType = filter.Invoke(worldCoordinates);
+                    if (filterType == RaycastBlockFilterType.Continue)
+                        continue;
+                    else if (filterType == RaycastBlockFilterType.Break)
+                        break;
+                }
+                if (!IsValidWorldBlockCoordinates(worldCoordinates))
+                    continue;
+                if (!TryGetId(worldCoordinates, out var cId, out var bId))
+                    continue;
+                if (!TryGetBlock(cId, bId, out var blockData, out var reason))
+                    continue;
+
+                var hitResult = new RaycastBlockResult();
+                hitResult.WorldBlockCoordinates = worldCoordinates;
+                hitResult.HitFaceNormal = -blockResult.HitRayNormal;
+                hitResult.HitWorldPosition = blockResult.HitWorldPosition;
+                hitResult.HaveData = false;
+                hitResult.HaveData = true;
+                hitResult.ChunkId = cId;
+                hitResult.BlockId = bId;
+                result.Add(hitResult);
+                if (result.Count >= maxCount)
+                    break;
+            }
+
+            return result.Count != 0;
+        }
+
+        public bool RaycastBlockMesh(Ray ray, float distance, out RaycastHit hit)
+        {
+            hit = default;
+            if (!RaycastBlock(ray, distance, out var raycastBlockResultList, null, 8))
+                return false;
+
+            var vertices = new List<Vector3>();
+            var triangles = new List<int>();
+            var normals = new List<Vector3>();
+            var uvs = new List<Vector2>();
+            var uvs2 = new List<Vector2>();
+            var uvs3 = new List<Vector2>();
+
+            for (int i = 0; i < raycastBlockResultList.Count; i++)
+            {
+                var raycastBlockResult = raycastBlockResultList[i];
+                if (!IdToChunkEditData.TryGetValue(raycastBlockResult.ChunkId, out var chunkData))
+                    return false;
+
+                if (!chunkData.IdToBlockEditData.TryGetValue(raycastBlockResult.BlockId, out var blockData))
+                    return false;
+
+                TerrainEditorUtility.CreateBlock(
+                    vertices,
+                    triangles,
+                    normals,
+                    uvs,
+                    uvs2,
+                    uvs3,
+                    this,
+                    chunkData,
+                    blockData);
+            }
+
+            for (int j = 0; j < triangles.Count; j += 3)
+            {
+                var result = MathUtils.IntersectRayTriangle(
+                    ray,
+                    vertices[triangles[j]],
+                    vertices[triangles[j + 1]],
+                    vertices[triangles[j + 2]],
+                    true);
+                if (result == null)
+                    continue;
+
+                hit = (RaycastHit)result;
+                return true;
+            }
+
+            return false;
         }
     }
 }

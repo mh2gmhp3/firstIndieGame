@@ -77,6 +77,8 @@ namespace TerrainModule.Editor
         private Transform _terrainChunkParent;
         private TerrainEditRuntimeData _curTerrainEditData;
         private Dictionary<int, ChunkPreviewMesh> _chunkIdToPreviewMeshDic = new Dictionary<int, ChunkPreviewMesh>();
+        private Transform _terrainEnvironmentDrawTrans;
+        private MeshBatchController _terrainEnvironmentDrawInsMesh = new MeshBatchController();
 
         private Transform _blockTemplateParent;
         private BlockTemplateEditRuntimeData _curBlockTemplateEditData;
@@ -149,6 +151,7 @@ namespace TerrainModule.Editor
 
         public void Update()
         {
+            UpdateTerrainEnvironmentDrawInsMesh();
             EnvironmentTemplateUpdateInsMesh();
         }
 
@@ -203,6 +206,81 @@ namespace TerrainModule.Editor
             }
             TerrainEditorUtility.CreateChunkMesh(previewMesh.Mesh, _curTerrainEditData, chunkId);
             previewMesh.MeshRenderer.sharedMaterial = _curTerrainEditData.TerrainMaterial;
+        }
+
+        public void SetTerrainEnvironmentDraw(EnvironmentTemplatePreviewSetting drawPreviewSetting)
+        {
+            if (_curEditorMode != EditorMode.Terrain)
+                return;
+
+            if (drawPreviewSetting == null)
+                return;
+
+            if (_curTerrainEditData == null)
+                return;
+
+            if (!_curTerrainEditData.EnvironmentTemplateEditRuntimeData.TryGetCategory(drawPreviewSetting.CategoryName, out var categoryData))
+                return;
+
+            ClearTerrainEnvironmentDraw();
+
+            if (drawPreviewSetting.IsInstanceMesh)
+            {
+                if (categoryData.InstanceMeshDataList.TryGet(drawPreviewSetting.Index, out var instanceMeshData))
+                {
+                    _terrainEnvironmentDrawInsMesh.Clear();
+                    for (int i = 0; i < instanceMeshData.MeshSingleDataList.Count; i++)
+                    {
+                        var singleData = instanceMeshData.MeshSingleDataList[i];
+                        var mesh = singleData.Mesh.EditorInstance;
+                        var material = singleData.Material.EditorInstance;
+                        _terrainEnvironmentDrawInsMesh.AddMeshBatchData(mesh, material);
+                    }
+                    _terrainEnvironmentDrawInsMesh.RegisterMesh(0, Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one));
+                }
+            }
+            else
+            {
+                if (categoryData.PrefabList.TryGet(drawPreviewSetting.Index, out var prefabData))
+                {
+                    if (prefabData.Prefab.EditorInstance == null)
+                        return;
+                    var go = Object.Instantiate(prefabData.Prefab.EditorInstance);
+                    go.transform.SetParent(_terrainChunkParent);
+                    go.transform.Reset();
+                    _terrainEnvironmentDrawTrans = go.transform;
+                }
+            }
+        }
+
+        public void UpdateTerrainEnvironmentDraw(Vector3 position, Quaternion rotation, Vector3 scale)
+        {
+            if (_curEditorMode != EditorMode.Terrain)
+                return;
+
+            if (_terrainEnvironmentDrawTrans != null)
+            {
+                _terrainEnvironmentDrawTrans.position = position;
+                _terrainEnvironmentDrawTrans.rotation = rotation;
+                _terrainEnvironmentDrawTrans.localScale = scale;
+            }
+            _terrainEnvironmentDrawInsMesh.UpdateMesh(0, Matrix4x4.TRS(position, rotation, scale));
+        }
+
+        public void ClearTerrainEnvironmentDraw()
+        {
+            if (_terrainEnvironmentDrawTrans != null)
+                Object.DestroyImmediate(_terrainEnvironmentDrawTrans.gameObject);
+
+            _terrainEnvironmentDrawInsMesh.Clear();
+            _terrainEnvironmentDrawInsMesh.UpdateInstance();
+        }
+
+        private void UpdateTerrainEnvironmentDrawInsMesh()
+        {
+            if (_curEditorMode != EditorMode.Terrain)
+                return;
+            _terrainEnvironmentDrawInsMesh.UpdateInstance();
         }
 
         #endregion
