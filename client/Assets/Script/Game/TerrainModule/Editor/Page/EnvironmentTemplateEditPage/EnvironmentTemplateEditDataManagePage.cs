@@ -39,8 +39,8 @@ namespace TerrainModule.Editor
         public override void OnEnable()
         {
             RefreshCategoryNames();
-            if (_curSelectedCategoryIndex == -1)
-                _curSelectedCategoryIndex = _categoryNames.Length - 1;
+            if (_curSelectedCategoryIndex == -1 && _categoryNames.Length > 0)
+                _curSelectedCategoryIndex = 0;
             SelectCategory(_curSelectedCategoryIndex);
         }
 
@@ -105,7 +105,7 @@ namespace TerrainModule.Editor
 
                 EditorGUILayout.BeginHorizontal(CommonGUIStyle.Default_Box);
                 {
-                    if (_categoryNames != null || _categoryNames.Length > 0)
+                    if (_categoryNames != null && _categoryNames.Length > 0)
                     {
                         EditorGUI.BeginChangeCheck();
                         {
