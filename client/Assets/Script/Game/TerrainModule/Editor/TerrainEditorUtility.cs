@@ -1155,7 +1155,7 @@ namespace TerrainModule.Editor
                 var meshData = data.MeshSingleDataList[i];
                 listCache.Add(new PreviewMeshData(
                     meshData.Mesh.EditorInstance,
-                    Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one),
+                    meshData.Matrix,
                     meshData.Material.EditorInstance));
             }
             return EditorPreviewUtility.GenPreviewTexture(
@@ -1177,7 +1177,7 @@ namespace TerrainModule.Editor
                 var meshData = data.TempMeshSingleDataList[i];
                 listCache.Add(new PreviewMeshData(
                     meshData.Mesh.EditorInstance,
-                    Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one),
+                    meshData.Matrix,
                     meshData.Material.EditorInstance));
             }
             return EditorPreviewUtility.GenPreviewTexture(

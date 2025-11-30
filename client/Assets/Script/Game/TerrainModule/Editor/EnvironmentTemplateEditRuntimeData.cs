@@ -25,17 +25,13 @@ namespace TerrainModule.Editor
     {
         public MeshIndirectField Mesh = new MeshIndirectField();
         public MaterialIndirectField Material = new MaterialIndirectField();
+        public Matrix4x4 Matrix;
 
-        public EnvironmentTemplateInstanceMeshEditRuntimeSingleData(Mesh mesh, Material material)
+        public EnvironmentTemplateInstanceMeshEditRuntimeSingleData(Mesh mesh, Material material, Matrix4x4 matrix)
         {
             Mesh.EditorInstance = mesh;
             Material.EditorInstance = material;
-        }
-
-        public EnvironmentTemplateInstanceMeshEditRuntimeSingleData(EnvironmentTemplateInstanceMeshEditSingleData editData)
-        {
-            editData.Mesh.CopyTo(Mesh);
-            editData.Material.CopyTo(Material);
+            Matrix = matrix;
         }
 
         public Bounds GetMeshBounds()
@@ -73,7 +69,7 @@ namespace TerrainModule.Editor
             for (int i = 0; i < meshDataList.Count; i++)
             {
                 var meshData = meshDataList[i];
-                MeshSingleDataList.Add(new EnvironmentTemplateInstanceMeshEditRuntimeSingleData(meshData.Mesh, meshData.Material));
+                MeshSingleDataList.Add(new EnvironmentTemplateInstanceMeshEditRuntimeSingleData(meshData.Mesh, meshData.Material, meshData.Matrix));
             }
         }
     }
@@ -105,7 +101,7 @@ namespace TerrainModule.Editor
             for (int i = 0; i < meshDataList.Count; i++)
             {
                 var meshData = meshDataList[i];
-                TempMeshSingleDataList.Add(new EnvironmentTemplateInstanceMeshEditRuntimeSingleData(meshData.Mesh, meshData.Material));
+                TempMeshSingleDataList.Add(new EnvironmentTemplateInstanceMeshEditRuntimeSingleData(meshData.Mesh, meshData.Material, meshData.Matrix));
             }
         }
     }

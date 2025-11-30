@@ -234,7 +234,8 @@ namespace TerrainModule.Editor
                         var singleData = instanceMeshData.MeshSingleDataList[i];
                         var mesh = singleData.Mesh.EditorInstance;
                         var material = singleData.Material.EditorInstance;
-                        _terrainEnvironmentDrawInsMesh.AddMeshBatchData(mesh, material);
+                        var matrix = singleData.Matrix;
+                        _terrainEnvironmentDrawInsMesh.AddMeshBatchData(mesh, material, matrix);
                     }
                     _terrainEnvironmentDrawInsMesh.RegisterMesh(0, Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one));
                 }
@@ -371,7 +372,8 @@ namespace TerrainModule.Editor
                         var singleData = instanceMeshData.MeshSingleDataList[i];
                         var mesh = singleData.Mesh.EditorInstance;
                         var material = singleData.Material.EditorInstance;
-                        _environmentIneMeshPreviewController.AddMeshBatchData(mesh, material);
+                        var matrix = singleData.Matrix;
+                        _environmentIneMeshPreviewController.AddMeshBatchData(mesh, material, matrix);
                     }
                     _environmentIneMeshPreviewController.RegisterMesh(0, Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one));
                 }

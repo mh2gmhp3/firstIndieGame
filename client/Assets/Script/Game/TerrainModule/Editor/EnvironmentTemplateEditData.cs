@@ -11,11 +11,13 @@ namespace TerrainModule.Editor
     {
         public MeshIndirectField Mesh = new MeshIndirectField();
         public MaterialIndirectField Material = new MaterialIndirectField();
+        public Matrix4x4 Matrix;
 
         public EnvironmentTemplateInstanceMeshEditSingleData(EnvironmentTemplateInstanceMeshEditRuntimeSingleData runtimeData)
         {
             runtimeData.Mesh.CopyTo(Mesh);
             runtimeData.Material.CopyTo(Material);
+            Matrix = runtimeData.Matrix;
         }
     }
 

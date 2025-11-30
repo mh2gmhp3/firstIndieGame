@@ -3,39 +3,45 @@ using UnityEngine;
 
 namespace TerrainModule
 {
-    public class MeshBatchData
+    public class MeshBatch
     {
-        public List<Mesh> MeshList = new List<Mesh>();
-        public List<Material> MaterialList = new List<Material>();
+        public Mesh Mesh;
+        public Material Material;
+        public Matrix4x4 Matrix;
+
+        public List<Matrix4x4> InsMatrices = new List<Matrix4x4>();
+
+        public MeshBatch(Mesh mesh, Material material, Matrix4x4 matrix)
+        {
+            Mesh = mesh;
+            Material = material;
+            Matrix = matrix;
+        }
     }
 
     public class MeshBatchController
     {
-        private static List<Matrix4x4> _matrixListCache = new List<Matrix4x4>();
         private static Matrix4x4[] _matrixBuffer = new Matrix4x4[512];
 
         public int Id;
-        private MeshBatchData _mashBatchData = new MeshBatchData();
         private Dictionary<int, Matrix4x4> _idToMatrix = new Dictionary<int, Matrix4x4>();
+        private List<MeshBatch> _meshBatch = new List<MeshBatch>();
 
         private bool _batchDirty = false;
 
-        public void AddMeshBatchData(Mesh mesh, Material material)
+        public void AddMeshBatchData(Mesh mesh, Material material, Matrix4x4 matrix)
         {
-            _mashBatchData.MeshList.Add(mesh);
-            _mashBatchData.MaterialList.Add(material);
+            _meshBatch.Add(new MeshBatch(mesh, material, matrix));
         }
 
         public void ClearMeshBatchData()
         {
-            _mashBatchData.MeshList.Clear();
-            _mashBatchData.MaterialList.Clear();
+            _meshBatch.Clear();
         }
 
         public void Clear()
         {
             _idToMatrix.Clear();
-            _matrixListCache.Clear();
             ClearMeshBatchData();
         }
 
@@ -73,31 +79,28 @@ namespace TerrainModule
         {
             UpdateMatrix();
 
-            var totalCount = _matrixListCache.Count;
+            var totalCount = _idToMatrix.Count;
             var startIndex = 0;
 
             while (startIndex < totalCount)
             {
                 int batchCount = Mathf.Min(
                     totalCount - startIndex,
-                    _matrixBuffer.Length
-                );
+                    _matrixBuffer.Length);
 
-                _matrixListCache.CopyTo(
-                    startIndex,
-                    _matrixBuffer,
-                    0,
-                    batchCount
-                );
-
-                for (int i = 0; i < _mashBatchData.MeshList.Count; i++)
+                for (int i = 0; i < _meshBatch.Count; i++)
                 {
-                    var mesh = _mashBatchData.MeshList[i];
-                    var material = _mashBatchData.MaterialList[i];
+                    var meshBatch = _meshBatch[i];
+                    meshBatch.InsMatrices.CopyTo(
+                        startIndex,
+                        _matrixBuffer,
+                        0,
+                        batchCount);
+
                     Graphics.DrawMeshInstanced(
-                    mesh,
+                    meshBatch.Mesh,
                     0,
-                    material,
+                    meshBatch.Material,
                     _matrixBuffer,
                     batchCount);
                 }
@@ -111,10 +114,14 @@ namespace TerrainModule
             if (!_batchDirty)
                 return;
 
-            _matrixListCache.Clear();
-            foreach (var matrix in _idToMatrix.Values)
+            for (int i = 0; i < _meshBatch.Count; i++)
             {
-                _matrixListCache.Add(matrix);
+                var meshBatch = _meshBatch[i];
+                meshBatch.InsMatrices.Clear();
+                foreach (var matrix in _idToMatrix.Values)
+                {
+                    meshBatch.InsMatrices.Add(matrix * meshBatch.Matrix);
+                }
             }
 
             _batchDirty = false;
