@@ -52,6 +52,15 @@ namespace TerrainModule
             _batchDirty = true;
         }
 
+        public void UpdateMesh(int id, Matrix4x4 matrix)
+        {
+            if (_idToMatrix.ContainsKey(id))
+            {
+                _idToMatrix[id] = matrix;
+                _batchDirty = true;
+            }
+        }
+
         public void UnRegisterMesh(int id)
         {
             if (_idToMatrix.Remove(id))
