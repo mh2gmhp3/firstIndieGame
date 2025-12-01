@@ -24,7 +24,8 @@ namespace TerrainModule
         private static Matrix4x4[] _matrixBuffer = new Matrix4x4[512];
 
         public int Id;
-        private Dictionary<int, Matrix4x4> _idToMatrix = new Dictionary<int, Matrix4x4>();
+        private Dictionary<int, Matrix4x4> _instanceIdToMatrix = new Dictionary<int, Matrix4x4>();
+        private List<int> _instanceIdList = new List<int>();
         private List<MeshBatch> _meshBatch = new List<MeshBatch>();
 
         private bool _batchDirty = false;
@@ -41,36 +42,38 @@ namespace TerrainModule
 
         public void Clear()
         {
-            _idToMatrix.Clear();
+            _instanceIdToMatrix.Clear();
             ClearMeshBatchData();
         }
 
-        public void RegisterMesh(int id, Matrix4x4 matrix)
+        public void AddInstance(int id, Matrix4x4 matrix)
         {
-            if (_idToMatrix.ContainsKey(id))
+            if (_instanceIdToMatrix.ContainsKey(id))
             {
-                _idToMatrix[id] = matrix;
+                _instanceIdToMatrix[id] = matrix;
             }
             else
             {
-                _idToMatrix.Add(id, matrix);
+                _instanceIdToMatrix.Add(id, matrix);
+                _instanceIdList.Add(id);
             }
             _batchDirty = true;
         }
 
-        public void UpdateMesh(int id, Matrix4x4 matrix)
+        public void UpdateInstance(int id, Matrix4x4 matrix)
         {
-            if (_idToMatrix.ContainsKey(id))
+            if (_instanceIdToMatrix.ContainsKey(id))
             {
-                _idToMatrix[id] = matrix;
+                _instanceIdToMatrix[id] = matrix;
                 _batchDirty = true;
             }
         }
 
-        public void UnRegisterMesh(int id)
+        public void RemoveInstance(int id)
         {
-            if (_idToMatrix.Remove(id))
+            if (_instanceIdToMatrix.Remove(id))
             {
+                _instanceIdList.Remove(id);
                 _batchDirty = true;
             }
         }
@@ -79,7 +82,7 @@ namespace TerrainModule
         {
             UpdateMatrix();
 
-            var totalCount = _idToMatrix.Count;
+            var totalCount = _instanceIdToMatrix.Count;
             var startIndex = 0;
 
             while (startIndex < totalCount)
@@ -118,7 +121,7 @@ namespace TerrainModule
             {
                 var meshBatch = _meshBatch[i];
                 meshBatch.InsMatrices.Clear();
-                foreach (var matrix in _idToMatrix.Values)
+                foreach (var matrix in _instanceIdToMatrix.Values)
                 {
                     meshBatch.InsMatrices.Add(matrix * meshBatch.Matrix);
                 }
