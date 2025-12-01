@@ -74,6 +74,24 @@ namespace TerrainModule.Editor
                     _editorData.TerrainEditorMgr.UpdateTerrainEnvironmentDraw(hit.point, Quaternion.identity, Vector3.one);
                     Repaint();
                 }
+                if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0)
+                {
+                    if (_curCategoryRuntimeData.TryGetName(_drawPreviewSetting.IsInstanceMesh, _drawPreviewSetting.Index, out var name))
+                    {
+                        if (CurEditRuntimeData.AddEnvironment(
+                            _drawPreviewSetting.IsInstanceMesh,
+                            _drawPreviewSetting.CategoryName,
+                            name,
+                            hit.point,
+                            Quaternion.identity,
+                            Vector3.one))
+                        {
+                            if (CurEditRuntimeData.TryGetId(hit.point, out int chunkId, out _))
+                                _editorData.TerrainEditorMgr.RefreshChunkEnvironment(chunkId);
+                        }
+                    }
+                    currentEvent.Use();
+                }
             }
             if (_drawPreviewSetting.IsInstanceMesh)
             {

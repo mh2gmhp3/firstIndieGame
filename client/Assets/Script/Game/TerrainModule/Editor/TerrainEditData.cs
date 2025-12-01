@@ -1,10 +1,45 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace TerrainModule.Editor
 {
+    [Serializable]
+    public class EnvironmentInstanceEditData
+    {
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public Vector3 Scale;
+
+        public EnvironmentInstanceEditData(EnvironmentInstanceEditRuntimeData runtimeData)
+        {
+            Position = runtimeData.Position;
+            Rotation = runtimeData.Rotation;
+            Scale = runtimeData.Scale;
+        }
+    }
+
+    [Serializable]
+    public class EnvironmentEditData
+    {
+        public bool IsInstanceMesh;
+        public string CategoryName;
+        public string Name;
+
+        public List<EnvironmentInstanceEditData> InstanceList = new List<EnvironmentInstanceEditData>();
+
+        public EnvironmentEditData(EnvironmentEditRuntimeData runtimeData)
+        {
+            IsInstanceMesh = runtimeData.IsInstanceMesh;
+            CategoryName = runtimeData.CategoryName;
+            Name = runtimeData.Name;
+            for (int i = 0; i < runtimeData.InstanceList.Count; i++)
+            {
+                InstanceList.Add(new EnvironmentInstanceEditData(runtimeData.InstanceList[i]));
+            }
+        }
+    }
+
     [Serializable]
     public class BlockEditData
     {
@@ -39,6 +74,7 @@ namespace TerrainModule.Editor
     {
         public int Id;
         public List<BlockEditData> BlockEditDataList = new List<BlockEditData>();
+        public List<EnvironmentEditData> EnvironmentEditDataList = new List<EnvironmentEditData>();
 
         public ChunkEditData(ChunkEditRuntimeData runtimeData)
         {
@@ -47,6 +83,10 @@ namespace TerrainModule.Editor
             foreach (var blockEditData in runtimeData.IdToBlockEditData.Values)
             {
                 BlockEditDataList.Add(new BlockEditData(blockEditData));
+            }
+            for (int i = 0; i < runtimeData.EnvironmentEditDataList.Count; i++)
+            {
+                EnvironmentEditDataList.Add(new EnvironmentEditData(runtimeData.EnvironmentEditDataList[i]));
             }
         }
     }

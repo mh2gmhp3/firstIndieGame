@@ -1,4 +1,5 @@
 ﻿using Extension;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,129 @@ namespace TerrainModule.Editor
             Terrain,
             BlockTemplate,
             EnvironmentTemplate
+        }
+
+        public class TerrainEnvironmentController
+        {
+            public struct PrefabInfo
+            {
+                public GameObject Prefab;
+                public Transform Parent;
+
+                public bool IsValid()
+                {
+                    if (Prefab == null)
+                        return false;
+                    return true;
+                }
+            }
+
+            public struct MeshSingleInfo
+            {
+                public Mesh Mesh;
+                public Material Material;
+                public Matrix4x4 Matrix;
+
+                public bool IsValid()
+                {
+                    if (Mesh == null)
+                        return false;
+                    if (Material == null)
+                        return false;
+                    return true;
+                }
+            }
+
+            public struct MeshInfo
+            {
+                public List<MeshSingleInfo> MeshSingleInfoList;
+
+                public bool IsValid()
+                {
+                    if (MeshSingleInfoList == null)
+                        return false;
+                    for (int i = 0; i < MeshSingleInfoList.Count; i++)
+                    {
+                        if (!MeshSingleInfoList[i].IsValid())
+                            return false;
+                    }
+                    return true;
+                }
+            }
+
+            private Dictionary<int, PrefabController> _idToPrefabController = new Dictionary<int, PrefabController>();
+            private Dictionary<int, MeshBatchController> _idToInsMeshBatchController = new Dictionary<int, MeshBatchController>();
+            private List<MeshBatchController> _meshBatchControllerList = new List<MeshBatchController>();
+
+            private Func<int, PrefabInfo> _prefabGetAction;
+            private Func<int, MeshInfo> _meshGetAction;
+
+            public void SetGetAction(Func<int, PrefabInfo> prefabGetAction, Func<int, MeshInfo> meshGetAction)
+            {
+                _prefabGetAction = prefabGetAction;
+                _meshGetAction = meshGetAction;
+            }
+
+            public void AddPrefabInstance(int id, int instanceId, Vector3 position, Quaternion rotation, Vector3 scale)
+            {
+                if (_prefabGetAction == null)
+                    return;
+
+                if (!_idToPrefabController.TryGetValue(id, out var prefabController))
+                {
+                    var prefabInfo = _prefabGetAction(id);
+                    if (!prefabInfo.IsValid())
+                        return;
+                    prefabController = new PrefabController(prefabInfo.Prefab, prefabInfo.Parent);
+                    _idToPrefabController.Add(id, prefabController);
+                }
+                prefabController.AddInstance(instanceId, position, rotation, scale);
+            }
+
+            public void RemovePrefabInstance(int id, int instanceId)
+            {
+                if (!_idToPrefabController.TryGetValue(id, out var prefabController))
+                    return;
+
+                prefabController.RemoveInstance(instanceId);
+            }
+
+            public void AddMeshInstance(int id, int instanceId, Vector3 position, Quaternion rotation, Vector3 scale)
+            {
+                if (_meshGetAction == null)
+                    return;
+
+                if (!_idToInsMeshBatchController.TryGetValue(id, out var meshBatchController))
+                {
+                    var meshInfo = _meshGetAction(id);
+                    if (!meshInfo.IsValid())
+                        return;
+                    meshBatchController = new MeshBatchController();
+                    for (int i = 0; i < meshInfo.MeshSingleInfoList.Count; i++)
+                    {
+                        var meshSingleInfo = meshInfo.MeshSingleInfoList[i];
+                        meshBatchController.AddMeshBatchData(meshSingleInfo.Mesh, meshSingleInfo.Material, meshSingleInfo.Matrix);
+                        _meshBatchControllerList.Add(meshBatchController);
+                    }
+                    _idToInsMeshBatchController.Add(id, meshBatchController);
+                }
+                meshBatchController.AddInstance(instanceId, Matrix4x4.TRS(position, rotation, scale));
+            }
+
+            public void RemoveMeshInstance(int id, int instanceId)
+            {
+                if (!_idToInsMeshBatchController.TryGetValue(id, out var meshBatchController))
+                    return;
+                meshBatchController.RemoveInstance(instanceId);
+            }
+
+            public void Update()
+            {
+                for (int i = 0; i < _meshBatchControllerList.Count; i++)
+                {
+                    _meshBatchControllerList[i].UpdateInstance();
+                }
+            }
         }
 
         private class ChunkPreviewMesh
@@ -35,7 +159,7 @@ namespace TerrainModule.Editor
             public void Clear()
             {
                 if (Obj != null)
-                    Object.DestroyImmediate(Obj);
+                    UnityEngine.Object.DestroyImmediate(Obj);
                 MeshFilter = null;
                 Mesh = null;
             }
@@ -63,7 +187,7 @@ namespace TerrainModule.Editor
             public void Clear()
             {
                 if (Obj != null)
-                    Object.DestroyImmediate(Obj);
+                    UnityEngine.Object.DestroyImmediate(Obj);
                 MeshFilter = null;
                 Mesh = null;
             }
@@ -79,6 +203,7 @@ namespace TerrainModule.Editor
         private Dictionary<int, ChunkPreviewMesh> _chunkIdToPreviewMeshDic = new Dictionary<int, ChunkPreviewMesh>();
         private Transform _terrainEnvironmentDrawTrans;
         private MeshBatchController _terrainEnvironmentDrawInsMesh = new MeshBatchController();
+        private TerrainEnvironmentController _terrainEnvironmentController = new TerrainEnvironmentController();
 
         private Transform _blockTemplateParent;
         private BlockTemplateEditRuntimeData _curBlockTemplateEditData;
@@ -152,6 +277,7 @@ namespace TerrainModule.Editor
         public void Update()
         {
             UpdateTerrainEnvironmentDrawInsMesh();
+            UpdateTerrainEnvironmentInsMesh();
             EnvironmentTemplateUpdateInsMesh();
         }
 
@@ -167,6 +293,7 @@ namespace TerrainModule.Editor
                 _terrainChunkParent.SetParent(Transform);
             }
 
+            _terrainEnvironmentController.SetGetAction(GetEnvironmentPrefabInfo, GetEnvironmentMeshInfo);
             RebuildAllTerrainPreviewMesh();
         }
 
@@ -188,6 +315,7 @@ namespace TerrainModule.Editor
             foreach (var chunkId in _curTerrainEditData.IdToChunkEditData.Keys)
             {
                 RefreshChunkMesh(chunkId);
+                RefreshChunkEnvironment(chunkId);
             }
         }
 
@@ -246,7 +374,7 @@ namespace TerrainModule.Editor
                 {
                     if (prefabData.Prefab.EditorInstance == null)
                         return;
-                    var go = Object.Instantiate(prefabData.Prefab.EditorInstance);
+                    var go = UnityEngine.Object.Instantiate(prefabData.Prefab.EditorInstance);
                     go.transform.SetParent(_terrainChunkParent);
                     go.transform.Reset();
                     _terrainEnvironmentDrawTrans = go.transform;
@@ -265,13 +393,13 @@ namespace TerrainModule.Editor
                 _terrainEnvironmentDrawTrans.rotation = rotation;
                 _terrainEnvironmentDrawTrans.localScale = scale;
             }
-            _terrainEnvironmentDrawInsMesh.UpdateMesh(0, Matrix4x4.TRS(position, rotation, scale));
+            _terrainEnvironmentDrawInsMesh.UpdateInstance(0, Matrix4x4.TRS(position, rotation, scale));
         }
 
         public void ClearTerrainEnvironmentDraw()
         {
             if (_terrainEnvironmentDrawTrans != null)
-                Object.DestroyImmediate(_terrainEnvironmentDrawTrans.gameObject);
+                UnityEngine.Object.DestroyImmediate(_terrainEnvironmentDrawTrans.gameObject);
 
             _terrainEnvironmentDrawInsMesh.Clear();
             _terrainEnvironmentDrawInsMesh.UpdateInstance();
@@ -282,6 +410,90 @@ namespace TerrainModule.Editor
             if (_curEditorMode != EditorMode.Terrain)
                 return;
             _terrainEnvironmentDrawInsMesh.UpdateInstance();
+        }
+
+        public void RefreshChunkEnvironment(int chunkId)
+        {
+            if (_curEditorMode != EditorMode.Terrain)
+                return;
+
+            if (_curTerrainEditData == null)
+                return;
+
+            if (!_curTerrainEditData.IdToChunkEditData.TryGetValue(chunkId, out var chunkData))
+                return;
+
+            //TODO 要考慮刪除
+            for (int i = 0; i < chunkData.EnvironmentEditDataList.Count; i++)
+            {
+                var envData = chunkData.EnvironmentEditDataList[i];
+                if (!_curTerrainEditData.EnvironmentTemplateIdMapping.TryGetId(envData.IsInstanceMesh, envData.CategoryName, envData.Name, out var id))
+                    continue;
+                for (int j = 0; j < envData.InstanceList.Count; j++)
+                {
+                    var instanceData = envData.InstanceList[j];
+                    if (envData.IsInstanceMesh)
+                    {
+                        _terrainEnvironmentController.AddMeshInstance(
+                            id,
+                            instanceData.InstanceId,
+                            instanceData.Position,
+                            instanceData.Rotation,
+                            instanceData.Scale);
+                    }
+                    else
+                    {
+                        _terrainEnvironmentController.AddPrefabInstance(
+                            id,
+                            instanceData.InstanceId,
+                            instanceData.Position,
+                            instanceData.Rotation,
+                            instanceData.Scale);
+                    }
+                }
+            }
+        }
+
+        private void UpdateTerrainEnvironmentInsMesh()
+        {
+            if (_curEditorMode != EditorMode.Terrain)
+                return;
+            _terrainEnvironmentController.Update();
+        }
+
+        private TerrainEnvironmentController.PrefabInfo GetEnvironmentPrefabInfo(int id)
+        {
+            if (!_curTerrainEditData.TryGetEnvPrefabData(id, out var prefabData))
+                return default;
+
+            return new TerrainEnvironmentController.PrefabInfo()
+            {
+                Prefab = prefabData.Prefab.EditorInstance,
+                Parent = _terrainChunkParent
+            };
+        }
+
+        private List<TerrainEnvironmentController.MeshSingleInfo> _meshSingleInfoCache = new List<TerrainEnvironmentController.MeshSingleInfo>();
+        private TerrainEnvironmentController.MeshInfo GetEnvironmentMeshInfo(int id)
+        {
+            if (!_curTerrainEditData.TryGetEnvInsMeshData(id, out var insMeshData))
+                return default;
+
+            _meshSingleInfoCache.Clear();
+            for (int i = 0; i < insMeshData.MeshSingleDataList.Count; i++)
+            {
+                var meshData = insMeshData.MeshSingleDataList[i];
+                _meshSingleInfoCache.Add(new TerrainEnvironmentController.MeshSingleInfo()
+                {
+                    Mesh = meshData.Mesh.EditorInstance,
+                    Material = meshData.Material.EditorInstance,
+                    Matrix = meshData.Matrix
+                });
+            }
+            return new TerrainEnvironmentController.MeshInfo()
+            {
+                MeshSingleInfoList = _meshSingleInfoCache
+            };
         }
 
         #endregion
@@ -357,7 +569,7 @@ namespace TerrainModule.Editor
                 return;
 
             if (_environmentPrefabPreviewObj != null)
-                Object.DestroyImmediate(_environmentPrefabPreviewObj);
+                UnityEngine.Object.DestroyImmediate(_environmentPrefabPreviewObj);
 
             if (!_curEnvironmentTemplateEditData.TryGetCategory(_environmentTemplatePreviewSetting.CategoryName, out var categoryEditRuntimeData))
                 return;
@@ -384,7 +596,7 @@ namespace TerrainModule.Editor
                 {
                     if (prefabData.Prefab.EditorInstance == null)
                         return;
-                    var go = Object.Instantiate(prefabData.Prefab.EditorInstance);
+                    var go = UnityEngine.Object.Instantiate(prefabData.Prefab.EditorInstance);
                     go.transform.SetParent(_environmentTemplateParent);
                     go.transform.Reset();
                     _environmentPrefabPreviewObj = go;

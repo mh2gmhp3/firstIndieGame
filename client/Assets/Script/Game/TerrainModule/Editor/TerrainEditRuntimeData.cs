@@ -1,15 +1,73 @@
 ﻿using Extension;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Utility;
 
 namespace TerrainModule.Editor
 {
+    public class TerrainEnvironmentIdMapping
+    {
+        public struct MappingInfo
+        {
+            public bool IsInsMesh;
+            public string CategoryName;
+            public string Name;
+
+            public MappingInfo(bool isInsMesh, string categoryName, string name)
+            {
+                IsInsMesh = isInsMesh;
+                CategoryName = categoryName;
+                Name = name;
+            }
+        }
+
+        private Dictionary<string, Dictionary<string, int>> _prefabToId = new Dictionary<string, Dictionary<string, int>>();
+        private Dictionary<string, Dictionary<string, int>> _insMeshToId = new Dictionary<string, Dictionary<string, int>>();
+        private Dictionary<int, MappingInfo> _idToMappingInfo = new Dictionary<int, MappingInfo>();
+
+        private int _id;
+
+        public void AddMapping(bool isInsMesh, string categoryName, string name)
+        {
+            var categoryMapping = GetMapping(isInsMesh);
+            if (!categoryMapping.TryGetValue(categoryName, out var nameMapping))
+            {
+                nameMapping = new Dictionary<string, int>();
+                categoryMapping.Add(categoryName, nameMapping);
+            }
+            nameMapping[name] = ++_id;
+            _idToMappingInfo[_id] = new MappingInfo(isInsMesh, categoryName, name);
+        }
+
+        public bool TryGetId(bool isInsMesh, string categoryName, string name, out int id)
+        {
+            id = -1;
+            var categoryMapping = GetMapping(isInsMesh);
+            if (!categoryMapping.TryGetValue(categoryName, out var nameMapping))
+                return false;
+
+            return nameMapping.TryGetValue(name, out id);
+        }
+
+        public bool TryGetInfo(int id, out MappingInfo info)
+        {
+            return _idToMappingInfo.TryGetValue(id, out info);
+        }
+
+        private Dictionary<string, Dictionary<string, int>> GetMapping(bool isInsMesh)
+        {
+            return isInsMesh ? _insMeshToId : _prefabToId;
+        }
+
+        public void Clear()
+        {
+            _insMeshToId.Clear();
+            _prefabToId.Clear();
+        }
+    }
+
     public enum GetBlockReason
     {
         Success,
@@ -45,6 +103,43 @@ namespace TerrainModule.Editor
         Ok,
         Continue,
         Break
+    }
+
+    public class EnvironmentInstanceEditRuntimeData
+    {
+        public int InstanceId;
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public Vector3 Scale;
+
+        public EnvironmentInstanceEditRuntimeData(int instanceId, Vector3 position, Quaternion rotation, Vector3 scale)
+        {
+            InstanceId = instanceId;
+            Position = position;
+            Rotation = rotation;
+            Scale = scale;
+        }
+    }
+
+    public class EnvironmentEditRuntimeData
+    {
+        public bool IsInstanceMesh;
+        public string CategoryName;
+        public string Name;
+
+        public List<EnvironmentInstanceEditRuntimeData> InstanceList = new List<EnvironmentInstanceEditRuntimeData>();
+
+        public EnvironmentEditRuntimeData(bool isInsMesh, string categoryName, string name)
+        {
+            IsInstanceMesh = isInsMesh;
+            CategoryName = categoryName;
+            Name = name;
+        }
+
+        public void AddInstance(int instanceId, Vector3 position, Quaternion rotation, Vector3 scale)
+        {
+            InstanceList.Add(new EnvironmentInstanceEditRuntimeData(instanceId, position, rotation, scale));
+        }
     }
 
     public class BlockEditRuntimeData
@@ -105,12 +200,14 @@ namespace TerrainModule.Editor
 
         public Dictionary<int, BlockEditRuntimeData> IdToBlockEditData = new Dictionary<int, BlockEditRuntimeData>();
 
+        public List<EnvironmentEditRuntimeData> EnvironmentEditDataList = new List<EnvironmentEditRuntimeData>();
+
         public ChunkEditRuntimeData(int id)
         {
             Id = id;
         }
 
-        public ChunkEditRuntimeData(ChunkEditData editData)
+        public ChunkEditRuntimeData(ChunkEditData editData, ref int evnInstanceId)
         {
             Id = editData.Id;
             IdToBlockEditData.Clear();
@@ -122,6 +219,41 @@ namespace TerrainModule.Editor
                 var blockRuntimeData = new BlockEditRuntimeData(blockData);
                 IdToBlockEditData.Add(blockRuntimeData.Id, blockRuntimeData);
             }
+            EnvironmentEditDataList.Clear();
+            for (int i = 0; i < editData.EnvironmentEditDataList.Count; i++)
+            {
+                var envData = editData.EnvironmentEditDataList[i];
+                var envEditData = GetEnvironmentEditData(envData.IsInstanceMesh, envData.CategoryName, envData.Name);
+                for (int j = 0; j < envData.InstanceList.Count; j++)
+                {
+                    var insData = envData.InstanceList[j];
+                    envEditData.AddInstance(++evnInstanceId, insData.Position, insData.Rotation, insData.Scale);
+                }
+            }
+        }
+
+        public void AddEnvironment(int instanceId, bool isInsMesh, string categoryName, string name, Vector3 position, Quaternion rotation, Vector3 scale)
+        {
+            var evnEditData = GetEnvironmentEditData(isInsMesh, categoryName, name);
+            evnEditData.AddInstance(instanceId, position, rotation, scale);
+        }
+
+        private EnvironmentEditRuntimeData GetEnvironmentEditData(bool isInsMesh, string categoryName, string name)
+        {
+            for (int i = 0; i < EnvironmentEditDataList.Count; i++)
+            {
+                var envEditData = EnvironmentEditDataList[i];
+                if (envEditData.IsInstanceMesh == isInsMesh &&
+                    envEditData.CategoryName == categoryName &&
+                    envEditData.Name == name)
+                {
+                    return envEditData;
+                }
+            }
+
+            var newEditData = new EnvironmentEditRuntimeData(isInsMesh, categoryName, name);
+            EnvironmentEditDataList.Add(newEditData);
+            return newEditData;
         }
     }
 
@@ -146,6 +278,8 @@ namespace TerrainModule.Editor
         public Material TerrainMaterial { get; private set; }
 
         public EnvironmentTemplateEditRuntimeData EnvironmentTemplateEditRuntimeData { get; private set; }
+        public TerrainEnvironmentIdMapping EnvironmentTemplateIdMapping { get; private set; } = new TerrainEnvironmentIdMapping();
+        public int EnvironmentInstanceId;
 
         public TerrainEditRuntimeData(TerrainEditData editData)
         {
@@ -163,7 +297,7 @@ namespace TerrainModule.Editor
                 if (chunk == null)
                     continue;
 
-                var chunkRuntimeData = new ChunkEditRuntimeData(chunk);
+                var chunkRuntimeData = new ChunkEditRuntimeData(chunk, ref EnvironmentInstanceId);
                 IdToChunkEditData.Add(chunkRuntimeData.Id, chunkRuntimeData);
             }
 
@@ -184,6 +318,25 @@ namespace TerrainModule.Editor
             if (EnvironmentTemplateEditData == null)
                 return;
             EnvironmentTemplateEditRuntimeData = new EnvironmentTemplateEditRuntimeData(EnvironmentTemplateEditData);
+            EnvironmentTemplateIdMapping.Clear();
+            for (int i = 0; i < EnvironmentTemplateEditRuntimeData.CategoryDataList.Count; i++)
+            {
+                var category = EnvironmentTemplateEditRuntimeData.CategoryDataList[i];
+                for (int j= 0; j < category.PrefabList.Count; j++)
+                {
+                    var prefab = category.PrefabList[i].Prefab.EditorInstance;
+                    if (prefab == null)
+                        continue;
+                    EnvironmentTemplateIdMapping.AddMapping(false, category.CategoryName, prefab.name);
+                }
+                for (int j = 0; j < category.InstanceMeshDataList.Count; j++)
+                {
+                    var prefab = category.InstanceMeshDataList[i].OriginObject.EditorInstance;
+                    if (prefab == null)
+                        continue;
+                    EnvironmentTemplateIdMapping.AddMapping(true, category.CategoryName, prefab.name);
+                }
+            }
         }
 
         public Vector3Int GetBlockNum()
@@ -352,7 +505,77 @@ namespace TerrainModule.Editor
 
         #region Block
 
-        #region GetData
+        #region Data
+
+        public void AddBlockData(int chunkId, int blockId, int blockTemplateId)
+        {
+            if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
+                return;
+            if (!IsValidBlockInChunkCoordinates(GetBlockInChunkCoordinatesWithId(blockId)))
+                return;
+
+            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunkEditRuntime))
+            {
+                chunkEditRuntime = new ChunkEditRuntimeData(chunkId);
+                IdToChunkEditData.Add(chunkId, chunkEditRuntime);
+            }
+
+            if (!chunkEditRuntime.IdToBlockEditData.TryGetValue(blockId, out var blockEditRuntimeData))
+            {
+                blockEditRuntimeData = new BlockEditRuntimeData(blockId, blockTemplateId);
+                chunkEditRuntime.IdToBlockEditData.Add(blockId, blockEditRuntimeData);
+            }
+        }
+
+        public void AddBlockData(int chunkId, int blockId, int blockTemplateId, Vector4 yTopValue, Vector4 yBottomValue)
+        {
+            if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
+                return;
+            if (!IsValidBlockInChunkCoordinates(GetBlockInChunkCoordinatesWithId(blockId)))
+                return;
+
+            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunkEditRuntime))
+            {
+                chunkEditRuntime = new ChunkEditRuntimeData(chunkId);
+                IdToChunkEditData.Add(chunkId, chunkEditRuntime);
+            }
+
+            if (!chunkEditRuntime.IdToBlockEditData.TryGetValue(blockId, out var blockEditRuntimeData))
+            {
+                blockEditRuntimeData = new BlockEditRuntimeData(blockId, blockTemplateId, yTopValue, yBottomValue);
+                chunkEditRuntime.IdToBlockEditData.Add(blockId, blockEditRuntimeData);
+            }
+        }
+
+        public void UpdateBlockData(int chunkId, int blockId, int blockTemplateId)
+        {
+            if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
+                return;
+            if (!IsValidBlockInChunkCoordinates(GetBlockInChunkCoordinatesWithId(blockId)))
+                return;
+
+            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunkEditRuntime))
+                return;
+
+            if (!chunkEditRuntime.IdToBlockEditData.TryGetValue(blockId, out var blockEditRuntimeData))
+                return;
+
+            blockEditRuntimeData.TemplateId = blockTemplateId;
+        }
+
+        public void RemoveBlockData(int chunkId, int blockId)
+        {
+            if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
+                return;
+            if (!IsValidBlockInChunkCoordinates(GetBlockInChunkCoordinatesWithId(blockId)))
+                return;
+
+            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunkEditRuntime))
+                return;
+
+            chunkEditRuntime.IdToBlockEditData.Remove(blockId);
+        }
+
         public bool TryGetBlock(int chunkId, int blockId, out BlockEditRuntimeData blockData, out GetBlockReason reason)
         {
             blockData = null;
@@ -404,6 +627,7 @@ namespace TerrainModule.Editor
 
             return TryGetBlock(chunkId, blockInChunkId, out blockData, out reason);
         }
+
         #endregion
 
         #region BlockInChunkId
@@ -560,6 +784,40 @@ namespace TerrainModule.Editor
 
         #endregion
 
+        #region Environment
+
+        public bool AddEnvironment(bool isInsMesh, string categoryName, string name, Vector3 position, Quaternion rotation, Vector3 scale)
+        {
+            if (!IsValid(position))
+                return false;
+
+            if (!TryGetChunk(position, out var chunkData, out _))
+                return false;
+
+            chunkData.AddEnvironment(++EnvironmentInstanceId, isInsMesh, categoryName, name, position, rotation, scale);
+            return true;
+        }
+
+        public bool TryGetEnvPrefabData(int id, out EnvironmentTemplatePrefabEditRuntimeData prefabData)
+        {
+            prefabData = null;
+            if (!EnvironmentTemplateIdMapping.TryGetInfo(id, out var info))
+                return false;
+
+            return EnvironmentTemplateEditRuntimeData.TryGetPrefab(info.CategoryName, info.Name, out prefabData);
+        }
+
+        public bool TryGetEnvInsMeshData(int id, out EnvironmentTemplateInstanceMeshEditRuntimeData insMeshData)
+        {
+            insMeshData = null;
+            if (!EnvironmentTemplateIdMapping.TryGetInfo(id, out var info))
+                return false;
+
+            return EnvironmentTemplateEditRuntimeData.TryGetInsMesh(info.CategoryName, info.Name, out insMeshData);
+        }
+
+        #endregion
+
         public bool IsValid(Vector3 position)
         {
             var size = TerrainSize();
@@ -570,75 +828,6 @@ namespace TerrainModule.Editor
             if (position.z < 0 || position.z >= size.z)
                 return false;
             return true;
-        }
-
-        public void AddBlockData(int chunkId, int blockId, int blockTemplateId)
-        {
-            if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
-                return;
-            if (!IsValidBlockInChunkCoordinates(GetBlockInChunkCoordinatesWithId(blockId)))
-                return;
-
-            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunkEditRuntime))
-            {
-                chunkEditRuntime = new ChunkEditRuntimeData(chunkId);
-                IdToChunkEditData.Add(chunkId, chunkEditRuntime);
-            }
-
-            if (!chunkEditRuntime.IdToBlockEditData.TryGetValue(blockId, out var blockEditRuntimeData))
-            {
-                blockEditRuntimeData = new BlockEditRuntimeData(blockId, blockTemplateId);
-                chunkEditRuntime.IdToBlockEditData.Add(blockId, blockEditRuntimeData);
-            }
-        }
-
-        public void AddBlockData(int chunkId, int blockId, int blockTemplateId, Vector4 yTopValue, Vector4 yBottomValue)
-        {
-            if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
-                return;
-            if (!IsValidBlockInChunkCoordinates(GetBlockInChunkCoordinatesWithId(blockId)))
-                return;
-
-            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunkEditRuntime))
-            {
-                chunkEditRuntime = new ChunkEditRuntimeData(chunkId);
-                IdToChunkEditData.Add(chunkId, chunkEditRuntime);
-            }
-
-            if (!chunkEditRuntime.IdToBlockEditData.TryGetValue(blockId, out var blockEditRuntimeData))
-            {
-                blockEditRuntimeData = new BlockEditRuntimeData(blockId, blockTemplateId, yTopValue, yBottomValue);
-                chunkEditRuntime.IdToBlockEditData.Add(blockId, blockEditRuntimeData);
-            }
-        }
-
-        public void UpdateBlockData(int chunkId, int blockId, int blockTemplateId)
-        {
-            if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
-                return;
-            if (!IsValidBlockInChunkCoordinates(GetBlockInChunkCoordinatesWithId(blockId)))
-                return;
-
-            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunkEditRuntime))
-                return;
-
-            if (!chunkEditRuntime.IdToBlockEditData.TryGetValue(blockId, out var blockEditRuntimeData))
-                return;
-
-            blockEditRuntimeData.TemplateId = blockTemplateId;
-        }
-
-        public void RemoveBlockData(int chunkId, int blockId)
-        {
-            if (!IsValidChunkCoordinates(GetChunkCoordinatesWithId(chunkId)))
-                return;
-            if (!IsValidBlockInChunkCoordinates(GetBlockInChunkCoordinatesWithId(blockId)))
-                return;
-
-            if (!IdToChunkEditData.TryGetValue(chunkId, out var chunkEditRuntime))
-                return;
-
-            chunkEditRuntime.IdToBlockEditData.Remove(blockId);
         }
 
         /// <summary>

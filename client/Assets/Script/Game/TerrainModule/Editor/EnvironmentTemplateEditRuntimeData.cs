@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Utility;
+using Extension;
 
 namespace TerrainModule.Editor
 {
@@ -157,6 +158,67 @@ namespace TerrainModule.Editor
             }
             return false;
         }
+
+        public bool TryGetPrefab(string name, out EnvironmentTemplatePrefabEditRuntimeData prefabData)
+        {
+            prefabData = null;
+            for (int i = 0; i < PrefabList.Count; i++)
+            {
+                var go = PrefabList[i].Prefab.EditorInstance;
+                if (go == null)
+                    continue;
+
+                if (go.name == name)
+                {
+                    prefabData = PrefabList[i];
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool TryGetInsMesh(string name, out EnvironmentTemplateInstanceMeshEditRuntimeData insMeshData)
+        {
+            insMeshData = null;
+            for (int i = 0; i < InstanceMeshDataList.Count; i++)
+            {
+                var go = InstanceMeshDataList[i].OriginObject.EditorInstance;
+                if (go == null)
+                    continue;
+
+                if (go.name == name)
+                {
+                    insMeshData = InstanceMeshDataList[i];
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool TryGetName(bool isInsMesh, int index, out string name)
+        {
+            name = string.Empty;
+            if (isInsMesh)
+            {
+                if (!InstanceMeshDataList.TryGet(index, out var insMeshData))
+                    return false;
+                var go = insMeshData.OriginObject.EditorInstance;
+                if (go == null)
+                    return false;
+                name = go.name;
+                return true;
+            }
+            else
+            {
+                if (!PrefabList.TryGet(index, out var insMeshData))
+                    return false;
+                var go = insMeshData.Prefab.EditorInstance;
+                if (go == null)
+                    return false;
+                name = go.name;
+                return true;
+            }
+        }
     }
 
     public class EnvironmentTemplateEditRuntimeData
@@ -236,6 +298,24 @@ namespace TerrainModule.Editor
 
             result = null;
             return false;
+        }
+
+        public bool TryGetPrefab(string categoryName, string name, out EnvironmentTemplatePrefabEditRuntimeData prefabData)
+        {
+            prefabData = null;
+            if (!TryGetCategory(categoryName, out var categoryData))
+                return false;
+
+            return categoryData.TryGetPrefab(name, out prefabData);
+        }
+
+        public bool TryGetInsMesh(string categoryName, string name, out EnvironmentTemplateInstanceMeshEditRuntimeData insMeshData)
+        {
+            insMeshData = null;
+            if (!TryGetCategory(categoryName, out var categoryData))
+                return false;
+
+            return categoryData.TryGetInsMesh(name, out insMeshData);
         }
 
         public AddInstanceMeshResult AddInstanceMesh(string categoryName, GameObject go)
