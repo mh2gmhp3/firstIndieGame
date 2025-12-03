@@ -23,19 +23,22 @@ namespace TerrainModule
         private MeshRenderer _renderer;
         private MeshCollider _collider;
 
-        public ChunkController(Transform parent, string terrainName, ChunkData data, Material material)
+        private TerrainEnvironmentController _environmentController;
+
+        public ChunkController(Transform parent, string terrainName, ChunkData data, Material material, TerrainEnvironmentController environmentController)
         {
             _parent = parent;
             _data = data;
-            var mesh = AssetSystem.LoadAsset<Mesh>(TerrainDefine.GetResourcesChunkMeshPath(terrainName, data.MeshName));
+            _environmentController = environmentController;
+            var mesh = AssetSystem.LoadAsset(data.Mesh);
             if (mesh == null)
             {
-                Log.LogError($"ChunkController.construct error mesh not found Name:{terrainName} MeshName:{data.MeshName}");
+                Log.LogError($"ChunkController.construct error mesh not found Name:{terrainName} MeshPath:{data.Mesh.ResourcePath}");
             }
             else
             {
                 _chunkMesh = mesh;
-                _go = new GameObject(data.MeshName);
+                _go = new GameObject(mesh.name);
                 _transform = _go.transform;
                 _filter = _go.AddComponent<MeshFilter>();
                 _renderer = _go.AddComponent<MeshRenderer>();
@@ -46,14 +49,45 @@ namespace TerrainModule
                 _filter.sharedMesh = _chunkMesh;
                 _renderer.sharedMaterial = material;
                 _collider.sharedMesh = _chunkMesh;
+
+                for (int i = 0; i < data.EnvironmentDataList.Count; i++)
+                {
+                    var envData = data.EnvironmentDataList[i];
+                    for (int j = 0; j < envData.InstanceList.Count; j++)
+                    {
+                        var instanceData = envData.InstanceList[j];
+                        if (envData.IsInstanceMesh)
+                        {
+                            _environmentController.AddMeshInstance(
+                                envData.Id,
+                                instanceData.InstanceId,
+                                instanceData.Position,
+                                instanceData.Rotation,
+                                instanceData.Scale);
+                        }
+                        else
+                        {
+                            _environmentController.AddPrefabInstance(
+                                envData.Id,
+                                instanceData.InstanceId,
+                                instanceData.Position,
+                                instanceData.Rotation,
+                                instanceData.Scale);
+                        }
+                    }
+                }
             }
         }
     }
 
     public class TerrainController : IUpdateTarget
     {
+        private Transform _parent;
         private TerrainData _terrainData;
         private Material _terrainMaterial;
+
+        private TerrainEnvironmentController _environmentController = new TerrainEnvironmentController();
+        private List<TerrainEnvironmentController.MeshSingleInfo> _meshSingleInfoCache = new List<TerrainEnvironmentController.MeshSingleInfo>();
 
         private Dictionary<int, ChunkController> _idToChunkController = new Dictionary<int, ChunkController>();
 
@@ -61,8 +95,10 @@ namespace TerrainModule
 
         public TerrainController(Transform parent, TerrainData data)
         {
+            _parent = parent;
             _terrainData = data;
             var chunkRootGo = new GameObject(data.name);
+            _environmentController.SetGetAction(GetEnvironmentPrefabInfo, GetEnvironmentMeshInfo);
             _chunkRoot = chunkRootGo.transform;
             _chunkRoot.SetParent(parent);
             _chunkRoot.Reset();
@@ -92,15 +128,55 @@ namespace TerrainModule
             for (int i = 0; i < _terrainData.ChunkDataList.Count; i++)
             {
                 var chunkData = _terrainData.ChunkDataList[i];
-                _idToChunkController.Add(chunkData.Id, new ChunkController(_chunkRoot, _terrainData.name, chunkData, _terrainMaterial));
+                var chunkController = new ChunkController(_chunkRoot, _terrainData.name, chunkData, _terrainMaterial, _environmentController);
+                _idToChunkController.Add(chunkData.Id, chunkController);
             }
+        }
+
+        private TerrainEnvironmentController.PrefabInfo GetEnvironmentPrefabInfo(int id)
+        {
+            var data = _terrainData.GetEnvPrefabData(id);
+            if (data == null)
+                return default;
+
+            var prefab = AssetSystem.LoadAsset(data.Prefab);
+            if (prefab == null)
+                return default;
+            return new TerrainEnvironmentController.PrefabInfo()
+            {
+                Prefab = prefab,
+                Parent = _chunkRoot
+            };
+        }
+
+        private TerrainEnvironmentController.MeshInfo GetEnvironmentMeshInfo(int id)
+        {
+            var data = _terrainData.GetEnvInsMeshData(id);
+            if (data == null)
+                return default;
+
+            _meshSingleInfoCache.Clear();
+            for (int i = 0; i < data.MeshSingleDataList.Count; i++)
+            {
+                var meshData = data.MeshSingleDataList[i];
+                _meshSingleInfoCache.Add(new TerrainEnvironmentController.MeshSingleInfo()
+                {
+                    Mesh = meshData.Mesh.EditorInstance,
+                    Material = meshData.Material.EditorInstance,
+                    Matrix = meshData.Matrix
+                });
+            }
+            return new TerrainEnvironmentController.MeshInfo()
+            {
+                MeshSingleInfoList = _meshSingleInfoCache
+            };
         }
 
         #region IUpdateTarget
 
         public void DoUpdate()
         {
-
+            _environmentController.Update();
         }
 
         public void DoFixedUpdate()
