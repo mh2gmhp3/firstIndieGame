@@ -65,6 +65,7 @@ namespace TerrainModule.Editor
         {
             _insMeshToId.Clear();
             _prefabToId.Clear();
+            _idToMappingInfo.Clear();
         }
     }
 
