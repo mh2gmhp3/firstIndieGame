@@ -1,7 +1,4 @@
 ﻿using Framework.Editor;
-using Framework.Editor.Utility;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,6 +17,10 @@ namespace TerrainModule.Editor
         private TerrainEditRuntimeData CurEditRuntimeData => _editorData.CurTerrainEditRuntimeData;
         private EnvironmentTemplateCategoryEditRuntimeData _curCategoryRuntimeData;
         private int _editDistance = 0;
+        private Vector3 _editPosition = Vector3.zero;
+        private Vector3 _editRotation = Vector3.zero;
+        private Vector3 _editScale = Vector3.one;
+        private bool _alignWithSurface = false;
 
         private string[] _categoryNames;
         private int _curSelectedCategoryIndex = -1;
@@ -56,6 +57,8 @@ namespace TerrainModule.Editor
             GUILayout.Space(5f);
             DrawEditorSetting();
             GUILayout.Space(5f);
+            DrawInstanceValue();
+            GUILayout.Space(5f);
             DrawGUI_CategoryData();
         }
 
@@ -71,20 +74,25 @@ namespace TerrainModule.Editor
             {
                 if (currentEvent.type == EventType.MouseMove)
                 {
-                    _editorData.TerrainEditorMgr.UpdateTerrainEnvironmentDraw(hit.point, Quaternion.identity, Vector3.one);
+                    GetDrawTransform(hit, out var position, out var rotation, out var scale);
+                    _editorData.TerrainEditorMgr.UpdateTerrainEnvironmentDraw(
+                        position,
+                        rotation,
+                        scale);
                     Repaint();
                 }
                 if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0)
                 {
                     if (_curCategoryRuntimeData.TryGetName(_drawPreviewSetting.IsInstanceMesh, _drawPreviewSetting.Index, out var name))
                     {
+                        GetSetTransform(hit, out var position, out var rotation, out var scale);
                         if (CurEditRuntimeData.AddEnvironment(
                             _drawPreviewSetting.IsInstanceMesh,
                             _drawPreviewSetting.CategoryName,
                             name,
-                            hit.point,
-                            Quaternion.identity,
-                            Vector3.one))
+                            position,
+                            rotation,
+                            scale))
                         {
                             if (CurEditRuntimeData.TryGetId(hit.point, out int chunkId, out _))
                                 _editorData.TerrainEditorMgr.RefreshChunkEnvironment(chunkId);
@@ -136,6 +144,20 @@ namespace TerrainModule.Editor
                     Mathf.Max(128, Mathf.Min((int)CurEditRuntimeData.TerrainSize().y, 512)));
             }
             EditorGUILayout.EndVertical();
+        }
+
+        private void DrawInstanceValue()
+        {
+            _editPosition = EditorGUILayout.Vector3Field("平移", _editPosition);
+            _editRotation = EditorGUILayout.Vector3Field("旋轉", _editRotation);
+            _editScale = EditorGUILayout.Vector3Field("縮放", _editScale);
+            _alignWithSurface = EditorGUILayout.Toggle("對齊表面", _alignWithSurface);
+            if (GUILayout.Button("重設"))
+            {
+                _editPosition = Vector3.zero;
+                _editRotation = Vector3.zero;
+                _editScale = Vector3.one;
+            }
         }
 
         private void DrawGUI_CategoryData()
@@ -308,6 +330,24 @@ namespace TerrainModule.Editor
             if (index < 0)
                 return;
             SelectCategory(_categoryNames[index]);
+        }
+
+        private void GetDrawTransform(RaycastHit hit, out Vector3 position, out Quaternion rotation, out Vector3 scale)
+        {
+            position = hit.point + _editPosition;
+            rotation = _alignWithSurface ?
+                Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(_editRotation) :
+                Quaternion.Euler(_editRotation);
+            scale = _editScale;
+        }
+
+        private void GetSetTransform(RaycastHit hit, out Vector3 position, out Quaternion rotation, out Vector3 scale)
+        {
+            position = hit.point + _editPosition;
+            rotation = _alignWithSurface ?
+                Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(_editRotation) :
+                Quaternion.Euler(_editRotation);
+            scale = _editScale;
         }
     }
 }
