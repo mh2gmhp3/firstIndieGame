@@ -2,9 +2,81 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 
 namespace TerrainModule
 {
+    [Serializable]
+    public class ChunkEnvironmentInstanceData
+    {
+        public int InstanceId;
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public Vector3 Scale;
+
+        public ChunkEnvironmentInstanceData(int instanceId, Vector3 position, Quaternion rotation, Vector3 scale)
+        {
+            InstanceId = instanceId;
+            Position = position;
+            Rotation = rotation;
+            Scale = scale;
+        }
+    }
+
+    [Serializable]
+    public class ChunkEnvironmentData
+    {
+        public bool IsInstanceMesh;
+        public int Id;
+        public List<ChunkEnvironmentInstanceData> InstanceList = new List<ChunkEnvironmentInstanceData>();
+
+        public ChunkEnvironmentData(bool isInsMesh, int id)
+        {
+            IsInstanceMesh = isInsMesh;
+            Id = id;
+        }
+    }
+
+    [Serializable]
+    public class EnvironmentPrefabData
+    {
+        public int Id;
+        public GameObjectIndirectField Prefab = new GameObjectIndirectField();
+
+        public EnvironmentPrefabData(int id, GameObjectIndirectField prefab)
+        {
+            Id = id;
+            prefab.CopyTo(Prefab);
+        }
+    }
+
+    [Serializable]
+    public class EnvironmentInstanceMeshSingleData
+    {
+        public MeshIndirectField Mesh = new MeshIndirectField();
+        public MaterialIndirectField Material = new MaterialIndirectField();
+        public Matrix4x4 Matrix;
+
+        public EnvironmentInstanceMeshSingleData(MeshIndirectField mesh, MaterialIndirectField material, Matrix4x4 matrix)
+        {
+            mesh.CopyTo(Mesh);
+            material.CopyTo(Material);
+            Matrix = matrix;
+        }
+    }
+
+    [Serializable]
+    public class EnvironmentInstanceMeshData
+    {
+        public int Id;
+        public List<EnvironmentInstanceMeshSingleData> MeshSingleDataList = new List<EnvironmentInstanceMeshSingleData>();
+
+        public EnvironmentInstanceMeshData(int id)
+        {
+            Id = id;
+        }
+    }
+
     [Serializable]
     public class BlockData
     {
@@ -17,8 +89,9 @@ namespace TerrainModule
     public class ChunkData
     {
         public int Id;
-        public string MeshName;
+        public MeshIndirectField Mesh = new MeshIndirectField();
         public List<BlockData> BlockDataList = new List<BlockData>();
+        public List<ChunkEnvironmentData> EnvironmentDataList = new List<ChunkEnvironmentData>();
 
         public ChunkData(int id)
         {
@@ -47,11 +120,34 @@ namespace TerrainModule
 
         public List<ChunkData> ChunkDataList = new List<ChunkData>();
 
+        public List<EnvironmentPrefabData> EnvironmentPrefabDataList = new List<EnvironmentPrefabData>();
+        public List<EnvironmentInstanceMeshData> EnvironmentInstanceMeshDataList = new List<EnvironmentInstanceMeshData>();
+
         public TerrainData(Vector3Int blockSize, Vector3Int chunkBlockNum, Vector3Int chunkNum)
         {
             BlockSize = blockSize;
             ChunkBlockNum = chunkBlockNum;
             ChunkNum = chunkNum;
+        }
+
+        public EnvironmentPrefabData GetEnvPrefabData(int id)
+        {
+            for (int i = 0; i < EnvironmentPrefabDataList.Count; i++)
+            {
+                if (EnvironmentPrefabDataList[i].Id == id)
+                    return EnvironmentPrefabDataList[i];
+            }
+            return null;
+        }
+
+        public EnvironmentInstanceMeshData GetEnvInsMeshData(int id)
+        {
+            for (int i = 0; i < EnvironmentInstanceMeshDataList.Count; i++)
+            {
+                if (EnvironmentInstanceMeshDataList[i].Id == id)
+                    return EnvironmentInstanceMeshDataList[i];
+            }
+            return null;
         }
     }
 }

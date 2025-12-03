@@ -3,7 +3,6 @@ using System.IO;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using static TerrainModule.Editor.TerrainEditorManager;
 
 namespace TerrainModule.Editor
 {
@@ -91,6 +90,43 @@ namespace TerrainModule.Editor
                 EditorUtility.DisplayProgressBar(title, "輸出地形材質", 0.1f);
             }
 
+            //環境物件
+            var envIdMapping = CurTerrainEditRuntimeData.EnvironmentTemplateIdMapping;
+            if (CurTerrainEditRuntimeData.EnvironmentTemplateEditRuntimeData != null)
+            {
+                var envTemplateData = CurTerrainEditRuntimeData.EnvironmentTemplateEditRuntimeData;
+                for (int i = 0; i < envTemplateData.CategoryDataList.Count; i++)
+                {
+                    var categoryData = envTemplateData.CategoryDataList[i];
+                    for (int j = 0; j < categoryData.PrefabList.Count; j++)
+                    {
+                        var prefabData = categoryData.PrefabList[j];
+                        var prefab = prefabData.Prefab.EditorInstance;
+                        if (prefab == null)
+                            continue;
+                        if (!envIdMapping.TryGetId(false, categoryData.CategoryName, prefab.name, out var id))
+                            continue;
+                        terrainData.EnvironmentPrefabDataList.Add(new EnvironmentPrefabData(id, prefabData.Prefab));
+                    }
+                    for (int j = 0; j < categoryData.InstanceMeshDataList.Count; j++)
+                    {
+                        var insMeshData = categoryData.InstanceMeshDataList[j];
+                        var prefab = insMeshData.OriginObject.EditorInstance;
+                        if (prefab == null)
+                            continue;
+                        if (!envIdMapping.TryGetId(true, categoryData.CategoryName, prefab.name, out var id))
+                            continue;
+                        var meshData = new EnvironmentInstanceMeshData(id);
+                        for (int s = 0; s < insMeshData.MeshSingleDataList.Count; s++)
+                        {
+                            var singleData = insMeshData.MeshSingleDataList[s];
+                            meshData.MeshSingleDataList.Add(new EnvironmentInstanceMeshSingleData(singleData.Mesh, singleData.Material, singleData.Matrix));
+                        }
+                        terrainData.EnvironmentInstanceMeshDataList.Add(meshData);
+                    }
+                }
+            }
+
             var meshFolderPath = TerrainDefine.GetExportChunkMeshFolderPath(dataName);
             Directory.CreateDirectory(meshFolderPath);
             var chunkCount = CurTerrainEditRuntimeData.IdToChunkEditData.Count;
@@ -101,8 +137,25 @@ namespace TerrainModule.Editor
                 var chunkMesh = TerrainEditorUtility.CreateChunkMesh(CurTerrainEditRuntimeData, chunkEditData.Id);
                 chunkMesh.name = $"Chunk_{chunkEditData.Id}";
                 var chunkData = GetChunkData(chunkEditData.Id);
-                chunkData.MeshName = chunkMesh.name;
                 AssetDatabase.CreateAsset(chunkMesh, TerrainDefine.GetExportChunkMeshPath(dataName, chunkMesh.name));
+                chunkData.Mesh.EditorInstance = chunkMesh;
+                for (int i = 0; i < chunkEditData.EnvironmentEditDataList.Count; i++)
+                {
+                    var envEditData = chunkEditData.EnvironmentEditDataList[i];
+                    if (!envIdMapping.TryGetId(envEditData.IsInstanceMesh, envEditData.CategoryName, envEditData.Name, out var id))
+                        continue;
+                    var envData = new ChunkEnvironmentData(envEditData.IsInstanceMesh, id);
+                    for (int j = 0; j < envEditData.InstanceList.Count; j++)
+                    {
+                        var insEditData = envEditData.InstanceList[j];
+                        envData.InstanceList.Add(new ChunkEnvironmentInstanceData(
+                            insEditData.InstanceId,
+                            insEditData.Position,
+                            insEditData.Rotation,
+                            insEditData.Scale));
+                    }
+                    chunkData.EnvironmentDataList.Add(envData);
+                }
                 exportedChunkCount++;
                 EditorUtility.DisplayProgressBar(
                     title,
