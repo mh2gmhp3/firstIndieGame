@@ -3,6 +3,7 @@ using Logging;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 using UObject = UnityEngine.Object;
 
 namespace AssetModule
@@ -101,6 +102,18 @@ namespace AssetModule
             return _instance.DoLoadAsset<T>(path);
         }
 
+        /// <summary>
+        /// 讀取資源
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="objectIndirectField"></param>
+        /// <returns></returns>
+        public static T LoadAsset<T>(ObjectIndirectField<T> objectIndirectField)
+            where T : UObject
+        {
+            return _instance.DoLoadAsset<T>(objectIndirectField.ResourcePath);
+        }
+
         private T DoLoadAsset<T>(string path)
             where T : UObject
         {
@@ -134,6 +147,18 @@ namespace AssetModule
         public static void LoadAssetAsync(string path, Action<UObject> onLoaded)
         {
             _instance.DoLoadAssetAsync(path, onLoaded);
+        }
+
+        /// <summary>
+        /// 非同步讀取資源
+        /// 作用於EnterGameFlowStep與Update
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="objectIndirectField"></param>
+        /// <param name="onLoaded"></param>
+        public static void LoadAssetAsync<T>(ObjectIndirectField<T> objectIndirectField, Action<UObject> onLoaded) where T : UObject
+        {
+            _instance.DoLoadAssetAsync(objectIndirectField.ResourcePath, onLoaded);
         }
 
         private void DoLoadAssetAsync(string path, Action<UObject> onLoaded)
