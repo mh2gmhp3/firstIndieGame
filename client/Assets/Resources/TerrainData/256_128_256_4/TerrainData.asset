@@ -17,14 +17,5017 @@ MonoBehaviour:
   ChunkNum: {x: 16, y: 8, z: 16}
   ChunkDataList:
   - Id: 0
-    MeshName: Chunk_0
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_0.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_0
+      _guid: c9291f7cab4584543a3361c472ff5172
     BlockDataList: []
+    EnvironmentDataList:
+    - IsInstanceMesh: 0
+      Id: 1
+      InstanceList:
+      - InstanceId: 1
+        Position: {x: 11.50881, y: 4, z: 29.425282}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 2
+        Position: {x: 12.841492, y: 4, z: 13.555583}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 3
+        Position: {x: 30.13549, y: 4, z: 6.2638893}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 4
+        Position: {x: 27.412987, y: 4, z: 28.475578}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 5
+        Position: {x: 15.928005, y: 4, z: 17.796299}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 6
+        Position: {x: 46.627655, y: 12, z: 23.519312}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 7
+        Position: {x: 62.353333, y: 4, z: 11.782966}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 8
+        Position: {x: 22.474838, y: 4, z: 34.802277}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 9
+        Position: {x: 22.066362, y: 4, z: 28.2339}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 10
+        Position: {x: 21.046175, y: 4, z: 25.220009}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 11
+        Position: {x: 15.791224, y: 3.999999, z: 30.842384}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 12
+        Position: {x: 16.42642, y: 4, z: 26.721003}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+    - IsInstanceMesh: 1
+      Id: 2
+      InstanceList:
+      - InstanceId: 13
+        Position: {x: 8.137482, y: 4, z: 37.05703}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 14
+        Position: {x: 8.536985, y: 4, z: 20.901215}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 15
+        Position: {x: 10.366188, y: 4, z: 8.171015}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 16
+        Position: {x: 21.450785, y: 4, z: 3.868865}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 17
+        Position: {x: 20.19497, y: 4, z: 13.694893}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 18
+        Position: {x: 42.866444, y: 1.6000004, z: 53.834957}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 19
+        Position: {x: 48.039097, y: 12.000001, z: 25.482012}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 20
+        Position: {x: 49.023438, y: 12, z: 28.806837}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 21
+        Position: {x: 44, y: 10.552117, z: 32.791748}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 22
+        Position: {x: 39.102737, y: 7.5513687, z: 31.43417}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 23
+        Position: {x: 37.693848, y: 6.846924, z: 30.844866}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 24
+        Position: {x: 37.557877, y: 6.7789383, z: 30.754107}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 25
+        Position: {x: 24.127031, y: 4, z: 42.735374}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 26
+        Position: {x: 16.086258, y: 4, z: 47.348427}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 27
+        Position: {x: 10.856682, y: 4, z: 46.58044}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 28
+        Position: {x: 6.8424706, y: 4, z: 46.7995}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 29
+        Position: {x: 8.089794, y: 4, z: 62.771477}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 30
+        Position: {x: 6.952498, y: 4, z: 51.045036}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 31
+        Position: {x: 4.8733144, y: 4, z: 53.231693}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 32
+        Position: {x: 61.86428, y: 11.999999, z: 38.871384}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 4.74, z: 1}
+      - InstanceId: 33
+        Position: {x: 54.417625, y: 12, z: 26.843403}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 4.74, z: 1}
+      - InstanceId: 34
+        Position: {x: 27.84615, y: 4, z: 57.556473}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 4.74, z: 1}
+      - InstanceId: 35
+        Position: {x: 30.857239, y: 7.402731, z: 60}
+        Rotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+        Scale: {x: 1, y: 4.74, z: 1}
+      - InstanceId: 36
+        Position: {x: 39.081337, y: 10.109392, z: 60.000008}
+        Rotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+        Scale: {x: 1, y: 4.74, z: 1}
+      - InstanceId: 37
+        Position: {x: 29.930748, y: 4, z: 39.279957}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 4.74, z: 1}
+      - InstanceId: 38
+        Position: {x: 58.60543, y: 4, z: 19.807167}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 39
+        Position: {x: 63.40757, y: 4, z: 19.379004}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 40
+        Position: {x: 62.780136, y: 4, z: 23.403847}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 41
+        Position: {x: 40.569214, y: 8, z: 20.769424}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 42
+        Position: {x: 47.855366, y: 4, z: 15.366344}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 43
+        Position: {x: 53.54248, y: 4, z: 10.164859}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 44
+        Position: {x: 49.88307, y: 4, z: 9.58868}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 45
+        Position: {x: 45.037766, y: 4, z: 11.619893}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 46
+        Position: {x: 40.95929, y: 4, z: 14.435968}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 47
+        Position: {x: 39.880028, y: 4, z: 15.584056}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 48
+        Position: {x: 44.544003, y: 4.000002, z: 15.941017}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 49
+        Position: {x: 48.531685, y: 4, z: 13.659264}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 50
+        Position: {x: 52.84955, y: 4, z: 12.4936495}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 51
+        Position: {x: 57.442677, y: 4, z: 14.460299}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 52
+        Position: {x: 54.861195, y: 4, z: 17.821154}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 53
+        Position: {x: 47.90358, y: 4.000002, z: 17.661934}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 54
+        Position: {x: 44.285812, y: 4, z: 17.246433}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 55
+        Position: {x: 42.900803, y: 4, z: 14.802296}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 56
+        Position: {x: 44.25534, y: 4, z: 13.5490055}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 57
+        Position: {x: 46.804726, y: 4, z: 13.476053}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 58
+        Position: {x: 46.584213, y: 4, z: 14.006873}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 59
+        Position: {x: 44.241196, y: 4, z: 15.866817}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 60
+        Position: {x: 41.961945, y: 4, z: 16.386438}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 61
+        Position: {x: 41.12848, y: 4, z: 17.593758}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 62
+        Position: {x: 39.908916, y: 4, z: 17.364895}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 63
+        Position: {x: 37.677658, y: 6.838829, z: 22.897465}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 64
+        Position: {x: 35.915306, y: 5.9576516, z: 24.460375}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 65
+        Position: {x: 33.64219, y: 4.821094, z: 23.737}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 66
+        Position: {x: 31.236904, y: 3.9999995, z: 16.321846}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 67
+        Position: {x: 33.68385, y: 4, z: 14.679865}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 68
+        Position: {x: 37.08971, y: 6.544855, z: 22.053724}
+        Rotation: {x: 0, y: 0, z: 0.22975294, w: 0.973249}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 69
+        Position: {x: 35.099983, y: 5.5499916, z: 23.661297}
+        Rotation: {x: 0, y: 0, z: 0.22975294, w: 0.973249}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 70
+        Position: {x: 34.42574, y: 5.2128706, z: 23.700573}
+        Rotation: {x: 0, y: 0, z: 0.22975294, w: 0.973249}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 71
+        Position: {x: 32.081364, y: 4.0406823, z: 24.183697}
+        Rotation: {x: 0, y: 0, z: 0.22975294, w: 0.973249}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 72
+        Position: {x: 35.087997, y: 5.543998, z: 28.583652}
+        Rotation: {x: 0, y: 0, z: 0.22975294, w: 0.973249}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 73
+        Position: {x: 35.19657, y: 5.598287, z: 28.581059}
+        Rotation: {x: 0, y: 0, z: 0.22975294, w: 0.973249}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 74
+        Position: {x: 34.02981, y: 5.014906, z: 21.675459}
+        Rotation: {x: 0, y: 0, z: 0.22975294, w: 0.973249}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 75
+        Position: {x: 34.043346, y: 5.0216737, z: 21.563206}
+        Rotation: {x: 0, y: 0, z: 0.22975294, w: 0.973249}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 76
+        Position: {x: 34.4328, y: 3.9999995, z: 19.904158}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 77
+        Position: {x: 34.22261, y: 4.0000005, z: 16.064182}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 78
+        Position: {x: 33.882492, y: 4, z: 13.191821}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 79
+        Position: {x: 36.484997, y: 4.0000005, z: 12.471073}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 80
+        Position: {x: 37.677635, y: 4, z: 14.344858}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 81
+        Position: {x: 37.125942, y: 4, z: 15.330414}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 82
+        Position: {x: 34.84521, y: 3.9999995, z: 15.305126}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 83
+        Position: {x: 34.808277, y: 4.0000005, z: 12.617004}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 84
+        Position: {x: 36.09773, y: 4, z: 11.528032}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 85
+        Position: {x: 38.18439, y: 4, z: 11.180607}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 86
+        Position: {x: 39.2697, y: 4.0000005, z: 11.700331}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 87
+        Position: {x: 42.612633, y: 4, z: 13.843342}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 88
+        Position: {x: 41.500435, y: 4, z: 12.282686}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 89
+        Position: {x: 42.07639, y: 4, z: 10.001111}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 90
+        Position: {x: 43.935024, y: 4, z: 9.675863}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 91
+        Position: {x: 44.654778, y: 3.9999998, z: 9.950837}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 92
+        Position: {x: 44.82084, y: 4, z: 8.826691}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 93
+        Position: {x: 43.012646, y: 4, z: 7.1210947}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 94
+        Position: {x: 41.85432, y: 4, z: 7.422984}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 95
+        Position: {x: 42.03018, y: 4, z: 6.628962}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 96
+        Position: {x: 42.917046, y: 3.9999998, z: 6.1716337}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 97
+        Position: {x: 44.77897, y: 4, z: 6.2536488}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 98
+        Position: {x: 45.49979, y: 4, z: 6.6968427}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 99
+        Position: {x: 46.24384, y: 4, z: 7.3756}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 100
+        Position: {x: 47.34275, y: 3.9999998, z: 9.42923}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 101
+        Position: {x: 47.61227, y: 4, z: 10.397245}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 102
+        Position: {x: 50.758533, y: 4.0000005, z: 13.290452}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 103
+        Position: {x: 51.36115, y: 4, z: 10.622845}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 104
+        Position: {x: 52.956707, y: 3.9999995, z: 8.865135}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 105
+        Position: {x: 55.31532, y: 4, z: 9.22055}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 106
+        Position: {x: 55.953087, y: 4, z: 11.730807}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 107
+        Position: {x: 55.057392, y: 4, z: 14.560811}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 108
+        Position: {x: 53.796665, y: 4, z: 17.239067}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 109
+        Position: {x: 55.491444, y: 4, z: 11.281131}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 110
+        Position: {x: 57.228188, y: 4, z: 8.802599}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 111
+        Position: {x: 59.194416, y: 4, z: 10.681213}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 112
+        Position: {x: 60.161686, y: 4, z: 12.384466}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 113
+        Position: {x: 59.238583, y: 4, z: 13.783848}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 114
+        Position: {x: 60.42923, y: 4, z: 17.22975}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 115
+        Position: {x: 61.484665, y: 4, z: 21.995117}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 116
+        Position: {x: 57.96651, y: 4.0000005, z: 24.931408}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
   - Id: 1
-    MeshName: Chunk_1
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_1.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_1
+      _guid: 8b995d298c0500d4dbad2f7113be541b
     BlockDataList: []
+    EnvironmentDataList:
+    - IsInstanceMesh: 0
+      Id: 1
+      InstanceList:
+      - InstanceId: 117
+        Position: {x: 72.72454, y: 8, z: 17.728527}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 118
+        Position: {x: 73.06326, y: 9.098815, z: 36}
+        Rotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 119
+        Position: {x: 85.14014, y: 9.622954, z: 32}
+        Rotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 120
+        Position: {x: 88.38001, y: 16, z: 33.45581}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+    - IsInstanceMesh: 1
+      Id: 2
+      InstanceList:
+      - InstanceId: 121
+        Position: {x: 89.10252, y: 16.551256, z: 38.69603}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 122
+        Position: {x: 97.02859, y: 21.026691, z: 40.000004}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 123
+        Position: {x: 99.839386, y: 22.796268, z: 40}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 124
+        Position: {x: 106.24138, y: 26.191542, z: 40}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 125
+        Position: {x: 110.9898, y: 28, z: 40.216682}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 126
+        Position: {x: 115.99999, y: 29.620117, z: 40.620625}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 127
+        Position: {x: 118.0122, y: 31.267292, z: 40}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 128
+        Position: {x: 107.200485, y: 4.000004, z: 12.175138}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 129
+        Position: {x: 95.301765, y: 4, z: 9.259794}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 130
+        Position: {x: 101.18258, y: 14.671745, z: 32}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 131
+        Position: {x: 91.1767, y: 6.3102493, z: 32}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 132
+        Position: {x: 74.4332, y: 5.064003, z: 26.935997}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 133
+        Position: {x: 93.012024, y: 8.089977, z: 32}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 134
+        Position: {x: 94.88463, y: 11.926804, z: 32}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 135
+        Position: {x: 101.29857, y: 15.187618, z: 32}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 136
+        Position: {x: 117.47429, y: 19.012718, z: 31.999996}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 137
+        Position: {x: 126.57021, y: 14.5619545, z: 32.000004}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 138
+        Position: {x: 109.13492, y: 4, z: 23.188911}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 139
+        Position: {x: 88.33835, y: 4, z: 15.511801}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 140
+        Position: {x: 125.261536, y: 3.9999962, z: 10.233321}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 141
+        Position: {x: 95.80598, y: 4, z: 10.29324}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 142
+        Position: {x: 71.74609, y: 7.746086, z: 11.800465}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 143
+        Position: {x: 68.22044, y: 9.323278, z: 36}
+        Rotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 144
+        Position: {x: 72.71567, y: 12, z: 38.199112}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 145
+        Position: {x: 74.55792, y: 4.0093975, z: 8.0094}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 146
+        Position: {x: 87.906136, y: 4, z: 10.367334}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 147
+        Position: {x: 85.395386, y: 4, z: 19.983229}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 148
+        Position: {x: 76.18491, y: 8, z: 15.228213}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 149
+        Position: {x: 85.28515, y: 16, z: 33.18502}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 150
+        Position: {x: 103.36058, y: 4, z: 16.147955}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 151
+        Position: {x: 102.57859, y: 4.000001, z: 15.974554}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 152
+        Position: {x: 98.53474, y: 4, z: 16.172852}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 153
+        Position: {x: 102.49671, y: 4, z: 25.75291}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 154
+        Position: {x: 96.55801, y: 3.999999, z: 25.19278}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 155
+        Position: {x: 66.95548, y: 4, z: 16.706764}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 156
+        Position: {x: 68.70373, y: 4.703726, z: 15.741312}
+        Rotation: {x: 0, y: 0, z: 0.38268346, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 157
+        Position: {x: 69.45976, y: 5.4597583, z: 15.350969}
+        Rotation: {x: 0, y: 0, z: 0.38268346, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 158
+        Position: {x: 69.760345, y: 5.7603416, z: 15.390364}
+        Rotation: {x: 0, y: 0, z: 0.38268346, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 159
+        Position: {x: 69.923294, y: 5.923295, z: 12.85951}
+        Rotation: {x: 0, y: 0, z: 0.38268346, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 160
+        Position: {x: 71.15734, y: 7.157337, z: 13.211323}
+        Rotation: {x: 0, y: 0, z: 0.38268346, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 161
+        Position: {x: 71.86812, y: 7.868121, z: 14.996901}
+        Rotation: {x: 0, y: 0, z: 0.38268346, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 162
+        Position: {x: 74.23307, y: 8, z: 17.487873}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 163
+        Position: {x: 75.12776, y: 8, z: 19.784492}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 164
+        Position: {x: 74.0582, y: 8, z: 13.13398}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 165
+        Position: {x: 75.7525, y: 7.7450175, z: 11.745018}
+        Rotation: {x: -0.38268346, y: 0, z: 0, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 166
+        Position: {x: 80.064606, y: 6.377212, z: 10.377211}
+        Rotation: {x: -0.38268346, y: 0, z: 0, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 167
+        Position: {x: 81.19701, y: 5.9437137, z: 9.943714}
+        Rotation: {x: -0.38268346, y: 0, z: 0, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 168
+        Position: {x: 82.22399, y: 5.77601, z: 12.697527}
+        Rotation: {x: 0, y: 0, z: -0.38268346, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 169
+        Position: {x: 83.13122, y: 4.8687844, z: 10.985519}
+        Rotation: {x: 0, y: 0, z: -0.38268346, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 170
+        Position: {x: 82.52488, y: 5.4751177, z: 16.306208}
+        Rotation: {x: 0, y: 0, z: -0.38268346, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 171
+        Position: {x: 80.92575, y: 7.074253, z: 16.978191}
+        Rotation: {x: 0, y: 0, z: -0.38268346, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 172
+        Position: {x: 81.94585, y: 6.0541506, z: 15.013553}
+        Rotation: {x: 0, y: 0, z: -0.38268346, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 173
+        Position: {x: 83.22724, y: 4.772756, z: 14.086491}
+        Rotation: {x: 0, y: 0, z: -0.38268346, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 174
+        Position: {x: 84.30021, y: 3.9999995, z: 13.799367}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 175
+        Position: {x: 88.497826, y: 4.0000005, z: 17.610271}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 176
+        Position: {x: 91.47036, y: 4, z: 20.153286}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 177
+        Position: {x: 92.56256, y: 4, z: 20.986687}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 178
+        Position: {x: 93.44582, y: 4, z: 18.34051}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 179
+        Position: {x: 96.229034, y: 4, z: 22.08522}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 180
+        Position: {x: 95.24265, y: 3.9999998, z: 23.442343}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 181
+        Position: {x: 94.648056, y: 4, z: 20.5461}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 182
+        Position: {x: 93.99516, y: 4, z: 17.93182}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 183
+        Position: {x: 93.36941, y: 4, z: 16.08422}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 184
+        Position: {x: 95.10153, y: 4, z: 16.806177}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 185
+        Position: {x: 98.55733, y: 4, z: 22.451681}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 186
+        Position: {x: 99.04027, y: 3.9999998, z: 25.482174}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 187
+        Position: {x: 106.100586, y: 4, z: 31.113012}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 188
+        Position: {x: 100.55107, y: 4, z: 30.578346}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 189
+        Position: {x: 98.175896, y: 4, z: 29.507786}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 190
+        Position: {x: 101.36521, y: 4, z: 28.44282}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 191
+        Position: {x: 107.92239, y: 4, z: 27.438068}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 192
+        Position: {x: 73.11529, y: 4, z: 2.6286232}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 193
+        Position: {x: 73.38756, y: 4, z: 2.9962392}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 194
+        Position: {x: 86.08278, y: 4, z: 2.8784537}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 195
+        Position: {x: 89.40398, y: 4, z: 3.989513}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 196
+        Position: {x: 89.859856, y: 4, z: 6.8030815}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 197
+        Position: {x: 89.021126, y: 4, z: 9.141924}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 198
+        Position: {x: 88.886734, y: 4, z: 9.2870655}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 199
+        Position: {x: 85.54156, y: 4, z: 5.3432508}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 200
+        Position: {x: 82.300896, y: 4, z: 3.4169993}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 201
+        Position: {x: 81.43545, y: 4.000001, z: 2.6835237}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 202
+        Position: {x: 80.79274, y: 3.999999, z: 2.5050979}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 203
+        Position: {x: 78.26055, y: 4, z: 2.99545}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 204
+        Position: {x: 80.969666, y: 4, z: 5.699724}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 205
+        Position: {x: 87.20291, y: 4, z: 4.394242}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 206
+        Position: {x: 89.067245, y: 3.999999, z: 2.297809}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 207
+        Position: {x: 90.305885, y: 4.000001, z: 1.0787781}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 208
+        Position: {x: 90.6253, y: 4, z: 0.73022056}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 209
+        Position: {x: 87.00137, y: 4, z: 0.99428904}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 210
+        Position: {x: 85.351135, y: 3.999999, z: 0.98788327}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 211
+        Position: {x: 82.05967, y: 4, z: 0.663369}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 212
+        Position: {x: 82.18022, y: 4.980568, z: 8.980567}
+        Rotation: {x: -0.38268346, y: 0, z: 0, w: 0.92387956}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 213
+        Position: {x: 87.46279, y: 4, z: 47.706196}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 214
+        Position: {x: 89.49199, y: 3.999999, z: 47.527115}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 215
+        Position: {x: 91.426544, y: 4, z: 46.206017}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 216
+        Position: {x: 96.35995, y: 3.9999995, z: 48.383026}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 217
+        Position: {x: 99.49295, y: 4.0000005, z: 47.81404}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 218
+        Position: {x: 92.222946, y: 4, z: 50.739998}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 219
+        Position: {x: 88.50543, y: 4, z: 51.059383}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 220
+        Position: {x: 92.05396, y: 4.0000005, z: 53.475765}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 221
+        Position: {x: 93.227776, y: 4, z: 54.860004}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 222
+        Position: {x: 96.31735, y: 3.9999995, z: 50.679314}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 223
+        Position: {x: 84.64003, y: 4, z: 49.63212}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 224
+        Position: {x: 84.97481, y: 4, z: 51.35902}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 225
+        Position: {x: 79.78732, y: 4.0000005, z: 47.384167}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 226
+        Position: {x: 80.91284, y: 4, z: 51.104923}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 227
+        Position: {x: 82.48166, y: 4, z: 51.9005}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 228
+        Position: {x: 77.27763, y: 4, z: 51.414497}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
   - Id: 2
-    MeshName: Chunk_2
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_2.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_2
+      _guid: f622c1d4c33974f45897af66a04a5e46
     BlockDataList: []
+    EnvironmentDataList:
+    - IsInstanceMesh: 1
+      Id: 2
+      InstanceList:
+      - InstanceId: 229
+        Position: {x: 128, y: 32.268566, z: 42.470184}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 230
+        Position: {x: 130.80414, y: 36, z: 41.109253}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 231
+        Position: {x: 135.8884, y: 39.9442, z: 39.725136}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 232
+        Position: {x: 128, y: 42.12836, z: 35.825924}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 233
+        Position: {x: 128, y: 43.46288, z: 34.473755}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 234
+        Position: {x: 135.99998, y: 46.498222, z: 34.130424}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 235
+        Position: {x: 136, y: 47.483147, z: 32.74685}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 236
+        Position: {x: 140.76227, y: 43.481426, z: 31.999998}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 237
+        Position: {x: 137.2234, y: 19.79852, z: 32}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 238
+        Position: {x: 134.25581, y: 20.65345, z: 32}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 239
+        Position: {x: 146.15738, y: 4, z: 8.311295}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 240
+        Position: {x: 148.74965, y: 4, z: 8.136515}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 241
+        Position: {x: 140, y: 57.00596, z: 35.4227}
+        Rotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 242
+        Position: {x: 136, y: 60.079475, z: 32.117622}
+        Rotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 243
+        Position: {x: 153.60675, y: 56.062187, z: 31.999996}
+        Rotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 244
+        Position: {x: 162.54837, y: 38.706554, z: 32}
+        Rotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 245
+        Position: {x: 144.79959, y: 30.614464, z: 32}
+        Rotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+        Scale: {x: 1, y: 1, z: 1}
   - Id: 258
-    MeshName: Chunk_258
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_258.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_258
+      _guid: f818dc98c2e03894285fcc1934adfc32
     BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 17
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_17.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_17
+      _guid: a80d7bb89f8fc25419dbbb3a78158965
+    BlockDataList: []
+    EnvironmentDataList:
+    - IsInstanceMesh: 1
+      Id: 2
+      InstanceList:
+      - InstanceId: 246
+        Position: {x: 75.85083, y: 4, z: 91.925095}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 247
+        Position: {x: 83.336685, y: 4.000002, z: 92.38685}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 248
+        Position: {x: 102.62936, y: 4, z: 94.27938}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 249
+        Position: {x: 109.19738, y: 4, z: 97.84583}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 250
+        Position: {x: 110.33299, y: 4, z: 109.734825}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 251
+        Position: {x: 98.38748, y: 4.000002, z: 117.48463}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 252
+        Position: {x: 92.20638, y: 4, z: 122.07454}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 253
+        Position: {x: 89.7619, y: 4, z: 123.6978}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 254
+        Position: {x: 64.59597, y: 4.000002, z: 124.33028}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+  - Id: 16
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_16.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_16
+      _guid: 6a0e31806ac9a2d42a5c6b9c9a112920
+    BlockDataList: []
+    EnvironmentDataList:
+    - IsInstanceMesh: 1
+      Id: 2
+      InstanceList:
+      - InstanceId: 255
+        Position: {x: 29.308067, y: 16, z: 66.14413}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 256
+        Position: {x: 35.025597, y: 16, z: 72.35087}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 257
+        Position: {x: 29.51356, y: 15.999998, z: 72.22659}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 258
+        Position: {x: 31.764456, y: 4, z: 101.44915}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 259
+        Position: {x: 39.389343, y: 4, z: 102.43959}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 260
+        Position: {x: 30.182394, y: 4, z: 104.61193}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 261
+        Position: {x: 34.02601, y: 4, z: 113.35307}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 262
+        Position: {x: 50.926735, y: 4.000002, z: 125.97562}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 263
+        Position: {x: 62.154694, y: 4.000002, z: 115.72655}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 264
+        Position: {x: 57.986263, y: 4.000002, z: 108.94095}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 265
+        Position: {x: 36.92601, y: 3.999998, z: 100.60014}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 266
+        Position: {x: 37.971287, y: 4, z: 109.484886}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 267
+        Position: {x: 46.332245, y: 4.000002, z: 113.667496}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 268
+        Position: {x: 46.84743, y: 4, z: 113.64188}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 269
+        Position: {x: 37.204597, y: 4, z: 107.14479}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 270
+        Position: {x: 37.050632, y: 4, z: 106.96127}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 271
+        Position: {x: 42.743572, y: 4.000002, z: 104.576965}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 272
+        Position: {x: 44.858093, y: 3.999998, z: 103.92056}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 273
+        Position: {x: 46.64893, y: 4, z: 98.14662}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 274
+        Position: {x: 48.272297, y: 4, z: 92.040146}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 275
+        Position: {x: 54.465836, y: 4, z: 121.37376}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 276
+        Position: {x: 47.620785, y: 4, z: 122.843216}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 277
+        Position: {x: 31.113058, y: 4, z: 126.44975}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+    - IsInstanceMesh: 0
+      Id: 1
+      InstanceList:
+      - InstanceId: 278
+        Position: {x: 30.356405, y: 4, z: 118.94447}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 279
+        Position: {x: 25.194805, y: 3.999998, z: 114.46042}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 280
+        Position: {x: 24.205248, y: 4, z: 107.528885}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 281
+        Position: {x: 25.986393, y: 4, z: 102.86609}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 282
+        Position: {x: 25.990631, y: 4, z: 91.89635}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 283
+        Position: {x: 26.121735, y: 4.000002, z: 91.94876}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+  - Id: 18
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_18.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_18
+      _guid: 116fc5337994f704aa3290190f10ea18
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 19
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_19.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_19
+      _guid: 845cc85fb397590448b3104a5e4ce2b3
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 20
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_20.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_20
+      _guid: 1974f33793c0e3e4ebf2b8f4434a02da
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 21
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_21.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_21
+      _guid: 4ac18eb810eba8549b241530756ceb01
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 32
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_32.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_32
+      _guid: 3d304e1a169e02140989df8d15ebe745
+    BlockDataList: []
+    EnvironmentDataList:
+    - IsInstanceMesh: 1
+      Id: 2
+      InstanceList:
+      - InstanceId: 284
+        Position: {x: 42.139896, y: 4.000002, z: 128.76799}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 285
+        Position: {x: 27.953396, y: 3.999998, z: 181.04364}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+    - IsInstanceMesh: 0
+      Id: 1
+      InstanceList:
+      - InstanceId: 286
+        Position: {x: 58.5002, y: 4, z: 150.19794}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 287
+        Position: {x: 44.80824, y: 4, z: 140.70496}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 288
+        Position: {x: 41.268635, y: 3.999998, z: 139.11992}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 289
+        Position: {x: 38.111782, y: 4, z: 147.25934}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 290
+        Position: {x: 36.68112, y: 4, z: 149.7905}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 291
+        Position: {x: 59.094337, y: 4, z: 158.1661}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 292
+        Position: {x: 44.595573, y: 4.000004, z: 150.34087}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 293
+        Position: {x: 42.49317, y: 4, z: 159.2633}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 294
+        Position: {x: 42.41275, y: 4, z: 161.58116}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 295
+        Position: {x: 45.92848, y: 4, z: 164.0075}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 296
+        Position: {x: 54.245182, y: 4.000004, z: 165.1693}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 297
+        Position: {x: 54.245182, y: 4.000004, z: 165.1693}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 298
+        Position: {x: 40.868923, y: 4, z: 159.94072}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 299
+        Position: {x: 38.986786, y: 4, z: 159.6156}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 300
+        Position: {x: 51.491253, y: 4, z: 171.76422}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 301
+        Position: {x: 59.580166, y: 4, z: 165.94106}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 302
+        Position: {x: 53.109413, y: 4, z: 149.18005}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+  - Id: 33
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_33.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_33
+      _guid: 8e9b4bc7f0eff9941a8486c0c60fd844
+    BlockDataList: []
+    EnvironmentDataList:
+    - IsInstanceMesh: 0
+      Id: 1
+      InstanceList:
+      - InstanceId: 303
+        Position: {x: 69.94938, y: 4, z: 141.10046}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 304
+        Position: {x: 67.8367, y: 4, z: 175.7604}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 305
+        Position: {x: 68.88819, y: 4, z: 175.67354}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 306
+        Position: {x: 66.1236, y: 4, z: 160.61227}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 307
+        Position: {x: 81.91203, y: 4, z: 162.69528}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 308
+        Position: {x: 71.56732, y: 4, z: 157.46329}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+  - Id: 34
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_34.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_34
+      _guid: 9af1fbd761d6657439fcb8094861f317
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 35
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_35.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_35
+      _guid: 8bf369f60ccc57e4383d34e13c89e35b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 36
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_36.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_36
+      _guid: 91657631ea027f24480d83946d376207
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 37
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_37.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_37
+      _guid: 6f818c2cafcb02c4091504249294aa21
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 48
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_48.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_48
+      _guid: db42082026e963341bb2a0d9d605fe99
+    BlockDataList: []
+    EnvironmentDataList:
+    - IsInstanceMesh: 1
+      Id: 2
+      InstanceList:
+      - InstanceId: 309
+        Position: {x: 50.774097, y: 4, z: 201.6864}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 310
+        Position: {x: 33.689724, y: 4, z: 252.35486}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 311
+        Position: {x: 24.76639, y: 3.999998, z: 240.56659}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 312
+        Position: {x: 28.18516, y: 4.000002, z: 221.92108}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 313
+        Position: {x: 45.683437, y: 4, z: 225.56575}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 314
+        Position: {x: 17.981901, y: 4.000002, z: 239.2104}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 315
+        Position: {x: 27.930084, y: 4, z: 230.67668}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 316
+        Position: {x: 35.658524, y: 4, z: 233.14047}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 317
+        Position: {x: 38.84216, y: 4.000002, z: 232.44974}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 318
+        Position: {x: 27.904493, y: 4, z: 214.74837}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 319
+        Position: {x: 14.090939, y: 4, z: 208.04065}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 320
+        Position: {x: 12.563097, y: 4, z: 205.80801}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 321
+        Position: {x: 26.761642, y: 3.999998, z: 203.19087}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 322
+        Position: {x: 58.98941, y: 4.000002, z: 209.61586}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+  - Id: 49
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_49.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_49
+      _guid: d565bb8fc274c10449ae674863b4e689
+    BlockDataList: []
+    EnvironmentDataList:
+    - IsInstanceMesh: 1
+      Id: 2
+      InstanceList:
+      - InstanceId: 323
+        Position: {x: 68.136024, y: 4, z: 235.78018}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 324
+        Position: {x: 68.70294, y: 4, z: 243.09865}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 325
+        Position: {x: 74.594696, y: 4, z: 214.5058}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 326
+        Position: {x: 100.711525, y: 4, z: 221.85583}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+  - Id: 50
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_50.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_50
+      _guid: ed21cfba58df1344c901a5a281356101
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 51
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_51.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_51
+      _guid: 4b096c410e9731e40922c3cb22244d47
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 52
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_52.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_52
+      _guid: f7b26c621f131e848a42443b66913125
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 53
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_53.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_53
+      _guid: bba37254664f43242bfdae0a6fbdc061
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 64
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_64.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_64
+      _guid: 627e958a0fd3f0b4591cac3c231c74da
+    BlockDataList: []
+    EnvironmentDataList:
+    - IsInstanceMesh: 1
+      Id: 2
+      InstanceList:
+      - InstanceId: 327
+        Position: {x: 46.664036, y: 4, z: 260.0453}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 328
+        Position: {x: 46.916428, y: 3.999998, z: 283.06155}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 329
+        Position: {x: 29.0752, y: 3.999998, z: 261.03882}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+  - Id: 65
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_65.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_65
+      _guid: 790405123709df14ba7bad8ea03a4769
+    BlockDataList: []
+    EnvironmentDataList:
+    - IsInstanceMesh: 1
+      Id: 2
+      InstanceList:
+      - InstanceId: 330
+        Position: {x: 81.276764, y: 4, z: 259.43414}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 331
+        Position: {x: 73.645355, y: 4, z: 290.3791}
+        Rotation: {x: 0, y: 0, z: 0, w: 1}
+        Scale: {x: 1, y: 1, z: 1}
+  - Id: 66
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_66.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_66
+      _guid: bd9952c03dbc7bf4a959a6c2ac4803f4
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 67
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_67.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_67
+      _guid: 093247ed6fb289c4dab0e2984c1dfe61
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 68
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_68.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_68
+      _guid: 59253bfe2df646946aa036b919b88c9f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 69
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_69.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_69
+      _guid: 1755223eb5a577f4fafb062e168cc849
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 80
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_80.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_80
+      _guid: 8bd2000545dd18349811fff60b84bcee
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 81
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_81.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_81
+      _guid: c67a08b85fd6f394884f05e039fc8bf0
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 82
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_82.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_82
+      _guid: 03ac3e047446fb547b202f0865449e4e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 83
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_83.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_83
+      _guid: c0433fbeaa530ad4193741ba6939c98f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 84
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_84.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_84
+      _guid: e7837018dcc930e42a65708dc6541e2b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 85
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_85.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_85
+      _guid: 3aa072fda9ab5094db4897aefe1b332f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 96
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_96.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_96
+      _guid: 1bf433ced24981344bbf03c7fa620524
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 97
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_97.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_97
+      _guid: 400e77bc8a301864882074502661b660
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 98
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_98.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_98
+      _guid: f79bd1e3247f717468ef89eefb8ca482
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 99
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_99.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_99
+      _guid: 3260dda6be2fe464db6ca3f9a0b8f021
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 100
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_100.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_100
+      _guid: da8a82d14cc4dc4499e281c74484579c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 101
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_101.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_101
+      _guid: d1bf2831a5023fe419f8ccfd95c90ea9
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 112
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_112.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_112
+      _guid: db53178c0ce62584abf0a757f2397afb
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 113
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_113.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_113
+      _guid: e639d8bc25617f740a0527951b9aa6c6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 114
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_114.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_114
+      _guid: ae913071d25e3cd42975d16cc71712b7
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 115
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_115.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_115
+      _guid: 0e9205e062064ee4b95a6766cdd3959c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 116
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_116.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_116
+      _guid: 4d216a1bf0b7d1d48b09c68ad5b50f6c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 117
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_117.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_117
+      _guid: 2f06112676d933042b2188e77369c682
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 133
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_133.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_133
+      _guid: a779c3f3684db1f48a79a3da683ffed3
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 132
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_132.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_132
+      _guid: c3f989e48b765874a8b9d802337af9eb
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 131
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_131.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_131
+      _guid: 5d36136e9096b8a4bb40766b193b44eb
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 130
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_130.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_130
+      _guid: 14a90e52e55346240970cd26b08e1cc0
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 129
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_129.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_129
+      _guid: 1ac9963614fe0d2409657ae85286d4b6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 128
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_128.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_128
+      _guid: bdcabc0f24a8e5c4da4c8f1cce1a4244
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 149
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_149.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_149
+      _guid: 9d9dbcafe0df51942bc677ba6f0973dc
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 148
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_148.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_148
+      _guid: 20b15fdb5faf48a438063bf647493c17
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 147
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_147.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_147
+      _guid: 3c5afa9e7a2fdd744824ffbb4c9f8dbb
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 146
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_146.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_146
+      _guid: b4e0d6912a689d340ae4e3ce82420736
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 145
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_145.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_145
+      _guid: 85caea97d64185d42bdcf98ed819feeb
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 144
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_144.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_144
+      _guid: c9428f96ca2a75b48ab6d6b7f6ce635b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 165
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_165.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_165
+      _guid: 46401d235b19bd245afe255c11cf6ab3
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 164
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_164.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_164
+      _guid: 0671d6c79fc7437479d4fab4d9fa6746
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 163
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_163.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_163
+      _guid: a072d052a8a7d4a4585c85b974e86d3d
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 162
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_162.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_162
+      _guid: ae0398b4249386b4485c18a22c895322
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 161
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_161.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_161
+      _guid: 5b85b3eb483c7af4688068b689e0881c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 160
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_160.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_160
+      _guid: 3e83b7aa02150f84f9948e63467e1382
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 181
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_181.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_181
+      _guid: 78fb7185f3d877649bc9eac8dbc02730
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 180
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_180.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_180
+      _guid: 41d299070036ba94d986a3071166e2d5
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 179
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_179.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_179
+      _guid: aed29fff99c6feb4288cbced79fc2cac
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 178
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_178.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_178
+      _guid: 661ef92dcabc67a479ce78db143611dc
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 177
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_177.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_177
+      _guid: 8fc90ee5156b3e94d86c588e7e5c1e05
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 176
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_176.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_176
+      _guid: 769079c1c495e84418ebc89fd2ad7fe7
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 197
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_197.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_197
+      _guid: fbc3db0810ddf78458d974c9dac6633a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 196
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_196.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_196
+      _guid: c291f18ef80151b44ad2995750bad80f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 195
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_195.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_195
+      _guid: 79b12be48e00c1d488ad7aaa2ec9866f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 194
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_194.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_194
+      _guid: e8c293e071c780847a96c79e19298f50
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 193
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_193.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_193
+      _guid: 18492040e8ab0a34e9d3cda8ee343c47
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 192
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_192.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_192
+      _guid: 6914b8e296949e845a95d79dde218ea8
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 213
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_213.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_213
+      _guid: 17da9812ca5a78240999c5896a5a0d17
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 212
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_212.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_212
+      _guid: fa94a38ebe4f4724bb727cc908593ff9
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 211
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_211.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_211
+      _guid: 87ac1eab17960504eb08c46197a922c3
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 210
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_210.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_210
+      _guid: 38c834c31a19238498aac56e64599954
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 209
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_209.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_209
+      _guid: bbb83e01c13457845877415ba5488dbd
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 208
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_208.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_208
+      _guid: f8ca49cf26a233849ad610a6796b7bdc
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 229
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_229.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_229
+      _guid: 272344a23ad350846a588057dc4d72a8
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 228
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_228.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_228
+      _guid: fb37c81c894d88c44a5d2a1635312f45
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 227
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_227.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_227
+      _guid: 21cacfe02f51d7341b029856491430d5
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 226
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_226.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_226
+      _guid: 65ff1005ee7163849981b55edb0bdac8
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 225
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_225.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_225
+      _guid: 69c71b2eae928b1498f7949d517b7870
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 224
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_224.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_224
+      _guid: 310ade0990e36ad4088b0e4493eb2890
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 245
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_245.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_245
+      _guid: ed6aba83e99c56c43862e45851c21660
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 244
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_244.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_244
+      _guid: 392868e78a67c6e4b9f5ebd5e6e4b269
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 243
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_243.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_243
+      _guid: 3509257ef29579241979d2f034177c1a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 242
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_242.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_242
+      _guid: 740b3ef719b31f64b9798d38f76f10df
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 241
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_241.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_241
+      _guid: 1f054d1cf71d6b940a7836d9b400e3ff
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 240
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_240.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_240
+      _guid: e9977a348fdbc5a4a9d62099d14ef5e2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 246
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_246.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_246
+      _guid: 946b4a5d30c55f440ba70a0fdb21641f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 247
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_247.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_247
+      _guid: f2083b40221a5b24ab06455ad6267e94
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 248
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_248.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_248
+      _guid: 16ec321887b6bf54b8e6bd12ab377f46
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 249
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_249.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_249
+      _guid: 5700b88488fa24040890bae4d212db7f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 250
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_250.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_250
+      _guid: 388617beb91dafd43aa6ea33b4fbf4c4
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 251
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_251.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_251
+      _guid: a9839e928d521584cba9ae37a328892a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 252
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_252.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_252
+      _guid: bd564fae3d70d94448e5bb694ea62d79
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 253
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_253.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_253
+      _guid: 3ac8b85a014948045ba60e22638b82ed
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 230
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_230.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_230
+      _guid: 3dec60a70efda9d4fbb8681807215913
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 231
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_231.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_231
+      _guid: 32b88c94d69676843835c3e04677a7f1
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 232
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_232.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_232
+      _guid: b33519c8462da7f48ae1585ed2a0bb18
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 233
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_233.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_233
+      _guid: 229692ec65a143646bef2f87b0c98978
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 234
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_234.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_234
+      _guid: 5f7668eb2e1c9af4c8ed4b3651017eff
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 235
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_235.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_235
+      _guid: 81f7a8238e16a7b4e98765a622d6dd31
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 236
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_236.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_236
+      _guid: f1589b40198b2bb4dbffdd0b19865a02
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 237
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_237.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_237
+      _guid: 5d0ff009a49455447a34b14e4ff475c0
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 214
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_214.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_214
+      _guid: 42760fed59368324aacf736a7a1637ff
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 215
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_215.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_215
+      _guid: 01ad20bb642e0024d81a84670cc46a07
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 216
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_216.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_216
+      _guid: a06c4b383e6dbf94da8cc9622477471a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 217
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_217.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_217
+      _guid: 3e762e9e02076954eaf4c3441ecabc11
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 218
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_218.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_218
+      _guid: 7365c781868389f419e2da4990c899b7
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 219
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_219.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_219
+      _guid: 7a28779ef8d8c274b868b6e4c6debdd4
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 220
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_220.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_220
+      _guid: db7eea947cc19494481ad359662b66df
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 221
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_221.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_221
+      _guid: 165294f476d10424694c230901195857
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 198
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_198.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_198
+      _guid: cbd58181f28a5914998b6aa8ec5a5576
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 199
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_199.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_199
+      _guid: 9ef20663dbc712d4697b41514db238d5
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 200
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_200.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_200
+      _guid: 5ef6d83d5830d42488900a354e9f2678
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 201
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_201.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_201
+      _guid: 31e260557e056d2489cab681ecf6958e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 202
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_202.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_202
+      _guid: 2ab0dbf241e79094f992522f74c70eee
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 203
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_203.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_203
+      _guid: a36f2adc1d1dcdf418a9ab2a25a076db
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 204
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_204.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_204
+      _guid: 8077636279768da4da4e77b094a950b7
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 205
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_205.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_205
+      _guid: d5ff5ee78f545b44ab010bc3548f9acb
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 182
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_182.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_182
+      _guid: 1dc54d8faa6c73b4fa4d31a841fb722b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 183
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_183.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_183
+      _guid: 0a9b03fc6f12dd444948228c8500249e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 184
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_184.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_184
+      _guid: 9b57f374a801d1941b95c66813081d66
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 185
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_185.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_185
+      _guid: 31d3fde13ee73b549bc6adc98482b4c3
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 186
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_186.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_186
+      _guid: b67ede267b9c4ce4cbaa675f87e41d60
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 187
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_187.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_187
+      _guid: f2ef5ca33eb255642a332a50db453a9b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 188
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_188.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_188
+      _guid: e413c37e3e94a2445bd47e10b49580d9
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 189
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_189.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_189
+      _guid: 83367a219152749449abb560fae19205
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 254
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_254.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_254
+      _guid: ee5aa676f4e1a0243afbe17106acee14
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 255
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_255.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_255
+      _guid: 1637b6b836af16e428f2ea6b44f7471e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 238
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_238.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_238
+      _guid: 5ab000de15945d94da053f813f77d84a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 239
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_239.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_239
+      _guid: 08f3a79a37dad3c43b27977991de27c1
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 222
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_222.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_222
+      _guid: 9e2fdcb966ea99744803f57c32962f32
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 223
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_223.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_223
+      _guid: 108106048ec37f5439e60004dbc9b2a1
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 206
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_206.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_206
+      _guid: 34f0c58fe9431d14da786ca89ec4bcda
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 207
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_207.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_207
+      _guid: 045997c0049dd2d4e9305a109b0439d7
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 190
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_190.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_190
+      _guid: 7b29c5a68221f19439163b7bd6440f9e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 191
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_191.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_191
+      _guid: 61c20bc433912b64abdeff8ebc948fb8
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 174
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_174.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_174
+      _guid: 5120d230f2e703148818d3ddae2b83a3
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 175
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_175.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_175
+      _guid: 389b4708c7bd55d4f9e6bb61cab36aa2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 173
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_173.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_173
+      _guid: a3ad80c54c8060047aef7f5f8c18c0ec
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 159
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_159.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_159
+      _guid: b492f0b7f0ea3a441a1eb5650c775279
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 158
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_158.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_158
+      _guid: 4e96058550c50ea4f9baf50d2fe4d381
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 157
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_157.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_157
+      _guid: 5eb5ee57d7cf90044982e49b12077e97
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 143
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_143.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_143
+      _guid: 934a1913f47a97c47b84d6d01cb78dd0
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 142
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_142.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_142
+      _guid: 8b52d4cf2199c9948abe3827d21a1f64
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 141
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_141.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_141
+      _guid: 56eb645eb7a23694990a22140334d61a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 127
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_127.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_127
+      _guid: 5e48e3bb90097d7429f4db70bf9d0e91
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 126
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_126.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_126
+      _guid: 1b6a9a1355d28c14b9242a89db26edce
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 125
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_125.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_125
+      _guid: e5d3fdadf8c58404ebc20cacc24489a8
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 111
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_111.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_111
+      _guid: b61e8b04d2cb49a42bbcc871a73698f2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 110
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_110.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_110
+      _guid: 01a793f7c1513c340bab1608e2503b5a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 109
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_109.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_109
+      _guid: 3a065fe0b6ee31c4bae271b0f2c3375a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 95
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_95.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_95
+      _guid: 8e41ebfd9c7bfb648ae830e71af1db9e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 94
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_94.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_94
+      _guid: 643e79c0a1281e4409310d8c6d4a2f31
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 93
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_93.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_93
+      _guid: 6056bdded2b0f9d459d78c1b53064b7a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 172
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_172.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_172
+      _guid: 425cfbc371983c84c991175a983ca91a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 171
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_171.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_171
+      _guid: bbd78b69ffd1b404c8cf9e7e05bfa039
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 79
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_79.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_79
+      _guid: e6c91f86f127f6840b27ec534872595c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 78
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_78.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_78
+      _guid: ba3eafa2f96856f408f894cdb10d785a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 77
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_77.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_77
+      _guid: 00812135226d85c4b9661a663dd9a228
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 63
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_63.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_63
+      _guid: 5e1c4c3910167c047b4c520e454bf6fa
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 62
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_62.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_62
+      _guid: 7c6c4ad41c86c2349ae0aa3f8f97a671
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 61
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_61.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_61
+      _guid: b0805ff223531824e868dbcc5c4cd0aa
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 45
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_45.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_45
+      _guid: fc2c1d255ad57914a8ad43e3c87d10c6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 46
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_46.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_46
+      _guid: 4aff4df47607293478af5ed3cd4d5d25
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 47
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_47.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_47
+      _guid: c332edae067fe4a4da91687746a673b4
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 29
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_29.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_29
+      _guid: b5298440c5c74e442a5a7dace5290fab
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 30
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_30.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_30
+      _guid: 8396978cc3204d64693dc65208ec0818
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 31
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_31.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_31
+      _guid: 14fa37696ae07294498cb6574cf58f56
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 13
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_13.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_13
+      _guid: 9e047bd7738b76347b8f4c50564603be
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 14
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_14.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_14
+      _guid: f84ebf155fa080c44857c1b5a1079730
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 15
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_15.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_15
+      _guid: f3f071fa1a9a74947b2d380dc44c4add
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 22
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_22.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_22
+      _guid: e51e89cc4aba4b440b833ec2d0b0db96
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 23
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_23.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_23
+      _guid: 3b26df5ab73d2e946a0eb90083921bc2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 24
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_24.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_24
+      _guid: 882cfe5f8367de44aa1d976e81dba7e1
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 25
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_25.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_25
+      _guid: 530e5971097026849910db9a2ff58c67
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 26
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_26.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_26
+      _guid: abc038cd329ae7f459e2fa0074266789
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 27
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_27.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_27
+      _guid: 106f38f6019673942be7b3b6316f8034
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 28
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_28.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_28
+      _guid: ae371eecd9fa598438448f5ca5e1f48e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 38
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_38.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_38
+      _guid: ddbf72fb99d15ec42b40b9dfbfae04a4
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 39
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_39.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_39
+      _guid: 665cf084dfafe364ab005a8dc5e4129a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 40
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_40.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_40
+      _guid: fee1d7ef16afc7f4989b93a701f48aa6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 41
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_41.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_41
+      _guid: ec90f1cac43941c4584ce33b9ed9bbeb
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 42
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_42.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_42
+      _guid: 35184f84f36083f4a9dd7067832519c5
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 43
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_43.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_43
+      _guid: 864a5b9d40637184bab07bb95a6bda5e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 44
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_44.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_44
+      _guid: cffbf498b239ced408c1f60797d09619
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 54
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_54.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_54
+      _guid: 27322c514947d544f8a068419b99a105
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 55
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_55.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_55
+      _guid: 23aa4266de866704b9f3f7615b2f0324
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 56
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_56.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_56
+      _guid: 3800af0e00d8459428699053c03b8090
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 57
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_57.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_57
+      _guid: 36fd40814c921d545be05e1c48777182
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 58
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_58.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_58
+      _guid: 11bd75d465e22d645b3704cdec6e0f5d
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 59
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_59.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_59
+      _guid: 905cb37cf77e96a4d8deedea9358e8ac
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 60
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_60.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_60
+      _guid: be00322fe7824f64491af64cb61b3eb4
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 70
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_70.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_70
+      _guid: 76c50c872fd86434e9b7a3d6dbc19c4f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 71
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_71.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_71
+      _guid: 33f814d77f93ee54eb4532058bb19679
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 72
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_72.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_72
+      _guid: 6090bba4d68d32f44939228f242e5685
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 73
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_73.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_73
+      _guid: 0f00d62ff1f38124296eceb82163f9b2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 74
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_74.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_74
+      _guid: 949e161e7b78fcb4d922643a67c9f1a0
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 75
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_75.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_75
+      _guid: 0019b0c4749d8ec42852e53ee86dec80
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 76
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_76.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_76
+      _guid: 47feb530d7766444ba140b069493ccfe
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 86
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_86.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_86
+      _guid: 4866fa604d6cb1543a2745f957a6dfb0
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 87
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_87.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_87
+      _guid: 781fcf6b7b5094c459b5e542237905b6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 88
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_88.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_88
+      _guid: 466ed24952c3e014aa29fb87bcb7f5b4
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 89
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_89.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_89
+      _guid: cda6b4a067bdd684f952f7d1fdf1f99b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 90
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_90.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_90
+      _guid: 6d0730997a309684582577d76d1b1489
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 91
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_91.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_91
+      _guid: 93d21beb4591cb640a6a3e36e1aa3b10
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 92
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_92.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_92
+      _guid: f165c89f13f7b744eaa09ac64ec6ee08
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 102
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_102.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_102
+      _guid: c99dcac3be4ca2a489374981d462c69b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 103
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_103.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_103
+      _guid: 745c53cc92a33974b862b8fc53b22953
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 104
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_104.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_104
+      _guid: c99cd16deb93b62479720fcad9adf349
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 105
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_105.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_105
+      _guid: a1cf64737e7cab74da256edd7b69c8b9
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 106
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_106.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_106
+      _guid: 400b884b219439f48a8a5ab136d987cf
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 107
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_107.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_107
+      _guid: 2fcd6bb36173b814696e5f1a48f05374
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 108
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_108.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_108
+      _guid: 8d4f87712ecd9074e89bfb65df90ee96
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 118
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_118.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_118
+      _guid: 11e99385333fc0944aace57ac7722823
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 119
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_119.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_119
+      _guid: 81800a93d3630a64483032176e4ac694
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 120
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_120.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_120
+      _guid: 8fb42919d6bb131419b578a8e49c3cf5
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 121
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_121.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_121
+      _guid: 896a6220c74eddb4b93c4517e1f8d9ab
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 122
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_122.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_122
+      _guid: 83491c2afb69eb643966bab79c283c7f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 123
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_123.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_123
+      _guid: 63a6767a6cd9ed34486e06935ccc0c8d
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 124
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_124.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_124
+      _guid: 512f4c271e78e124db3c50801b645b08
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 134
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_134.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_134
+      _guid: 8d2782149bc83474580f806bb789da15
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 135
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_135.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_135
+      _guid: 19455beada9da0f429ee024acc728145
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 136
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_136.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_136
+      _guid: 291f4b8e9d72db6428bd61771afd1ac2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 137
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_137.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_137
+      _guid: 3f90877ae16ee584486be646ed6be420
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 138
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_138.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_138
+      _guid: 38cd2fbada12470448f7d6d3451597c6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 139
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_139.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_139
+      _guid: 4441094e1162e304d9d5be67d04bafa9
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 140
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_140.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_140
+      _guid: 52b79b05309771c499286f66a45c5098
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 150
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_150.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_150
+      _guid: c519c2226adc4c44a9c79245efdec0ce
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 151
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_151.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_151
+      _guid: fd4f419cc5b6f274790b8d78607aab95
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 152
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_152.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_152
+      _guid: e296ae255ee0fda4095baa323be08423
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 153
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_153.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_153
+      _guid: aeab5b4cfb8769a4d9fd4bea45d644e6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 154
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_154.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_154
+      _guid: dfb7405f904509e4fa6c3fe60ec6c776
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 155
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_155.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_155
+      _guid: f6bb670e4e1b08141b92c8c1da316fad
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 156
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_156.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_156
+      _guid: 1acda68a4fb07d741b25de5600328f32
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 166
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_166.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_166
+      _guid: 321950950cae4aa4d9ab2a3741f9ed8d
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 167
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_167.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_167
+      _guid: f5a085fd919c91f43bb2d8de40c9097c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 168
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_168.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_168
+      _guid: aeb1db9f3ff13684faee363396df3662
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 169
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_169.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_169
+      _guid: 2b7d1b39aa9d58a4e82c91474121ca1a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 170
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_170.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_170
+      _guid: 85284cc6a7a65144687c8dbeb2e88cc2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 12
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_12.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_12
+      _guid: 35df028d4befba949b5555d7d1914542
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 11
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_11.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_11
+      _guid: ebf11aa2d9aa9f942bb14772df310dd3
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 10
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_10.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_10
+      _guid: 80670da9bcd6eac40972bbadf24e1810
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 9
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_9.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_9
+      _guid: 3ac5c5d3329e6324fa65ec5d706056ae
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 8
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_8.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_8
+      _guid: d83ab767d2773ee4eaa7aa834ccd7754
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 7
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_7.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_7
+      _guid: b8c11e0a1e19d024280173ad0f5f324d
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 6
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_6.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_6
+      _guid: 226be4bae45dc534c9fd09e6c7781381
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 5
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_5.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_5
+      _guid: e13cf222d7c9d3744904649dc3bfe475
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 4
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_4.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_4
+      _guid: a8c8d2fa45e84c946b87763811ac00b9
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 3
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_3.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_3
+      _guid: e13b1179420e82c438ab577fcd378346
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 256
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_256.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_256
+      _guid: 4b610e17f4924954c9435ea7299a82d1
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 257
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_257.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_257
+      _guid: fcc9b0b786815a842950faa7426cc9ba
+    BlockDataList: []
+    EnvironmentDataList:
+    - IsInstanceMesh: 1
+      Id: 2
+      InstanceList:
+      - InstanceId: 332
+        Position: {x: 96.44128, y: 64, z: 27.842398}
+        Rotation: {x: 1, y: 0, z: 0, w: 0}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 333
+        Position: {x: 95.787704, y: 64, z: 22.687248}
+        Rotation: {x: 1, y: 0, z: 0, w: 0}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 334
+        Position: {x: 97.01053, y: 64, z: 16.944036}
+        Rotation: {x: 1, y: 0, z: 0, w: 0}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 335
+        Position: {x: 102.189865, y: 64, z: 15.437832}
+        Rotation: {x: 1, y: 0, z: 0, w: 0}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 336
+        Position: {x: 92.81596, y: 64, z: 43.46479}
+        Rotation: {x: 1, y: 0, z: 0, w: 0}
+        Scale: {x: 1, y: 1, z: 1}
+      - InstanceId: 337
+        Position: {x: 97.38819, y: 64, z: 50.700638}
+        Rotation: {x: 1, y: 0, z: 0, w: 0}
+        Scale: {x: 1, y: 1, z: 1}
+  - Id: 259
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_259.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_259
+      _guid: e148352db7a75cd48bc12add8edee817
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 260
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_260.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_260
+      _guid: 58a0d8e8c2c99084ab8aca01ede6a427
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 261
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_261.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_261
+      _guid: b1161f1bd7561d9488384d8419d7e49a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 262
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_262.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_262
+      _guid: 3f4ac4ac29c676e49ad01f4e32ea2a40
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 263
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_263.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_263
+      _guid: 0476e0a52c0ea674c9da9b0db243ae68
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 264
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_264.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_264
+      _guid: 2591951ef8b2af14ba82fb532ed35b98
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 265
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_265.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_265
+      _guid: a45fbeba1dc5a5a4a85917f4ac77787a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 266
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_266.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_266
+      _guid: f230e62bd1fc6164d87cd87c16909928
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 267
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_267.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_267
+      _guid: 59da05e460565e943bfca7f133a1ccc7
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 268
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_268.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_268
+      _guid: ccf1390c6d0dd0a40b6a122b0382655e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 269
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_269.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_269
+      _guid: 26cb8d4654958924b9f17147aa7c217f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 270
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_270.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_270
+      _guid: 4e18535f81b45ac46ac5df14de4efec4
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 271
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_271.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_271
+      _guid: 5ee5571921877b94eba4e9ff2699308a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 272
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_272.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_272
+      _guid: df30f0519c16f684282e770035acc7fe
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 273
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_273.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_273
+      _guid: b42128745292297499d87abfc3272335
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 274
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_274.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_274
+      _guid: 76d822c5d0512ab4383e44ef7ecd98af
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 275
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_275.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_275
+      _guid: d6bab8fae25119d45a067d2582f9dba2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 276
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_276.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_276
+      _guid: aa873a4cd5505254281e506878f5f2c3
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 277
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_277.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_277
+      _guid: 29056913a5453904ab53f5a4ff0995b8
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 278
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_278.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_278
+      _guid: 89ea6ecfb03205d4e89c25607033da01
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 279
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_279.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_279
+      _guid: 995d8e8fb58c8774ca9cead22eef7d12
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 280
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_280.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_280
+      _guid: 1e2396687cd16844e9c9a189b76e40e2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 281
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_281.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_281
+      _guid: 26effaa586936ea46a48fca6eefad705
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 282
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_282.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_282
+      _guid: 4ea1d9b673467a64c82c597bcf4101b0
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 283
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_283.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_283
+      _guid: daaa94915ea862443b897cee7759d895
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 284
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_284.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_284
+      _guid: d06beaddcbe3b21478786f60e09d266e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 285
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_285.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_285
+      _guid: efaf70384a7fa034ba72e49986e767ea
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 286
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_286.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_286
+      _guid: fab06b8dcfd1a584c840d595b8b55765
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 287
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_287.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_287
+      _guid: 11249d1196ea21a43a07a788e762c594
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 288
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_288.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_288
+      _guid: f40ebaeda9d0ce548a9e52a2607fcf20
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 289
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_289.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_289
+      _guid: fd19c25587544f5409c90708a36e91cf
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 290
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_290.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_290
+      _guid: 90c6d3fcd217fb2478d5f16a06a494f1
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 291
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_291.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_291
+      _guid: ccfc8cd67bd20074d96398dc10570417
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 292
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_292.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_292
+      _guid: 5be3515ddb325304ea7b3b38ab29dd24
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 293
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_293.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_293
+      _guid: ed67533448fbdde4d81396826e7e911a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 294
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_294.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_294
+      _guid: 52f02c971321abf4e825b121fc3cc391
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 295
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_295.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_295
+      _guid: 525c02697ab662441aa117ca5ecf5f4c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 296
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_296.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_296
+      _guid: 2f284acd65ee5f54b94c7913bc981655
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 297
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_297.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_297
+      _guid: 2525bf06a73e8f7469882032cffcafed
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 298
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_298.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_298
+      _guid: fca2a37c3ae8b0a46828823ac956cd7c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 299
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_299.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_299
+      _guid: 02a88e484552c124bbe9c03d83caace6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 300
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_300.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_300
+      _guid: d5d7cb705cf60264d9c5c5afe34eb874
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 301
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_301.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_301
+      _guid: 9bb66fdfb4b03ef4ca5580306ff7d176
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 302
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_302.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_302
+      _guid: 797310ac3ddda1145aab5cb63877d37b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 303
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_303.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_303
+      _guid: e8cf2922727d6ed46bfc0ee6aa2f5da5
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 304
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_304.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_304
+      _guid: 27bdd7754e731c2409854938a5c303d8
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 305
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_305.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_305
+      _guid: 1e61abddbd86914428d49b98fd995849
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 306
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_306.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_306
+      _guid: cda6459dd4291f74490a54415996247b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 307
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_307.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_307
+      _guid: fa68a6f7275b58644881958665752da6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 308
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_308.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_308
+      _guid: 74a0b8d9c739e094585650bf62b862c1
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 309
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_309.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_309
+      _guid: 0c4dd757401b80043bdce7f9c1a846e5
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 310
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_310.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_310
+      _guid: c0f0a0eacc832324193c909cc32699be
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 311
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_311.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_311
+      _guid: b7e71517c8ef8e843b23b173b70a47fb
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 312
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_312.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_312
+      _guid: dbce288f0ea7d544c9c8e6cb8cfd87c8
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 313
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_313.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_313
+      _guid: 9348ee3aeacc2d74ab5dbf6d315d2977
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 314
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_314.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_314
+      _guid: fad2951c4a221d94b84bec97863f3d45
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 315
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_315.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_315
+      _guid: bdb728f86dafda64eafbb21feada7a84
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 316
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_316.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_316
+      _guid: 723caa07e6c57984884e852a3db5408c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 317
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_317.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_317
+      _guid: 851807713e7bc604cb98b681118d3931
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 318
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_318.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_318
+      _guid: a69716b09025eb1469f03f4a8b51e34f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 319
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_319.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_319
+      _guid: e9568f3fb1d66344dabc09c4b5d1bead
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 320
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_320.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_320
+      _guid: 6937a14a70f23ea47a8a22f69047e982
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 321
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_321.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_321
+      _guid: 3a1994604111c63439d855f8e55dd729
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 322
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_322.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_322
+      _guid: 9d5b68ee22589fc41841c0646378c3d7
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 323
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_323.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_323
+      _guid: c1e971d660a84864087553f9288e5b38
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 324
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_324.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_324
+      _guid: 5a68ca47aa5761e4b8fba8dde7989c3e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 325
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_325.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_325
+      _guid: 2b4ba63a607adf944a028bf5c645fae6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 326
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_326.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_326
+      _guid: 578a2c928dff1e047a9b324c29136ab0
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 327
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_327.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_327
+      _guid: 73fa4ef486c05db428ffa38ec4e06be4
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 328
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_328.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_328
+      _guid: d7ccae9c6d701d6459e8fcc77d104615
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 329
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_329.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_329
+      _guid: 9c5c2cdd4d74fef4fa81975e6587847e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 330
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_330.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_330
+      _guid: f564699a613596345924f63b7a56119f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 331
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_331.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_331
+      _guid: 2f371d327c946434d88c69b2d9cbd80f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 332
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_332.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_332
+      _guid: 2fb995d266768314499d6ddc8f88589e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 333
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_333.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_333
+      _guid: f00e53b42c1b4e14385a1ca7b795aea3
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 334
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_334.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_334
+      _guid: ae33349a8e66e444eb611594c3af9485
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 335
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_335.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_335
+      _guid: 96d81975f4765874a8d56e644cdab94c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 336
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_336.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_336
+      _guid: 402726141cf89954c9878a2b4d75818b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 337
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_337.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_337
+      _guid: 6ab522bc056a0934dab6af2292f8e362
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 338
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_338.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_338
+      _guid: 0d7712b98f5bbdc43b4b9968911322ec
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 339
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_339.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_339
+      _guid: 43acc796778d95b40b1a1b5663996d29
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 340
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_340.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_340
+      _guid: b550d461b715b8849a43708da5d7281c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 341
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_341.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_341
+      _guid: a0d7302d61ebd0046ad1f639a9b9aa6c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 342
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_342.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_342
+      _guid: 75707a8dc6a750c4088123641a106ec9
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 343
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_343.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_343
+      _guid: 9f2cb6d96f8410f4f8fc14fd30de4529
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 344
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_344.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_344
+      _guid: c522ef86c1df9dd45ad3bea4ee506aa7
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 345
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_345.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_345
+      _guid: e656fb78586bc9440be7d577f202e94a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 346
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_346.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_346
+      _guid: 8021899b2d5a05247a4e02176ee319cc
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 347
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_347.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_347
+      _guid: 864a676f6e25aba4f9f2eb9ab4e7d744
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 348
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_348.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_348
+      _guid: 4b4daaec90ca95143969d6c9bd09ad95
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 349
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_349.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_349
+      _guid: 40c8a2928ecbad447abec87cc7679467
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 350
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_350.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_350
+      _guid: b2eaba0f42ad99444aad9f2904ab6e19
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 351
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_351.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_351
+      _guid: 760585495e32ed242a65babbb31d689a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 352
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_352.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_352
+      _guid: 8780d2b52f058014f818f4592db01433
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 353
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_353.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_353
+      _guid: 0c47a821d4f6cc34c91bd3dfbc00409b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 354
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_354.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_354
+      _guid: dc4f915e85550a04696e3c104f7b9fc2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 355
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_355.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_355
+      _guid: 894e7ccc1f4beed4c9758ef05ba3d146
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 356
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_356.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_356
+      _guid: 37f51baa3c681bb4fa5badc2513b535c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 357
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_357.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_357
+      _guid: c5c304caff9a9cc4eab9329b2628bcf3
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 358
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_358.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_358
+      _guid: 2280eea22ea56b34aa3fcaf787ecbd12
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 359
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_359.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_359
+      _guid: b524228d645e0ef459cc91ad73b3a59a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 360
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_360.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_360
+      _guid: 750967123072f944b92b650713bf8f08
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 361
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_361.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_361
+      _guid: 5f9fdadfc7a7b604f82142b74cec8f24
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 362
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_362.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_362
+      _guid: 8c3a7380feffa5b4cb744ea868bc0d30
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 363
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_363.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_363
+      _guid: bc49cd79aa620eb418e06059bfb63d4f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 364
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_364.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_364
+      _guid: fcf5732e2f663cb4982c604156dfea4d
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 365
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_365.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_365
+      _guid: 8566ecee41c11d344abb012398f95ad0
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 366
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_366.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_366
+      _guid: 875001927a53139418dccb37d23e6342
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 367
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_367.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_367
+      _guid: f9abfe9df53bb434caa898a3f2759d10
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 368
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_368.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_368
+      _guid: 297b472211c10a049a30119c59883072
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 369
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_369.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_369
+      _guid: 4d20ea0b0f861c640a7595603fcd03c2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 370
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_370.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_370
+      _guid: 7f8bc0335f402c744b6a78ebba0d7c64
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 371
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_371.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_371
+      _guid: 1fed636728cc5f44d96c9a64be2ea235
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 372
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_372.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_372
+      _guid: 44683d18cb0876948ac4ab9c87818fc8
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 373
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_373.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_373
+      _guid: 7489e3feb8cf5f24491d1431ee6b9768
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 374
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_374.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_374
+      _guid: a3f5681b83baa9244a5aa7af001eae46
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 375
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_375.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_375
+      _guid: dc417567e75bf8c44ab771d314faf4f1
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 376
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_376.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_376
+      _guid: 18c6ef96e29453c4db515862c02133d2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 377
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_377.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_377
+      _guid: 74c9725dbeb06874f81403bdbf45099e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 378
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_378.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_378
+      _guid: 5c42f4b6172cdb646aec5c7b04852bbb
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 379
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_379.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_379
+      _guid: ebe7448c54b949746b1af41fbbd5da9e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 380
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_380.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_380
+      _guid: 9cb942d2802aae84183daf6753be9d9e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 381
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_381.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_381
+      _guid: 43b892d6353f6fa409ce25da0efc6f62
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 382
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_382.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_382
+      _guid: 04b557513563f0542b9180707f4da199
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 383
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_383.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_383
+      _guid: 7b4cdebe532b7224997cfbd6ff624806
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 384
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_384.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_384
+      _guid: ed417f8c28ab0b14ca9e5326098afa83
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 385
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_385.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_385
+      _guid: 694dec12ded3f3f4285cf9b3c7868d20
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 386
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_386.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_386
+      _guid: 7956e67c359bb4341a5e3a83ed80238e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 387
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_387.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_387
+      _guid: 70f495b678a9642459c7444e1effca52
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 388
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_388.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_388
+      _guid: 1361a4738422f0f409315b4c932b1562
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 389
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_389.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_389
+      _guid: d052d3a9b1bd2fe4381044da809c9ed5
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 390
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_390.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_390
+      _guid: 8376b743dbb094641ae6e6602eb9a052
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 391
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_391.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_391
+      _guid: 8e9421cc880284f4595c1cb0a15b199f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 392
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_392.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_392
+      _guid: ac7b9b2b1363f8846907e4e858d02d19
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 393
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_393.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_393
+      _guid: 941428716c39b924d82c869ad060233b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 394
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_394.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_394
+      _guid: d693dcf390f52244aaad1bd62f4f4660
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 395
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_395.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_395
+      _guid: 1d94d133b87ce86479855b4f1325affa
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 396
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_396.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_396
+      _guid: 60469d1c315eea946b520432dd604c0c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 397
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_397.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_397
+      _guid: d03991f065c3cac4d89e1a552fd62e8e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 398
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_398.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_398
+      _guid: ca72da7a23cc00e4594bae6b834aca96
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 399
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_399.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_399
+      _guid: 72aeca0e0cbfde743b30ba506990ba25
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 400
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_400.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_400
+      _guid: 02c2f9420867a434a871eae00d6e8b70
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 401
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_401.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_401
+      _guid: c8faa83b697b5ab4ab671e5722c70938
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 402
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_402.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_402
+      _guid: 6805290b74410604b8427757edbdd18f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 403
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_403.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_403
+      _guid: bacd733f18ca89c4e9ab97fb3360f6e7
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 404
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_404.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_404
+      _guid: c014a5ca7317aa44cbd37d1a8978618f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 405
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_405.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_405
+      _guid: 7875d5c95aa31db43b0d76f892f985e9
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 406
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_406.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_406
+      _guid: 0f871747caa5b344b817e56c8b5ad207
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 407
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_407.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_407
+      _guid: 814004d15d8557d4c98d12529af77557
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 408
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_408.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_408
+      _guid: c15071fcd3df9f34ca151eb2c7eac6e1
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 409
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_409.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_409
+      _guid: 324535c43edf0834ebc7ccb623037967
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 410
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_410.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_410
+      _guid: fbec35e7d148e2c46a30c505d2267af3
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 411
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_411.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_411
+      _guid: e2adda419fe6ee246bc090475256b772
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 412
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_412.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_412
+      _guid: 145ae967b15c1ee458a07f9bdd09149b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 413
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_413.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_413
+      _guid: 5955920fba34e1949b01ad292e6ce763
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 414
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_414.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_414
+      _guid: 130b85dbec6502140b25950b1d731799
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 415
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_415.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_415
+      _guid: 33e602c9c8dc64a42b11f1f3fb793b2f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 416
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_416.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_416
+      _guid: 34bd8ca0915d67f4183d2487c54b0ce1
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 417
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_417.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_417
+      _guid: ce67404c4aed0f14aa70c15f08248354
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 418
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_418.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_418
+      _guid: 7ef51ec761e0a184a9d94a12cd899fb4
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 419
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_419.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_419
+      _guid: d26bf9009fd320e4fb2cc14aafc4e941
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 420
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_420.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_420
+      _guid: 63681e5cf0acb7647870a0f3537d6e82
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 421
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_421.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_421
+      _guid: bf8a842a946b1ef479663a6545274e04
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 422
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_422.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_422
+      _guid: 7f50d10593ccea44a9f24424d6e14f25
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 423
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_423.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_423
+      _guid: 0a399c11c02f828479169b9527003852
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 424
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_424.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_424
+      _guid: 824bad02625d47544a0aa371050323b2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 425
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_425.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_425
+      _guid: cfe1f873362738e4f8edcacd83854b64
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 426
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_426.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_426
+      _guid: 158eb563f6ed1614db6155d43a576ea5
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 427
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_427.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_427
+      _guid: 4a5a7a5e18065a144b7db44d485e80d4
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 428
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_428.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_428
+      _guid: 5917ff2292dbb5d40b231bee36e20b55
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 429
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_429.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_429
+      _guid: f63e42405fc71d047bfcc5266c38948c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 430
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_430.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_430
+      _guid: 04993c89314d6254997476796bacedaf
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 431
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_431.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_431
+      _guid: c8901f3f5c9c48c4683ab8ce8e86ca7a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 432
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_432.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_432
+      _guid: ee6e1078ab24d3242a1081bacc71734b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 433
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_433.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_433
+      _guid: 89b4bb8b960607143b94a0e9764ae9c9
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 434
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_434.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_434
+      _guid: 58b6343693666c34e81b50e1d2f5a20e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 435
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_435.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_435
+      _guid: a862c9106172e4b479be18e5c97ea49c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 436
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_436.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_436
+      _guid: a8df855b149f84547b50f2d9fbb4b807
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 437
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_437.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_437
+      _guid: afd4e8df38df0d544a513b911f2bb7d8
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 438
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_438.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_438
+      _guid: 3f79f5c71216b42469739f7eb4f51c84
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 439
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_439.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_439
+      _guid: 0ee37ab676d22a047b21699cdc3aa263
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 440
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_440.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_440
+      _guid: 1f304d6e0b7a9d949a4031c2c9292707
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 441
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_441.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_441
+      _guid: 20815a75c63e5c94bb55864904f4989f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 442
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_442.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_442
+      _guid: 3705a693f996b7b4d904dac2cc761d76
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 443
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_443.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_443
+      _guid: a6eaf70c8d925f243b876bfd9faf1aa0
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 444
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_444.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_444
+      _guid: 13e0507f6a326e4458631331db0a03f6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 445
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_445.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_445
+      _guid: 32ca85ed82f03f74dbe7dc6dc11ac434
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 446
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_446.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_446
+      _guid: 0e2f4c853bd724149b0c23c329d416d7
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 447
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_447.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_447
+      _guid: 44edbf64a8637554bb5d1e11414c3e6c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 448
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_448.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_448
+      _guid: aff3836df0a703c448af2b8449417d97
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 449
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_449.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_449
+      _guid: 5bfb50cc53ff0fb4cb1aaf36cba59655
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 450
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_450.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_450
+      _guid: 8f859c64e600ace409ef880e976121a9
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 451
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_451.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_451
+      _guid: 8d95355f1c8fb2247a10f798b43bb160
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 452
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_452.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_452
+      _guid: 087e877681317964fade6ad49ca76c94
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 453
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_453.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_453
+      _guid: b582ec075d66ecf4ba1e356156f36977
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 454
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_454.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_454
+      _guid: d93abf0d970c0a24bba147f1b5838e3a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 455
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_455.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_455
+      _guid: 1f34b2061e90edc469830c8b16af5bf9
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 456
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_456.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_456
+      _guid: e1c618e5aab5de74f90171f919726d3f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 457
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_457.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_457
+      _guid: 1c3000eedadfdbb45aa41a304f8db5a6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 458
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_458.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_458
+      _guid: 9256b27240448cf46be8f394c03bee77
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 459
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_459.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_459
+      _guid: 435cc4c8829512949958bd4b61f9749a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 460
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_460.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_460
+      _guid: c49a3bb3c84daf44f81d8bca3401037a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 461
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_461.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_461
+      _guid: a415782bf0b2a364db1652630b18ee66
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 462
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_462.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_462
+      _guid: c7fc88874324bf14097d65a7adc4a16f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 463
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_463.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_463
+      _guid: 7eda115edf3641f42a38ba5db54263a4
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 464
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_464.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_464
+      _guid: 9b9a581e9cf0ce74b8617f6462d4fbd6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 465
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_465.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_465
+      _guid: 914cfb554ebd8ff4d864c0d58f3861ce
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 466
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_466.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_466
+      _guid: c7d577e9e94f9934c9a020be9ac60857
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 467
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_467.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_467
+      _guid: f240d009b23c4ba4db0480205488a691
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 468
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_468.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_468
+      _guid: fd5916afe0c17ab418342938bb5db515
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 469
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_469.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_469
+      _guid: c9137c6ddb7c230449a38ad16367d161
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 470
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_470.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_470
+      _guid: 2a18c4225abde0d418cbc53f65385136
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 471
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_471.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_471
+      _guid: 28ad13e4423e02542a4a3ad9a99aea1a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 472
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_472.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_472
+      _guid: aaa04a8d0d702534bb56424f132ad572
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 473
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_473.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_473
+      _guid: 0988f58020021a640b995a62d5130ffb
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 474
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_474.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_474
+      _guid: 7c73f8ca54c023a439fc986fb664d825
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 475
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_475.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_475
+      _guid: 93b06a8e01d1cf242a62c74bcba836f7
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 476
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_476.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_476
+      _guid: c2706562ec0b8794eaecea3b5b5552f3
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 477
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_477.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_477
+      _guid: 3a157c779f1fc8a44b042c77a20e3517
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 478
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_478.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_478
+      _guid: d43e74b546845ff41bde525d80c209af
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 479
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_479.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_479
+      _guid: 2ec77fb429d2dd94d94c06074c53be26
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 480
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_480.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_480
+      _guid: 46860df9390a1444485acbbb57371a65
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 481
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_481.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_481
+      _guid: c4fcc49abb27fdd459e31b45cb47ebb6
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 482
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_482.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_482
+      _guid: 299d4b9fa183e434abfefe3860211389
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 483
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_483.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_483
+      _guid: aef2013dec86eda48872773045b2caf7
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 484
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_484.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_484
+      _guid: 73224ab1e13cc6e4aaa5ba72f97b1e9b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 485
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_485.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_485
+      _guid: 6ccb962fb281ee04fa6b94e726135d4f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 486
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_486.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_486
+      _guid: f049adf6e4410e44fac4caab78debe7f
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 487
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_487.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_487
+      _guid: 99921b13de9967b4eae508d829c93c18
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 488
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_488.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_488
+      _guid: 93b86cb1e51da2c45bdd21caf9dd7b72
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 489
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_489.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_489
+      _guid: d31b3962c095aed478f4c6d1359566f0
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 490
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_490.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_490
+      _guid: 2b99200d46414584eab9bc2df53485ed
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 491
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_491.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_491
+      _guid: 063a020f9597df743a7b4c5ac315f3e7
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 492
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_492.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_492
+      _guid: 5e06106459b6d204cb7100c8f34e2a8a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 493
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_493.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_493
+      _guid: bcb15d88b5b8652428d4e385a3cac685
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 494
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_494.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_494
+      _guid: 7d445589a37c9404a9e7d4187e1d2758
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 495
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_495.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_495
+      _guid: 00b4a16dc944b8449af823b859df8f52
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 496
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_496.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_496
+      _guid: 591d3602a9410404a9a618550e13c280
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 497
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_497.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_497
+      _guid: 6f43ac28e93421f429cbaaf152c71475
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 498
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_498.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_498
+      _guid: c60bf8e56bca5e844bc725393a64df75
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 499
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_499.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_499
+      _guid: ffeb273ddec04ff4686a1404185804af
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 500
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_500.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_500
+      _guid: 625bee07421d2ea4697d2ea5bf180b9d
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 501
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_501.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_501
+      _guid: aa9bc6bab30a12f41b5dd04843c2850c
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 502
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_502.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_502
+      _guid: 4682190a0474e154796c6645b71a59cb
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 503
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_503.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_503
+      _guid: 498594475226aba45a61cc8ae2146fbf
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 504
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_504.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_504
+      _guid: 77dbfce299d4e33479d4b918b6338fa2
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 505
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_505.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_505
+      _guid: 34d83fdcc1d4fcf42ae6e95cbdde9f8a
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 506
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_506.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_506
+      _guid: 4459215af0642ba429f9dc2c2856b219
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 507
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_507.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_507
+      _guid: 808976953e067e64d944a9d338c4bd1b
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 508
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_508.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_508
+      _guid: f95b8cb9ac102d14a86041b7d75f4291
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 509
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_509.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_509
+      _guid: 5d1260eef5017cf4db5c444d737b5b2e
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 510
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_510.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_510
+      _guid: 068b54afe2af62d488c8fb85edaebec9
+    BlockDataList: []
+    EnvironmentDataList: []
+  - Id: 511
+    Mesh:
+      Path: Assets/Resources/TerrainData/256_128_256_4/ChunkMesh/Chunk_511.mesh
+      ResourcePath: TerrainData/256_128_256_4/ChunkMesh/Chunk_511
+      _guid: ea3d7455cf3fe4c4ca57e6163bd1fc04
+    BlockDataList: []
+    EnvironmentDataList: []
+  EnvironmentPrefabDataList:
+  - Id: 1
+    Prefab:
+      Path: Assets/Resources/Prototype/TestObject/GameObject 1.prefab
+      ResourcePath: Prototype/TestObject/GameObject 1
+      _guid: c403fe8b15d2d1f4995a24cadba59b88
+  EnvironmentInstanceMeshDataList:
+  - Id: 2
+    MeshSingleDataList:
+    - Mesh:
+        Path: Assets/Resources/Prototype/TestObject/Grass/Grass.mesh
+        ResourcePath: Prototype/TestObject/Grass/Grass
+        _guid: 18dd5cf6bfecc9d4581365f880079432
+      Material:
+        Path: Assets/Resources/Prototype/TestObject/Grass/GrassAlphaTest.mat
+        ResourcePath: Prototype/TestObject/Grass/GrassAlphaTest
+        _guid: 84bb41152503c57438514553f5101841
+      Matrix:
+        e00: 1
+        e01: 0
+        e02: 0
+        e03: 0
+        e10: 0
+        e11: 1
+        e12: 0
+        e13: 0
+        e20: 0
+        e21: 0
+        e22: 1
+        e23: 0
+        e30: 0
+        e31: 0
+        e32: 0
+        e33: 1
+    ColliderDataList: []
