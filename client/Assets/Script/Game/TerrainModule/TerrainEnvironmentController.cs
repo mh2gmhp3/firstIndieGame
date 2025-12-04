@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -68,11 +67,11 @@ namespace TerrainModule
 
         public void AddPrefabInstance(int id, int instanceId, Vector3 position, Quaternion rotation, Vector3 scale)
         {
-            if (_prefabGetAction == null)
-                return;
-
             if (!_idToPrefabController.TryGetValue(id, out var prefabController))
             {
+                if (_prefabGetAction == null)
+                    return;
+
                 var prefabInfo = _prefabGetAction(id);
                 if (!prefabInfo.IsValid())
                     return;
@@ -92,11 +91,11 @@ namespace TerrainModule
 
         public void AddMeshInstance(int id, int instanceId, Vector3 position, Quaternion rotation, Vector3 scale)
         {
-            if (_meshGetAction == null)
-                return;
-
             if (!_idToInsMeshBatchController.TryGetValue(id, out var meshBatchController))
             {
+                if (_meshGetAction == null)
+                    return;
+
                 var meshInfo = _meshGetAction(id);
                 if (!meshInfo.IsValid())
                     return;
