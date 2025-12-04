@@ -10,6 +10,17 @@ namespace TerrainModule
         public const string TerrainDataExportFolderPath = "Assets/Resources/TerrainData";
         public const string TerrainDataResourcesFolderPath = "TerrainData";
 
+        #region ColliderInfo
+
+        public enum ColliderType
+        {
+            Box,
+            Sphere,
+            Capsule,
+        }
+
+        #endregion
+
         #region Export
 
         public static string GetExportFolderPath(string dataName)

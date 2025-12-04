@@ -1,12 +1,12 @@
-﻿using Framework.Editor;
+﻿using Extension;
+using Framework.Editor;
 using Framework.Editor.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-using Extension;
-using static TerrainModule.Editor.TerrainEditorManager;
+using static TerrainModule.TerrainDefine;
 
 namespace TerrainModule.Editor
 {
@@ -1260,6 +1260,79 @@ namespace TerrainModule.Editor
                 }
             }
             return maxSize;
+        }
+
+        public struct ColliderData
+        {
+            public ColliderType ColliderType;
+            public Vector3 Center;
+            public Vector3 Size;
+            public float Radius;
+            public float Height;
+            public int Direction;
+
+            public Vector3 Position;
+            public Quaternion Rotation;
+            public Vector3 Scale;
+        }
+
+        private static List<ColliderData> _colliderDataListCache = new List<ColliderData>();
+        public static List<ColliderData> GetGameObjectColliderData(GameObject go)
+        {
+            _colliderDataListCache.Clear();
+            if (go == null)
+                return _colliderDataListCache;
+
+            var colliders = go.GetComponentsInChildren<Collider>();
+            if (colliders == null)
+                return _colliderDataListCache;
+
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                var collider = colliders[i];
+                var trans = collider.transform;
+                if (trans == null)
+                    continue;
+                if (collider is BoxCollider boxCollider)
+                {
+                    _colliderDataListCache.Add(new ColliderData()
+                    {
+                        ColliderType = ColliderType.Box,
+                        Center = boxCollider.center,
+                        Size = boxCollider.size,
+                        Position = trans.position,
+                        Rotation = trans.rotation,
+                        Scale = trans.localScale
+                    });
+                }
+                else if (collider is SphereCollider sphereCollider)
+                {
+                    _colliderDataListCache.Add(new ColliderData()
+                    {
+                        ColliderType = ColliderType.Box,
+                        Center = sphereCollider.center,
+                        Radius = sphereCollider.radius,
+                        Position = trans.position,
+                        Rotation = trans.rotation,
+                        Scale = trans.localScale
+                    });
+                }
+                else if (collider is CapsuleCollider capsuleCollider)
+                {
+                    _colliderDataListCache.Add(new ColliderData()
+                    {
+                        ColliderType = ColliderType.Box,
+                        Center = capsuleCollider.center,
+                        Radius = capsuleCollider.radius,
+                        Height = capsuleCollider.height,
+                        Direction = capsuleCollider.direction,
+                        Position = trans.position,
+                        Rotation = trans.rotation,
+                        Scale = trans.localScale
+                    });
+                }
+            }
+            return _colliderDataListCache;
         }
 
         #endregion

@@ -122,6 +122,20 @@ namespace TerrainModule.Editor
                             var singleData = insMeshData.MeshSingleDataList[s];
                             meshData.MeshSingleDataList.Add(new EnvironmentInstanceMeshSingleData(singleData.Mesh, singleData.Material, singleData.Matrix));
                         }
+                        for (int c = 0; c < insMeshData.ColliderDataList.Count; c++)
+                        {
+                            var colliderData = insMeshData.ColliderDataList[i];
+                            meshData.ColliderDataList.Add(new EnvironmentColliderData(
+                                colliderData.ColliderType,
+                                colliderData.Center,
+                                colliderData.Size,
+                                colliderData.Radius,
+                                colliderData.Height,
+                                colliderData.Direction,
+                                colliderData.Position,
+                                colliderData.Rotation,
+                                colliderData.Scale));
+                        }
                         terrainData.EnvironmentInstanceMeshDataList.Add(meshData);
                     }
                 }

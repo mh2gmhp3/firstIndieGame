@@ -2,12 +2,8 @@
 using Extension;
 using GameSystem;
 using Logging;
-using Palmmedia.ReportGenerator.Core.Parser.Filtering;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace TerrainModule
 {
@@ -24,12 +20,20 @@ namespace TerrainModule
         private MeshCollider _collider;
 
         private TerrainEnvironmentController _environmentController;
+        private ColliderController _colliderController;
 
-        public ChunkController(Transform parent, string terrainName, ChunkData data, Material material, TerrainEnvironmentController environmentController)
+        public ChunkController(
+            Transform parent,
+            string terrainName,
+            ChunkData data,
+            Material material,
+            TerrainEnvironmentController environmentController,
+            ColliderController colliderController)
         {
             _parent = parent;
             _data = data;
             _environmentController = environmentController;
+            _colliderController = colliderController;
             var mesh = AssetSystem.LoadAsset(data.Mesh);
             if (mesh == null)
             {
@@ -64,6 +68,13 @@ namespace TerrainModule
                                 instanceData.Position,
                                 instanceData.Rotation,
                                 instanceData.Scale);
+
+                            _colliderController.AddColliderInstance(
+                                envData.Id,
+                                instanceData.InstanceId,
+                                instanceData.Position,
+                                instanceData.Rotation,
+                                instanceData.Scale);
                         }
                         else
                         {
@@ -89,6 +100,9 @@ namespace TerrainModule
         private TerrainEnvironmentController _environmentController = new TerrainEnvironmentController();
         private List<TerrainEnvironmentController.MeshSingleInfo> _meshSingleInfoCache = new List<TerrainEnvironmentController.MeshSingleInfo>();
 
+        private ColliderController _colliderController;
+        private List<ColliderController.ColliderSingleInfo> _colliderSingleInfoCache = new List<ColliderController.ColliderSingleInfo>();
+
         private Dictionary<int, ChunkController> _idToChunkController = new Dictionary<int, ChunkController>();
 
         private Transform _chunkRoot = null;
@@ -102,6 +116,7 @@ namespace TerrainModule
             _chunkRoot = chunkRootGo.transform;
             _chunkRoot.SetParent(parent);
             _chunkRoot.Reset();
+            _colliderController = new ColliderController(_chunkRoot, GetEnvironmentColliderInfo);
             var terrainMaterial = AssetSystem.LoadAsset<Material>(TerrainDefine.GetResourcesMaterialPath(data.name));
             if (terrainMaterial == null)
             {
@@ -128,7 +143,13 @@ namespace TerrainModule
             for (int i = 0; i < _terrainData.ChunkDataList.Count; i++)
             {
                 var chunkData = _terrainData.ChunkDataList[i];
-                var chunkController = new ChunkController(_chunkRoot, _terrainData.name, chunkData, _terrainMaterial, _environmentController);
+                var chunkController = new ChunkController(
+                    _chunkRoot,
+                    _terrainData.name,
+                    chunkData,
+                    _terrainMaterial,
+                    _environmentController,
+                    _colliderController);
                 _idToChunkController.Add(chunkData.Id, chunkController);
             }
         }
@@ -161,14 +182,43 @@ namespace TerrainModule
                 var meshData = data.MeshSingleDataList[i];
                 _meshSingleInfoCache.Add(new TerrainEnvironmentController.MeshSingleInfo()
                 {
-                    Mesh = meshData.Mesh.EditorInstance,
-                    Material = meshData.Material.EditorInstance,
+                    Mesh = AssetSystem.LoadAsset(meshData.Mesh),
+                    Material = AssetSystem.LoadAsset(meshData.Material),
                     Matrix = meshData.Matrix
                 });
             }
             return new TerrainEnvironmentController.MeshInfo()
             {
-                MeshSingleInfoList = _meshSingleInfoCache
+                MeshSingleInfoList = _meshSingleInfoCache,
+            };
+        }
+
+        private ColliderController.ColliderInfo GetEnvironmentColliderInfo(int id)
+        {
+            var data = _terrainData.GetEnvInsMeshData(id);
+            if (data == null)
+                return default;
+
+            _colliderSingleInfoCache.Clear();
+            for (int i = 0; i < data.ColliderDataList.Count; i++)
+            {
+                var colliderData = data.ColliderDataList[i];
+                _colliderSingleInfoCache.Add(new ColliderController.ColliderSingleInfo()
+                {
+                    ColliderType = colliderData.ColliderType,
+                    Center = colliderData.Center,
+                    Size = colliderData.Size,
+                    Radius = colliderData.Radius,
+                    Height = colliderData.Height,
+                    Direction = colliderData.Direction,
+                    Position = colliderData.Position,
+                    Rotation = colliderData.Rotation,
+                    Scale = colliderData.Scale,
+                });
+            }
+            return new ColliderController.ColliderInfo()
+            {
+                ColliderSingleInfoList = _colliderSingleInfoCache,
             };
         }
 

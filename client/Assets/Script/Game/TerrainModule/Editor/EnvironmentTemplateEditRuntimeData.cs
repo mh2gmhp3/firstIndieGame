@@ -2,6 +2,8 @@
 using UnityEngine;
 using Utility;
 using Extension;
+using System;
+using static TerrainModule.TerrainDefine;
 
 namespace TerrainModule.Editor
 {
@@ -20,6 +22,20 @@ namespace TerrainModule.Editor
         ObjectIsNull,
         CategoryNotFound,
         DuplicateName
+    }
+
+    public class EnvironmentTemplateColliderEditRuntimeData
+    {
+        public ColliderType ColliderType;
+        public Vector3 Center;
+        public Vector3 Size;
+        public float Radius;
+        public float Height;
+        public int Direction;
+
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public Vector3 Scale;
     }
 
     public class EnvironmentTemplateInstanceMeshEditRuntimeSingleData
@@ -48,6 +64,7 @@ namespace TerrainModule.Editor
     {
         public GameObjectIndirectField OriginObject = new GameObjectIndirectField();
         public List<EnvironmentTemplateInstanceMeshEditRuntimeSingleData> MeshSingleDataList = new List<EnvironmentTemplateInstanceMeshEditRuntimeSingleData>();
+        public List<EnvironmentTemplateColliderEditRuntimeData> ColliderDataList = new List<EnvironmentTemplateColliderEditRuntimeData>();
 
         public TerrainPreviewInfo PreviewInfo = new TerrainPreviewInfo();
 
@@ -71,6 +88,54 @@ namespace TerrainModule.Editor
             {
                 var meshData = meshDataList[i];
                 MeshSingleDataList.Add(new EnvironmentTemplateInstanceMeshEditRuntimeSingleData(meshData.Mesh, meshData.Material, meshData.Matrix));
+            }
+            var colliderDataList = TerrainEditorUtility.GetGameObjectColliderData(OriginObject.EditorInstance);
+            for (int i = 0; i < colliderDataList.Count; i++)
+            {
+                var colliderData = colliderDataList[i];
+                EnvironmentTemplateColliderEditRuntimeData colliderEditData = null;
+                if (colliderData.ColliderType == ColliderType.Box)
+                {
+                    colliderEditData = new EnvironmentTemplateColliderEditRuntimeData()
+                    {
+                        ColliderType = ColliderType.Box,
+                        Center = colliderData.Center,
+                        Size = colliderData.Size,
+                        Position = colliderData.Position,
+                        Rotation = colliderData.Rotation,
+                        Scale = colliderData.Scale,
+                    };                }
+                else if (colliderData.ColliderType == ColliderType.Sphere)
+                {
+                    colliderEditData = new EnvironmentTemplateColliderEditRuntimeData()
+                    {
+                        ColliderType = ColliderType.Sphere,
+                        Center = colliderData.Center,
+                        Radius = colliderData.Radius,
+                        Position = colliderData.Position,
+                        Rotation = colliderData.Rotation,
+                        Scale = colliderData.Scale,
+                    };
+                }
+                else if (colliderData.ColliderType == ColliderType.Capsule)
+                {
+                    colliderEditData = new EnvironmentTemplateColliderEditRuntimeData()
+                    {
+                        ColliderType = ColliderType.Capsule,
+                        Center = colliderData.Center,
+                        Radius = colliderData.Radius,
+                        Height = colliderData.Height,
+                        Direction = colliderData.Direction,
+                        Position = colliderData.Position,
+                        Rotation = colliderData.Rotation,
+                        Scale = colliderData.Scale,
+                    };
+                }
+                else
+                {
+                    continue;
+                }
+                ColliderDataList.Add(colliderEditData);
             }
         }
     }

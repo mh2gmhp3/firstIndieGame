@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utility;
+using static TerrainModule.TerrainDefine;
 
 namespace TerrainModule
 {
@@ -34,6 +35,44 @@ namespace TerrainModule
         {
             IsInstanceMesh = isInsMesh;
             Id = id;
+        }
+    }
+
+    [Serializable]
+    public class EnvironmentColliderData
+    {
+        public ColliderType ColliderType;
+        public Vector3 Center;
+        public Vector3 Size;
+        public float Radius;
+        public float Height;
+        public int Direction;
+
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public Vector3 Scale;
+
+        public EnvironmentColliderData(
+            ColliderType colliderType,
+            Vector3 center,
+            Vector3 size,
+            float radius,
+            float height,
+            int direction,
+            Vector3 position,
+            Quaternion rotation,
+            Vector3 scale)
+        {
+            ColliderType = colliderType;
+            Center = center;
+            Size = size;
+            Radius = radius;
+            Height = height;
+            Direction = direction;
+
+            Position = position;
+            Rotation = rotation;
+            Scale = scale;
         }
     }
 
@@ -70,6 +109,7 @@ namespace TerrainModule
     {
         public int Id;
         public List<EnvironmentInstanceMeshSingleData> MeshSingleDataList = new List<EnvironmentInstanceMeshSingleData>();
+        public List<EnvironmentColliderData> ColliderDataList = new List<EnvironmentColliderData>();
 
         public EnvironmentInstanceMeshData(int id)
         {

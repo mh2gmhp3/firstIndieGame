@@ -1,11 +1,40 @@
-﻿using Utility;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
+using static TerrainModule.TerrainDefine;
 
 namespace TerrainModule.Editor
 {
+    [Serializable]
+    public class EnvironmentTemplateColliderEditData
+    {
+        public ColliderType ColliderType;
+        public Vector3 Center;
+        public Vector3 Size;
+        public float Radius;
+        public float Height;
+        public int Direction;
+
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public Vector3 Scale;
+
+        public EnvironmentTemplateColliderEditData(EnvironmentTemplateColliderEditRuntimeData runtimeData)
+        {
+            ColliderType = runtimeData.ColliderType;
+            Center = runtimeData.Center;
+            Size = runtimeData.Size;
+            Radius = runtimeData.Radius;
+            Height = runtimeData.Height;
+            Direction = runtimeData.Direction;
+
+            Position = runtimeData.Position;
+            Rotation = runtimeData.Rotation;
+            Scale = runtimeData.Scale;
+        }
+    }
+
     [Serializable]
     public class EnvironmentTemplateInstanceMeshEditSingleData
     {
@@ -26,6 +55,7 @@ namespace TerrainModule.Editor
     {
         public GameObjectIndirectField OriginObject = new GameObjectIndirectField();
         public List<EnvironmentTemplateInstanceMeshEditSingleData> MeshSingleDataList = new List<EnvironmentTemplateInstanceMeshEditSingleData>();
+        public List<EnvironmentTemplateColliderEditData> ColliderDataList = new List<EnvironmentTemplateColliderEditData>();
 
         public EnvironmentTemplateInstanceMeshEditData(EnvironmentTemplateInstanceMeshEditRuntimeData runtimeData)
         {
@@ -33,6 +63,10 @@ namespace TerrainModule.Editor
             for (int i = 0; i < runtimeData.MeshSingleDataList.Count; i++)
             {
                 MeshSingleDataList.Add(new EnvironmentTemplateInstanceMeshEditSingleData(runtimeData.MeshSingleDataList[i]));
+            }
+            for (int i = 0; i < runtimeData.ColliderDataList.Count; i++)
+            {
+                ColliderDataList.Add(new EnvironmentTemplateColliderEditData(runtimeData.ColliderDataList[i]));
             }
         }
     }
