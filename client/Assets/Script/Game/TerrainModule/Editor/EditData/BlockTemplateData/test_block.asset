@@ -12,49 +12,105 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451f7b423cb6c8140beaefc0faea454e, type: 3}
   m_Name: test_block
   m_EditorClassIdentifier: 
-  TileMap: {fileID: 2800000, guid: 6344bf96fbda94141a525046d088fb23, type: 3}
-  Tiling: {x: 4, y: 4}
+  TileMap: {fileID: 2800000, guid: cbc6d3aaeb06fae449aa51ac17a7dcf4, type: 3}
+  Tiling: {x: 16, y: 16}
   Shader: {fileID: 4800000, guid: 0273231d23bbd6045992ff43db3578e7, type: 3}
   BlockTemplateDataList:
   - Id: 1
-    PXTiling: {x: 0.25, y: 0.25}
-    NXTiling: {x: 0.25, y: 0.25}
-    PYTiling: {x: 0, y: 0.75}
-    NYTiling: {x: 0.25, y: 0.25}
-    PZTiling: {x: 0.25, y: 0.25}
-    NZTiling: {x: 0.25, y: 0.25}
+    PXTiling: {x: 0.125, y: 0.9375}
+    NXTiling: {x: 0.125, y: 0.9375}
+    PYTiling: {x: 0, y: 0.9375}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.125, y: 0.9375}
+    NZTiling: {x: 0.125, y: 0.9375}
   - Id: 2
-    PXTiling: {x: 0.25, y: 0.25}
-    NXTiling: {x: 0.25, y: 0.25}
-    PYTiling: {x: 0.25, y: 0.25}
-    NYTiling: {x: 0.25, y: 0.25}
-    PZTiling: {x: 0.25, y: 0.25}
-    NZTiling: {x: 0.25, y: 0.25}
+    PXTiling: {x: 0.0625, y: 0.9375}
+    NXTiling: {x: 0.0625, y: 0.9375}
+    PYTiling: {x: 0.0625, y: 0.9375}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.0625, y: 0.9375}
+    NZTiling: {x: 0.0625, y: 0.9375}
   - Id: 3
-    PXTiling: {x: 0.25, y: 0.25}
-    NXTiling: {x: 0.25, y: 0.25}
-    PYTiling: {x: 0.75, y: 0.75}
-    NYTiling: {x: 0.25, y: 0.25}
-    PZTiling: {x: 0.25, y: 0.25}
-    NZTiling: {x: 0.25, y: 0.25}
+    PXTiling: {x: 0.0625, y: 0.9375}
+    NXTiling: {x: 0.125, y: 0.9375}
+    PYTiling: {x: 0, y: 0.8125}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.0625, y: 0.9375}
+    NZTiling: {x: 0.0625, y: 0.9375}
   - Id: 4
-    PXTiling: {x: 0, y: 0}
-    NXTiling: {x: 0, y: 0}
-    PYTiling: {x: 0, y: 0}
-    NYTiling: {x: 0, y: 0}
-    PZTiling: {x: 0, y: 0}
-    NZTiling: {x: 0, y: 0}
+    PXTiling: {x: 0.125, y: 0.9375}
+    NXTiling: {x: 0.0625, y: 0.9375}
+    PYTiling: {x: 0.125, y: 0.8125}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.0625, y: 0.9375}
+    NZTiling: {x: 0.0625, y: 0.9375}
   - Id: 5
-    PXTiling: {x: 0, y: 0}
-    NXTiling: {x: 0, y: 0}
-    PYTiling: {x: 0, y: 0}
-    NYTiling: {x: 0, y: 0}
-    PZTiling: {x: 0, y: 0}
-    NZTiling: {x: 0, y: 0}
+    PXTiling: {x: 0.0625, y: 0.9375}
+    NXTiling: {x: 0.0625, y: 0.9375}
+    PYTiling: {x: 0.0625, y: 0.875}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.0625, y: 0.9375}
+    NZTiling: {x: 0.0625, y: 0.9375}
   - Id: 6
-    PXTiling: {x: 0, y: 0}
-    NXTiling: {x: 0, y: 0}
-    PYTiling: {x: 0, y: 0}
-    NYTiling: {x: 0, y: 0}
-    PZTiling: {x: 0, y: 0}
-    NZTiling: {x: 0, y: 0}
+    PXTiling: {x: 0.0625, y: 0.9375}
+    NXTiling: {x: 0.0625, y: 0.9375}
+    PYTiling: {x: 0.0625, y: 0.75}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.0625, y: 0.9375}
+    NZTiling: {x: 0.125, y: 0.9375}
+  - Id: 7
+    PXTiling: {x: 0.0625, y: 0.9375}
+    NXTiling: {x: 0.0625, y: 0.9375}
+    PYTiling: {x: 0, y: 0.875}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.0625, y: 0.9375}
+    NZTiling: {x: 0.0625, y: 0.9375}
+  - Id: 8
+    PXTiling: {x: 0.0625, y: 0.9375}
+    NXTiling: {x: 0.0625, y: 0.9375}
+    PYTiling: {x: 0.125, y: 0.875}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.0625, y: 0.9375}
+    NZTiling: {x: 0.0625, y: 0.9375}
+  - Id: 9
+    PXTiling: {x: 0.0625, y: 0.9375}
+    NXTiling: {x: 0.0625, y: 0.9375}
+    PYTiling: {x: 0, y: 0.75}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.0625, y: 0.9375}
+    NZTiling: {x: 0.0625, y: 0.9375}
+  - Id: 10
+    PXTiling: {x: 0.0625, y: 0.9375}
+    NXTiling: {x: 0.0625, y: 0.9375}
+    PYTiling: {x: 0.125, y: 0.75}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.0625, y: 0.9375}
+    NZTiling: {x: 0.0625, y: 0.9375}
+  - Id: 11
+    PXTiling: {x: 0.0625, y: 0.9375}
+    NXTiling: {x: 0.0625, y: 0.9375}
+    PYTiling: {x: 0, y: 0.6875}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.0625, y: 0.9375}
+    NZTiling: {x: 0.0625, y: 0.9375}
+  - Id: 12
+    PXTiling: {x: 0.0625, y: 0.9375}
+    NXTiling: {x: 0.0625, y: 0.9375}
+    PYTiling: {x: 0.0625, y: 0.6875}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.0625, y: 0.9375}
+    NZTiling: {x: 0.0625, y: 0.9375}
+  - Id: 13
+    PXTiling: {x: 0.0625, y: 0.9375}
+    NXTiling: {x: 0.0625, y: 0.9375}
+    PYTiling: {x: 0, y: 0.625}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.0625, y: 0.9375}
+    NZTiling: {x: 0.0625, y: 0.9375}
+  - Id: 14
+    PXTiling: {x: 0.0625, y: 0.9375}
+    NXTiling: {x: 0.0625, y: 0.9375}
+    PYTiling: {x: 0.0625, y: 0.625}
+    NYTiling: {x: 0.0625, y: 0.9375}
+    PZTiling: {x: 0.0625, y: 0.9375}
+    NZTiling: {x: 0.0625, y: 0.9375}
