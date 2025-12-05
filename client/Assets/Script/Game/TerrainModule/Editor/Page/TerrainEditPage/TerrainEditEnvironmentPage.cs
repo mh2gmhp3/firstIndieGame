@@ -1,4 +1,6 @@
 ﻿using Framework.Editor;
+using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,18 +11,24 @@ namespace TerrainModule.Editor
         private enum MouseFunction
         {
             AddEnvironment,
-            DeleteEnvironment,
+            RemoveEnvironment,
         }
 
         public override string Name => TerrainEditorDefine.TerrainEditPageToName[(int)TerrainEditPageType.EditEnvironment];
 
         private TerrainEditRuntimeData CurEditRuntimeData => _editorData.CurTerrainEditRuntimeData;
         private EnvironmentTemplateCategoryEditRuntimeData _curCategoryRuntimeData;
+        private MouseFunction _curMouseFunction = MouseFunction.AddEnvironment;
         private int _editDistance = 0;
+        //AddEnvironment
         private Vector3 _editPosition = Vector3.zero;
         private Vector3 _editRotation = Vector3.zero;
         private Vector3 _editScale = Vector3.one;
         private bool _alignWithSurface = false;
+        //RemoveEnvironment
+        private float _removeRadius = 1f;
+        private bool _removeUseMask = false;
+        private Color _removeHandlesSphereColor = new Color(0, 0, 1, 0.3f);
 
         private string[] _categoryNames;
         private int _curSelectedCategoryIndex = -1;
@@ -50,6 +58,8 @@ namespace TerrainModule.Editor
 
         public override void OnGUI()
         {
+            ReceiveInputForMouseFunction();
+
             if (CurEditRuntimeData == null)
                 return;
 
@@ -57,13 +67,15 @@ namespace TerrainModule.Editor
             GUILayout.Space(5f);
             DrawEditorSetting();
             GUILayout.Space(5f);
-            DrawInstanceValue();
+            DrawMouseFunction();
             GUILayout.Space(5f);
             DrawGUI_CategoryData();
         }
 
         public override void OnSceneGUI()
         {
+            ReceiveInputForMouseFunction();
+
             if (CurEditRuntimeData == null)
                 return;
 
@@ -72,33 +84,23 @@ namespace TerrainModule.Editor
             Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
             if (CurEditRuntimeData.RaycastBlockMesh(ray, _editDistance, out var hit))
             {
+                DrawSceneMouseFunctionMove(hit);
+
                 if (currentEvent.type == EventType.MouseMove)
                 {
-                    GetDrawTransform(hit, out var position, out var rotation, out var scale);
-                    _editorData.TerrainEditorMgr.UpdateTerrainEnvironmentDraw(
-                        position,
-                        rotation,
-                        scale);
-                    Repaint();
+                    SceneView.RepaintAll();
                 }
                 if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0)
                 {
-                    if (_curCategoryRuntimeData.TryGetName(_drawPreviewSetting.IsInstanceMesh, _drawPreviewSetting.Index, out var name))
-                    {
-                        GetSetTransform(hit, out var position, out var rotation, out var scale);
-                        if (CurEditRuntimeData.AddEnvironment(
-                            _drawPreviewSetting.IsInstanceMesh,
-                            _drawPreviewSetting.CategoryName,
-                            name,
-                            position,
-                            rotation,
-                            scale))
-                        {
-                            if (CurEditRuntimeData.TryGetId(hit.point, out int chunkId, out _))
-                                _editorData.TerrainEditorMgr.RefreshChunkEnvironment(chunkId);
-                        }
-                    }
+                    InvokeMouseFunctionDown(hit);
                     currentEvent.Use();
+                }
+                else if (currentEvent.type == EventType.MouseDrag)
+                {
+                    if (currentEvent.button == 0 && InvokeMouseFunctionDrag(hit))
+                    {
+                        currentEvent.Use();
+                    }
                 }
             }
             if (_drawPreviewSetting.IsInstanceMesh)
@@ -106,7 +108,127 @@ namespace TerrainModule.Editor
                 //Mesh要強制呼叫Update繪製
                 EditorApplication.QueuePlayerLoopUpdate();
             }
+            HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
         }
+
+        #region MouseFunction
+
+        private void ReceiveInputForMouseFunction()
+        {
+            Event currentEvent = Event.current;
+            if (!currentEvent.isKey && currentEvent.type != EventType.KeyDown)
+                return;
+
+            if (currentEvent.keyCode == KeyCode.A)
+            {
+                SetMouseFunction(MouseFunction.AddEnvironment);
+            }
+            else if (currentEvent.keyCode == KeyCode.D)
+            {
+                SetMouseFunction(MouseFunction.RemoveEnvironment);
+            }
+        }
+
+        private void SetMouseFunction(MouseFunction function)
+        {
+            if (_curMouseFunction == function)
+                return;
+
+            if (_curMouseFunction == MouseFunction.AddEnvironment)
+                _editorData.TerrainEditorMgr.ClearTerrainEnvironmentDraw();
+
+            _curMouseFunction = function;
+
+            if (function == MouseFunction.AddEnvironment)
+                SelectCategory(_curSelectedCategoryIndex);
+
+            SceneView.RepaintAll();
+            Repaint();
+        }
+
+        private void DrawSceneMouseFunctionMove(RaycastHit hit)
+        {
+            if (_curMouseFunction == MouseFunction.AddEnvironment)
+            {
+                GetDrawTransform(hit, out var position, out var rotation, out var scale);
+                _editorData.TerrainEditorMgr.UpdateTerrainEnvironmentDraw(
+                    position,
+                    rotation,
+                    scale);
+            }
+            else if (_curMouseFunction == MouseFunction.RemoveEnvironment)
+            {
+                Handles.color = _removeHandlesSphereColor;
+                Handles.SphereHandleCap(
+                    GUIUtility.GetControlID(FocusType.Passive),
+                    hit.point,
+                    Quaternion.identity,
+                    _removeRadius * 2,
+                    EventType.Repaint);
+            }
+        }
+
+        private void InvokeMouseFunctionDown(RaycastHit hit)
+        {
+            if (_curMouseFunction == MouseFunction.AddEnvironment)
+            {
+                if (_curCategoryRuntimeData.TryGetName(_drawPreviewSetting.IsInstanceMesh, _drawPreviewSetting.Index, out var name))
+                {
+                    GetSetTransform(hit, out var position, out var rotation, out var scale);
+                    if (CurEditRuntimeData.AddEnvironment(
+                        _drawPreviewSetting.IsInstanceMesh,
+                        _drawPreviewSetting.CategoryName,
+                        name,
+                        position,
+                        rotation,
+                        scale))
+                    {
+                        if (CurEditRuntimeData.TryGetId(hit.point, out int chunkId, out _))
+                            _editorData.TerrainEditorMgr.RefreshChunkEnvironment(chunkId);
+                    }
+                }
+            }
+            else if (_curMouseFunction == MouseFunction.RemoveEnvironment)
+            {
+                RemoveEnvironment(hit.point);
+            }
+        }
+
+        private bool InvokeMouseFunctionDrag(RaycastHit hit)
+        {
+            if (_curMouseFunction == MouseFunction.RemoveEnvironment)
+            {
+                RemoveEnvironment(hit.point);
+                return true;
+            }
+            return false;
+        }
+
+        private void RemoveEnvironment(Vector3 position)
+        {
+            List<int> removeInsList = null;
+            if (_removeUseMask)
+            {
+                if (_curCategoryRuntimeData.TryGetName(_drawPreviewSetting.IsInstanceMesh, _drawPreviewSetting.Index, out var name))
+                {
+                    removeInsList = CurEditRuntimeData.RemoveEnvironment(position, _removeRadius,
+                        (cName, envName) =>
+                        {
+                            return cName == _drawPreviewSetting.CategoryName && envName == name;
+                        });
+                }
+            }
+            else
+            {
+                removeInsList = CurEditRuntimeData.RemoveEnvironment(position, _removeRadius);
+            }
+            if (removeInsList != null && removeInsList.Count > 0)
+            {
+                _editorData.TerrainEditorMgr.RemoveEnvironmentInstance(removeInsList);
+            }
+        }
+
+        #endregion
 
         private void DrawGUI_Category()
         {
@@ -146,7 +268,19 @@ namespace TerrainModule.Editor
             EditorGUILayout.EndVertical();
         }
 
-        private void DrawInstanceValue()
+        private void DrawMouseFunction()
+        {
+            if (_curMouseFunction == MouseFunction.AddEnvironment)
+            {
+                DrawAddEnvironmentSetting();
+            }
+            else if (_curMouseFunction == MouseFunction.RemoveEnvironment)
+            {
+                DrawRemoveEnvironmentSetting();
+            }
+        }
+
+        private void DrawAddEnvironmentSetting()
         {
             _editPosition = EditorGUILayout.Vector3Field("平移", _editPosition);
             _editRotation = EditorGUILayout.Vector3Field("旋轉", _editRotation);
@@ -158,6 +292,17 @@ namespace TerrainModule.Editor
                 _editRotation = Vector3.zero;
                 _editScale = Vector3.one;
             }
+        }
+
+        private void DrawRemoveEnvironmentSetting()
+        {
+            _removeRadius = EditorGUILayout.Slider("刪除半徑", _removeRadius, 0.1f, 10f);
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.LabelField("使用遮罩 (只刪除選擇環境物件)");
+                _removeUseMask = EditorGUILayout.Toggle(_removeUseMask);
+            }
+            EditorGUILayout.EndHorizontal();
         }
 
         private void DrawGUI_CategoryData()
@@ -315,7 +460,8 @@ namespace TerrainModule.Editor
                 _curSelectedCategoryIndex = i;
                 _curCategoryRuntimeData = result;
                 _drawPreviewSetting.CategoryName = name;
-                _editorData.TerrainEditorMgr.SetTerrainEnvironmentDraw(_drawPreviewSetting);
+                if (_curMouseFunction == MouseFunction.AddEnvironment)
+                    _editorData.TerrainEditorMgr.SetTerrainEnvironmentDraw(_drawPreviewSetting);
                 return;
             }
         }

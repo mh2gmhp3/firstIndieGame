@@ -799,6 +799,42 @@ namespace TerrainModule.Editor
             return true;
         }
 
+        private List<int> _removedEnvInstanceIdListCache = new List<int>();
+        public List<int> RemoveEnvironment(Vector3 position, float radius, Func<string, string, bool> filter = null)
+        {
+            _removedEnvInstanceIdListCache.Clear();
+            if (!IsValid(position))
+                return _removedEnvInstanceIdListCache;
+
+            if (!TryGetChunk(position, out var chunkData, out _))
+                return _removedEnvInstanceIdListCache;
+
+            bool haveFilter = filter != null;
+
+            var rangeDis = radius * radius;
+            for (int i = chunkData.EnvironmentEditDataList.Count - 1; i >= 0; i--)
+            {
+                var envData = chunkData.EnvironmentEditDataList[i];
+                if (haveFilter && !filter(envData.CategoryName, envData.Name))
+                    continue;
+                for (int j = envData.InstanceList.Count - 1; j >= 0; j--)
+                {
+                    var insData = envData.InstanceList[j];
+                    var diff = insData.Position - position;
+                    var dis = diff.sqrMagnitude;
+                    if (dis > rangeDis)
+                        continue;
+
+                    envData.InstanceList.RemoveAt(j);
+                    _removedEnvInstanceIdListCache.Add(insData.InstanceId);
+                }
+                if (envData.InstanceList.Count == 0)
+                    chunkData.EnvironmentEditDataList.RemoveAt(i);
+            }
+
+            return _removedEnvInstanceIdListCache;
+        }
+
         public bool TryGetEnvPrefabData(int id, out EnvironmentTemplatePrefabEditRuntimeData prefabData)
         {
             prefabData = null;

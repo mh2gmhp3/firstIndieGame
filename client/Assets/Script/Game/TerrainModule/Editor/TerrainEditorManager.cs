@@ -189,6 +189,8 @@ namespace TerrainModule.Editor
             }
             _chunkIdToPreviewMeshDic.Clear();
 
+            _terrainEnvironmentController.Clear();
+
             foreach (var chunkId in _curTerrainEditData.IdToChunkEditData.Keys)
             {
                 RefreshChunkMesh(chunkId);
@@ -300,7 +302,6 @@ namespace TerrainModule.Editor
             if (!_curTerrainEditData.IdToChunkEditData.TryGetValue(chunkId, out var chunkData))
                 return;
 
-            //TODO 要考慮刪除
             for (int i = 0; i < chunkData.EnvironmentEditDataList.Count; i++)
             {
                 var envData = chunkData.EnvironmentEditDataList[i];
@@ -328,6 +329,21 @@ namespace TerrainModule.Editor
                             instanceData.Scale);
                     }
                 }
+            }
+        }
+
+        public void RemoveEnvironmentInstance(List<int> removeInsIdList)
+        {
+            if (_curEditorMode != EditorMode.Terrain)
+                return;
+
+            if (_curTerrainEditData == null)
+                return;
+
+            for (int i = 0; i < removeInsIdList.Count; i++)
+            {
+                var instanceId = removeInsIdList[i];
+                _terrainEnvironmentController.RemoveInstance(instanceId);
             }
         }
 
