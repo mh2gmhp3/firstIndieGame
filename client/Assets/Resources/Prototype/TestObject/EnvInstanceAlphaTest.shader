@@ -7,6 +7,10 @@ Shader "Protptype/EnvInstanceAlphaTest"
     {
         _BaseMap("Base Map", 2D) = "white" {}
         _Cutoff("Alpha Cutoff Threshold", Range(0.0, 1.0)) = 0.5
+        _WindStrength("WindStrength", float) = 0.5
+        _WindSpeed("WindSpeed", float) = 0.5
+        _WindDirection("WindDirection", Vector) = (1, 0, 0, 0)
+        _PixelsPerUnit("PixelsPerUnit", float) = 1
     }
 
     // The SubShader block containing the Shader code.
@@ -67,6 +71,10 @@ Shader "Protptype/EnvInstanceAlphaTest"
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
                 float _Cutoff;
+                float _WindStrength;
+                float _WindSpeed;
+                float4 _WindDirection;
+                float _PixelsPerUnit;
             CBUFFER_END
 
             // The vertex shader definition with properties defined in the Varyings
@@ -77,9 +85,20 @@ Shader "Protptype/EnvInstanceAlphaTest"
                 // Declaring the output object (OUT) with the Varyings struct.
                 Varyings OUT;
                 UNITY_SETUP_INSTANCE_ID(IN);
+
+                float bendMask = IN.uv.y;
+                float snapSize = 1 / _PixelsPerUnit;
+                float oscillation = sin(_Time.y * _WindSpeed) * 0.5 + 0.5;
+                float smoothDisplacementValue = oscillation * _WindStrength * bendMask;
+                float3 smoothDisplacement = smoothDisplacementValue * _WindDirection.xyz;
+                IN.positionOS.xyz += smoothDisplacement;
+                float3 positionWS = TransformObjectToWorld(IN.positionOS.xyz);
+                positionWS.xyz = floor(positionWS.xyz / snapSize) * snapSize;
+
                 // The TransformObjectToHClip function transforms vertex positions
                 // from object space to homogenous space
-                OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
+                OUT.positionHCS = TransformWorldToHClip(positionWS);
+                //OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
                 OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
                 OUT.shadowCoord = TransformWorldToShadowCoord(TransformObjectToWorld(IN.positionOS.xyz));
