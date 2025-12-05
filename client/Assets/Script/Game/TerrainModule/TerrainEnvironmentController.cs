@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace TerrainModule
@@ -55,6 +56,7 @@ namespace TerrainModule
         private Dictionary<int, PrefabController> _idToPrefabController = new Dictionary<int, PrefabController>();
         private Dictionary<int, MeshBatchController> _idToInsMeshBatchController = new Dictionary<int, MeshBatchController>();
         private List<MeshBatchController> _meshBatchControllerList = new List<MeshBatchController>();
+        private Dictionary<int, (bool IsInsMesh, int EnvId)> _instanceToInfoDic = new Dictionary<int, (bool IsInsMesh, int EnvId)>();
 
         private Func<int, PrefabInfo> _prefabGetAction;
         private Func<int, MeshInfo> _meshGetAction;
@@ -67,6 +69,9 @@ namespace TerrainModule
 
         public void AddPrefabInstance(int id, int instanceId, Vector3 position, Quaternion rotation, Vector3 scale)
         {
+            if (_instanceToInfoDic.ContainsKey(instanceId))
+                return;
+
             if (!_idToPrefabController.TryGetValue(id, out var prefabController))
             {
                 if (_prefabGetAction == null)
@@ -78,19 +83,23 @@ namespace TerrainModule
                 prefabController = new PrefabController(prefabInfo.Prefab, prefabInfo.Parent);
                 _idToPrefabController.Add(id, prefabController);
             }
-            prefabController.AddInstance(instanceId, position, rotation, scale);
+            if (prefabController.AddInstance(instanceId, position, rotation, scale))
+                _instanceToInfoDic.Add(instanceId, (false, id));
         }
 
         public void RemovePrefabInstance(int id, int instanceId)
         {
             if (!_idToPrefabController.TryGetValue(id, out var prefabController))
                 return;
-
-            prefabController.RemoveInstance(instanceId);
+            if (prefabController.RemoveInstance(instanceId))
+                _instanceToInfoDic.Remove(instanceId);
         }
 
         public void AddMeshInstance(int id, int instanceId, Vector3 position, Quaternion rotation, Vector3 scale)
         {
+            if (_instanceToInfoDic.ContainsKey(instanceId))
+                return;
+
             if (!_idToInsMeshBatchController.TryGetValue(id, out var meshBatchController))
             {
                 if (_meshGetAction == null)
@@ -109,6 +118,7 @@ namespace TerrainModule
                 _idToInsMeshBatchController.Add(id, meshBatchController);
             }
             meshBatchController.AddInstance(instanceId, Matrix4x4.TRS(position, rotation, scale));
+            _instanceToInfoDic.Add(instanceId, (true, id));
         }
 
         public void RemoveMeshInstance(int id, int instanceId)
@@ -116,6 +126,32 @@ namespace TerrainModule
             if (!_idToInsMeshBatchController.TryGetValue(id, out var meshBatchController))
                 return;
             meshBatchController.RemoveInstance(instanceId);
+            _instanceToInfoDic.Remove(instanceId);
+        }
+
+        public void RemoveInstance(int instanceId)
+        {
+            if (!_instanceToInfoDic.TryGetValue(instanceId, out var info))
+                return;
+
+            if (info.IsInsMesh)
+                RemoveMeshInstance(info.EnvId, instanceId);
+            else
+                RemovePrefabInstance(info.EnvId, instanceId);
+        }
+
+        public void Clear()
+        {
+            var instanceIdList = _instanceToInfoDic.Keys.ToList();
+            foreach (var instanceId in instanceIdList)
+            {
+                RemoveInstance(instanceId);
+            }
+
+            _idToPrefabController.Clear();
+            _idToInsMeshBatchController.Clear();
+            _meshBatchControllerList.Clear();
+            _instanceToInfoDic.Clear();
         }
 
         public void Update()

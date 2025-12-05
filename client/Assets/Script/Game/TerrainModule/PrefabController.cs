@@ -32,10 +32,10 @@ namespace TerrainModule
             _pool = new ObjectPool<PrefabInstanceInfo>(CreateInstance, actionOnRelease:OnInstanceRelease);
         }
 
-        public void AddInstance(int id, Vector3 position, Quaternion rotation, Vector3 scale)
+        public bool AddInstance(int id, Vector3 position, Quaternion rotation, Vector3 scale)
         {
             if (_idToInstanceDic.ContainsKey(id))
-                return;
+                return false;
 
             var instance = _pool.Get();
             instance.Transform.position = position;
@@ -43,16 +43,18 @@ namespace TerrainModule
             instance.Transform.localScale = scale;
             _idToInstanceDic.Add(id, instance);
             _instanceIdList.Add(id);
+            return true;
         }
 
-        public void RemoveInstance(int id)
+        public bool RemoveInstance(int id)
         {
             if (!_idToInstanceDic.TryGetValue(id, out var instanceInfo))
-                return;
+                return false;
 
             _pool.Release(instanceInfo);
             _idToInstanceDic.Remove(id);
             _instanceIdList.Remove(id);
+            return true;
         }
 
         private PrefabInstanceInfo CreateInstance()
