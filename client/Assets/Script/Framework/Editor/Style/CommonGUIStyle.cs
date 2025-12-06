@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace Framework.Editor
@@ -8,6 +6,18 @@ namespace Framework.Editor
     public class CommonGUIStyle
     {
         public static string Default_Box = "Box";
+
+        [MenuItem("Tools/ClearAllGUIStyle", priority = 100)]
+        public static void ClearAllGUIStyle()
+        {
+            var t = typeof(CommonGUIStyle);
+            var staticFields = t.GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            for (int i = 0; i < staticFields.Length; i++)
+            {
+                var staticField = staticFields[i];
+                staticField.SetValue(t, null);
+            }
+        }
 
         private static GUIStyle _redBox;
         public static GUIStyle RedBox
