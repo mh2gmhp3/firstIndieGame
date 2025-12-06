@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using Utility;
+using static TerrainModule.TerrainDefine;
 
 namespace TerrainModule.Editor
 {
@@ -104,6 +105,70 @@ namespace TerrainModule.Editor
         Ok,
         Continue,
         Break
+    }
+
+    public class AreaEditRuntimeData
+    {
+        public int Id;
+        public AreaType AreaType;
+
+        public Vector3 WorldPoint;
+        public float Radius;
+
+        public AreaEditRuntimeData(int id)
+        {
+            Id = id;
+        }
+
+        public AreaEditRuntimeData(AreaEditData editData)
+        {
+            Id = editData.Id;
+            AreaType = editData.AreaType;
+
+            WorldPoint = editData.WorldPoint;
+            Radius = editData.Radius;
+        }
+    }
+
+    public class AreaGroupEditRuntimeData
+    {
+        public int Id;
+        public string Description;
+        public List<AreaEditRuntimeData> AreaList = new List<AreaEditRuntimeData>();
+
+        public AreaGroupEditRuntimeData(int id)
+        {
+            Id = id;
+        }
+
+        public AreaGroupEditRuntimeData(AreaGroupEditData editData)
+        {
+            Id = editData.Id;
+            Description = editData.Description;
+            for (int i = 0; i < editData.AreaList.Count; i++)
+            {
+                AreaList.Add(new AreaEditRuntimeData(editData.AreaList[i]));
+            }
+        }
+
+        public void AddArea()
+        {
+            var nextId = GetAreaNextId();
+            AreaList.Add(new AreaEditRuntimeData(nextId));
+        }
+
+        private int GetAreaNextId()
+        {
+            var maxId = 0;
+            for (int i = 0; i < AreaList.Count; i++)
+            {
+                var area = AreaList[i];
+                if (area.Id > maxId)
+                    maxId = area.Id;
+            }
+
+            return ++maxId;
+        }
     }
 
     public class EnvironmentInstanceEditRuntimeData
@@ -275,6 +340,8 @@ namespace TerrainModule.Editor
 
         public Dictionary<int, ChunkEditRuntimeData> IdToChunkEditData = new Dictionary<int, ChunkEditRuntimeData>();
 
+        public List<AreaGroupEditRuntimeData> AreaGroupEditDataList = new List<AreaGroupEditRuntimeData>();
+
         public BlockTemplateEditRuntimeData BlockTemplateEditRuntimeData { get; private set; }
         public Material TerrainMaterial { get; private set; }
 
@@ -300,6 +367,12 @@ namespace TerrainModule.Editor
 
                 var chunkRuntimeData = new ChunkEditRuntimeData(chunk, ref EnvironmentInstanceId);
                 IdToChunkEditData.Add(chunkRuntimeData.Id, chunkRuntimeData);
+            }
+
+            AreaGroupEditDataList.Clear();
+            for (int i = 0; i < editData.AreaGroupEditDataList.Count; i++)
+            {
+                AreaGroupEditDataList.Add(new AreaGroupEditRuntimeData(editData.AreaGroupEditDataList[i]));
             }
 
             RefreshBlockTemplateRuntimeData();
@@ -851,6 +924,43 @@ namespace TerrainModule.Editor
                 return false;
 
             return EnvironmentTemplateEditRuntimeData.TryGetInsMesh(info.CategoryName, info.Name, out insMeshData);
+        }
+
+        #endregion
+
+        #region Area
+
+        public void AddAreaGroup()
+        {
+            var nextId = GetAreaGroupNextId();
+            AreaGroupEditDataList.Add(new AreaGroupEditRuntimeData(nextId));
+        }
+
+        public bool TryGetAreaGroup(int groupId, out AreaGroupEditRuntimeData data)
+        {
+            data = null;
+            for (int i = 0; i < AreaGroupEditDataList.Count; i++)
+            {
+                if (AreaGroupEditDataList[i].Id == groupId)
+                {
+                    data = AreaGroupEditDataList[i];
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private int GetAreaGroupNextId()
+        {
+            var maxId = 0;
+            for (int i = 0; i < AreaGroupEditDataList.Count; i++)
+            {
+                var areaGroup = AreaGroupEditDataList[i];
+                if (areaGroup.Id > maxId)
+                    maxId = areaGroup.Id;
+            }
+
+            return ++maxId;
         }
 
         #endregion

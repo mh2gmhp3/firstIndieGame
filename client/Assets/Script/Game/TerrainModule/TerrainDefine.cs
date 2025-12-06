@@ -21,6 +21,16 @@ namespace TerrainModule
 
         #endregion
 
+        #region Area
+
+        public enum AreaType
+        {
+            Point,
+            Sphere,
+        }
+
+        #endregion
+
         #region Export
 
         public static string GetExportFolderPath(string dataName)

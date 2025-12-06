@@ -16,6 +16,7 @@ namespace TerrainModule.Editor
         DataManage,
         EditTerrain,
         EditEnvironment,
+        EditArea,
     }
 
     public enum BlockTemplateEditPageType
@@ -55,8 +56,9 @@ namespace TerrainModule.Editor
             new Dictionary<int, string>()
             {
                 { (int)TerrainEditPageType.DataManage, "檔案管理"},
-                { (int)TerrainEditPageType.EditTerrain, "編輯"},
-                { (int)TerrainEditPageType.EditEnvironment, "編輯環境"}
+                { (int)TerrainEditPageType.EditTerrain, "編輯地形"},
+                { (int)TerrainEditPageType.EditEnvironment, "編輯環境"},
+                { (int)TerrainEditPageType.EditArea, "編輯地點"}
             };
 
         public static Dictionary<int, string> BlockTemplateEditPageToName =

@@ -1,9 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static TerrainModule.TerrainDefine;
 
 namespace TerrainModule.Editor
 {
+    [Serializable]
+    public class AreaEditData
+    {
+        public int Id;
+        public AreaType AreaType;
+
+        public Vector3 WorldPoint;
+        public float Radius;
+
+        public AreaEditData(AreaEditRuntimeData runtimeData)
+        {
+            Id = runtimeData.Id;
+            AreaType = runtimeData.AreaType;
+
+            WorldPoint = runtimeData.WorldPoint;
+            Radius = runtimeData.Radius;
+        }
+    }
+
+    [Serializable]
+    public class AreaGroupEditData
+    {
+        public int Id;
+        public string Description;
+        public List<AreaEditData> AreaList = new List<AreaEditData>();
+
+        public AreaGroupEditData(AreaGroupEditRuntimeData runtimeData)
+        {
+            Id = runtimeData.Id;
+            Description = runtimeData.Description;
+            for (int i = 0; i < runtimeData.AreaList.Count; i++)
+            {
+                AreaList.Add(new AreaEditData(runtimeData.AreaList[i]));
+            }
+        }
+    }
+
     [Serializable]
     public class EnvironmentInstanceEditData
     {
@@ -114,6 +152,7 @@ namespace TerrainModule.Editor
         public EnvironmentTemplateEditData EnvironmentTemplateEditData;
 
         public List<ChunkEditData> ChunkEditDataList = new List<ChunkEditData>();
+        public List<AreaGroupEditData> AreaGroupEditDataList = new List<AreaGroupEditData>();
 
         public TerrainEditData(
             Vector3Int blockSize,
@@ -146,6 +185,12 @@ namespace TerrainModule.Editor
             foreach (var chunkEditData in runtimeData.IdToChunkEditData.Values)
             {
                 ChunkEditDataList.Add(new ChunkEditData(chunkEditData));
+            }
+
+            AreaGroupEditDataList.Clear();
+            for (var i = 0; i < runtimeData.AreaGroupEditDataList.Count; i++)
+            {
+                AreaGroupEditDataList.Add(new AreaGroupEditData(runtimeData.AreaGroupEditDataList[i]));
             }
         }
     }

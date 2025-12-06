@@ -34,10 +34,11 @@ namespace TerrainModule.Editor
 
         protected override void OnAddToContainer()
         {
-            _pageContainer = new EditorPageContainer(3, GetPageContainerRepaintEvent());
+            _pageContainer = new EditorPageContainer(4, GetPageContainerRepaintEvent());
             _pageContainer.AddPage(new TerrainDataManagePage(_editorData));
             _pageContainer.AddPage(new TerrainEditDataPage(_editorData));
             _pageContainer.AddPage(new TerrainEditEnvironmentPage(_editorData));
+            _pageContainer.AddPage(new TerrainEditAreaPage(_editorData));
             _pageContainer.ChangeToPage(0);
         }
 
