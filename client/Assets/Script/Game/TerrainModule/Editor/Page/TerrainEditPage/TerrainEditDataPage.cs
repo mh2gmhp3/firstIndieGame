@@ -1113,7 +1113,6 @@ namespace TerrainModule.Editor
             {
                 EditorGUILayout.BeginVertical(CommonGUIStyle.Default_Box);
                 {
-                    _autoYValueFit = EditorGUILayout.Toggle("自動貼合Y高低值:", _autoYValueFit);
                     _replaceBlock = EditorGUILayout.Toggle("覆蓋既有方塊類型", _replaceBlock);
                     _blockOperateMode = (BlockOperateMode)EditorGUILayout.EnumPopup("模式:", _blockOperateMode);
                     if (_blockOperateMode == BlockOperateMode.Single)
