@@ -138,6 +138,19 @@ namespace TerrainModule
 
         }
 
+        public bool TryGetAreaWorldPoint(int groupId, int id, out Vector3 worldPoint, out float radius)
+        {
+            worldPoint = Vector3.zero;
+            radius = 0;
+            var areaData = _terrainData.GetAreaData(groupId, id);
+            if (areaData == null)
+                return false;
+
+            worldPoint = areaData.WorldPoint;
+            radius = areaData.Radius;
+            return true;
+        }
+
         private void LoadAllChunk()
         {
             for (int i = 0; i < _terrainData.ChunkDataList.Count; i++)
@@ -287,6 +300,16 @@ namespace TerrainModule
 
             _curTerrainController = controller;
             _curTerrainController.OnEnter();
+        }
+
+        public bool TryGetCurTerrainAreaWorldPoint(int groupId, int id, out Vector3 worldPoint, out float radius)
+        {
+            worldPoint = Vector3.zero;
+            radius = 0;
+            if (_curTerrainController == null)
+                return false;
+
+            return _curTerrainController.TryGetAreaWorldPoint(groupId, id, out worldPoint, out radius);
         }
 
         #region IUpdateTarget
