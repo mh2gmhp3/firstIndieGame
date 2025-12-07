@@ -8,6 +8,37 @@ using static TerrainModule.TerrainDefine;
 namespace TerrainModule
 {
     [Serializable]
+    public class AreaData
+    {
+        public int Id;
+        public AreaType AreaType;
+
+        public Vector3 WorldPoint;
+        public float Radius;
+
+        public AreaData(int id, AreaType areaType, Vector3 worldPoint, float radius)
+        {
+            Id = id;
+            AreaType = areaType;
+
+            WorldPoint = worldPoint;
+            Radius = radius;
+        }
+    }
+
+    [Serializable]
+    public class AreaGroupData
+    {
+        public int Id;
+        public List<AreaData> AreaDataList = new List<AreaData>();
+
+        public AreaGroupData(int id)
+        {
+            Id = id;
+        }
+    }
+
+    [Serializable]
     public class ChunkEnvironmentInstanceData
     {
         public int InstanceId;
@@ -162,6 +193,7 @@ namespace TerrainModule
 
         public List<EnvironmentPrefabData> EnvironmentPrefabDataList = new List<EnvironmentPrefabData>();
         public List<EnvironmentInstanceMeshData> EnvironmentInstanceMeshDataList = new List<EnvironmentInstanceMeshData>();
+        public List<AreaGroupData> AreaGroupDataList = new List<AreaGroupData>();
 
         public TerrainData(Vector3Int blockSize, Vector3Int chunkBlockNum, Vector3Int chunkNum)
         {
@@ -186,6 +218,24 @@ namespace TerrainModule
             {
                 if (EnvironmentInstanceMeshDataList[i].Id == id)
                     return EnvironmentInstanceMeshDataList[i];
+            }
+            return null;
+        }
+
+        public AreaData GetAreaData(int groupId, int id)
+        {
+            for (int i = 0; i < AreaGroupDataList.Count; i++)
+            {
+                var areaGroupData = AreaGroupDataList[i];
+                if (areaGroupData.Id != groupId)
+                    continue;
+
+                for (int j = 0; j < areaGroupData.AreaDataList.Count; j++)
+                {
+                    var areaData = areaGroupData.AreaDataList[j];
+                    if (areaData.Id == id)
+                        return areaData;
+                }
             }
             return null;
         }

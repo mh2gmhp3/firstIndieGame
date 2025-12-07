@@ -177,6 +177,19 @@ namespace TerrainModule.Editor
                     0.1f + 0.9f * (exportedChunkCount / (float)chunkCount));
             }
 
+            //區域
+            for (int i = 0; i < CurTerrainEditRuntimeData.AreaGroupEditDataList.Count; i++)
+            {
+                var areaGroupEditData = CurTerrainEditRuntimeData.AreaGroupEditDataList[i];
+                var areaGroupData = new AreaGroupData(areaGroupEditData.Id);
+                for (int j = 0; j < areaGroupEditData.AreaList.Count; j++)
+                {
+                    var areaEditData = areaGroupEditData.AreaList[j];
+                    areaGroupData.AreaDataList.Add(new AreaData(areaEditData.Id, areaEditData.AreaType, areaEditData.WorldPoint, areaEditData.Radius));
+                }
+                terrainData.AreaGroupDataList.Add(areaGroupData);
+            }
+
             terrainData.ChunkDataList.AddRange(idToChunkData.Values);
             AssetDatabase.CreateAsset(terrainData, TerrainDefine.GetExportTerrainDataPath(CurTerrainEditRuntimeData.Name));
             AssetDatabase.Refresh();

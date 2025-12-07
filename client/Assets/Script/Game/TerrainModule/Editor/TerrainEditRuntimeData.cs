@@ -115,9 +115,10 @@ namespace TerrainModule.Editor
         public Vector3 WorldPoint;
         public float Radius;
 
-        public AreaEditRuntimeData(int id)
+        public AreaEditRuntimeData(int id, Vector3 worldPoint)
         {
             Id = id;
+            WorldPoint = worldPoint;
         }
 
         public AreaEditRuntimeData(AreaEditData editData)
@@ -136,9 +137,13 @@ namespace TerrainModule.Editor
         public string Description;
         public List<AreaEditRuntimeData> AreaList = new List<AreaEditRuntimeData>();
 
-        public AreaGroupEditRuntimeData(int id)
+        public Bounds Bounds = new Bounds();
+
+        public AreaGroupEditRuntimeData(int id, Vector3 worldPoint)
         {
             Id = id;
+            AreaList.Add(new AreaEditRuntimeData(1, worldPoint));
+            RefreshBounds();
         }
 
         public AreaGroupEditRuntimeData(AreaGroupEditData editData)
@@ -149,15 +154,68 @@ namespace TerrainModule.Editor
             {
                 AreaList.Add(new AreaEditRuntimeData(editData.AreaList[i]));
             }
+            RefreshBounds();
         }
 
-        public void AddArea()
+        public bool AddArea(int id, Vector3 worldPoint)
         {
-            var nextId = GetAreaNextId();
-            AreaList.Add(new AreaEditRuntimeData(nextId));
+            if (TryGetArea(id, out _))
+                return false;
+
+            AreaList.Add(new AreaEditRuntimeData(id, worldPoint));
+            AreaList.Sort((x, y) =>
+            {
+                if (x == null)
+                    return 1;
+                if (y == null)
+                    return -1;
+                return x.Id.CompareTo(y.Id);
+            });
+            RefreshBounds();
+            return true;
         }
 
-        private int GetAreaNextId()
+        public bool TryGetArea(int id, out AreaEditRuntimeData data)
+        {
+            data = null;
+            for (int i = 0; i < AreaList.Count; i++)
+            {
+                if (AreaList[i].Id == id)
+                {
+                    data = AreaList[i];
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void RemoveAreaByIndex(int index)
+        {
+            if (index < 0 || index >= AreaList.Count)
+                return;
+            AreaList.RemoveAt(index);
+            RefreshBounds();
+        }
+
+        public void RefreshBounds()
+        {
+            Bounds = AreaList.Count > 0 ? new Bounds(AreaList[0].WorldPoint, Vector3.zero) : new Bounds();
+            for (int i = 1; i < AreaList.Count; i++)
+            {
+                Bounds.Encapsulate(AreaList[i].WorldPoint);
+            }
+        }
+
+        public void Translate(Vector3 translation)
+        {
+            for (int i = 0; i < AreaList.Count; i++)
+            {
+                AreaList[i].WorldPoint += translation;
+            }
+            RefreshBounds();
+        }
+
+        public int GetAreaNextId()
         {
             var maxId = 0;
             for (int i = 0; i < AreaList.Count; i++)
@@ -930,10 +988,21 @@ namespace TerrainModule.Editor
 
         #region Area
 
-        public void AddAreaGroup()
+        public bool AddAreaGroup(int id, Vector3 worldPoint)
         {
-            var nextId = GetAreaGroupNextId();
-            AreaGroupEditDataList.Add(new AreaGroupEditRuntimeData(nextId));
+            if (TryGetAreaGroup(id, out _))
+                return false;
+
+            AreaGroupEditDataList.Add(new AreaGroupEditRuntimeData(id, worldPoint));
+            AreaGroupEditDataList.Sort((x, y) =>
+            {
+                if (x == null)
+                    return 1;
+                if (y == null)
+                    return -1;
+                return x.Id.CompareTo(y.Id);
+            });
+            return true;
         }
 
         public bool TryGetAreaGroup(int groupId, out AreaGroupEditRuntimeData data)
@@ -950,7 +1019,7 @@ namespace TerrainModule.Editor
             return false;
         }
 
-        private int GetAreaGroupNextId()
+        public int GetAreaGroupNextId()
         {
             var maxId = 0;
             for (int i = 0; i < AreaGroupEditDataList.Count; i++)
