@@ -19,9 +19,12 @@ namespace GameMainModule
         private void InitGameTest()
         {
             SetCurGameState(GameState.Normal);
-            InitTestPlayerCharacterUnit();
             EnterTerrain("256_128_256_4");
-            CharacterTeleportTo(new Vector3(2, 4, 2));
+            InitTestPlayerCharacterUnit();
+            if (_terrainManager.TryGetCurTerrainAreaWorldPoint(1, 1, out var worldPoint, out _))
+                CharacterTeleportTo(worldPoint);
+            else
+                CharacterTeleportTo(new Vector3(2, 4, 2));
             //SceneSystem.SwitchStage(new SwitchStageData("world_map_test"));
         }
 
@@ -60,18 +63,21 @@ namespace GameMainModule
                 npcAvatarIns.UnitSetting.RootTransform.position = new Vector3(5.0f, 0, 0);
 
             //Test Enemy
-            AddEnemySpawnPoint(
-                new Vector3(5, 10, 5),
-                5,
-                new List<TestEnemySpawnData>()
-                {
+            if (_terrainManager.TryGetCurTerrainAreaWorldPoint(2, 1, out var worldPoint, out var radius))
+            {
+                AddEnemySpawnPoint(
+                    worldPoint,
+                    radius,
+                    new List<TestEnemySpawnData>()
+                    {
                     new TestEnemySpawnData()
                     {
                         SettingId = 0,
                         Hp = 60,
                         ModelName = prototypeCharacterAvatarName
                     }
-                });
+                    });
+            }
 
             UISystem.OpenUIWindow(WindowId.Window_Game, null);
         }
