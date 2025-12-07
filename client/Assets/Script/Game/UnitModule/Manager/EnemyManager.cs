@@ -95,8 +95,8 @@ namespace UnitModule
             {
                 double angle = random.NextDouble() * 2 * Math.PI;
                 double distance = Math.Sqrt(random.NextDouble()) * spawner.Radius;
-                float x = spawner.Position.x + (float)(distance * Math.Cos(angle));
-                float z = spawner.Position.z + (float)(distance * Math.Sin(angle));
+                float x = (float)(distance * Math.Cos(angle));
+                float z = (float)(distance * Math.Sin(angle));
 
                 var spawnData = spawner.EnemySpawnDataList[random.Next(spawner.EnemySpawnDataList.Count)];
 
