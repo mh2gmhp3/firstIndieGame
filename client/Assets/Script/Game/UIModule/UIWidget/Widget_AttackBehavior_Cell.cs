@@ -23,13 +23,12 @@ namespace UIModule.Game
                 else if (GameMainSystem.TryGetAttackBehaviorData(editData.RefItemId, out var attackBehaviorData))
                 {
                     if (FormSystem.Table.AttackBehaviorSettingTable.TryGetData(attackBehaviorData.SettingId, out var row) &&
-                        GameMainSystem.AttackBehaviorAssetSetting.TryGetSetting(row.AssetSettingId, out var assetSetting))
+                        GameMainSystem.AttackBehaviorAssetSetting.TryGetRuntimeAsset(row.AssetSettingId, out var assetSetting))
                     {
                         Text_Content.text =
                             $"Id:{attackBehaviorData.RefItemId}\n" +
                             $"SettingId:{attackBehaviorData.SettingId}\n" +
-                            $"AssetSettingId:{row.AssetSettingId}\n" +
-                            $"AreaType:{assetSetting.CollisionAreaType}";
+                            $"AssetSettingId:{row.AssetSettingId}";
                     }
                     else
                     {
@@ -42,13 +41,12 @@ namespace UIModule.Game
             else if (_uiData is UIAttackBehaviorData data)
             {
                 if (FormSystem.Table.AttackBehaviorSettingTable.TryGetData(data.RawData.SettingId, out var row) &&
-                    GameMainSystem.AttackBehaviorAssetSetting.TryGetSetting(row.AssetSettingId, out var assetSetting))
+                    GameMainSystem.AttackBehaviorAssetSetting.TryGetRuntimeAsset(row.AssetSettingId, out var assetSetting))
                 {
                     Text_Content.text =
                         $"Id:{data.RawData.RefItemId}\n" +
                         $"SettingId:{data.RawData.SettingId}\n" +
-                        $"AssetSettingId:{row.AssetSettingId}\n" +
-                        $"AreaType:{assetSetting.CollisionAreaType}";
+                        $"AssetSettingId:{row.AssetSettingId}";
                 }
             }
 

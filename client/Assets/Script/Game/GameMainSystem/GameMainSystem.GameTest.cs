@@ -1,7 +1,9 @@
 ﻿using AssetModule;
 using CameraModule;
+using CollisionModule;
 using DataModule;
 using GameMainModule.Animation;
+using GameMainModule.Attack;
 using SceneModule;
 using System.Collections.Generic;
 using UIModule;
@@ -88,5 +90,33 @@ namespace GameMainModule
             AddAllItem();
             DataManager.Save(id);
         }
+        public static ICollisionAreaSetupData GetCollisionAreaSetupData(
+            IAttackRefSetting attackRefSetting,
+            AttackCollisionRuntimeTrack collision,
+            ICollisionAreaTriggerInfo triggerInfo,
+            float speedRate)
+        {
+            switch (collision.CollisionAreaType)
+            {
+                case CollisionAreaDefine.AreaType.Test:
+                    return new TestCollisionAreaSetupData(1); ;
+                case CollisionAreaDefine.AreaType.Quad:
+                    if (!attackRefSetting.TryGetAttackCastPoint(
+                        0,
+                        out var worldPoint,
+                        out var direction))
+                        return new TestCollisionAreaSetupData(1); ;
+                    return new QuadCollisionAreaSetupData(
+                        worldPoint,
+                        direction,
+                        collision.Duration(speedRate),
+                        5f,
+                        5f,
+                        triggerInfo);
+            }
+
+            return new TestCollisionAreaSetupData(1);
+        }
+
     }
 }

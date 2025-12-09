@@ -12,89 +12,148 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25f091f7649c824ba43f1bb50dd9b8e, type: 3}
   m_Name: PrototypeCharacter
   m_EditorClassIdentifier: 
-  SettingList:
+  AttackBehaviorTimelineAssetList:
   - Id: 101
-    CollisionAreaType: 1
-    CollisionAreaStartTime: 0.1
-    CollisionAreaDuration: 0.2
-    AnimationStateName: Attack_01
-    LockNextTime: 0
+    AttackClipTrackList:
+    - Id: 1
+      StartTime: 0
+      Clip:
+        Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_01.anim
+        ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_01
+        _guid: b5af8f487ce43c148b7073f43c7759d5
+    AttackEffectTrackList: []
+    AttackCollisionTrackList:
+    - Id: 2
+      StartTime: 0.1
+      Duration: 0.2
+      CollisionAreaType: 1
+      Position: {x: 0, y: 0, z: 0}
+      Rotation: {x: 0, y: 0, z: 0}
   - Id: 102
-    CollisionAreaType: 1
-    CollisionAreaStartTime: 0.1
-    CollisionAreaDuration: 0.2
-    AnimationStateName: Attack_02
-    LockNextTime: 0
+    AttackClipTrackList:
+    - Id: 1
+      StartTime: 0
+      Clip:
+        Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_02.anim
+        ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_02
+        _guid: 412ca1babf3875c49b8597fe8bf7cd34
+    AttackEffectTrackList: []
+    AttackCollisionTrackList:
+    - Id: 2
+      StartTime: 0.1
+      Duration: 0.2
+      CollisionAreaType: 1
+      Position: {x: 0, y: 0, z: 0}
+      Rotation: {x: 0, y: 0, z: 0}
   - Id: 103
-    CollisionAreaType: 1
-    CollisionAreaStartTime: 0.1
-    CollisionAreaDuration: 0.2
-    AnimationStateName: Attack_03
-    LockNextTime: 0
+    AttackClipTrackList:
+    - Id: 1
+      StartTime: 0
+      Clip:
+        Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_03.anim
+        ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_03
+        _guid: 7ceae6c85dc6c6340b5abdbff55bde73
+    AttackEffectTrackList: []
+    AttackCollisionTrackList:
+    - Id: 2
+      StartTime: 0.1
+      Duration: 0.2
+      CollisionAreaType: 1
+      Position: {x: 0, y: 0, z: 0}
+      Rotation: {x: 0, y: 0, z: 0}
   - Id: 201
-    CollisionAreaType: 1
-    CollisionAreaStartTime: 0.1
-    CollisionAreaDuration: 0.2
-    AnimationStateName: Attack_01
-    LockNextTime: 0
+    AttackClipTrackList:
+    - Id: 1
+      StartTime: 0
+      Clip:
+        Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_04.anim
+        ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_04
+        _guid: afa704d906125c74a94a3ea90bd752cc
+    AttackEffectTrackList: []
+    AttackCollisionTrackList:
+    - Id: 2
+      StartTime: 0.1
+      Duration: 0.2
+      CollisionAreaType: 1
+      Position: {x: 0, y: 0, z: 0}
+      Rotation: {x: 0, y: 0, z: 0}
   - Id: 202
-    CollisionAreaType: 1
-    CollisionAreaStartTime: 0.1
-    CollisionAreaDuration: 0.2
-    AnimationStateName: Attack_02
-    LockNextTime: 0
+    AttackClipTrackList:
+    - Id: 1
+      StartTime: 0
+      Clip:
+        Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_05.anim
+        ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_05
+        _guid: a8d7f538ff0e7e2409771a6f9548945c
+    AttackEffectTrackList: []
+    AttackCollisionTrackList:
+    - Id: 2
+      StartTime: 0.1
+      Duration: 0.2
+      CollisionAreaType: 1
+      Position: {x: 0, y: 0, z: 0}
+      Rotation: {x: 0, y: 0, z: 0}
   - Id: 203
-    CollisionAreaType: 1
-    CollisionAreaStartTime: 0.1
-    CollisionAreaDuration: 0.2
-    AnimationStateName: Attack_03
-    LockNextTime: 0
+    AttackClipTrackList:
+    - Id: 1
+      StartTime: 0
+      Clip:
+        Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_06.anim
+        ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_06
+        _guid: b991a65ddfa842149923696be5e1cbdb
+    AttackEffectTrackList: []
+    AttackCollisionTrackList:
+    - Id: 2
+      StartTime: 0.1
+      Duration: 0.2
+      CollisionAreaType: 1
+      Position: {x: 0, y: 0, z: 0}
+      Rotation: {x: 0, y: 0, z: 0}
   - Id: 301
-    CollisionAreaType: 1
-    CollisionAreaStartTime: 0.1
-    CollisionAreaDuration: 0.2
-    AnimationStateName: Attack_01
-    LockNextTime: 0
+    AttackClipTrackList:
+    - Id: 1
+      StartTime: 0
+      Clip:
+        Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_01.anim
+        ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_01
+        _guid: b5af8f487ce43c148b7073f43c7759d5
+    AttackEffectTrackList: []
+    AttackCollisionTrackList:
+    - Id: 2
+      StartTime: 0.1
+      Duration: 0.2
+      CollisionAreaType: 1
+      Position: {x: 0, y: 0, z: 0}
+      Rotation: {x: 0, y: 0, z: 0}
   - Id: 302
-    CollisionAreaType: 1
-    CollisionAreaStartTime: 0.1
-    CollisionAreaDuration: 0.2
-    AnimationStateName: Attack_02
-    LockNextTime: 0
+    AttackClipTrackList:
+    - Id: 1
+      StartTime: 0
+      Clip:
+        Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_02.anim
+        ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_02
+        _guid: 412ca1babf3875c49b8597fe8bf7cd34
+    AttackEffectTrackList: []
+    AttackCollisionTrackList:
+    - Id: 2
+      StartTime: 0.1
+      Duration: 0.2
+      CollisionAreaType: 1
+      Position: {x: 0, y: 0, z: 0}
+      Rotation: {x: 0, y: 0, z: 0}
   - Id: 303
-    CollisionAreaType: 1
-    CollisionAreaStartTime: 0.1
-    CollisionAreaDuration: 0.2
-    AnimationStateName: Attack_03
-    LockNextTime: 0
-  AnimationGroupSettingList:
-  - GroupId: 100
-    SettingList:
-    - AnimationName: Attack_01
-      AnimationClip: {fileID: 7400000, guid: b5af8f487ce43c148b7073f43c7759d5, type: 2}
-    - AnimationName: Attack_02
-      AnimationClip: {fileID: 7400000, guid: 412ca1babf3875c49b8597fe8bf7cd34, type: 2}
-    - AnimationName: Attack_03
-      AnimationClip: {fileID: 7400000, guid: 7ceae6c85dc6c6340b5abdbff55bde73, type: 2}
-    - AnimationName: Attack_04
-      AnimationClip: {fileID: 7400000, guid: afa704d906125c74a94a3ea90bd752cc, type: 2}
-    - AnimationName: Attack_05
-      AnimationClip: {fileID: 7400000, guid: a8d7f538ff0e7e2409771a6f9548945c, type: 2}
-    - AnimationName: Attack_06
-      AnimationClip: {fileID: 7400000, guid: b991a65ddfa842149923696be5e1cbdb, type: 2}
-  - GroupId: 200
-    SettingList:
-    - AnimationName: Attack_01
-      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
-    - AnimationName: Attack_02
-      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
-    - AnimationName: Attack_03
-      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
-  - GroupId: 300
-    SettingList:
-    - AnimationName: Attack_01
-      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
-    - AnimationName: Attack_02
-      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
-    - AnimationName: Attack_03
-      AnimationClip: {fileID: 7400000, guid: 1251a91ae0613a64abb657fdeb229b53, type: 2}
+    AttackClipTrackList:
+    - Id: 1
+      StartTime: 0
+      Clip:
+        Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_03.anim
+        ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_03
+        _guid: 7ceae6c85dc6c6340b5abdbff55bde73
+    AttackEffectTrackList: []
+    AttackCollisionTrackList:
+    - Id: 2
+      StartTime: 0.1
+      Duration: 0.2
+      CollisionAreaType: 1
+      Position: {x: 0, y: 0, z: 0}
+      Rotation: {x: 0, y: 0, z: 0}

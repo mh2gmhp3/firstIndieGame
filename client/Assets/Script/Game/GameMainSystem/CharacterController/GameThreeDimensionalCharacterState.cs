@@ -293,11 +293,11 @@ namespace GameMainModule
         }
     }
 
-    public class AttackState : GameCharacterState, IAttackCombinationObserver
+    public class AttackState : GameCharacterState
     {
         public AttackState(GameCharacterStateContext context) : base(context)
         {
-            _attackController.AddObserver(this);
+
         }
 
         private bool KeepCombo()
@@ -330,24 +330,5 @@ namespace GameMainModule
         {
             _attackController.DoUpdate(KeepCombo());
         }
-
-        #region IAttackCombinationObserver
-
-        public void OnStartAttackBehavior(string behaviorName)
-        {
-            _playableClipController.Attack(behaviorName);
-        }
-
-        public void OnStartComboing()
-        {
-
-        }
-
-        public void OnEndComboing()
-        {
-
-        }
-
-        #endregion
     }
 }

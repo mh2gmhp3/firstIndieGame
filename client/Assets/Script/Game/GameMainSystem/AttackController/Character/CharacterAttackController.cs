@@ -1,4 +1,5 @@
 ﻿using AssetModule;
+using CollisionModule;
 using Extension;
 using FormModule;
 using GameMainModule.Animation;
@@ -6,25 +7,34 @@ using Logging;
 using System;
 using System.Collections.Generic;
 using UnitModule;
-using UnitModule.Movement;
 using UnityEngine;
-using Utility;
 
 namespace GameMainModule.Attack
 {
+    public struct AttackBehaviorInfo
+    {
+        public int RefItemId;
+        public AttackBehaviorTimelineRuntimeAsset TimelineAsset;
+
+        public AttackBehaviorInfo(int refItemId, AttackBehaviorTimelineRuntimeAsset timelineAsset)
+        {
+            RefItemId = refItemId;
+            TimelineAsset = timelineAsset;
+        }
+    }
+
     [Serializable]
-    public class CharacterAttackController
+    public class CharacterAttackController : ITimelineListener
     {
         [SerializeField]
         private List<AttackCombination> _combinationList =
             new List<AttackCombination>();
 
-        private AttackCombination _curCombination;
-
-        private ObserverController<IAttackCombinationObserver> _observerController = new ObserverController<IAttackCombinationObserver>();
-
         private CharacterAttackRefSetting _attackRefSetting;
         private CharacterPlayableClipController _playableClipController;
+        private AttackBehaviorTimelinePlayController _attackBehaviorTimelinePlayController = new AttackBehaviorTimelinePlayController();
+        private FakeCharacterTriggerInfo _fakeCharacterTriggerInfo = new FakeCharacterTriggerInfo();
+
         private WeaponTransformSetting _weaponTransformSetting;
 
         private GameObject _curWeaponObj;
@@ -33,9 +43,32 @@ namespace GameMainModule.Attack
         private int _curCombinationIndex = -1;
         private int _combinationMaxCount = 0;
 
-        public bool IsComboing => _curCombination != null && _curCombination.IsComboing;
-        public bool IsProcessCombo => _curCombination != null && _curCombination.IsProcessingCombo;
-        public bool IsMaxCombo => _curCombination != null && _curCombination.IsMaxCombo;
+        private int _currentComboIndex = -1;
+
+        private bool _mainTrigger = false;
+        private bool _subTrigger = false;
+
+        private bool _isProcessingCombo = false;
+
+        public bool IsProcessCombo => _isProcessingCombo;
+        public bool IsMaxCombo
+        {
+            get
+            {
+                if (!TryCurCombination(out var combination))
+                    return true;
+
+                if (_mainTrigger)
+                {
+                    return _currentComboIndex >= combination.MainAttackBehaviorList.Count;
+                }
+                else if (_subTrigger)
+                {
+                    return _currentComboIndex >= combination.SubAttackBehaviorList.Count;
+                }
+                return true;
+            }
+        }
 
         public void Init(
             CharacterAttackRefSetting attackRefSetting,
@@ -45,6 +78,7 @@ namespace GameMainModule.Attack
             _attackRefSetting = attackRefSetting;
             _playableClipController = playableClipController;
             _weaponTransformSetting = weaponTransformSetting;
+            _attackBehaviorTimelinePlayController.AddListener(this);
         }
 
         #region Comnination
@@ -52,12 +86,12 @@ namespace GameMainModule.Attack
         public void SetCombinationMaxCount(int count)
         {
             _combinationMaxCount = count;
-            _combinationList.EnsureCount(_combinationMaxCount, () => { return new AttackCombination(_attackRefSetting); }, true);
+            _combinationList.EnsureCount(_combinationMaxCount, () => { return new AttackCombination(); }, true);
         }
 
         public bool SetCombination(int index, AttackCombinationRuntimeSetupData setupData)
         {
-            if (IsComboing)
+            if (IsProcessCombo)
                 return false;
 
             if (index < 0 || index >= _combinationList.Count)
@@ -75,7 +109,7 @@ namespace GameMainModule.Attack
 
         public bool SetCurCombination(int index)
         {
-            if (IsComboing)
+            if (IsProcessCombo)
                 return false;
 
             if (!_combinationList.TryGet(index, out var combination))
@@ -83,36 +117,20 @@ namespace GameMainModule.Attack
 
             _curCombinationIndex = index;
 
-            if (_curCombination != null)
-            {
-                _curCombination.ClearObserverList();
-                _curCombination.Reset();
-            }
-
-            _curCombination = combination;
-
-            if (_curCombination != null)
-            {
-                _curCombination.AddObserverList(_observerController.ObserverList);
-
-                //替換攻擊動畫
-                SetWeaponAnimation(_curCombination.WeaponGroup);
-                //替換武器模型
-                SetWeaponModel(_curCombination.WeaponSettingId);
-            }
+            //替換攻擊動畫
+            SetWeaponAnimation();
+            //替換武器模型
+            SetWeaponModel(combination.WeaponSettingId);
 
             return true;
         }
 
-        private void SetWeaponAnimation(int weaponGroup)
+        private void SetWeaponAnimation()
         {
-            if (!GameMainSystem.AttackBehaviorAssetSetting.TryGetAnimationNameToClipDic(
-                weaponGroup, out var attackNameToClip))
-            {
+            if (!TryCurCombination(out var combination))
                 return;
-            }
 
-            _playableClipController.SetAttackClip(attackNameToClip);
+            _playableClipController.SetAttackClip(combination.AllAttackClipCache);
         }
 
         private void SetWeaponModel(int weaponSettingId)
@@ -143,10 +161,11 @@ namespace GameMainModule.Attack
             if (_curWeaponObj == null)
                 return;
 
-            if (!FormSystem.Table.WeaponTable.TryGetData(_curCombination.WeaponSettingId, out var weaponRow))
-            {
+            if (!TryCurCombination(out var combination))
                 return;
-            }
+
+            if (!FormSystem.Table.WeaponTable.TryGetData(combination.WeaponSettingId, out var weaponRow))
+                return;
 
             Transform weaponParent = null;
             if (_isWeaponActive)
@@ -171,23 +190,9 @@ namespace GameMainModule.Attack
             _curWeaponObj.transform.Reset();
         }
 
-        #endregion
-
-        #region IAttackCombinationObserver
-
-        public void AddObserver(IAttackCombinationObserver observer)
+        private bool TryCurCombination(out AttackCombination combination)
         {
-            _observerController.AddObserver(observer);
-        }
-
-        public void RemoveObserver(IAttackCombinationObserver observer)
-        {
-            _observerController.RemoveObserver(observer);
-        }
-
-        public void ClearObserverList()
-        {
-            _observerController.ClearObservers();
+            return _combinationList.TryGet(_curCombinationIndex, out combination);
         }
 
         #endregion
@@ -196,10 +201,16 @@ namespace GameMainModule.Attack
 
         public void DoUpdate(bool keepComboOnEnd)
         {
-            if (_curCombination == null)
-                return;
+            ProcessTrigger();
 
-            _curCombination.DoUpdate(keepComboOnEnd);
+            _attackBehaviorTimelinePlayController.Evaluate();
+
+            if (_isProcessingCombo && _attackBehaviorTimelinePlayController.IsEnd)
+            {
+                if (!keepComboOnEnd)
+                    ResetCombo();
+                _isProcessingCombo = false;
+            }
         }
 
         #endregion
@@ -208,34 +219,52 @@ namespace GameMainModule.Attack
 
         public void TriggerMainAttack()
         {
-            if (_curCombination == null)
-                return;
-
-            _curCombination.TriggerMainAttack();
+            _mainTrigger = true;
         }
 
         public void TriggerSubAttack()
         {
-            if (_curCombination == null)
-                return;
-
-            _curCombination.TriggerSubAttack();
+            _subTrigger = true;
         }
 
         public bool HaveTrigger()
         {
-            if (_curCombination == null)
-                return false;
-
-            return _curCombination.HaveTrigger();
+            return _mainTrigger || _subTrigger;
         }
 
         public void ResetTrigger()
         {
-            if (_curCombination == null)
+            _mainTrigger = false;
+            _subTrigger = false;
+        }
+
+        private void ProcessTrigger()
+        {
+            if (TryCurCombination(out var attackCombination))
+            {
+                if (_mainTrigger)
+                    TriggerAttack(attackCombination.MainAttackBehaviorList);
+                else if (_subTrigger)
+                    TriggerAttack(attackCombination.SubAttackBehaviorList);
+            }
+            ResetTrigger();
+        }
+
+        private void TriggerAttack(List<AttackBehaviorInfo> infoList)
+        {
+            if (!_attackBehaviorTimelinePlayController.CanNext)
                 return;
 
-            _curCombination.ResetTrigger();
+            if (infoList.Count == 0)
+                return;
+
+            _currentComboIndex++;
+            if (!infoList.TryGet(_currentComboIndex, out var nextBehavior))
+                return;
+
+            _attackBehaviorTimelinePlayController.End();
+            _attackBehaviorTimelinePlayController.Play(nextBehavior.TimelineAsset, 1f);
+            _isProcessingCombo = true;
         }
 
         #endregion
@@ -244,18 +273,39 @@ namespace GameMainModule.Attack
 
         public void Reset()
         {
-            if (_curCombination == null)
-                return;
-
-            _curCombination.Reset();
+            ResetTrigger();
+            ResetCombo();
         }
 
         public void ResetCombo()
         {
-            if (_curCombination == null)
-                return;
+            _currentComboIndex = -1;
+        }
 
-            _curCombination.ResetCombo();
+        #endregion
+
+        #region ITimelineListener
+
+        public void OnPlayTrack(ITrackRuntimeAsset trackAsset, float speedRate)
+        {
+            if (trackAsset is AttackClipRuntimeTrack attackTrack)
+            {
+                _playableClipController.Attack(attackTrack.Name, speedRate);
+            }
+            else if (trackAsset is AttackCollisionRuntimeTrack collisionRuntimeTrack)
+            {
+                CollisionAreaManager.CreateCollisionArea(
+                    GameMainSystem.GetCollisionAreaSetupData(
+                        _attackRefSetting,
+                        collisionRuntimeTrack,
+                        _fakeCharacterTriggerInfo,
+                        speedRate));
+            }
+        }
+
+        public void OnEndTrack(ITrackRuntimeAsset trackAsset, float speedRate)
+        {
+
         }
 
         #endregion

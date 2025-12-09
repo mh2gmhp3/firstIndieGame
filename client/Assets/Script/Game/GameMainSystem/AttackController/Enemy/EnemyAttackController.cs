@@ -1,4 +1,5 @@
-﻿using FormModule;
+﻿using CollisionModule;
+using FormModule;
 using FormModule.Game.Table;
 using GameMainModule.Animation;
 using System.Collections.Generic;
@@ -6,16 +7,19 @@ using UnityEngine;
 
 namespace GameMainModule.Attack
 {
-    public class EnemyAttackController
+    public class EnemyAttackController : ITimelineListener
     {
         [SerializeField]
-        private List<AttackBehavior> _behaviorList =
-            new List<AttackBehavior>();
+        private List<AttackBehaviorTimelineRuntimeAsset> _behaviorList =
+            new List<AttackBehaviorTimelineRuntimeAsset>();
 
-        private AttackBehavior _curBehavior;
+        private int _curBehaviorIndex = -1;
 
         private EnemyAttackRefSetting _attackRefSetting;
         private CharacterPlayableClipController _playableClipController;
+        private AttackBehaviorTimelinePlayController _attackBehaviorTimelinePlayController = new AttackBehaviorTimelinePlayController();
+        private FakeCharacterTriggerInfo _fakeCharacterTriggerInfo = new FakeCharacterTriggerInfo();
+
 
         private float _delayStartTime;
         private bool _delayStart = false;
@@ -24,13 +28,10 @@ namespace GameMainModule.Attack
         {
             get
             {
-                if (_curBehavior == null)
-                    return true;
-
                 if (_delayStart)
                     return false;
 
-                return _curBehavior.IsEnd;
+                return _attackBehaviorTimelinePlayController.IsEnd;
             }
         }
 
@@ -38,64 +39,89 @@ namespace GameMainModule.Attack
         {
             _attackRefSetting = attackRefSetting;
             _playableClipController = clipController;
+            _fakeCharacterTriggerInfo.ToCharacter = true;
+            _attackBehaviorTimelinePlayController.AddListener(this);
 
             //TODO 先直接設定
             var behaviorRowList = new List<AttackBehaviorSettingRow>();
-            if (GameMainSystem.AttackBehaviorAssetSetting.TryGetAnimationNameToClipDic(100, out var result))
-            {
-                _playableClipController.SetAttackClip(result);
-            }
             FormSystem.Table.AttackBehaviorSettingTable.GetTypeRowList(100, behaviorRowList);
+            var nameToClip = new Dictionary<string, AnimationClip>();
             for (int i = 0; i < behaviorRowList.Count; i++)
             {
-                if (!GameMainSystem.AttackBehaviorAssetSetting.TryGetSetting(behaviorRowList[i].AssetSettingId, out var assetSetting))
+                if (!GameMainSystem.AttackBehaviorAssetSetting.TryGetRuntimeAsset(behaviorRowList[i].AssetSettingId, out var assetSetting))
                     continue;
-                var baseTime = GameMainSystem.AttackBehaviorAssetSetting.GetBehaviorBaseTime(
-                    behaviorRowList[i].WeaponType,
-                    assetSetting.AnimationStateName);
-                _behaviorList.Add(new AttackBehavior(_attackRefSetting, assetSetting, baseTime + 0.2f, true));
+                _behaviorList.Add(assetSetting);
+                for (int j = 0; j < assetSetting.AttackClipTrackList.Count; j++)
+                {
+                    var clip = assetSetting.AttackClipTrackList[j].Clip;
+                    if (clip == null)
+                        continue;
+                    if (nameToClip.ContainsKey(clip.name))
+                        continue;
+                    nameToClip.Add(clip.name, clip);
+                }
             }
+            _playableClipController.SetAttackClip(nameToClip);
         }
 
         public void Clear()
         {
             _behaviorList.Clear();
-            _curBehavior = null;
+            _curBehaviorIndex = -1;
             _attackRefSetting = null;
             _playableClipController = null;
+            _attackBehaviorTimelinePlayController.End();
         }
 
         public void RandomAttack()
         {
             var index = Random.Range(0, _behaviorList.Count);
-            _curBehavior = _behaviorList[index];
-
+            _curBehaviorIndex = index;
             _delayStartTime = Time.time;
             _delayStart = true;
         }
 
         public void DoUpdate()
         {
-            if (_curBehavior == null)
-                return;
-
             if (_delayStart)
             {
                 //TODO 先設定0.5秒間格
                 if ((Time.time - _delayStartTime) < 0.5f)
                     return;
 
-                _curBehavior.OnStart();
-                _playableClipController.Attack(_curBehavior.Name);
+                _attackBehaviorTimelinePlayController.End();
+                _attackBehaviorTimelinePlayController.Play(_behaviorList[_curBehaviorIndex], 1f);
 
                 _delayStart = false;
             }
 
-            _curBehavior.OnUpdate();
-            if (_curBehavior.IsEnd)
+            _attackBehaviorTimelinePlayController.Evaluate();
+        }
+
+        #region ITimeline
+
+        public void OnPlayTrack(ITrackRuntimeAsset trackAsset, float speedRate)
+        {
+            if (trackAsset is AttackClipRuntimeTrack attackTrack)
             {
-                _curBehavior.OnEnd();
+                _playableClipController.Attack(attackTrack.Name);
+            }
+            else if (trackAsset is AttackCollisionRuntimeTrack collisionRuntimeTrack)
+            {
+                CollisionAreaManager.CreateCollisionArea(
+                    GameMainSystem.GetCollisionAreaSetupData(
+                        _attackRefSetting,
+                        collisionRuntimeTrack,
+                        _fakeCharacterTriggerInfo,
+                        speedRate));
             }
         }
+
+        public void OnEndTrack(ITrackRuntimeAsset trackAsset, float speedRate)
+        {
+
+        }
+
+        #endregion
     }
 }

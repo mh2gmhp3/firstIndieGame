@@ -10,9 +10,11 @@ namespace GameMainModule.Attack
 
     public struct AttackBehaviorRuntimeSetupData
     {
+        public int RefItemId;
         public int SettingId;
-        public AttackBehaviorRuntimeSetupData(int settingId)
+        public AttackBehaviorRuntimeSetupData(int refItemId, int settingId)
         {
+            RefItemId = refItemId;
             SettingId = settingId;
         }
     }
@@ -59,7 +61,7 @@ namespace GameMainModule.Attack
                         $"SettingId:{behaviorData.SettingId}");
                     continue;
                 }
-                BehaviorRuntimeSetupDataList.Add(new AttackBehaviorRuntimeSetupData(behaviorData.SettingId));
+                BehaviorRuntimeSetupDataList.Add(new AttackBehaviorRuntimeSetupData(behaviorData.RefItemId, behaviorData.SettingId));
             }
         }
     }
