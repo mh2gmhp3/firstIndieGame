@@ -12,6 +12,9 @@ namespace GameMainModule
         private AttackBehaviorAssetSetting _attackBehaviorAssetSetting;
         public static AttackBehaviorAssetSetting AttackBehaviorAssetSetting => _instance._attackBehaviorAssetSetting;
 
+        private AttackCastAssetSetting _attackTriggerAssetSetting;
+        public static AttackCastAssetSetting AttackTriggerAssetSetting => _instance._attackTriggerAssetSetting;
+
         private MovementSetting _movementSetting;
         public static MovementSetting MovementSetting => _instance._movementSetting;
 
@@ -19,6 +22,7 @@ namespace GameMainModule
         {
             _attackBehaviorAssetSetting = AssetSystem.LoadAsset<AttackBehaviorAssetSetting>("Setting/AttackBehaviorAssetSetting/PrototypeCharacter");
             _movementSetting = AssetSystem.LoadAsset<MovementSetting>("Setting/MovementSetting");
+            _attackTriggerAssetSetting = AssetSystem.LoadAsset<AttackCastAssetSetting>("Setting/AttackCastAssetSetting");
         }
     }
 }

@@ -21,14 +21,14 @@ MonoBehaviour:
         Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_01.anim
         ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_01
         _guid: b5af8f487ce43c148b7073f43c7759d5
-    AttackEffectTrackList: []
-    AttackCollisionTrackList:
+    AttackCastTrackList:
     - Id: 2
       StartTime: 0.1
-      Duration: 0.2
-      CollisionAreaType: 1
-      Position: {x: 0, y: 0, z: 0}
-      Rotation: {x: 0, y: 0, z: 0}
+      Duration: 0
+      CastId: 1
+      CastParam: 0
+      CastDirection: {x: 0, y: 0, z: 0}
+      CastRotation: {x: 0, y: 0, z: 0}
   - Id: 102
     AttackClipTrackList:
     - Id: 1
@@ -37,14 +37,14 @@ MonoBehaviour:
         Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_02.anim
         ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_02
         _guid: 412ca1babf3875c49b8597fe8bf7cd34
-    AttackEffectTrackList: []
-    AttackCollisionTrackList:
+    AttackCastTrackList:
     - Id: 2
       StartTime: 0.1
-      Duration: 0.2
-      CollisionAreaType: 1
-      Position: {x: 0, y: 0, z: 0}
-      Rotation: {x: 0, y: 0, z: 0}
+      Duration: 0
+      CastId: 1
+      CastParam: 0
+      CastDirection: {x: 0, y: 0, z: 0}
+      CastRotation: {x: 0, y: 0, z: 0}
   - Id: 103
     AttackClipTrackList:
     - Id: 1
@@ -53,14 +53,14 @@ MonoBehaviour:
         Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_03.anim
         ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_03
         _guid: 7ceae6c85dc6c6340b5abdbff55bde73
-    AttackEffectTrackList: []
-    AttackCollisionTrackList:
+    AttackCastTrackList:
     - Id: 2
       StartTime: 0.1
-      Duration: 0.2
-      CollisionAreaType: 1
-      Position: {x: 0, y: 0, z: 0}
-      Rotation: {x: 0, y: 0, z: 0}
+      Duration: 0
+      CastId: 1
+      CastParam: 0
+      CastDirection: {x: 0, y: 0, z: 0}
+      CastRotation: {x: 0, y: 0, z: 0}
   - Id: 201
     AttackClipTrackList:
     - Id: 1
@@ -69,14 +69,14 @@ MonoBehaviour:
         Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_04.anim
         ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_04
         _guid: afa704d906125c74a94a3ea90bd752cc
-    AttackEffectTrackList: []
-    AttackCollisionTrackList:
+    AttackCastTrackList:
     - Id: 2
       StartTime: 0.1
-      Duration: 0.2
-      CollisionAreaType: 1
-      Position: {x: 0, y: 0, z: 0}
-      Rotation: {x: 0, y: 0, z: 0}
+      Duration: 0
+      CastId: 1
+      CastParam: 0
+      CastDirection: {x: 0, y: 0, z: 0}
+      CastRotation: {x: 0, y: 0, z: 0}
   - Id: 202
     AttackClipTrackList:
     - Id: 1
@@ -85,14 +85,7 @@ MonoBehaviour:
         Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_05.anim
         ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_05
         _guid: a8d7f538ff0e7e2409771a6f9548945c
-    AttackEffectTrackList: []
-    AttackCollisionTrackList:
-    - Id: 2
-      StartTime: 0.1
-      Duration: 0.2
-      CollisionAreaType: 1
-      Position: {x: 0, y: 0, z: 0}
-      Rotation: {x: 0, y: 0, z: 0}
+    AttackCastTrackList: []
   - Id: 203
     AttackClipTrackList:
     - Id: 1
@@ -101,14 +94,14 @@ MonoBehaviour:
         Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_06.anim
         ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_06
         _guid: b991a65ddfa842149923696be5e1cbdb
-    AttackEffectTrackList: []
-    AttackCollisionTrackList:
+    AttackCastTrackList:
     - Id: 2
       StartTime: 0.1
-      Duration: 0.2
-      CollisionAreaType: 1
-      Position: {x: 0, y: 0, z: 0}
-      Rotation: {x: 0, y: 0, z: 0}
+      Duration: 0
+      CastId: 1
+      CastParam: 0
+      CastDirection: {x: 0, y: 0, z: 0}
+      CastRotation: {x: 0, y: 0, z: 0}
   - Id: 301
     AttackClipTrackList:
     - Id: 1
@@ -117,14 +110,14 @@ MonoBehaviour:
         Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_01.anim
         ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_01
         _guid: b5af8f487ce43c148b7073f43c7759d5
-    AttackEffectTrackList: []
-    AttackCollisionTrackList:
+    AttackCastTrackList:
     - Id: 2
       StartTime: 0.1
-      Duration: 0.2
-      CollisionAreaType: 1
-      Position: {x: 0, y: 0, z: 0}
-      Rotation: {x: 0, y: 0, z: 0}
+      Duration: 0
+      CastId: 1
+      CastParam: 0
+      CastDirection: {x: 0, y: 0, z: 0}
+      CastRotation: {x: 0, y: 0, z: 0}
   - Id: 302
     AttackClipTrackList:
     - Id: 1
@@ -133,14 +126,14 @@ MonoBehaviour:
         Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_02.anim
         ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_02
         _guid: 412ca1babf3875c49b8597fe8bf7cd34
-    AttackEffectTrackList: []
-    AttackCollisionTrackList:
+    AttackCastTrackList:
     - Id: 2
       StartTime: 0.1
-      Duration: 0.2
-      CollisionAreaType: 1
-      Position: {x: 0, y: 0, z: 0}
-      Rotation: {x: 0, y: 0, z: 0}
+      Duration: 0
+      CastId: 1
+      CastParam: 0
+      CastDirection: {x: 0, y: 0, z: 0}
+      CastRotation: {x: 0, y: 0, z: 0}
   - Id: 303
     AttackClipTrackList:
     - Id: 1
@@ -149,11 +142,11 @@ MonoBehaviour:
         Path: Assets/Resources/Prototype/TestObject/Character_06/Armature_Attack_Sw_03.anim
         ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_03
         _guid: 7ceae6c85dc6c6340b5abdbff55bde73
-    AttackEffectTrackList: []
-    AttackCollisionTrackList:
+    AttackCastTrackList:
     - Id: 2
       StartTime: 0.1
-      Duration: 0.2
-      CollisionAreaType: 1
-      Position: {x: 0, y: 0, z: 0}
-      Rotation: {x: 0, y: 0, z: 0}
+      Duration: 0
+      CastId: 1
+      CastParam: 0
+      CastDirection: {x: 0, y: 0, z: 0}
+      CastRotation: {x: 0, y: 0, z: 0}

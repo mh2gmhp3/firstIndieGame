@@ -17,7 +17,7 @@ namespace GameMainModule.Attack
 
         private EnemyAttackRefSetting _attackRefSetting;
         private CharacterPlayableClipController _playableClipController;
-        private AttackBehaviorTimelinePlayController _attackBehaviorTimelinePlayController = new AttackBehaviorTimelinePlayController();
+        private TimelinePlayController _attackBehaviorTimelinePlayController = new TimelinePlayController();
         private FakeCharacterTriggerInfo _fakeCharacterTriggerInfo = new FakeCharacterTriggerInfo();
 
 
@@ -106,14 +106,20 @@ namespace GameMainModule.Attack
             {
                 _playableClipController.Attack(attackTrack.Name);
             }
-            else if (trackAsset is AttackCollisionRuntimeTrack collisionRuntimeTrack)
+            else if (trackAsset is AttackCastRuntimeTrack attackCast)
             {
-                CollisionAreaManager.CreateCollisionArea(
-                    GameMainSystem.GetCollisionAreaSetupData(
-                        _attackRefSetting,
-                        collisionRuntimeTrack,
-                        _fakeCharacterTriggerInfo,
-                        speedRate));
+                AttackCastManager.CastAttack(attackCast.CastId,
+                    new CastAttackInfo()
+                    {
+                        SpeedRate = speedRate,
+                        TriggerInfo = _fakeCharacterTriggerInfo,
+                        TransformInfo = new CastTransformInfo()
+                        {
+                            AttackRef = _attackRefSetting,
+                            CastDirection = attackCast.CastDirection,
+                            CastRotation = attackCast.CastRotation,
+                        }
+                    });
             }
         }
 

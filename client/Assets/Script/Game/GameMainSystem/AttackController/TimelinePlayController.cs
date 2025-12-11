@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameMainModule.Attack
+namespace GameMainModule
 {
     public interface ITimelineListener
     {
@@ -9,7 +9,20 @@ namespace GameMainModule.Attack
         public void OnEndTrack(ITrackRuntimeAsset trackAsset, float speedRate);
     }
 
-    public class AttackBehaviorTimelinePlayController
+    public interface ITrackRuntimeAsset
+    {
+        public int Id { get; }
+        public float StartTime(float speedRate);
+        public float Duration(float speedRate);
+    }
+
+    public interface ITimelineRuntimeAsset
+    {
+        public List<ITrackRuntimeAsset> TrackAssetList { get; }
+        public float TotalDuration(float speedRate);
+    }
+
+    public class TimelinePlayController
     {
         public enum State
         {
@@ -28,7 +41,7 @@ namespace GameMainModule.Attack
         private float _lastTime;
         private float _elapsedTime;
 
-        private AttackBehaviorTimelineRuntimeAsset _asset;
+        private ITimelineRuntimeAsset _asset;
         private float _speedRate;
 
         private float _duration;
@@ -63,7 +76,7 @@ namespace GameMainModule.Attack
             _listenerList.Remove(listener);
         }
 
-        public void Play(AttackBehaviorTimelineRuntimeAsset asset, float speedRate)
+        public void Play(ITimelineRuntimeAsset asset, float speedRate)
         {
             if (asset == null || speedRate <= 0)
                 return;
@@ -129,9 +142,16 @@ namespace GameMainModule.Attack
             DoEnd();
         }
 
+        public void Clear()
+        {
+            ClearPlayState();
+            _asset = null;
+            _speedRate = 0;
+        }
+
         private void StartTrack(int id)
         {
-            var track = _asset.GetTrack(id);
+            var track = GetTrack(id);
             if (track == null)
                 return;
 
@@ -144,7 +164,7 @@ namespace GameMainModule.Attack
 
         private void EndTrack(int id)
         {
-            var track = _asset.GetTrack(id);
+            var track = GetTrack(id);
             if (track == null)
                 return;
 
@@ -157,11 +177,27 @@ namespace GameMainModule.Attack
 
         private void DoEnd()
         {
+            ClearPlayState();
+        }
+
+        private void ClearPlayState()
+        {
             _lastTime = 0;
             _elapsedTime = 0;
             _waitPlayTrackInfo.Clear();
             _playingTrackInfo.Clear();
             _state = State.End;
+        }
+
+        private ITrackRuntimeAsset GetTrack(int id)
+        {
+            var trackAssetList = _asset.TrackAssetList;
+            for (int i = 0; i < trackAssetList.Count; i++)
+            {
+                if (trackAssetList[i].Id == id)
+                    return trackAssetList[i];
+            }
+            return null;
         }
     }
 }

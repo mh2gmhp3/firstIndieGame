@@ -1,17 +1,9 @@
 ﻿using AssetModule;
 using System.Collections.Generic;
 using UnityEngine;
-using static CollisionModule.CollisionAreaDefine;
 
 namespace GameMainModule.Attack
 {
-    public interface ITrackRuntimeAsset
-    {
-        public int Id { get; }
-        public float StartTime(float speedRate);
-        public float Duration(float speedRate);
-    }
-
     public class AttackClipRuntimeTrack : ITrackRuntimeAsset
     {
         private AttackClipTrack _editData;
@@ -44,13 +36,18 @@ namespace GameMainModule.Attack
         }
     }
 
-    public class AttackEffectRuntimeTrack : ITrackRuntimeAsset
+    public class AttackCastRuntimeTrack : ITrackRuntimeAsset
     {
-        private AttackEffectTrack _editData;
+        private AttackCastTrack _editData;
 
         public int Id => _editData.Id;
 
-        public AttackEffectRuntimeTrack(AttackEffectTrack editData)
+        public int CastId => _editData.CastId;
+        public int CastParam => _editData.CastParam;
+        public Vector3 CastDirection => _editData.CastDirection;
+        public Vector3 CastRotation => _editData.CastRotation;
+
+        public AttackCastRuntimeTrack(AttackCastTrack editData)
         {
             _editData = editData;
         }
@@ -66,31 +63,7 @@ namespace GameMainModule.Attack
         }
     }
 
-    public class AttackCollisionRuntimeTrack : ITrackRuntimeAsset
-    {
-        private AttackCollisionTrack _editData;
-
-        public int Id => _editData.Id;
-
-        public AreaType CollisionAreaType => _editData.CollisionAreaType;
-
-        public AttackCollisionRuntimeTrack(AttackCollisionTrack editData)
-        {
-            _editData = editData;
-        }
-
-        public float StartTime(float speedRate)
-        {
-            return _editData.StartTime / speedRate;
-        }
-
-        public float Duration(float speedRate)
-        {
-            return _editData.Duration / speedRate;
-        }
-    }
-
-    public class AttackBehaviorTimelineRuntimeAsset
+    public class AttackBehaviorTimelineRuntimeAsset : ITimelineRuntimeAsset
     {
         private AttackBehaviorTimelineAsset _editData;
         private List<ITrackRuntimeAsset> _trackAssetList = new List<ITrackRuntimeAsset>();
@@ -112,13 +85,9 @@ namespace GameMainModule.Attack
                 _trackAssetList.Add(attackClipTrack);
                 _attackClipTrackList.Add(attackClipTrack);
             }
-            for (int i = 0; i < editData.AttackEffectTrackList.Count; i++)
+            for (int i = 0; i < editData.AttackCastTrackList.Count; i++)
             {
-                _trackAssetList.Add(new AttackEffectRuntimeTrack(editData.AttackEffectTrackList[i]));
-            }
-            for (int i = 0; i < editData.AttackCollisionTrackList.Count; i++)
-            {
-                _trackAssetList.Add(new AttackCollisionRuntimeTrack(editData.AttackCollisionTrackList[i]));
+                _trackAssetList.Add(new AttackCastRuntimeTrack(editData.AttackCastTrackList[i]));
             }
             _trackAssetList.Sort(
                 (l, r) =>
@@ -143,16 +112,6 @@ namespace GameMainModule.Attack
         public float TotalDuration(float speedRate)
         {
             return _totalDuration / speedRate;
-        }
-
-        public ITrackRuntimeAsset GetTrack(int id)
-        {
-            for (int i = 0; i < _trackAssetList.Count; i++)
-            {
-                if (_trackAssetList[i].Id == id)
-                    return _trackAssetList[i];
-            }
-            return null;
         }
     }
 }
