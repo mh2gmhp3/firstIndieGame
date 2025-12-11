@@ -232,12 +232,12 @@ namespace UnitModule.Movement
 
                 Vector3 projectedForward = Vector3.ProjectOnPlane(rotateTrans.forward, movementData.SlopeHit.normal).normalized;
                 Quaternion targetRotation = Quaternion.LookRotation(projectedForward, movementData.SlopeHit.normal);
-                avatarTrans.rotation = Quaternion.Slerp(avatarTrans.rotation, targetRotation, 10 * Time.deltaTime);
+                avatarTrans.rotation = Quaternion.Slerp(avatarTrans.rotation, targetRotation, 5 * Time.deltaTime);
             }
             else
             {
                 //清空
-                avatarTrans.localRotation = Quaternion.identity;
+                avatarTrans.localRotation = Quaternion.Slerp(avatarTrans.localRotation, Quaternion.identity, 5 * Time.deltaTime);
             }
         }
 
