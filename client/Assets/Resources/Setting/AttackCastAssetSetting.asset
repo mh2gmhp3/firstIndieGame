@@ -14,7 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackCastTimelineAssetList:
   - Id: 1
-    AttackEffectTrackList: []
+    CastType: 0
+    AttackEffectTrackList:
+    - Id: 0
+      StartTime: 0
+      Duration: 0.4
+      EffectObject:
+        Path: Assets/Resources/Prototype/TestObject/Slash/TestSlash.prefab
+        ResourcePath: Prototype/TestObject/Slash/TestSlash
+        _guid: 1aa7ac9cf0a45ac40af83c1147edf2a0
+      Position: {x: 0, y: 0, z: 0}
+      Rotation: {x: 0, y: 0, z: 0}
     AttackCollisionTrackList:
     - Id: 1
       StartTime: 0
