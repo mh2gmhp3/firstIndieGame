@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Utility;
 using static CollisionModule.CollisionAreaDefine;
 
 namespace GameMainModule.Attack
@@ -8,6 +9,7 @@ namespace GameMainModule.Attack
         private AttackEffectTrack _editData;
 
         public int Id => _editData.Id;
+        public GameObjectIndirectField EffectObject => _editData.EffectObject;
 
         public AttackEffectRuntimeTrack(AttackEffectTrack editData)
         {
@@ -58,6 +60,7 @@ namespace GameMainModule.Attack
         public List<ITrackRuntimeAsset> TrackAssetList => _trackAssetList;
 
         public int Id => _editData.Id;
+        public AttackCastDefine.CastType CastType => _editData.CastType;
 
         public AttackCastTimelineRuntimeAsset(AttackCastTimelineAsset editData)
         {

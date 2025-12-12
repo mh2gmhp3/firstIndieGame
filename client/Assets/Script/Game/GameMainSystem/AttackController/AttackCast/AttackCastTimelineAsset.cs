@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 using static CollisionModule.CollisionAreaDefine;
 
 namespace GameMainModule.Attack
@@ -11,6 +12,8 @@ namespace GameMainModule.Attack
         public int Id;
         public float StartTime;
         public float Duration;
+
+        public GameObjectIndirectField EffectObject = new GameObjectIndirectField();
 
         public Vector3 Position;
         public Vector3 Rotation;
@@ -33,6 +36,8 @@ namespace GameMainModule.Attack
     public class AttackCastTimelineAsset
     {
         public int Id;
+
+        public AttackCastDefine.CastType CastType;
 
         public List<AttackEffectTrack> AttackEffectTrackList = new List<AttackEffectTrack>();
         public List<AttackCollisionTrack> AttackCollisionTrackList = new List<AttackCollisionTrack>();

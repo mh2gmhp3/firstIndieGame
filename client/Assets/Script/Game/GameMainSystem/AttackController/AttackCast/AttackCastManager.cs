@@ -1,7 +1,7 @@
 ﻿using CollisionModule;
+using GameMainModule.VFX;
 using GameSystem;
 using Logging;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -20,8 +20,10 @@ namespace GameMainModule.Attack
         public IAttackRefSetting AttackRef;
         public Vector3 CastDirection;
         public Vector3 CastRotation;
-    }
 
+        public bool FollowTarget;
+        public Transform FollowTrans;
+    }
 
     public class AttackCastManager : IUpdateTarget
     {
@@ -31,11 +33,21 @@ namespace GameMainModule.Attack
 
             private FakeCharacterTriggerInfo _triggerInfo;
 
+            private AttackCastTimelineRuntimeAsset _asset;
+
             private IAttackRefSetting _attackRef;
             private Vector3 _castDirection;
             private Vector3 _castRotation;
 
-            public bool IsEnd => _timelinePlayController.IsEnd;
+            private VFXObject _vfxObject = null;
+
+            public bool IsEnd
+            {
+                get
+                {
+                    return _timelinePlayController.IsEnd;
+                }
+            }
 
             public CastAttackProcesser()
             {
@@ -53,7 +65,19 @@ namespace GameMainModule.Attack
 
             public void OnPlayTrack(ITrackRuntimeAsset trackAsset, float speedRate)
             {
-                if (trackAsset is AttackCollisionRuntimeTrack collisionRuntimeTrack)
+                if (trackAsset is AttackEffectRuntimeTrack effectRuntimeTrack)
+                {
+                    VFXManager.GetVFX(effectRuntimeTrack.EffectObject, (vfxO) =>
+                    {
+                        _vfxObject = vfxO;
+                        if (_attackRef.TryGetAttackCastPoint(0, out var worldPoint, out var direction ))
+                        {
+                            _vfxObject.Transform.position = worldPoint;
+                            _vfxObject.Transform.rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(_castRotation);
+                        }
+                    });
+                }
+                else if (trackAsset is AttackCollisionRuntimeTrack collisionRuntimeTrack)
                 {
                     CollisionAreaManager.CreateCollisionArea(
                         GameMainSystem.GetCollisionAreaSetupData(
@@ -77,8 +101,13 @@ namespace GameMainModule.Attack
             public void Clear()
             {
                 _timelinePlayController.Clear();
-                _attackRef = null;
                 _triggerInfo = null;
+                _asset = null;
+                _attackRef = null;
+                _castDirection = Vector3.zero;
+                _castRotation = Vector3.zero;
+
+                VFXManager.RecycleVFX(_vfxObject);
             }
         }
 
@@ -88,6 +117,8 @@ namespace GameMainModule.Attack
 
         private List<CastAttackProcesser> _castingAttackList = new List<CastAttackProcesser>();
         private ObjectPool<CastAttackProcesser> _pool;
+
+        private VFXManager _fxManager = new VFXManager();
 
         public AttackCastManager(AttackCastAssetSetting assetSetting)
         {
