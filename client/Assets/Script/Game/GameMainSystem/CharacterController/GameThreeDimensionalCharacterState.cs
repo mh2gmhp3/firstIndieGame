@@ -323,6 +323,10 @@ namespace GameMainModule
 
         public override void DoExit(CharacterState nextState)
         {
+            if (!KeepCombo())
+            {
+                _attackController.ResetCombo();
+            }
             _attackController.SetWeaponActive(false);
         }
 
