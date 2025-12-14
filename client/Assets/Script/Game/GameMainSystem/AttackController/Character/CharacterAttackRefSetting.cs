@@ -16,8 +16,8 @@ namespace GameMainModule.Attack
 
         public bool TryGetAttackCastPoint(int id, out Vector3 worldPoint, out Vector3 direction)
         {
-            worldPoint = _unitMovementSetting.RootTransform.position + new Vector3(0f, 0.5f, 0f);
-            direction = _unitMovementSetting.RotateTransform.forward;
+            worldPoint = _unitMovementSetting.RootTransform.position + _unitMovementSetting.AvatarTransform.rotation *  new Vector3(0f, 0.5f, 0f);
+            direction = _unitMovementSetting.AvatarTransform.forward;
             return true;
         }
     }
