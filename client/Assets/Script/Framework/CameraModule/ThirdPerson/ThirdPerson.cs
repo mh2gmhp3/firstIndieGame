@@ -6,6 +6,22 @@ using static CameraModule.BaseCameraBehavior;
 
 namespace CameraModule
 {
+    #region ThirdPersonImmediateLooAtTarget
+
+    public class ThirdPersonImmediateLooAtTarget : ICameraCommand
+    {
+        public int CommandId { get; set; }
+        public Vector3 Direction;
+
+        public ThirdPersonImmediateLooAtTarget(Vector3 direction)
+        {
+            CommandId = (int)CameraCommandDefine.BaseCommand.ThirdPersonImmediateLooAtTarget;
+            Direction = direction;
+        }
+    }
+
+    #endregion
+
     #region UpdateThirdPersonSettingData
 
     public class UpdateThirdPersonSettingData : ICameraCommand
@@ -127,6 +143,9 @@ namespace CameraModule
 
         private Vector3 _lookAtPosition = Vector3.zero;
 
+        private bool _triggerThirdPersonImmediateLooAtTarget = false;
+        private Vector3 _thirdPersonImmediateLooAtTargetDirection;
+
         public ThirdPersonModeProcessor(BaseCameraBehavior baseCameraBehavior)
         {
             _baseCameraBehavior = baseCameraBehavior;
@@ -159,6 +178,12 @@ namespace CameraModule
             _cameraRotateSensitivity = commandData.CameraRotateSensitivity;
         }
 
+        public void ThirdPersonImmediateLooAtTarget(ThirdPersonImmediateLooAtTarget commandData)
+        {
+            _triggerThirdPersonImmediateLooAtTarget = true;
+            _thirdPersonImmediateLooAtTargetDirection = commandData.Direction;
+        }
+
         public void FixedUpdate()
         {
             if (!_active)
@@ -166,8 +191,16 @@ namespace CameraModule
             if (_targetTrans == null)
                 return;
 
-            _cameraRotateValue.x += _screenInputAxis.x * _cameraRotateSensitivity * Time.deltaTime;
-            _cameraRotateValue.y -= _screenInputAxis.y * _cameraRotateSensitivity * Time.deltaTime;
+            if (_triggerThirdPersonImmediateLooAtTarget)
+            {
+                var eulerAngles = Quaternion.LookRotation(_thirdPersonImmediateLooAtTargetDirection).eulerAngles;
+                _cameraRotateValue = new Vector2(eulerAngles.y, eulerAngles.x);
+            }
+            else
+            {
+                _cameraRotateValue.x += _screenInputAxis.x * _cameraRotateSensitivity * Time.deltaTime;
+                _cameraRotateValue.y -= _screenInputAxis.y * _cameraRotateSensitivity * Time.deltaTime;
+            }
 
             _cameraRotateValue.x = _cameraRotateValue.x < 0 ?
                 _cameraRotateValue.x + 360 :
@@ -193,12 +226,23 @@ namespace CameraModule
             needNotify |= _baseCameraBehavior.CameraTrans.position != cameraPosition;
 
             _baseCameraBehavior.CameraTrans.rotation = rotationEuler;
-            _baseCameraBehavior.CameraTrans.position =
-                Vector3.MoveTowards(
-                    _baseCameraBehavior.CameraTrans.position,
-                    cameraPosition,
-                    _camMoveSpeed * Time.deltaTime);
-            //_baseCameraBehavior.CameraTrans.position = cameraPosition;
+            if (_triggerThirdPersonImmediateLooAtTarget)
+            {
+                _baseCameraBehavior.CameraTrans.position = cameraPosition;
+            }
+            else
+            {
+                _baseCameraBehavior.CameraTrans.position =
+                    Vector3.MoveTowards(
+                        _baseCameraBehavior.CameraTrans.position,
+                        cameraPosition,
+                        _camMoveSpeed * Time.deltaTime);
+            }
+
+            if (_triggerThirdPersonImmediateLooAtTarget)
+            {
+                _triggerThirdPersonImmediateLooAtTarget = false;
+            }
 
             if (needNotify)
             {

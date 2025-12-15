@@ -58,6 +58,15 @@ namespace CameraModule
             _thirdPersonModeProcessor.UpdateSetting(commandData);
         }
 
+        [CameraCommand((int)CameraCommandDefine.BaseCommand.ThirdPersonImmediateLooAtTarget)]
+        private void ThirdPersonImmediateLooAtTarget(ICameraCommand command)
+        {
+            if (!(command is ThirdPersonImmediateLooAtTarget commandData))
+                return;
+
+            _thirdPersonModeProcessor.ThirdPersonImmediateLooAtTarget(commandData);
+        }
+
         #endregion
 
         #region FollowTarget
