@@ -13,7 +13,7 @@ namespace GameMainModule
         /// </summary>
         Normal,
         /// <summary>
-        /// 過肩是繳
+        /// 過肩視角
         /// </summary>
         OTP
     }
