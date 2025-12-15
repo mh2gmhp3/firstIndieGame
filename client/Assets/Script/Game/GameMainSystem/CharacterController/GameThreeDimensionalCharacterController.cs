@@ -210,9 +210,11 @@ namespace GameMainModule
             _movementData.DashData.DashTrigger = true;
         }
 
-        public void Teleport(Vector3 worldPosition)
+        public void Teleport(Vector3 worldPosition, Vector3 direction)
         {
             _movementData.UnitMovementSetting.RootTransform.position = worldPosition;
+            var rotation = Quaternion.LookRotation(direction);
+            _movementData.UnitMovementSetting.RotateTransform.rotation = new Quaternion(0, rotation.y, 0, rotation.w);
         }
 
         #endregion

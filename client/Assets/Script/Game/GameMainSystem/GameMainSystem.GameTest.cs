@@ -24,9 +24,9 @@ namespace GameMainModule
             EnterTerrain("256_128_256_4");
             InitTestPlayerCharacterUnit();
             if (_terrainManager.TryGetCurTerrainAreaWorldPoint(1, 1, out var worldPoint, out _))
-                CharacterTeleportTo(worldPoint);
+                CharacterTeleportTo(worldPoint, Vector3.forward);
             else
-                CharacterTeleportTo(new Vector3(2, 4, 2));
+                CharacterTeleportTo(new Vector3(2, 4, 2), Vector3.forward);
             //SceneSystem.SwitchStage(new SwitchStageData("world_map_test"));
         }
 

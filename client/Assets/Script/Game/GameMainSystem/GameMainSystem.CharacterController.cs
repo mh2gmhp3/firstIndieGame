@@ -1,4 +1,5 @@
-﻿using DataModule;
+﻿using CameraModule;
+using DataModule;
 using GameMainModule.Attack;
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,9 +51,10 @@ namespace GameMainModule
             _instance._characterAttackController.SetCombination(index, new AttackCombinationRuntimeSetupData(weaponBehaviorSetup));
         }
 
-        public static void CharacterTeleportTo(Vector3 worldPosition)
+        public static void CharacterTeleportTo(Vector3 worldPosition, Vector3 direction)
         {
-            _instance._characterController.Teleport(worldPosition);
+            _instance._characterController.Teleport(worldPosition, direction);
+            CameraSystem.CameraCommand(new ThirdPersonImmediateLooAtTarget(direction));
         }
     }
 }
