@@ -50,7 +50,7 @@ namespace GameMainModule
             _playableClipController.Init("Character Playable", characterUnit.UnitMovementSetting.Animator, characterAnimationSetting);
 
             //AttackController
-            _characterAttackController.Init(characterUnit.AttackRefSetting, _playableClipController, characterUnit.WeaponTransformSetting);
+            _characterAttackController.Init(characterUnit.Id, characterUnit.AttackRefSetting, _playableClipController, characterUnit.WeaponTransformSetting);
 
             //State
             _characterStateMachine.AddState(CharacterState.Idle, new IdleState(_characterStateContext));

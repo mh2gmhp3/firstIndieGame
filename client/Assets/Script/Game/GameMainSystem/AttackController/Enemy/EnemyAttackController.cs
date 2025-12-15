@@ -15,11 +15,10 @@ namespace GameMainModule.Attack
 
         private int _curBehaviorIndex = -1;
 
+        private int _id;
         private EnemyAttackRefSetting _attackRefSetting;
         private CharacterPlayableClipController _playableClipController;
         private TimelinePlayController _attackBehaviorTimelinePlayController = new TimelinePlayController();
-        private FakeCharacterTriggerInfo _fakeCharacterTriggerInfo = new FakeCharacterTriggerInfo();
-
 
         private float _delayStartTime;
         private bool _delayStart = false;
@@ -35,11 +34,11 @@ namespace GameMainModule.Attack
             }
         }
 
-        public void Init(EnemyAttackRefSetting attackRefSetting, CharacterPlayableClipController clipController)
+        public void Init(int id, EnemyAttackRefSetting attackRefSetting, CharacterPlayableClipController clipController)
         {
+            _id = id;
             _attackRefSetting = attackRefSetting;
             _playableClipController = clipController;
-            _fakeCharacterTriggerInfo.ToCharacter = true;
             _attackBehaviorTimelinePlayController.AddListener(this);
 
             //TODO 先直接設定
@@ -66,6 +65,7 @@ namespace GameMainModule.Attack
 
         public void Clear()
         {
+            _id = 0;
             _behaviorList.Clear();
             _curBehaviorIndex = -1;
             _attackRefSetting = null;
@@ -108,18 +108,22 @@ namespace GameMainModule.Attack
             }
             else if (trackAsset is AttackCastRuntimeTrack attackCast)
             {
-                AttackCastManager.CastAttack(attackCast.CastId,
-                    new CastAttackInfo()
-                    {
-                        SpeedRate = speedRate,
-                        TriggerInfo = _fakeCharacterTriggerInfo,
-                        TransformInfo = new CastTransformInfo()
+                if (_attackRefSetting.TryGetAttackCastPoint(0, out var worldPoint, out var direction))
+                {
+                    AttackCastManager.CastAttack(attackCast.CastId,
+                        new CastAttackInfo()
                         {
-                            AttackRef = _attackRefSetting,
-                            CastDirection = attackCast.CastDirection,
-                            CastRotation = attackCast.CastRotation,
-                        }
-                    });
+                            SpeedRate = speedRate,
+                            CasterUnitId = _id,
+                            TransformInfo = new CastTransformInfo()
+                            {
+                                WorldPoint = worldPoint,
+                                Direction = direction,
+                                CastDirection = attackCast.CastDirection,
+                                CastRotation = attackCast.CastRotation,
+                            }
+                        });
+                }
             }
         }
 

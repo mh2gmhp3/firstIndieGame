@@ -31,18 +31,29 @@ namespace CollisionModule
             if (!GameMainSystem.TryGetUnitIdByColliderGroupId(groupId, out var unitId))
                 return;
 
-            if (triggerInfo is FakeCharacterTriggerInfo fakeTriggerInfo)
+            if (triggerInfo is AttackCastTriggerInfo attackTriggerInfo)
             {
-                if (fakeTriggerInfo.ToCharacter)
+                //後續有受擊觸發的在處理傷害計算時觸發
+                if (!GameMainSystem.IsSelf(attackTriggerInfo.CasterUnitId) && GameMainSystem.IsSelf(unitId))
                 {
-                    Log.LogInfo($"ToCharacter Hit Unit Id:{unitId}, Damage:{fakeTriggerInfo.Attack}");
+                    Log.LogInfo($"ToCharacter Hit Unit Id:{unitId}, Damage:{20}");
                 }
-                else
+                else if (GameMainSystem.IsSelf(attackTriggerInfo.CasterUnitId) && GameMainSystem.IsEnemy(unitId))
                 {
-                    GameMainSystem.TestCauseToEnemyDamage(unitId, fakeTriggerInfo.Attack);
+                    GameMainSystem.TestCauseToEnemyDamage(unitId, 20);
                 }
+                //只需要顯示受擊特效 只要位置
+                AttackCastManager.CastAttack(attackTriggerInfo.OnHitCastId,
+                    new CastAttackInfo()
+                    {
+                        SpeedRate = 1,
+                        TransformInfo = new CastTransformInfo()
+                        {
+                            WorldPoint = hit.point,
+                            Direction = hit.normal
+                        }
+                    });
                 _hits.Add(new HitHint() { Time = Time.time, Hit = hit });
-                //Log.LogInfo($"Hit Unit Id:{unitId}, Damage:{fakeTriggerInfo.Attack}");
             }
         }
 

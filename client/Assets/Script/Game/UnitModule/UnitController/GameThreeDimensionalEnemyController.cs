@@ -63,7 +63,7 @@ namespace UnitModule
                     "Enemy",
                     unit.UnitMovementSetting.Animator,
                     AssetSystem.LoadAsset<CharacterAnimationSetting>("Setting/CharacterAnimationSetting/PrototypeCharacter"));
-                _attackController.Init(unit.AttackRefSetting, _playableClipController);
+                _attackController.Init(unit.Id, unit.AttackRefSetting, _playableClipController);
             }
             _context.UnitId = Unit.Id;
             _movementData.Speed = 5f;

@@ -30,5 +30,19 @@ MonoBehaviour:
       StartTime: 0
       Duration: 0.2
       CollisionAreaType: 1
+      OnHitCastId: 2
       Position: {x: 0, y: 0, z: 0}
       Rotation: {x: 0, y: 0, z: 0}
+  - Id: 2
+    CastType: 0
+    AttackEffectTrackList:
+    - Id: 0
+      StartTime: 0
+      Duration: 0.4
+      EffectObject:
+        Path: Assets/Resources/Prototype/TestObject/Slash/TestSlashOnHit.prefab
+        ResourcePath: Prototype/TestObject/Slash/TestSlashOnHit
+        _guid: 3ea85ec4e9ade6b4eb81a2f240be442c
+      Position: {x: 0, y: 0, z: 0}
+      Rotation: {x: 0, y: 0, z: 0}
+    AttackCollisionTrackList: []

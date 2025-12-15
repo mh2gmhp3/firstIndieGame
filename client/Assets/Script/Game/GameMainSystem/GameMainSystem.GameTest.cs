@@ -91,7 +91,8 @@ namespace GameMainModule
             DataManager.Save(id);
         }
         public static ICollisionAreaSetupData GetCollisionAreaSetupData(
-            IAttackRefSetting attackRefSetting,
+            Vector3 worldPoint,
+            Vector3 direction,
             AttackCollisionRuntimeTrack collision,
             ICollisionAreaTriggerInfo triggerInfo,
             float speedRate)
@@ -101,11 +102,6 @@ namespace GameMainModule
                 case CollisionAreaDefine.AreaType.Test:
                     return new TestCollisionAreaSetupData(1); ;
                 case CollisionAreaDefine.AreaType.Quad:
-                    if (!attackRefSetting.TryGetAttackCastPoint(
-                        0,
-                        out var worldPoint,
-                        out var direction))
-                        return new TestCollisionAreaSetupData(1); ;
                     return new QuadCollisionAreaSetupData(
                         worldPoint,
                         direction,

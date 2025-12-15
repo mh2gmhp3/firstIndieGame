@@ -28,7 +28,7 @@ MonoBehaviour:
       CastId: 1
       CastParam: 0
       CastDirection: {x: 0, y: 0, z: 0}
-      CastRotation: {x: 0, y: 0, z: 180}
+      CastRotation: {x: 0, y: 0, z: -150}
   - Id: 102
     AttackClipTrackList:
     - Id: 1
@@ -44,7 +44,7 @@ MonoBehaviour:
       CastId: 1
       CastParam: 0
       CastDirection: {x: 0, y: 0, z: 0}
-      CastRotation: {x: 0, y: 0, z: 0}
+      CastRotation: {x: 0, y: 0, z: -45}
   - Id: 103
     AttackClipTrackList:
     - Id: 1
@@ -60,7 +60,7 @@ MonoBehaviour:
       CastId: 1
       CastParam: 0
       CastDirection: {x: 0, y: 0, z: 0}
-      CastRotation: {x: 0, y: 0, z: 0}
+      CastRotation: {x: 0, y: 0, z: -180}
   - Id: 201
     AttackClipTrackList:
     - Id: 1

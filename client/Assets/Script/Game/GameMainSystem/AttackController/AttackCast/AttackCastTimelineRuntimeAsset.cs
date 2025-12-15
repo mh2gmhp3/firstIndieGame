@@ -34,6 +34,7 @@ namespace GameMainModule.Attack
         public int Id => _editData.Id;
 
         public AreaType CollisionAreaType => _editData.CollisionAreaType;
+        public int OnHitCastId => _editData.OnHitCastId;
 
         public AttackCollisionRuntimeTrack(AttackCollisionTrack editData)
         {

@@ -8,16 +8,28 @@ using UnityEngine.Pool;
 
 namespace GameMainModule.Attack
 {
+    public class AttackCastTriggerInfo : ICollisionAreaTriggerInfo
+    {
+        public int CasterUnitId;
+        public int OnHitCastId;
+
+        public void Update(CastAttackInfo attackInfo)
+        {
+            CasterUnitId = attackInfo.CasterUnitId;
+        }
+    }
+
     public struct CastAttackInfo
     {
         public float SpeedRate;
-        public FakeCharacterTriggerInfo TriggerInfo;
+        public int CasterUnitId;
         public CastTransformInfo TransformInfo;
     }
 
     public struct CastTransformInfo
     {
-        public IAttackRefSetting AttackRef;
+        public Vector3 WorldPoint;
+        public Vector3 Direction;
         public Vector3 CastDirection;
         public Vector3 CastRotation;
 
@@ -30,14 +42,11 @@ namespace GameMainModule.Attack
         private class CastAttackProcesser : ITimelineListener
         {
             private TimelinePlayController _timelinePlayController = new TimelinePlayController();
-
-            private FakeCharacterTriggerInfo _triggerInfo;
+            private AttackCastTriggerInfo _attackCastTriggerInfo = new AttackCastTriggerInfo();
 
             private AttackCastTimelineRuntimeAsset _asset;
 
-            private IAttackRefSetting _attackRef;
-            private Vector3 _castDirection;
-            private Vector3 _castRotation;
+            private CastAttackInfo _attackInfo;
 
             private VFXObject _vfxObject = null;
 
@@ -56,11 +65,10 @@ namespace GameMainModule.Attack
 
             public void Play(AttackCastTimelineRuntimeAsset asset, CastAttackInfo castAttackInfo)
             {
+                _asset = asset;
                 _timelinePlayController.Play(asset, castAttackInfo.SpeedRate);
-                _triggerInfo = castAttackInfo.TriggerInfo;
-                _attackRef = castAttackInfo.TransformInfo.AttackRef;
-                _castDirection = castAttackInfo.TransformInfo.CastDirection;
-                _castRotation = castAttackInfo.TransformInfo.CastRotation;
+                _attackInfo = castAttackInfo;
+                _attackCastTriggerInfo.Update(_attackInfo);
             }
 
             public void OnPlayTrack(ITrackRuntimeAsset trackAsset, float speedRate)
@@ -70,20 +78,20 @@ namespace GameMainModule.Attack
                     VFXManager.GetVFX(effectRuntimeTrack.EffectObject, (vfxO) =>
                     {
                         _vfxObject = vfxO;
-                        if (_attackRef.TryGetAttackCastPoint(0, out var worldPoint, out var direction ))
-                        {
-                            _vfxObject.Transform.position = worldPoint;
-                            _vfxObject.Transform.rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(_castRotation);
-                        }
+                        _vfxObject.Transform.position = _attackInfo.TransformInfo.WorldPoint;
+                        _vfxObject.Transform.rotation = Quaternion.LookRotation(_attackInfo.TransformInfo.Direction) * Quaternion.Euler(_attackInfo.TransformInfo.CastRotation);
+                        _vfxObject.Play();
                     });
                 }
                 else if (trackAsset is AttackCollisionRuntimeTrack collisionRuntimeTrack)
                 {
+                    _attackCastTriggerInfo.OnHitCastId = collisionRuntimeTrack.OnHitCastId;
                     CollisionAreaManager.CreateCollisionArea(
                         GameMainSystem.GetCollisionAreaSetupData(
-                            _attackRef,
+                            _attackInfo.TransformInfo.WorldPoint,
+                            _attackInfo.TransformInfo.Direction,
                             collisionRuntimeTrack,
-                            _triggerInfo,
+                            _attackCastTriggerInfo,
                             speedRate));
                 }
             }
@@ -101,13 +109,11 @@ namespace GameMainModule.Attack
             public void Clear()
             {
                 _timelinePlayController.Clear();
-                _triggerInfo = null;
                 _asset = null;
-                _attackRef = null;
-                _castDirection = Vector3.zero;
-                _castRotation = Vector3.zero;
+                _attackInfo = default;
 
                 VFXManager.RecycleVFX(_vfxObject);
+                _vfxObject = null;
             }
         }
 

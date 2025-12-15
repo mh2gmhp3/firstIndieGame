@@ -86,6 +86,11 @@ namespace GameMainModule
             return _instance._characterController.Unit.Position;
         }
 
+        public static bool IsSelf(int unitId)
+        {
+            return _instance._characterController.Unit.Id == unitId;
+        }
+
         #endregion
 
         #region Npc
@@ -141,6 +146,13 @@ namespace GameMainModule
         private bool InternalTryGetNearEnemyUnit(Vector3 position, float radius, out int id)
         {
             return _enemyManager.TryGetNearUnit(position, radius, out id);
+        }
+
+        public static bool IsEnemy(int unitId)
+        {
+            if (!_instance._unitManager.TryGetUnit(unitId, out EnemyUnit unit))
+                return false;
+            return true;
         }
 
         #endregion

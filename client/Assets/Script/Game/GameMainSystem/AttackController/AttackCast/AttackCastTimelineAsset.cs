@@ -27,6 +27,7 @@ namespace GameMainModule.Attack
         public float Duration;
 
         public AreaType CollisionAreaType;
+        public int OnHitCastId;
 
         public Vector3 Position;
         public Vector3 Rotation;
