@@ -27,6 +27,7 @@ Shader "Terrain/Terrain"
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_IN_VERTEX _ADDITIONAL_LIGHTS
             #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fog
 
             // The Core.hlsl file contains definitions of frequently used HLSL
             // macros and functions, and also contains #include references to other
@@ -60,6 +61,7 @@ Shader "Terrain/Terrain"
                 float2 uv3_Rotation : TEXCOORD4;
 
                 float4 shadowCoord : TEXCOORD5;
+                float fogCoord : TEXCOORD6;
             };
 
             TEXTURE2D(_TileMap);
@@ -106,6 +108,7 @@ Shader "Terrain/Terrain"
                 OUT.uv3_Rotation = IN.uv3;
 
                 OUT.shadowCoord = TransformWorldToShadowCoord(OUT.positionWS);
+                OUT.fogCoord = ComputeFogFactor(OUT.positionHCS.z);
 
                 return OUT;
             }
@@ -129,11 +132,12 @@ Shader "Terrain/Terrain"
                 half NdotL = saturate(dot(normalWS, mainLight.direction));
                 half3 diffuse = mainLight.color * NdotL;
                 // 3. 应用阴影衰减和环境光
-                half3 lighting = diffuse * shadowAttenuation;
+                half3 lighting = diffuse;// * shadowAttenuation;
                 half3 ambient = SampleSH(normalWS); // 环境光 / 间接光
 
                 half3 finalColor = color.rgb * (lighting.r + ambient.r);
-
+                finalColor = MixFog(finalColor, IN.fogCoord);
+                //half3 finalColor = color.rgb * lighting.r;
                 return half4(finalColor, color.a);
             }
             ENDHLSL
