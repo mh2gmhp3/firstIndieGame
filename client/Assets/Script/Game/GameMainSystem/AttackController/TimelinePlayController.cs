@@ -5,6 +5,9 @@ namespace GameMainModule
 {
     public interface ITimelineListener
     {
+        public void OnPlayAsset();
+        public void OnEndAsset();
+
         public void OnPlayTrack(ITrackRuntimeAsset trackAsset, float speedRate);
         public void OnEndTrack(ITrackRuntimeAsset trackAsset, float speedRate);
     }
@@ -108,6 +111,8 @@ namespace GameMainModule
                         EndTime = trackAsset.StartTime(_speedRate) + trackAsset.Duration(_speedRate)
                     });
                 }
+
+                NotifyPlay();
             }
 
             _elapsedTime += Time.time - _lastTime;
@@ -178,6 +183,25 @@ namespace GameMainModule
         private void DoEnd()
         {
             ClearPlayState();
+            NotifyEnd();
+        }
+
+        private void NotifyPlay()
+        {
+            for (int i = 0; i < _listenerList.Count; i++)
+            {
+                var listener = _listenerList[i];
+                listener.OnPlayAsset();
+            }
+        }
+
+        private void NotifyEnd()
+        {
+            for (int i = 0; i < _listenerList.Count; i++)
+            {
+                var listener = _listenerList[i];
+                listener.OnEndAsset();
+            }
         }
 
         private void ClearPlayState()
@@ -198,6 +222,19 @@ namespace GameMainModule
                     return trackAssetList[i];
             }
             return null;
+        }
+
+        public float GetTrackPlayElapsedNormalizeTIme(ITrackRuntimeAsset trackAsset)
+        {
+            if (trackAsset == null)
+                return 0;
+
+            var startTime = trackAsset.StartTime(_speedRate);
+            var duration = trackAsset.Duration(_speedRate);
+            if (duration == 0)
+                return 1;
+
+            return Mathf.Clamp01((_elapsedTime - startTime) / duration);
         }
     }
 }

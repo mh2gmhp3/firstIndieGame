@@ -71,6 +71,16 @@ namespace GameMainModule.Attack
                 _attackCastTriggerInfo.Update(_attackInfo);
             }
 
+            public void OnPlayAsset()
+            {
+
+            }
+
+            public void OnEndAsset()
+            {
+
+            }
+
             public void OnPlayTrack(ITrackRuntimeAsset trackAsset, float speedRate)
             {
                 if (trackAsset is AttackEffectRuntimeTrack effectRuntimeTrack)

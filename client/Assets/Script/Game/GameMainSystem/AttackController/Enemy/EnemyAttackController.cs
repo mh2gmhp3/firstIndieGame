@@ -100,6 +100,16 @@ namespace GameMainModule.Attack
 
         #region ITimeline
 
+        public void OnPlayAsset()
+        {
+
+        }
+
+        public void OnEndAsset()
+        {
+
+        }
+
         public void OnPlayTrack(ITrackRuntimeAsset trackAsset, float speedRate)
         {
             if (trackAsset is AttackClipRuntimeTrack attackTrack)
