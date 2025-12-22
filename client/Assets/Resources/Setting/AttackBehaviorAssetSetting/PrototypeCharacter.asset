@@ -29,6 +29,64 @@ MonoBehaviour:
       CastParam: 0
       CastDirection: {x: 0, y: 0, z: 0}
       CastRotation: {x: 0, y: 0, z: -150}
+    AttackMovementTrackList:
+    - Id: 3
+      StartTime: 0
+      Duration: 0.15
+      ControlSpeedRateCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: -9.564772
+          outSlope: Infinity
+          tangentMode: 97
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.03626943
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    AttackMotionTrackList:
+    - Id: 4
+      StartTime: 0
+      Duration: 0.1
+      StartPosition: {x: 0, y: 0, z: 0}
+      EndPosition: {x: 0, y: 0, z: 4}
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
   - Id: 102
     AttackClipTrackList:
     - Id: 1
@@ -39,12 +97,70 @@ MonoBehaviour:
         _guid: 412ca1babf3875c49b8597fe8bf7cd34
     AttackCastTrackList:
     - Id: 2
-      StartTime: 0.1
+      StartTime: 0
       Duration: 0
       CastId: 1
       CastParam: 0
       CastDirection: {x: 0, y: 0, z: 0}
       CastRotation: {x: 0, y: 0, z: -45}
+    AttackMovementTrackList:
+    - Id: 3
+      StartTime: 0
+      Duration: 0.15
+      ControlSpeedRateCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: -8.960715
+          outSlope: Infinity
+          tangentMode: 97
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.04835924
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    AttackMotionTrackList:
+    - Id: 4
+      StartTime: 0
+      Duration: 0.1
+      StartPosition: {x: 0, y: 0, z: 0}
+      EndPosition: {x: 0, y: 0, z: 4}
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
   - Id: 103
     AttackClipTrackList:
     - Id: 1
@@ -61,6 +177,64 @@ MonoBehaviour:
       CastParam: 0
       CastDirection: {x: 0, y: 0, z: 0}
       CastRotation: {x: 0, y: 0, z: -180}
+    AttackMovementTrackList:
+    - Id: 3
+      StartTime: 0
+      Duration: 0.15
+      ControlSpeedRateCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: -9.649998
+          outSlope: Infinity
+          tangentMode: 97
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.034542315
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    AttackMotionTrackList:
+    - Id: 4
+      StartTime: 0
+      Duration: 0.1
+      StartPosition: {x: 0, y: 0, z: 0}
+      EndPosition: {x: 0, y: 0, z: 4}
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
   - Id: 201
     AttackClipTrackList:
     - Id: 1
@@ -77,6 +251,8 @@ MonoBehaviour:
       CastParam: 0
       CastDirection: {x: 0, y: 0, z: 0}
       CastRotation: {x: 0, y: 0, z: 0}
+    AttackMovementTrackList: []
+    AttackMotionTrackList: []
   - Id: 202
     AttackClipTrackList:
     - Id: 1
@@ -86,6 +262,8 @@ MonoBehaviour:
         ResourcePath: Prototype/TestObject/Character_06/Armature_Attack_Sw_05
         _guid: a8d7f538ff0e7e2409771a6f9548945c
     AttackCastTrackList: []
+    AttackMovementTrackList: []
+    AttackMotionTrackList: []
   - Id: 203
     AttackClipTrackList:
     - Id: 1
@@ -102,6 +280,8 @@ MonoBehaviour:
       CastParam: 0
       CastDirection: {x: 0, y: 0, z: 0}
       CastRotation: {x: 0, y: 0, z: 0}
+    AttackMovementTrackList: []
+    AttackMotionTrackList: []
   - Id: 301
     AttackClipTrackList:
     - Id: 1
@@ -118,6 +298,8 @@ MonoBehaviour:
       CastParam: 0
       CastDirection: {x: 0, y: 0, z: 0}
       CastRotation: {x: 0, y: 0, z: 0}
+    AttackMovementTrackList: []
+    AttackMotionTrackList: []
   - Id: 302
     AttackClipTrackList:
     - Id: 1
@@ -134,6 +316,8 @@ MonoBehaviour:
       CastParam: 0
       CastDirection: {x: 0, y: 0, z: 0}
       CastRotation: {x: 0, y: 0, z: 0}
+    AttackMovementTrackList: []
+    AttackMotionTrackList: []
   - Id: 303
     AttackClipTrackList:
     - Id: 1
@@ -150,3 +334,5 @@ MonoBehaviour:
       CastParam: 0
       CastDirection: {x: 0, y: 0, z: 0}
       CastRotation: {x: 0, y: 0, z: 0}
+    AttackMovementTrackList: []
+    AttackMotionTrackList: []
