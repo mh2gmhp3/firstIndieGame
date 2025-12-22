@@ -30,6 +30,34 @@ namespace GameMainModule.Attack
         public Vector3 CastRotation;
     }
 
+    /// <summary>
+    /// 移動控制
+    /// </summary>
+    [Serializable]
+    public class AttackMovementTrack
+    {
+        public int Id;
+        public float StartTime;
+        public float Duration;
+
+        public AnimationCurve ControlSpeedRateCurve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 1));
+    }
+
+    /// <summary>
+    /// 動畫位移
+    /// </summary>
+    [Serializable]
+    public class AttackMotionTrack
+    {
+        public int Id;
+        public float StartTime;
+        public float Duration;
+
+        public Vector3 StartPosition;
+        public Vector3 EndPosition;
+        public AnimationCurve Curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
+    }
+
     [Serializable]
     public class AttackBehaviorTimelineAsset
     {
@@ -37,5 +65,7 @@ namespace GameMainModule.Attack
 
         public List<AttackClipTrack> AttackClipTrackList = new List<AttackClipTrack>();
         public List<AttackCastTrack> AttackCastTrackList = new List<AttackCastTrack>();
+        public List<AttackMovementTrack> AttackMovementTrackList = new List<AttackMovementTrack>();
+        public List<AttackMotionTrack> AttackMotionTrackList = new List<AttackMotionTrack>();
     }
 }

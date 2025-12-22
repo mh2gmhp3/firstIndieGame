@@ -63,6 +63,58 @@ namespace GameMainModule.Attack
         }
     }
 
+    public class AttackMovementRuntimeTrack : ITrackRuntimeAsset
+    {
+        public AttackMovementTrack _editData;
+        public int Id => _editData.Id;
+
+        public AttackMovementRuntimeTrack(AttackMovementTrack editData)
+        {
+            _editData = editData;
+        }
+
+        public float GetSpeedRate(float normalizeTime)
+        {
+            return _editData.ControlSpeedRateCurve.Evaluate(normalizeTime);
+        }
+
+        public float StartTime(float speedRate)
+        {
+            return _editData.StartTime / speedRate;
+        }
+
+        public float Duration(float speedRate)
+        {
+            return _editData.Duration / speedRate;
+        }
+    }
+
+    public class AttackMotionRuntimeTrack : ITrackRuntimeAsset
+    {
+        public AttackMotionTrack _editData;
+        public int Id => _editData.Id;
+
+        public AttackMotionRuntimeTrack(AttackMotionTrack editData)
+        {
+            _editData = editData;
+        }
+
+        public Vector3 GetMotionPosition(float normalizeTime)
+        {
+            return Vector3.LerpUnclamped(_editData.StartPosition, _editData.EndPosition, _editData.Curve.Evaluate(normalizeTime));
+        }
+
+        public float StartTime(float speedRate)
+        {
+            return _editData.StartTime / speedRate;
+        }
+
+        public float Duration(float speedRate)
+        {
+            return _editData.Duration / speedRate;
+        }
+    }
+
     public class AttackBehaviorTimelineRuntimeAsset : ITimelineRuntimeAsset
     {
         private AttackBehaviorTimelineAsset _editData;
@@ -88,6 +140,14 @@ namespace GameMainModule.Attack
             for (int i = 0; i < editData.AttackCastTrackList.Count; i++)
             {
                 _trackAssetList.Add(new AttackCastRuntimeTrack(editData.AttackCastTrackList[i]));
+            }
+            for (int i = 0; i < editData.AttackMovementTrackList.Count; i++)
+            {
+                _trackAssetList.Add(new AttackMovementRuntimeTrack(editData.AttackMovementTrackList[i]));
+            }
+            for (int i = 0; i < editData.AttackMotionTrackList.Count; i++)
+            {
+                _trackAssetList.Add(new AttackMotionRuntimeTrack(editData.AttackMotionTrackList[i]));
             }
             _trackAssetList.Sort(
                 (l, r) =>

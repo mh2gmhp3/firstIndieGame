@@ -334,5 +334,10 @@ namespace GameMainModule
         {
             _attackController.DoUpdate(KeepCombo());
         }
+
+        public override void OnFixedUpdate()
+        {
+            _attackController.DoFixedUpdate();
+        }
     }
 }

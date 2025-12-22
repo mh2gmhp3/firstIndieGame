@@ -7,7 +7,10 @@ using Logging;
 using System;
 using System.Collections.Generic;
 using UnitModule;
+using UnitModule.Movement;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnitModule.Movement.ThreeDimensionalMovementUtility;
 
 namespace GameMainModule.Attack
 {
@@ -30,9 +33,13 @@ namespace GameMainModule.Attack
         private List<AttackCombination> _combinationList =
             new List<AttackCombination>();
 
+        private MovementData _movementData;
         private CharacterAttackRefSetting _attackRefSetting;
         private CharacterPlayableClipController _playableClipController;
         private TimelinePlayController _attackBehaviorTimelinePlayController = new TimelinePlayController();
+        private List<AttackMovementRuntimeTrack> _curMovementTrackList = new List<AttackMovementRuntimeTrack>();
+        private List<AttackMotionRuntimeTrack> _curMotionTrackList = new List<AttackMotionRuntimeTrack>();
+        private Vector3 _motionOriWorldPoint = Vector3.zero;
 
         private WeaponTransformSetting _weaponTransformSetting;
 
@@ -73,11 +80,15 @@ namespace GameMainModule.Attack
 
         public void Init(
             int id,
+            MovementData movementData,
             CharacterAttackRefSetting attackRefSetting,
             CharacterPlayableClipController playableClipController,
             WeaponTransformSetting weaponTransformSetting)
         {
             _id = id;
+            _movementData = movementData;
+            //速度有可能很快 讓他計算過程 避免直接衝進牆內
+            _movementData.UnitMovementSetting.Rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
             _attackRefSetting = attackRefSetting;
             _playableClipController = playableClipController;
             _weaponTransformSetting = weaponTransformSetting;
@@ -291,6 +302,8 @@ namespace GameMainModule.Attack
 
         public void OnPlayAsset()
         {
+            _motionOriWorldPoint = _movementData.UnitMovementSetting.RootTransform.position;
+            _curMotionTrackList.Clear();
         }
 
         public void OnEndAsset()
@@ -323,11 +336,69 @@ namespace GameMainModule.Attack
                         });
                 }
             }
+            else if (trackAsset is AttackMovementRuntimeTrack movementTrack)
+            {
+                _curMovementTrackList.Add(movementTrack);
+            }
+            else if (trackAsset is AttackMotionRuntimeTrack motionTrack)
+            {
+                _curMotionTrackList.Add(motionTrack);
+            }
         }
 
         public void OnEndTrack(ITrackRuntimeAsset trackAsset, float speedRate)
         {
+            if (trackAsset is AttackMovementRuntimeTrack movementTrack)
+            {
+                _curMovementTrackList.Remove(movementTrack);
+            }
+            else if (trackAsset is AttackMotionRuntimeTrack motionTrack)
+            {
+                _curMotionTrackList.Remove(motionTrack);
+            }
+        }
 
+        #endregion
+
+        #region FixedUpdate
+
+        public void DoFixedUpdate()
+        {
+            ProcessMovement();
+            ProcessMotion();
+        }
+
+        private void ProcessMovement()
+        {
+            if (_curMovementTrackList.Count == 0)
+                return;
+
+            float cacheSpeedRate = _movementData.SpeedRate;
+            var speedRate = 1f;
+            for (int i = 0; i < _curMovementTrackList.Count; i++)
+            {
+                var curMovementTrack = _curMovementTrackList[i];
+                speedRate *= curMovementTrack.GetSpeedRate(_attackBehaviorTimelinePlayController.GetTrackPlayElapsedNormalizeTIme(curMovementTrack));
+            }
+            _movementData.SpeedRate = speedRate;
+            ThreeDimensionalMovementUtility.Movement(_movementData);
+            _movementData.SpeedRate = cacheSpeedRate;
+        }
+
+        private void ProcessMotion()
+        {
+            if (_curMotionTrackList.Count == 0)
+                return;
+
+            for (int i = 0; i < _curMotionTrackList.Count; i++)
+            {
+                var curMotionTrack = _curMotionTrackList[i];
+                var position = curMotionTrack.GetMotionPosition(_attackBehaviorTimelinePlayController.GetTrackPlayElapsedNormalizeTIme(curMotionTrack));
+                position = _movementData.UnitMovementSetting.RotateTransform.rotation * position;
+                var diff = _motionOriWorldPoint + position - _movementData.UnitMovementSetting.RootTransform.position;
+                _movementData.UnitMovementSetting.Rigidbody.velocity += diff / Time.fixedDeltaTime;
+            }
+            RotateCharacterAvatarWithSlope(_movementData);
         }
 
         #endregion
